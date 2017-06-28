@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 
-<project name="Buildfile for common LGPL and Commercial awake-sql-client-x.y.z.jar" default="all" basedir=".">
+<project name="Buildfile for common LGPL and Commercial aceql-http-client-sdk-${version}.jar" default="all" basedir=".">
 
-    <property name="version"                        value="1.0-beta-1"/>
-	<property name="aceql-client"       			value="aceql-client-${version}.jar"/>
+    <property name="version"                        value="1.0-beta-2"/>
+	<property name="aceql-http-client-sdk"          value="aceql-http-client-sdk-${version}.jar"/>
 	
 	<property name="java.sql.Driver"            	value="../ant/java.sql.Driver"/>   
 	   
@@ -23,8 +23,8 @@
           tofile="${bin.dir}/META-INF/services/java.sql.Driver" />
 	 -->
 	  
-    <target name="jar-client" description=" generate aceql-client-x.y.z.jar jar 'dist.dir' directory.">
-        <jar jarfile="${dist.dir}/${aceql-client}" 
+    <target name="jar-client" description=" generate aceql-http-client-sdk-x.y.z.jar jar 'dist.dir' directory.">
+        <jar jarfile="${dist.dir}/${aceql-http-client-sdk}" 
          basedir="${bin.dir}"
          includes="**/*.class, **/META-INF/services/"
             excludes="      
