@@ -11,6 +11,6 @@ in the cloud by simply including standard JDBC calls in their code, just like th
 
 Go to the <a href="https://www.aceql.com/aceql-download-page-lgpl.html">Installation page</a>. 
 
-## Using AceQL HTTP ##
+## Using AceQL Java Client SDK ##
 
 Go to the <a href="https://www.aceql.com/documentation">Documentation page</a>. 
