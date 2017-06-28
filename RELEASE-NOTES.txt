@@ -1,0 +1,30 @@
+
+                 AceQL Java Client SDK
+                  Version 1.0-beta.2
+                    Release Notes
+
+
+Introduction
+------------
+
+The AceQL Java Client SDK allows to wrap the AceQL HTTP APIs and 
+eliminate the tedious works of handling communications errors and 
+parsing JSON results.
+
+Android and Java Desktop application developers can access 
+remote SQL databases and/or SQL databases in the cloud by simply 
+including standard JDBC calls in their code, just like 
+they would for a local database.
+
+The AceQL Java Client SDK licensed through the Apache 2.0
+License.
+    
+
+AceQL Java Client SDK - Version 1.0-beta.2 - 28-may-2016
+--------------------------------------------------------
+
+What's New:
+- License was erroneously marked as LGPL in previous pom.xml. 
+  This has been fixed : license is now Apache 2.0.
+
+
