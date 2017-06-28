@@ -1,0 +1,73 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.aceql</groupId>
+  <artifactId>aceql-http-client-sdk</artifactId>
+  <version>1.0-beta-1</version>
+  <dependencies>
+      <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.10</version>
+      <scope>test</scope>
+    </dependency>
+  	<dependency>
+  		<groupId>commons-io</groupId>
+  		<artifactId>commons-io</artifactId>
+  		<version>2.5</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.glassfish</groupId>
+  		<artifactId>javax.json</artifactId>
+  		<version>1.0.4</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.apache.commons</groupId>
+  		<artifactId>commons-lang3</artifactId>
+  		<version>3.5</version>
+  	</dependency>
+  </dependencies>
+  <organization>
+  	<name>KawanSoft</name>
+  	<url>http://www.kawansoft.com</url>
+  </organization>
+  
+    <licenses>
+        <license>
+            <name>LGPL 2.1</name>
+            <url>http://www.gnu.org/licenses/lgpl-2.1.html</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    
+    <developers>
+    <developer>
+        <id>abecquereau</id>
+        <name>Alexandre Becquereau</name>
+        <email>abecquereau@kawansoft.com</email>
+        <timezone>GMT+1</timezone>
+        <roles>
+            <role>developer</role>
+        </roles>
+    </developer>
+    <developer>
+        <id>ndepomereu</id>
+        <name>Nicolas de Pomereu</name>
+        <email>ndepomereu@kawansoft.com</email>
+        <timezone>GMT+1</timezone>
+        <roles>
+            <role>architect</role>
+            <role>developer</role>
+        </roles>
+    </developer>        
+  </developers> 
+  <name>AceQL HTTP Client SDK</name>
+  <url>http://www.aceql.com</url>
+  <scm>
+  	<url>https://github.com/kawansoft/aceql-http-client-sdk</url>
+  	<developerConnection>https://github.com/kawansoft/aceql-http-client-sdk</developerConnection>
+  </scm>
+  <inceptionYear>2017</inceptionYear>
+  <description>The AceQL Java Client SDK allows to wrap the AceQL HTTP APIs and eliminate the tedious works of handling communications errors and parsing JSON results.
+
+Android and Java Desktop application developers can access remote SQL databases and/or SQL databases in the cloud by simply including standard JDBC calls in their code, just like they would for a local database.</description>
+</project>

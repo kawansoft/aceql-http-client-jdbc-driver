@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+
+<project name="Buildfile for common LGPL and Commercial awake-sql-client-x.y.z.jar" default="all" basedir=".">
+
+    <property name="version"                        value="1.0-beta-1"/>
+	<property name="aceql-client"       			value="aceql-client-${version}.jar"/>
+	
+	<property name="java.sql.Driver"            	value="../ant/java.sql.Driver"/>   
+	   
+	<property name="aceql-test.dir"   				value="..\..\aceql-test\lib"/>   
+    <property name="aceql-android-test.dir"     	value="..\..\aceql-android-test\lib"/>
+	<property name="aceql-sample-android.dir"     	value="..\..\aceql-sample-android\lib"/>
+    <property name="aceql-sample-android-blob.dir" 	value="..\..\aceql-sample-android-blob\lib"/>
+    	
+	<property name="dist.dir"       value="../dist"/>
+	<property name="bin.dir"        value="../target/classes"/>
+	
+	<mkdir dir="${bin.dir}/META-INF" />
+    <mkdir dir="${bin.dir}/META-INF/services" />
+   
+    <!--
+    <copy file="${java.sql.Driver}"
+          tofile="${bin.dir}/META-INF/services/java.sql.Driver" />
+	 -->
+	  
+    <target name="jar-client" description=" generate aceql-client-x.y.z.jar jar 'dist.dir' directory.">
+        <jar jarfile="${dist.dir}/${aceql-client}" 
+         basedir="${bin.dir}"
+         includes="**/*.class, **/META-INF/services/"
+            excludes="      
+                        **org/kawanfw/test/**, 
+                        **org/kawanfw/sql/examples/**, 
+                              
+                        **com/aceql/client/test/**,
+        	
+                        **com/aceql/sdk/http/examples/**,     
+                        **com/aceql/sdk/jdbc/examples/**,     
+                                
+                        **org/kawanfw/commons/api/server/**,
+                        **org/kawanfw/commons/server/util/**,           
+                        **org/kawanfw/file/servlet/**,
+                
+                        **org/kawanfw/file/api/server/**,
+        	
+        				**org/kawanfw/sql/WebServer.class
+        				**org/kawanfw/sql/tomcat/**,
+                        **org/kawanfw/sql/servlet/**, 
+                        **org/kawanfw/sql/api/server/**,
+                        **org/kawanfw/sql/licensing/**"/>           
+    </target>   
+
+	<!-- Copy client jar to sibling test projects -->
+	<!-- Comment for jar generation only -->
+	
+	<!--  
+	
+    <target name="copy.test" depends="jar-client">
+       <copy file="${dist.dir}/${aceql-client}" todir="${aceql-test.dir}"/>
+    </target> 	
+		
+    <target name="copy.android.test" depends="copy.test">
+       <copy file="${dist.dir}/${aceql-client}" todir="${aceql-android-test.dir}"/>
+    </target> 
+	
+    <target name="copy.sample.android" depends="copy.android.test">
+       <copy file="${dist.dir}/${aceql-client}" todir="${aceql-sample-android.dir}"/>
+    </target> 
+
+    <target name="copy.sample.android.blob" depends="copy.sample.android">
+       <copy file="${dist.dir}/${aceql-client}" todir="${aceql-sample-android-blob.dir}"/>
+    </target> 
+	-->
+	
+	<target name="all" depends="jar-client" description="Do all!">
+	</target>
+
+</project>
