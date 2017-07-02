@@ -1,7 +1,7 @@
 # AceQL HTTP - Java Client SDK 
 <img src="https://www.aceql.com/favicon.png" alt=""/>
 
-The AceQL Java Client SDK allows to wrap the AceQL HTTP APIs and eliminate the tedious works of handling communications errors 
+The AceQL Java Client SDK allows to wrap the <a href="https://www.aceql.com">AceQL HTTP</a> APIs and eliminate the tedious works of handling communications errors 
 and parsing JSON results.
 
 Android and Java Desktop application developers can access remote SQL databases and/or SQL databases 
@@ -11,7 +11,7 @@ The AceQL Java Client SDK licensed through the liberal Apache 2.0 license.
 
 ## Installation  ##
 
-Go to the <a href="https://www.aceql.com/aceql-download-page-lgpl.html">Installation page</a>. 
+Go to the <a href="https://www.aceql.com/aceql-download-page.html">Installation page</a>. 
 
 ## Using AceQL Java Client SDK ##
 
