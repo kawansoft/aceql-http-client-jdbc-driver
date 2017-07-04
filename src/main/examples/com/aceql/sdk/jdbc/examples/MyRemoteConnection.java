@@ -45,8 +45,7 @@ public class MyRemoteConnection {
     Connection connection = null;
 
     /**
-     * Remote Connection Quick Start client example. 
-     * Creates a Connection to a
+     * Remote Connection Quick Start client example. Creates a Connection to a
      * remote database.
      * 
      * @return the Connection to the remote database
@@ -267,7 +266,7 @@ public class MyRemoteConnection {
      *            not used
      */
     public static void main(String[] args) throws Exception {
-	
+
 	int customerId = 1;
 	int itemId = 1;
 
