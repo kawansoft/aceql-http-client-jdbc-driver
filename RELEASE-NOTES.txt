@@ -1,6 +1,6 @@
 
                  AceQL Java Client SDK
-                  Version 1.0-beta.2
+                  Version 1.0-beta-3
                     Release Notes
 
 
@@ -20,7 +20,18 @@ The AceQL Java Client SDK licensed through the Apache 2.0
 License.
     
 
-AceQL Java Client SDK - Version 1.0-beta.2 - 28-jun-2016
+AceQL Java Client SDK - Version 1.0-beta-3 - 07-jul-2017
+--------------------------------------------------------
+
+What's New:
+- Parsing is now faster on initial "row_count" value read.
+
+Bugs fixed:
+- Parsing could fail on Result Sets with columns named 
+  "row_n" or row_count". This has been fixed.
+  
+  
+AceQL Java Client SDK - Version 1.0-beta-2 - 28-jun-2017
 --------------------------------------------------------
 
 What's New:

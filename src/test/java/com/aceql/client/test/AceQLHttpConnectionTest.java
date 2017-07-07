@@ -141,7 +141,7 @@ public class AceQLHttpConnectionTest {
 	try {
 	    getConnection().setAutoCommit(false);
 
-	    String sql = "delete from customer where customer_id >= 0 ";
+	    String sql = "delete from customer_2 where customer_id >= 0 ";
 	    PreparedStatement preparedStatement = getConnection().prepareStatement(sql);
 	    preparedStatement.executeUpdate();
 	    preparedStatement.close();
@@ -149,7 +149,7 @@ public class AceQLHttpConnectionTest {
 	    for (int i = 1; i < 10; i++) {
 		int customerId = i;
 
-		sql = "insert into customer values (?, ?, ?, ?, ?, ?, ?, ?)";
+		sql = "insert into customer_2 values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		preparedStatement = connection
 			.prepareStatement(sql);
 
@@ -162,7 +162,8 @@ public class AceQLHttpConnectionTest {
 		preparedStatement.setString(j++, "Town_" + customerId);
 		preparedStatement.setString(j++, customerId + "");
 		preparedStatement.setString(j++, customerId + "-12345678");
-
+		preparedStatement.setString(j++, customerId + "_row_num");
+		preparedStatement.setString(j++, customerId + "_row_count");
 		int rowCount = preparedStatement.executeUpdate();
 		preparedStatement.close();
 		assert (rowCount == 1);
@@ -177,7 +178,7 @@ public class AceQLHttpConnectionTest {
     @Test
     public void testSelect() {
 	try {
-	    String sql = "select * from customer order by customer_id limit 2";
+	    String sql = "select * from customer_2 order by customer_id limit 3";
 	    PreparedStatement preparedStatement = getConnection()
 		    .prepareStatement(sql);
 
@@ -188,8 +189,22 @@ public class AceQLHttpConnectionTest {
 		cpt++;
 		String fname = rs.getString("fname");
 		assert(fname.equals("André" + cpt));
+		
+		int i = 1;
+		System.out.println();
+		System.out.println("customer_id   : " + rs.getInt(i++));
+		System.out.println("customer_title: " + rs.getString(i++));
+		System.out.println("fname         : " + rs.getString(i++));
+		System.out.println("lname         : " + rs.getString(i++));
+		System.out.println("addressline   : " + rs.getString(i++));
+		System.out.println("town          : " + rs.getString(i++));
+		System.out.println("zipcode       : " + rs.getString(i++));
+		System.out.println("phone         : " + rs.getString(i++));
+		System.out.println("row_2         : " + rs.getString(i++));
+		System.out.println("row_count     : " + rs.getString(i++));
+		
 	    }
-	    assert (cpt == 2);
+	    assert (cpt == 3);
 	    
 	} catch (final Exception e) {
 	    fail(e.getMessage());

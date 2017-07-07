@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.aceql</groupId>
   <artifactId>aceql-http-client-sdk</artifactId>
-  <version>1.0-beta-2</version>
+  <version>1.0-beta-3</version>
   <dependencies>
       <dependency>
       <groupId>junit</groupId>
@@ -24,6 +24,11 @@
   		<groupId>org.apache.commons</groupId>
   		<artifactId>commons-lang3</artifactId>
   		<version>3.5</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.postgresql</groupId>
+  		<artifactId>postgresql</artifactId>
+  		<version>9.4-1204-jdbc4</version>
   	</dependency>
   </dependencies>
   <organization>

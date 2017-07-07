@@ -18,8 +18,19 @@
  */
 package com.aceql.sdk.jdbc.examples;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.util.Date;
+import java.util.zip.GZIPOutputStream;
 
+import org.apache.commons.io.IOUtils;
 import org.kawanfw.driver.util.FrameworkSystemUtil;
 
 import com.aceql.client.jdbc.AceQLException;
@@ -40,7 +51,12 @@ public class Test {
     /**
      * @param args
      */
+    @SuppressWarnings("unused")
     public static void main(String[] args) throws Exception {
+	
+	testCopyGzip();
+	
+	if (true) return;
 	
 	if (FrameworkSystemUtil.isAndroid()) {
 	    System.out.println(true);
@@ -48,18 +64,82 @@ public class Test {
 	else {
 	    System.out.println(false);
 	}
-	
-	
+
 	// TODO Auto-generated method stub
 	
 	AceQLException aceQLException = new AceQLException("reason", 11, new NullPointerException(), "remoteStackTrace", HttpURLConnection.HTTP_OK);
-	
 	
 	System.out.println(aceQLException.getMessage());
 	System.out.println(aceQLException.getErrorCode());
 	System.out.println(aceQLException.getCause());
 	System.out.println(aceQLException.getCause());
 
+    }
+
+    public static void testCopy() throws FileNotFoundException, IOException {
+	String theFile = "C:\\Users\\Nicolas de Pomereu\\.kawansoft\\tmp\\result-set.txt";
+	
+	InputStream in = new BufferedInputStream(new FileInputStream(theFile));
+	OutputStream out = new BufferedOutputStream(new FileOutputStream(theFile + ".OUT.txt"));
+	
+	long begin = 0;
+	long end = 0;
+	
+	begin = System.currentTimeMillis();
+	System.out.println(new Date() + " Begin..");
+	
+	IOUtils.copy(in, out);
+	end = System.currentTimeMillis();
+	System.out.println(new Date() + " "
+		+ (end - begin) + " milliseconds)...");
+	
+	in.close();
+	out.close();
+    }
+    
+    /**
+     * Get the OutputStream to use. A regular one or a GZIP_RESULT one
+     * 
+     * @param file
+     * @return
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
+    private static OutputStream getFinalOutputStream(OutputStream out)
+	    throws FileNotFoundException, IOException {
+
+	boolean doGzip = true;
+
+	if (doGzip) {
+	    GZIPOutputStream gZipOut = new GZIPOutputStream(out);
+	    return gZipOut;
+	} else {
+	    OutputStream outFinal = out;
+	    return outFinal;
+
+	}
+    }
+    
+    public static void testCopyGzip() throws FileNotFoundException, IOException {
+	String theFile = "C:\\Users\\Nicolas de Pomereu\\.kawansoft\\tmp\\result-set.txt";
+	
+	InputStream in = new BufferedInputStream(new FileInputStream(theFile));
+	OutputStream out1 = new BufferedOutputStream(new FileOutputStream(theFile + ".OUT.txt"));
+	
+	OutputStream out = getFinalOutputStream(out1);
+	long begin = 0;
+	long end = 0;
+	
+	begin = System.currentTimeMillis();
+	System.out.println(new Date() + " Begin..");
+	
+	IOUtils.copy(in, out);
+	end = System.currentTimeMillis();
+	System.out.println(new Date() + " "
+		+ (end - begin) + " milliseconds)...");
+	
+	in.close();
+	out.close();
     }
 
 }

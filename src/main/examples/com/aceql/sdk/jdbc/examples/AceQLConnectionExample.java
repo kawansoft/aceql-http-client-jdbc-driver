@@ -189,9 +189,9 @@ public class AceQLConnectionExample {
 
 	    while (rs.next()) {
 		System.out.println();
-		System.out.println("customer_id   : " + rs.getInt(1));
-		System.out.println("customer_title: " + rs.getString(2));
-		System.out.println("fname         : " + rs.getString(3));
+		System.out.println("customer_id   : " + rs.getInt("customer_id"));
+		System.out.println("customer_title: " + rs.getString("customer_title"));
+		System.out.println("fname         : " + rs.getString("fname"));
 	    }
 
 	    rs.close();

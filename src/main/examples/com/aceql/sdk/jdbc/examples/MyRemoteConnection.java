@@ -275,7 +275,7 @@ public class MyRemoteConnection {
 		connection);
 
 	System.out.println("deleting customer...");
-	// Delete previous instances, so that user can recall class
+	// Delete previous instances, so thaat user can recall class
 	myRemoteConnection.deleteCustomer(customerId);
 	System.out.println("deleting orderlog...");
 	myRemoteConnection.deleteOrderlog(customerId, itemId);

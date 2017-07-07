@@ -18,19 +18,25 @@
  */
 package com.aceql.client.jdbc.util.json;
 
+import java.io.BufferedReader;
+import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.RandomAccessFile;
 import java.io.Reader;
+import java.io.StringReader;
 import java.sql.SQLException;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.json.Json;
 import javax.json.stream.JsonParser;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author Nicolas de Pomereu
@@ -38,29 +44,24 @@ import org.apache.commons.io.IOUtils;
  */
 public class RowParser {
 
-    //private static final String COL_NAME = "nam";
-    //private static final String COL_VALUE = "val";
-    
     private Reader reader;
     private JsonParser parser = null;
-    
+
     private File jsonFile;
-    
-    private Map<String, String> valuesPerColName;
-    private Map<Integer, String> valuesPerColIndex;
-    //private Map<Integer, String> typesPerColIndex;
-    
+
+    private Map<Integer, String> valuesPerColIndex = null;
+    private Map<String, Integer> indexsPerColName = null;
+
     private boolean traceOn;
-    
-   
+
     /**
      * Constructor.
      * 
      * @param jsonFile
-     * @throws SQLException 
+     * @throws SQLException
      */
     public RowParser(File jsonFile) throws SQLException {
-	
+
 	if (jsonFile == null) {
 	    throw new SQLException("jsonFile is null!");
 	}
@@ -69,11 +70,10 @@ public class RowParser {
 	    throw new SQLException(new FileNotFoundException(
 		    "jsonFile does not exist: " + jsonFile));
 	}
-	
+
 	this.jsonFile = jsonFile;
     }
 
-    
     /**
      * Checks if the JSON content contains a valid {@code ResultSet} dumped by
      * server side /execute_query API. <br>
@@ -85,61 +85,132 @@ public class RowParser {
      * @return true if JSON content contains a valid {@code ResultSet}, else
      *         false if any error occurred when calling /execute_query
      */
-    public int getRowCount() throws SQLException {
+    /*
+     * public int getRowCount() throws SQLException {
+     * 
+     * trace(); Reader reader = null;
+     * 
+     * try { reader = getReader(); JsonParser parser =
+     * Json.createParser(reader);
+     * 
+     * while (parser.hasNext()) { JsonParser.Event event = parser.next(); switch
+     * (event) { case START_ARRAY: case END_ARRAY: case START_OBJECT: case
+     * END_OBJECT: case VALUE_FALSE: case VALUE_NULL: case VALUE_TRUE: //
+     * System.out.println("---" + event.toString()); break; case KEY_NAME:
+     * 
+     * trace(event.toString() + " " + parser.getString() + " - ");
+     * 
+     * if (parser.getString().equals("row_count")) { if (parser.hasNext())
+     * parser.next(); else return 0;
+     * 
+     * int rowCount = Integer.parseInt(parser.getString()); return rowCount; }
+     * 
+     * break; case VALUE_STRING: case VALUE_NUMBER:
+     * trace("Should not reach this:"); trace(event.toString() + " " +
+     * parser.getString()); break; } }
+     * 
+     * return 0; } finally { IOUtils.closeQuietly(reader); } }
+     */
 
-	trace();
-	Reader reader = null;
+    /**
+     * Extract the "row_count" value from JSON file, beginning reading at end of
+     * file
+     * 
+     * @param file
+     * @return the row_count value
+     * @throws FileNotFoundException
+     * @throws IOException
+     * @throws SQLException
+     */
+    public static int getRowCount(File file) throws SQLException {
+	RandomAccessFile raf = null;
 
+	StringBuffer stringBuffer;
 	try {
-	    reader = getReader();
-	    JsonParser parser = Json.createParser(reader);
+	    raf = new RandomAccessFile(file, "r");
+	    long count = 40;
+	    long position = raf.length();
+	    position -= count;
+	    if (position < 0)
+		position = 0;
+	    raf.seek(position);
 
-	    while (parser.hasNext()) {
-		JsonParser.Event event = parser.next();
-		switch (event) {
-		case START_ARRAY:
-		case END_ARRAY:
-		case START_OBJECT:
-		case END_OBJECT:
-		case VALUE_FALSE:
-		case VALUE_NULL:
-		case VALUE_TRUE:
-		    // System.out.println("---" + event.toString());
-		    break;
-		case KEY_NAME:
+	    stringBuffer = new StringBuffer();
 
-		    trace(event.toString() + " "
-			    + parser.getString() + " - ");
-
-		    if (parser.getString().equals("row_count")) {
-			if (parser.hasNext())
-			    parser.next();
-			else
-			    return 0;
-			
-			int rowCount = Integer.parseInt(parser.getString());
-			return rowCount;
-		    }
-
-		    break;
-		case VALUE_STRING:
-		case VALUE_NUMBER:
-		    trace("Should not reach this:");
-		    trace(event.toString() + " "
-			    + parser.getString());
+	    while (true) {
+		try {
+		    byte b = raf.readByte();
+		    stringBuffer.append((char) b);
+		} catch (EOFException eofe) {
 		    break;
 		}
 	    }
-
-	    return 0;
+	} catch (FileNotFoundException fnfe) {
+	    throw new SQLException("File does not exists: " + file, fnfe);
+	} catch (IOException ioe) {
+	    throw new SQLException(ioe);
 	} finally {
-	    IOUtils.closeQuietly(reader);
+	    IOUtils.closeQuietly(raf);
 	}
 
+	String rowCountStr = stringBuffer.toString();
+
+	int rowCount;
+	if (!rowCountStr.contains("row_count")) {
+	    rowCount = 0;
+	} else {
+	    rowCountStr = StringUtils.substringAfterLast(rowCountStr,
+		    "row_count\":");
+	    if (rowCountStr == null) {
+		rowCount = 0;
+	    } else {
+		// Because we may be in pretty printing, the acolade could be on
+		// next line
+		rowCountStr = getFirstLineOfText(rowCountStr);
+		rowCountStr = rowCountStr.trim();
+		//System.out.println("row_count: " + rowCountStr);
+
+		if (rowCountStr.contains("}")) {
+		    rowCountStr = StringUtils.substringBefore(rowCountStr, "}");
+		}
+
+		if (StringUtils.isNumeric(rowCountStr)) {
+		    rowCount = Integer.parseInt(rowCountStr);
+		} else {
+		    rowCount = 0;
+		}
+	    }
+	}
+
+	return rowCount;
     }
- 
+
+    /**
+     * Returns the first line of a text
+     * 
+     * @param str
+     *            the text
+     * @return the first line of the text
+     * @throws SQLException
+     */
+    private static String getFirstLineOfText(String str) throws SQLException {
+	BufferedReader bufferedReader = new BufferedReader(
+		new StringReader(str));
+
+	String line = null;
+
+	try {
+	    line = bufferedReader.readLine();
+	} catch (IOException e) {
+	    throw new SQLException(e);
+	}
+
+	return line;
+    }
+
     /**
      * Builds the valuesPerColName & valuesPerColIndex for the passed row num
+     * 
      * @param parser
      * @param rowNum
      * @throws SQLException
@@ -151,12 +222,23 @@ public class RowParser {
 	    reader = getReader();
 	    parser = Json.createParser(reader);
 	}
+
+	// Value needed because we don't want to take columns with "row_xxx" names as row numbers
+	boolean firstStartArrayPassed = false;
+	boolean isInsideRowValuesArray = false;
 	
 	while (parser.hasNext()) {
 	    JsonParser.Event event = parser.next();
 	    switch (event) {
 	    case START_ARRAY:
+		if (! firstStartArrayPassed) {
+		    firstStartArrayPassed = true;
+		}
+		else {
+		    isInsideRowValuesArray = true;
+		}
 	    case END_ARRAY:
+		isInsideRowValuesArray = false;
 	    case START_OBJECT:
 	    case END_OBJECT:
 	    case VALUE_FALSE:
@@ -166,21 +248,25 @@ public class RowParser {
 		break;
 	    case KEY_NAME:
 
+		trace();
 		trace(event.toString() + " " + parser.getString() + " - ");
 
-		if (parser.getString().equals("row_" + rowNum)) {
+		if (parser.getString().equals("row_" + rowNum) && ! isInsideRowValuesArray) {
 
 		    if (parser.hasNext())
 			parser.next();
 		    else
 			return;
 
-		    valuesPerColName = new LinkedHashMap<String, String>();
-		    valuesPerColIndex = new LinkedHashMap<Integer, String>();
-		    
+		    if (indexsPerColName == null) {
+			indexsPerColName = new HashMap<String, Integer>();
+		    }
+
+		    valuesPerColIndex = new HashMap<Integer, String>();
+
 		    int colIndex = 0;
 		    String colName = null;
-		    
+
 		    while (parser.hasNext()) {
 
 			if (parser.hasNext())
@@ -194,34 +280,39 @@ public class RowParser {
 				&& event != JsonParser.Event.END_ARRAY) {
 			    continue;
 			}
-			
+
 			// We are done at end of row
 			if (event == JsonParser.Event.END_ARRAY) {
 			    return;
 			}
-									
+
 			if (event == JsonParser.Event.KEY_NAME) {
 			    colName = parser.getString();
-			    
+
 			    if (parser.hasNext())
 				parser.next();
 			    else
 				return;
-			    
+
 			    String colValue = parser.getString();
-			    
+
 			    if (colValue != null) {
 				colValue = colValue.trim();
 			    }
-			    
+
 			    colIndex++;
-			    
+
 			    valuesPerColIndex.put(colIndex, colValue);
-			    valuesPerColName.put(colName, colValue);
-			    
+
+			    // Build the map of (column name, column index) on
+			    // first row only
+			    if (rowNum == 1) {
+				indexsPerColName.put(colName, colIndex);
+			    }
+
 			    trace(colValue);
 			}
-			
+
 		    }
 		}
 
@@ -234,30 +325,20 @@ public class RowParser {
 	    }
 	}
 
-
     }
 
-   
-    
-//    /**
-//     * @return the types per column index for current row
-//     */
-//    public Map<Integer, String> getTypesPerColIndex() {
-//        return typesPerColIndex;
-//    }
+    /**
+     * @return the index per column names
+     */
+    public Map<String, Integer> getIndexsPerColName() {
+	return indexsPerColName;
+    }
 
     /**
      * @return the values per column index for current row
      */
     public Map<Integer, String> getValuesPerColIndex() {
-        return valuesPerColIndex;
-    }
-
-    /**
-     * @return the values per column name for current row
-     */
-    public Map<String, String> getValuesPerColName() {
-        return valuesPerColName;
+	return valuesPerColIndex;
     }
 
     private Reader getReader() throws SQLException {
@@ -276,7 +357,7 @@ public class RowParser {
     public void resetParser() {
 	close(); // Same, as we don't maintain a isClosed state
     }
-    
+
     /**
      * Says if trace is on
      * 
@@ -295,7 +376,7 @@ public class RowParser {
     public void setTraceOn(boolean traceOn) {
 	this.traceOn = traceOn;
     }
-    
+
     private void trace() {
 	if (traceOn) {
 	    System.out.println();
@@ -307,12 +388,11 @@ public class RowParser {
 	    System.out.println(s);
 	}
     }
-    
+
     public void close() {
 	IOUtils.closeQuietly(reader);
 	// Reinit parser:
 	parser = null;
     }
-   
-    
+
 }

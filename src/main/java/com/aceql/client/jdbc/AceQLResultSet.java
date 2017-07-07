@@ -53,7 +53,7 @@ class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
     private int rowCount = 0;
     private int currentRowNum = 0;
 
-    public Map<String, String> valuesPerColName;
+    //public Map<String, String> valuesPerColName;
     public Map<Integer, String> valuesPerColIndex;
 
     private boolean isClosed = false;
@@ -97,17 +97,27 @@ class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
 	this.aceQLHttpApi = aceQLConnection.aceQLHttpApi;
 	
 	this.rowParser = new RowParser(jsonFile);	
-	this.rowCount = rowParser.getRowCount();
+	
+	DEBUG = true;
+	long begin = System.currentTimeMillis();
+	debug(new java.util.Date() + " Begin getRowCount");
+	
+	this.rowCount = RowParser.getRowCount(jsonFile);
+	
+	long end = System.currentTimeMillis();
+	debug(new java.util.Date() + " End getRowCount: " + rowCount);
+	debug("Elapsed = " + (end - begin));
+	DEBUG = false;
 	
     }
 
-    
     /**
      * @param row
      * @return
      * @throws SQLException
      * @see java.sql.ResultSet#absolute(int)
      */
+    @Override
     public boolean absolute(int row) throws SQLException {
 	
 	if (isClosed) {
@@ -145,11 +155,11 @@ class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
 	rowParser.buildRowNum(currentRowNum);
 	
 	valuesPerColIndex = rowParser.getValuesPerColIndex();
-	valuesPerColName = rowParser.getValuesPerColName();
+	//valuesPerColName = rowParser.getValuesPerColName();
 	
 	debug("");
 	debug("" + valuesPerColIndex);
-	debug("" + valuesPerColName);
+	//debug("" + valuesPerColName);
 	    
 	return true;
     }
@@ -168,11 +178,11 @@ class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
 	rowParser.buildRowNum(currentRowNum);
 	
 	valuesPerColIndex = rowParser.getValuesPerColIndex();
-	valuesPerColName = rowParser.getValuesPerColName();
+	//valuesPerColName = rowParser.getValuesPerColName();
 	
 	debug("");
 	debug("valuesPerColIndex: " + valuesPerColIndex);
-	debug("valuesPerColName :" + valuesPerColName);
+	//debug("valuesPerColName :" + valuesPerColName);
 	
 	return true;
 	
@@ -249,7 +259,13 @@ class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
 	    throw new SQLException("Invalid column name: " + string);
 	}
 	
-	String value = valuesPerColName.get(string);
+	if (rowParser.getIndexsPerColName().get(string) == null) {
+	    throw new SQLException("Invalid column name: " + string);
+	}
+	
+	int index = rowParser.getIndexsPerColName().get(string);
+	
+	String value = valuesPerColIndex.get(index);
 	
 	if (value == null) {
 	    throw new SQLException("Invalid column name: " + string);
