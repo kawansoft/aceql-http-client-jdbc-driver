@@ -11,7 +11,7 @@ The AceQL Java Client SDK licensed through the liberal Apache 2.0 license.
 
 ## Installation  ##
 
-Go to the <a href="https://www.aceql.com/aceql-download-page.html">Installation page</a>. 
+Go to the <a href="https://www.aceql.com/aceql-download-page.html">Download page</a>. 
 
 ## Using AceQL Java Client SDK ##
 
