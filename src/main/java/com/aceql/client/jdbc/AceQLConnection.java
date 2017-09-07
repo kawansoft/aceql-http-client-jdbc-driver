@@ -40,6 +40,8 @@ import com.aceql.client.jdbc.util.AceQLConnectionUtil;
  * virtual JDBC Connection that is mapped to a Server JDBC
  * <code>Connection</code> in order to access a remote SQL database through
  * HTTP.
+ * <br>
+ * This class acts as a wrapper of AceQL HTTP APIs.
  * <p>
  * This <code>Connection</code> implementation supports:
  * <ul>
@@ -69,8 +71,7 @@ import com.aceql.client.jdbc.util.AceQLConnectionUtil;
  * Example: <blockquote>
  * 
  * <pre>
- * // Define URL of the path to the ServerSqlManager Servlet and prefix
- * // it with with &quot;jdbc:aceql:&quot;
+ * // Define URL of the path to the AceQL Manager Servlet
  * // We will use a secure SSL/TLS session. All uploads/downloads of SQL
  * // commands &amp; data will be encrypted.
  * String url = &quot;https://www.acme.org:9443/aceql&quot;;
@@ -108,7 +109,7 @@ import com.aceql.client.jdbc.util.AceQLConnectionUtil;
  * </pre>
  * 
  * </blockquote> The following static dedicated <code>AceQLConnection</code>
- * method allows to set the session stateless or statefull mode and must the
+ * method allows to set the session stateless or stateful mode and must the
  * called before the constructor: <br>
  * {@link #setStateless(boolean)}
  * <p>
@@ -226,7 +227,7 @@ public class AceQLConnection extends AbstractConnection implements Connection,
      * Login on the AceQL server and connect to a database
      * 
      * @param serverUrl
-     *            the url of the AceQL server. Example:
+     *            the URL of the AceQL server. Example:
      *            http://localhost:9090/aceql
      * @param database
      *            the server database to connect to.
@@ -246,7 +247,7 @@ public class AceQLConnection extends AbstractConnection implements Connection,
      * Login on the AceQL server and connect to a database
      * 
      * @param serverUrl
-     *            the url of the AceQL server. Example:
+     *            the URL of the AceQL server. Example:
      *            http://localhost:9090/aceql
      * @param database
      *            the server database to connect to.
@@ -555,10 +556,10 @@ public class AceQLConnection extends AbstractConnection implements Connection,
     }
 
     /**
-     * Returns the sharable progress variable that will store blob/clob upload
+     * Returns the sharable progress variable that will store Blob/Clob upload
      * or download progress between 0 and 100
      * 
-     * @return the sharable progress variable that will store blob/clob upload
+     * @return the sharable progress variable that will store Blob/Clob upload
      *         or download progress between 0 and 100
      * 
      */
@@ -567,7 +568,7 @@ public class AceQLConnection extends AbstractConnection implements Connection,
     }
 
     /**
-     * Sets the sharable progress variable that will store blob/clob upload or
+     * Sets the sharable progress variable that will store Blob/Clob upload or
      * download progress between 0 and 100. Will be used by progress indicators
      * to show the progress.
      * 

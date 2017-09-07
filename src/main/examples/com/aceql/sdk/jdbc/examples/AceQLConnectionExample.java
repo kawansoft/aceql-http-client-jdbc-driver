@@ -62,9 +62,10 @@ public class AceQLConnectionExample {
 	String serverUrlLocalhostEmbedded = "http://localhost:9090/aceql";
 	String serverUrlLocalhostTomcat = "http://localhost:8080/aceql-test/aceql";
 	String serverUrlLocalhostTomcatPro = "http://localhost:8080/aceql-test-pro/aceql";
-	String serverUrlUnix = "http://www.aceql.com:9090/aceql";
+	String serverUrlUnix = "https://www.aceql.com:9443/aceql";
+	String serverUrlUnixNoSSL = "http://www.aceql.com:9090/aceql";
 	
-	String serverUrl = serverUrlUnix;
+	String serverUrl = serverUrlLocalhostEmbedded;
 	String database = "kawansoft_example";
 	String username = "username";
 	char [] password = { 'p', 'a', 's', 's', 'w', 'o', 'r', 'd'};
@@ -104,12 +105,13 @@ public class AceQLConnectionExample {
 
 	connection
 		.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
-	//connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+	connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
 
 	connection.setHoldability(ResultSet.HOLD_CURSORS_OVER_COMMIT);
 	connection.setHoldability(ResultSet.CLOSE_CURSORS_AT_COMMIT);
 
 	if (doInsert) {
+	    
 	    connection.setAutoCommit(false);
 
 	    sql = "delete from customer where customer_id >= 1 ";

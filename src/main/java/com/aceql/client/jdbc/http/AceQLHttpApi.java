@@ -322,10 +322,41 @@ public class AceQLHttpApi {
 
     }
 
+
+    
     private InputStream callWithGetReturnStream(String url)
 	    throws MalformedURLException, IOException,
 	    UnsupportedEncodingException {
 
+	/*
+	if (httpVersion == 1) {
+	    return callWithGetInputStreamHttp11(url);
+	} else {
+	    return callWithGetInputStreamHttp2(url);
+	}
+	*/
+	
+	return callWithGetInputStreamHttp11(url);
+	
+    }
+
+      // FUTUR USAGE
+    
+//    private int httpVersion = 1;
+//    OkHttpClient client = new OkHttpClient();
+//    
+//    private InputStream callWithGetInputStreamHttp2(String url)
+//	    throws MalformedURLException, IOException, ProtocolException {
+//
+//	Request request = new Request.Builder().url(url).build();
+//
+//	Response response = client.newCall(request).execute();
+//	return response.body().byteStream();
+//	
+//    }
+    
+    private InputStream callWithGetInputStreamHttp11(String url)
+	    throws MalformedURLException, IOException, ProtocolException {
 	URL theUrl = new URL(url);
 	HttpURLConnection conn = null;
 
@@ -347,6 +378,7 @@ public class AceQLHttpApi {
 	httpStatusMessage = conn.getResponseMessage();
 
 	InputStream in = null;
+	//if (httpStatusCode == HttpURLConnection.HTTP_OK || httpStatusCode == HttpURLConnection.HTTP_MOVED_TEMP) {
 	if (httpStatusCode == HttpURLConnection.HTTP_OK) {
 	    in = conn.getInputStream();
 	} else {
