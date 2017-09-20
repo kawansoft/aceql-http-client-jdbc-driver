@@ -16,7 +16,7 @@ remote SQL databases and/or SQL databases in the cloud by simply
 including standard JDBC calls in their code, just like 
 they would for a local database.
 
-The AceQL Java Client SDK licensed through the Apache 2.0
+The AceQL Java Client SDK is licensed under the Apache 2.0
 License.
     
 
