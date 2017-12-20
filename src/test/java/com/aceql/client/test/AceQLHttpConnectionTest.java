@@ -24,8 +24,8 @@ public class AceQLHttpConnectionTest {
     private static String OS = System.getProperty("os.name").toLowerCase();
     private static String FILE_SEP = File.separator;
 
-    public static final String ROOT = OS.contains("win") ? "c:\\tmp"
-	    + FILE_SEP : FILE_SEP + "tmp" + FILE_SEP;
+    public static final String ROOT = OS.contains("win") ? "c:\\tmp" + FILE_SEP
+	    : FILE_SEP + "tmp" + FILE_SEP;
 
     public static final String IN_DIRECTORY = ROOT;
     public static final String OUT_DIRECTORY = ROOT + "out" + FILE_SEP;
@@ -38,14 +38,14 @@ public class AceQLHttpConnectionTest {
     private AceQLConnection connection = null;
 
     Connection getConnection() throws SQLException {
-	
-	if (! new File(IN_DIRECTORY).exists()) {
+
+	if (!new File(IN_DIRECTORY).exists()) {
 	    new File(IN_DIRECTORY).mkdirs();
 	}
-	if (! new File(OUT_DIRECTORY).exists()) {
+	if (!new File(OUT_DIRECTORY).exists()) {
 	    new File(OUT_DIRECTORY).mkdirs();
 	}
-	
+
 	if (connection == null) {
 	    connection = new AceQLConnection(serverUrl, dbname, username,
 		    password.toCharArray());
@@ -58,7 +58,7 @@ public class AceQLHttpConnectionTest {
 	Connection connection = null;
 	try {
 	    connection = getConnection();
-	    assert(connection != null);
+	    assert (connection != null);
 	} catch (final Exception e) {
 	    fail(e.getMessage());
 	}
@@ -69,13 +69,13 @@ public class AceQLHttpConnectionTest {
     public void testFailedQuery() {
 	String sql = "select * from not_exist_table";
 	try {
-	    
+
 	    Statement statement = getConnection().createStatement();
 	    ResultSet rs = statement.executeQuery(sql);
 	    assert (!rs.next());
 	} catch (final Exception e) {
-	    //fail(e.getMessage());
-	    assert(e instanceof AceQLException);
+	    // fail(e.getMessage());
+	    assert (e instanceof AceQLException);
 	}
     }
 
@@ -97,13 +97,15 @@ public class AceQLHttpConnectionTest {
 	try {
 	    getConnection().setAutoCommit(true);
 	    int originalState = getConnection().getHoldability();
-	    
+
 	    getConnection().setHoldability(ResultSet.HOLD_CURSORS_OVER_COMMIT);
-	    assert (getConnection().getHoldability()== ResultSet.HOLD_CURSORS_OVER_COMMIT);
-	    
+	    assert (getConnection()
+		    .getHoldability() == ResultSet.HOLD_CURSORS_OVER_COMMIT);
+
 	    getConnection().setHoldability(ResultSet.CLOSE_CURSORS_AT_COMMIT);
-	    assert (getConnection().getHoldability()== ResultSet.CLOSE_CURSORS_AT_COMMIT);
-	    
+	    assert (getConnection()
+		    .getHoldability() == ResultSet.CLOSE_CURSORS_AT_COMMIT);
+
 	    getConnection().setHoldability(originalState);
 	    assert (getConnection().getHoldability() == originalState);
 	} catch (final Exception e) {
@@ -114,24 +116,41 @@ public class AceQLHttpConnectionTest {
     @Test
     public void testTransactionIsolation() {
 	try {
-	    int originalState = getConnection()
-		    .getTransactionIsolation();
-	    
-	    getConnection().setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
-	    assert (getConnection().getTransactionIsolation() == Connection.TRANSACTION_READ_UNCOMMITTED);
-	  
-	    getConnection().setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
-	    assert (getConnection().getTransactionIsolation() == Connection.TRANSACTION_READ_COMMITTED);
-	    
-	    getConnection().setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
-	    assert (getConnection().getTransactionIsolation() == Connection.TRANSACTION_REPEATABLE_READ);
-	    
-	    getConnection().setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
-	    assert (getConnection().getTransactionIsolation() == Connection.TRANSACTION_SERIALIZABLE);
-	    
+	    int originalState = getConnection().getTransactionIsolation();
+	    System.out.println("getConnection().getTransactionIsolation(): "
+		    + getConnection().getTransactionIsolation());
+
+	    getConnection().setTransactionIsolation(
+		    Connection.TRANSACTION_READ_UNCOMMITTED);
+	    System.out.println("getConnection().getTransactionIsolation(): "
+		    + getConnection().getTransactionIsolation());
+	    assert (getConnection()
+		    .getTransactionIsolation() == Connection.TRANSACTION_READ_UNCOMMITTED);
+
+	    getConnection().setTransactionIsolation(
+		    Connection.TRANSACTION_READ_COMMITTED);
+	    System.out.println("getConnection().getTransactionIsolation(): "
+		    + getConnection().getTransactionIsolation());
+	    assert (getConnection()
+		    .getTransactionIsolation() == Connection.TRANSACTION_READ_COMMITTED);
+
+	    getConnection().setTransactionIsolation(
+		    Connection.TRANSACTION_REPEATABLE_READ);
+	    System.out.println("getConnection().getTransactionIsolation(): "
+		    + getConnection().getTransactionIsolation());
+	    assert (getConnection()
+		    .getTransactionIsolation() == Connection.TRANSACTION_REPEATABLE_READ);
+
+	    getConnection().setTransactionIsolation(
+		    Connection.TRANSACTION_SERIALIZABLE);
+	    System.out.println("getConnection().getTransactionIsolation(): "
+		    + getConnection().getTransactionIsolation());
+	    assert (getConnection()
+		    .getTransactionIsolation() == Connection.TRANSACTION_SERIALIZABLE);
+
 	    getConnection().setTransactionIsolation(originalState);
 	    assert (getConnection().getTransactionIsolation() == originalState);
-	    
+
 	} catch (final Exception e) {
 	    fail(e.getMessage());
 	}
@@ -143,7 +162,8 @@ public class AceQLHttpConnectionTest {
 	    getConnection().setAutoCommit(false);
 
 	    String sql = "delete from customer where customer_id >= 0 ";
-	    PreparedStatement preparedStatement = getConnection().prepareStatement(sql);
+	    PreparedStatement preparedStatement = getConnection()
+		    .prepareStatement(sql);
 	    preparedStatement.executeUpdate();
 	    preparedStatement.close();
 
@@ -151,8 +171,7 @@ public class AceQLHttpConnectionTest {
 		int customerId = i;
 
 		sql = "insert into customer values (?, ?, ?, ?, ?, ?, ?, ?)";
-		preparedStatement = connection
-			.prepareStatement(sql);
+		preparedStatement = connection.prepareStatement(sql);
 
 		int j = 1;
 		preparedStatement.setInt(j++, customerId);
@@ -182,13 +201,13 @@ public class AceQLHttpConnectionTest {
 		    .prepareStatement(sql);
 
 	    ResultSet rs = preparedStatement.executeQuery();
-	    
+
 	    int cpt = 0;
-	    while(rs.next()) {
+	    while (rs.next()) {
 		cpt++;
 		String fname = rs.getString("fname");
-		assert(fname.equals("André" + cpt));
-		
+		assert (fname.equals("André" + cpt));
+
 		int i = 1;
 		System.out.println();
 		System.out.println("customer_id   : " + rs.getInt(i++));
@@ -199,10 +218,10 @@ public class AceQLHttpConnectionTest {
 		System.out.println("town          : " + rs.getString(i++));
 		System.out.println("zipcode       : " + rs.getString(i++));
 		System.out.println("phone         : " + rs.getString(i++));
-		
+
 	    }
 	    assert (cpt == 3);
-	    
+
 	} catch (final Exception e) {
 	    fail(e.getMessage());
 	}
@@ -215,17 +234,17 @@ public class AceQLHttpConnectionTest {
 	    PreparedStatement preparedStatement = getConnection()
 		    .prepareStatement(sql);
 	    preparedStatement.setInt(1, 3);
-		
+
 	    ResultSet rs = preparedStatement.executeQuery();
-	    
+
 	    String fname = null;
-	    
+
 	    if (rs.next()) {
 		fname = rs.getString("fname");
 	    }
-	    
-	    assert(fname.equals("André3"));
-		
+
+	    assert (fname.equals("André3"));
+
 	} catch (final Exception e) {
 	    fail(e.getMessage());
 	}
@@ -235,24 +254,24 @@ public class AceQLHttpConnectionTest {
     public void testBlobInsert() {
 	try {
 	    getConnection().setAutoCommit(false);
-	    
+
 	    String sql = "delete from orderlog where customer_id >= 0 ";
-	    PreparedStatement preparedStatement = getConnection().prepareStatement(sql);
+	    PreparedStatement preparedStatement = getConnection()
+		    .prepareStatement(sql);
 	    preparedStatement.executeUpdate();
 	    preparedStatement.close();
-	    
+
 	    int customerId = 1;
 	    int itemId = 1;
 
 	    File file = new File(IN_DIRECTORY + "username_koala.jpg");
-	    
-	    if (! file.exists()) {
+
+	    if (!file.exists()) {
 		throw new FileNotFoundException("file does not exist:" + file);
 	    }
-	    
+
 	    sql = "insert into orderlog values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-	    preparedStatement = connection
-		    .prepareStatement(sql);
+	    preparedStatement = connection.prepareStatement(sql);
 
 	    InputStream in = new FileInputStream(file);
 	    int j = 1;
@@ -269,8 +288,8 @@ public class AceQLHttpConnectionTest {
 	    preparedStatement.setInt(j++, itemId * 1000);
 
 	    int rowCount = preparedStatement.executeUpdate();
-	    
-	    assert(rowCount == 1);
+
+	    assert (rowCount == 1);
 	    preparedStatement.close();
 
 	    connection.commit();
@@ -278,7 +297,7 @@ public class AceQLHttpConnectionTest {
 	    fail(e.getMessage());
 	}
     }
-    
+
     @Test
     public void testBlobSelect() {
 	try {
@@ -290,7 +309,7 @@ public class AceQLHttpConnectionTest {
 	    ResultSet rs = preparedStatement.executeQuery();
 
 	    File file = null;
-	    
+
 	    while (rs.next()) {
 		int i = 1;
 		System.out.println();
@@ -303,7 +322,7 @@ public class AceQLHttpConnectionTest {
 		System.out.println("jpeg_image    : " + "<binary>");
 
 		file = new File(OUT_DIRECTORY + "downloaded_new_blob.jpg");
-				
+
 		InputStream in = null;
 		try {
 		    in = rs.getBinaryStream(i++);
@@ -311,14 +330,14 @@ public class AceQLHttpConnectionTest {
 		} finally {
 		    IOUtils.closeQuietly(in);
 		}
-		
+
 		System.out.println("is_delivered  : " + rs.getBoolean(i++));
 		System.out.println("quantity      : " + rs.getInt(i++));
-		
+
 		System.out.println("Blob Downloaded: " + file);
 
 	    }
-	    
+
 	    getConnection().commit();
 	    preparedStatement.close();
 	    rs.close();
@@ -333,6 +352,5 @@ public class AceQLHttpConnectionTest {
 	    fail(e.getMessage());
 	}
     }
-
 
 }

@@ -60,6 +60,7 @@ public class AceQLConnectionExample {
 	boolean doBlobDownload = true;
 
 	String serverUrlLocalhostEmbedded = "http://localhost:9090/aceql";
+	String serverUrlLocalhostEmbeddedSsl = "https://localhost:9443/aceql";
 	String serverUrlLocalhostTomcat = "http://localhost:8080/aceql-test/aceql";
 	String serverUrlLocalhostTomcatPro = "http://localhost:8080/aceql-test-pro/aceql";
 	String serverUrlUnix = "https://www.aceql.com:9443/aceql";

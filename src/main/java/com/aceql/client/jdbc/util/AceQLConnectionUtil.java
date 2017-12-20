@@ -23,7 +23,13 @@ import java.sql.ResultSet;
 
 public class AceQLConnectionUtil {
 
-    protected AceQLConnectionUtil() {
+    private static final String TRANSACTION_NONE_TEXT = "none";
+	private static final String TRANSACTION_SERIALIZABLE_TEXT = "serializable";
+	private static final String TRANSACTION_REPEATABLE_READ_TEXT = "repeatable_read";
+	private static final String TRANSACTION_READ_COMMITTED_TEXT = "read_committed";
+	private static final String TRANSACTION_READ_UNCOMMITTED_TEXT = "read_uncommitted";
+
+	protected AceQLConnectionUtil() {
 
     }
 
@@ -33,13 +39,13 @@ public class AceQLConnectionUtil {
             return 0;
         }
     
-        if (level.equals("read_uncommitted")) {
-            return Connection.TRANSACTION_READ_COMMITTED;
-        } else if (level.equals("read_committed")) {
+        if (level.equals(TRANSACTION_READ_UNCOMMITTED_TEXT)) {
             return Connection.TRANSACTION_READ_UNCOMMITTED;
-        } else if (level.equals("repeatable_read")) {
+        } else if (level.equals(TRANSACTION_READ_COMMITTED_TEXT)) {
+            return Connection.TRANSACTION_READ_COMMITTED;
+        } else if (level.equals(TRANSACTION_REPEATABLE_READ_TEXT)) {
             return Connection.TRANSACTION_REPEATABLE_READ;
-        } else if (level.equals("aserializable")) {
+        } else if (level.equals(TRANSACTION_SERIALIZABLE_TEXT)) {
             return Connection.TRANSACTION_SERIALIZABLE;
         } else {
             return 0;
@@ -50,15 +56,15 @@ public class AceQLConnectionUtil {
             int transactionIsolationLevel) {
     
         if (transactionIsolationLevel == Connection.TRANSACTION_NONE) {
-            return "none";
+            return TRANSACTION_NONE_TEXT;
         } else if (transactionIsolationLevel == Connection.TRANSACTION_READ_COMMITTED) {
-            return "read_committed";
+            return TRANSACTION_READ_COMMITTED_TEXT;
         } else if (transactionIsolationLevel == Connection.TRANSACTION_READ_UNCOMMITTED) {
-            return "read_uncommitted";
+            return TRANSACTION_READ_UNCOMMITTED_TEXT;
         } else if (transactionIsolationLevel == Connection.TRANSACTION_REPEATABLE_READ) {
-            return "repeatable_read";
+            return TRANSACTION_REPEATABLE_READ_TEXT;
         } else if (transactionIsolationLevel == Connection.TRANSACTION_SERIALIZABLE) {
-            return "serializable";
+            return TRANSACTION_SERIALIZABLE_TEXT;
         } else {
             throw new IllegalArgumentException(
         	    "Unsupported transaction isolation level: "

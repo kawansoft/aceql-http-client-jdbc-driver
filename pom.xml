@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.aceql</groupId>
   <artifactId>aceql-http-client-sdk</artifactId>
-  <version>1.0-beta-4</version>
+  <version>1.0</version>
   <dependencies>
       <dependency>
       <groupId>junit</groupId>
@@ -23,7 +23,7 @@
   	<dependency>
   		<groupId>org.apache.commons</groupId>
   		<artifactId>commons-lang3</artifactId>
-  		<version>3.5</version>
+  		<version>3.7</version>
   	</dependency>
   </dependencies>
   <organization>

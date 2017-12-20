@@ -19,9 +19,23 @@ they would for a local database.
 The AceQL Java Client SDK is licensed under the Apache 2.0
 License.
     
+AceQL Java Client SDK - Version 1.0 - 20-dec-2017
+-------------------------------------------------
+
+What's New:
+- Java 9 is now fully supported on all OSs.
+- Dependencies have been updated.
+
+Bugs fixed:
+- TRANSACTION_READ_COMMITTED & TRANSACTION_READ_UNCOMMITTED values were inverted.
+
 
 AceQL Java Client SDK - Version 1.0-beta-4 - 07-sep-2017
 --------------------------------------------------------
+
+
+What's New:
+- Java 9 is now fully supported on all client environments.
 
 Bugs fixed:
 - Some Javadoc errors have been fixed.
