@@ -59,6 +59,7 @@ public class AceQLApiHttpExample {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	public static void main(String[] args) throws Exception {
 
 		new File(OUT_DIRECTORY).mkdirs();
@@ -71,7 +72,10 @@ public class AceQLApiHttpExample {
 		boolean doBlobUpload = true;
 		boolean doBlobDownload = true;
 
-		String serverUrl = "http://localhost:9090/aceql";
+		String localhostUrl = "http://localhost:9090/aceql";
+		String linuxUrl = "https://www.aceql.com:9443/aceql";
+		
+		String serverUrl = linuxUrl;
 		String database = "kawansoft_example";
 		String username = "username";
 		String password = "password";
