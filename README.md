@@ -1,5 +1,7 @@
 # AceQL HTTP - Java Client SDK
 
+<img src="https://www.aceql.com/favicon.png" alt="AceQ HTTP Icon"/>
+
 - [Fundamentals](#fundamentals)
   * [Technical operating environment](#technical-operating-environment)
   * [License](#license)
@@ -26,8 +28,6 @@
     + [Using Progress Bars with Blobs](#using-progress-bars-with-blobs)
   * [HTTP session options](#http-session-options)
 - [Limitations](#limitations)
-
-<img src="https://www.aceql.com/favicon.png" alt="AceQ HTTP Icon"/>
 
 # Fundamentals 
 
