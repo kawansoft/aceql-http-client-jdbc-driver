@@ -1,6 +1,5 @@
 # AceQL HTTP - Java Client SDK
 
-- [AceQL HTTP - Java Client SDK](#aceql-http---java-client-sdk)
 - [Fundamentals](#fundamentals)
   * [Technical operating environment](#technical-operating-environment)
   * [License](#license)
@@ -27,8 +26,6 @@
     + [Using Progress Bars with Blobs](#using-progress-bars-with-blobs)
   * [HTTP session options](#http-session-options)
 - [Limitations](#limitations)
-
-<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
 
 <img src="https://www.aceql.com/favicon.png" alt="AceQ HTTP Icon"/>
 
