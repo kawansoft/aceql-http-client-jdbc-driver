@@ -1,5 +1,35 @@
 # AceQL HTTP - Java Client SDK
 
+- [AceQL HTTP - Java Client SDK](#aceql-http---java-client-sdk)
+- [Fundamentals](#fundamentals)
+  * [Technical operating environment](#technical-operating-environment)
+  * [License](#license)
+  * [SDK instead of JDBC Driver](#sdk-instead-of-jdbc-driver)
+  * [AceQL Java Client SDK installation](#aceql-java-client-sdk-installation)
+    + [Android Project settings](#android-project-settings)
+  * [Data transport](#data-transport)
+    + [Transport format](#transport-format)
+    + [Contents treaming and memory management](#contents-treaming-and-memory-management)
+  * [Best practices for fast response time](#best-practices-for-fast-response-time)
+- [Using the AceQL Java Client SDK](#using-the-aceql-java-client-sdk)
+  * [Connection creation](#connection-creation)
+  * [Using a Proxy](#using-a-proxy)
+  * [Handling Exceptions](#handling-exceptions)
+    + [The error type](#the-error-type)
+    + [Most common AceQL Server messages](#most-common-aceql-server-messages)
+    + [HTTP Status Codes](#http-status-codes)
+  * [Data types](#data-types)
+  * [State Management](#state-management)
+  * [SQL Transactions & Connections modifiers](#sql-transactions---connections-modifiers)
+  * [BLOB management](#blob-management)
+    + [BLOB creation](#blob-creation)
+    + [BLOB reading](#blob-reading)
+    + [Using Progress Bars with Blobs](#using-progress-bars-with-blobs)
+  * [HTTP session options](#http-session-options)
+- [Limitations](#limitations)
+
+<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
+
 <img src="https://www.aceql.com/favicon.png" alt="AceQ HTTP Icon"/>
 
 # Fundamentals 
