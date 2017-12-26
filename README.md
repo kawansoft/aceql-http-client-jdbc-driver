@@ -31,13 +31,13 @@
 
 # Fundamentals 
 
-The AceQL Java Client SDK allows users to wrap the [AceQL HTTP APIs](https://www.aceql.com/DocDownload?doc=https://github.com/kawansoft/aceql-http/blob/master/aceql-http-1.0-user-guide-api.md) and eliminate the tedious work of handling communication errors and parsing JSON results.
+The AceQL Java Client SDK allows users to wrap the [AceQL HTTP APIs](https://github.com/kawansoft/aceql-http/blob/master/aceql-http-1.0-user-guide-api.md) and eliminate the tedious work of handling communication errors and parsing JSON results.
 
 Android and Java Desktop application developers can access remote SQL databases and/or SQ Ldatabases in the cloud, simply by including standard JDBC calls in their code,just like they would for a local database.
 
 This document describes how to use the AceQL Java Client SDK and gives some details about how it operates with the server side.
 
-The AceQL Serve operation is described in [AceQL HTTP Server Installation and Configuration Guide](https://www.aceql.com/DocDownload?doc=https://github.com/kawansoft/aceql-http/blob/master/aceql-http-1.0-user-guide-server.md), whose content is sometimes referred in this User Guide. 
+The AceQL Serve operation is described in [AceQL HTTP Server Installation and Configuration Guide](https://github.com/kawansoft/aceql-http/blob/master/aceql-http-1.0-user-guide-server.md), whose content is sometimes referred in this User Guide. 
 
 ## Technical operating environment 
 
