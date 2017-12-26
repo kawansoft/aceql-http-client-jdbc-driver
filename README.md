@@ -29,6 +29,7 @@
       * [HTTP session options](#http-session-options)
    * [Limitations](#limitations)
 
+
 # Fundamentals 
 
 The AceQL Java Client SDK allows users to wrap the [AceQL HTTP APIs](https://www.aceql.com/DocDownload?doc=https://github.com/kawansoft/aceql-http/blob/master/aceql-http-1.0-user-guide-api.md) and eliminate the tedious work of handling communication errors and parsing JSON results.
