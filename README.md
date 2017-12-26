@@ -41,7 +41,7 @@ The AceQL Serve operation is described in [AceQL HTTP Server Installation and Co
 
 ## Technical operating environment 
 
-The AceQL Java Client SDK is entirely written in Java, and functions identically with Microsoft Windows, Linux, and all versions of UNIX supporting Java 7+, 
+The AceQL Java Client SDK is entirely written in Java, and functions identically with Microsoft Windows, Linux, and all versions of UNIX supporting Java 7+.
 
 The only required third party installation is a recent JVM. The following JVMs are supported in this version:
 
