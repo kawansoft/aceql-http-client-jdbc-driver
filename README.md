@@ -37,7 +37,7 @@ Android and Java Desktop application developers can access remote SQL databases 
 
 This document describes how to use the AceQL Java Client SDK and gives some details about how it operates with the server side.
 
-The AceQL Serve operation is described in [AceQL HTTP Server Installation and Configuration Guide](https://www.aceql.com/DocDownload?doc=aceql-http1.0-user-guide-server.pdf&version=1.0), whose content is sometimes referred in this User Guide. 
+The AceQL Serve operation is described in [AceQL HTTP Server Installation and Configuration Guide](https://www.aceql.com/DocDownload?doc=https://github.com/kawansoft/aceql-http/blob/master/aceql-http-1.0-user-guide-server.md), whose content is sometimes referred in this User Guide. 
 
 ## Technical operating environment 
 
@@ -259,7 +259,7 @@ The Stateful Mode is the default when creating a session.
 
 State Management is described in detail in:
 
-[AceQL HTTP Server Installation andConfiguration Guide](https://www.aceql.com/rest/soft/1.0/aceql-http1.0-user-guide-server.pdf). 
+[AceQL HTTP Server Installation and Configuration Guide](https://github.com/kawansoft/aceql-http/blob/master/aceql-http-1.0-user-guide-server.md). 
 
 You can set the session State *before* creating the `AceQLConnection` instance with a call to: [AceQLConnection.setStateless(booleanstateless)](http://www.aceql.com/rest/soft/1.0/javadoc_sdk/com/aceql/client/jdbc/AceQLConnection.html#setStateless(boolean)).
 
