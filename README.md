@@ -10,7 +10,7 @@
          * [Android Project settings](#android-project-settings)
       * [Data transport](#data-transport)
          * [Transport format](#transport-format)
-         * [Contents treaming and memory management](#contents-treaming-and-memory-management)
+         * [Content streaming and memory management](#content-streaming-and-memory-management)
       * [Best practices for fast response time](#best-practices-for-fast-response-time)
    * [Using the AceQL Java Client SDK](#using-the-aceql-java-client-sdk)
       * [Connection creation](#connection-creation)
@@ -35,7 +35,7 @@ This document describes how to use the AceQL Java Client SDK and gives some deta
 
 The AceQL Java Client SDK allows users to wrap the [AceQL HTTP APIs](https://github.com/kawansoft/aceql-http/blob/master/aceql-http-1.0-user-guide-api.md) and eliminate the tedious work of handling communication errors and parsing JSON results.
 
-Android and Java Desktop application developers can access remote SQL databases and/or SQ Ldatabases in the cloud, simply by including standard JDBC calls in their code,just like they would for a local database.
+Android and Java Desktop application developers can access remote SQL databases and/or SQL databases in the cloud, simply by including standard JDBC calls in their code, just like they would for a local database.
 
 The AceQL Server operation is described in [AceQL HTTP Server Installation and Configuration Guide](https://github.com/kawansoft/aceql-http/blob/master/aceql-http-1.0-user-guide-server.md), whose content is sometimes referred in this User Guide. 
 
@@ -94,7 +94,7 @@ AceQL transfers the least possible amount of meta-information:
 
 
 
-### Contents treaming and memory management 
+### Content streaming and memory management 
 
 All requests are streamed: 
 
@@ -119,7 +119,7 @@ Note that AceQL is optimized as much as possible:
   - The `ResultSet` creation is done once on the server by the `executeQuery()`.
   - The rows are all dumped at once on the servlet output stream by the server.
   - The client side gets the ResultSet content as a file.
-  - All `ResultSet` navigation commands are executedl ocally on the client side by navigating through the file:  `next()`, `prev(`), `first()`, `last()`, etc. 
+  - All `ResultSet` navigation commands are executed locally on the client side by navigating through the file:  `next()`, `prev(`), `first()`, `last()`, etc. 
 
 # Using the AceQL Java Client SDK
 
