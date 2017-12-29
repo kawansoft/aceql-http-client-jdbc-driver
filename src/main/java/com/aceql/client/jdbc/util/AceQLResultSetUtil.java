@@ -30,66 +30,68 @@ public class AceQLResultSetUtil {
     }
 
     public static int getIntValue(String value) throws SQLException {
-        try {
-            int returnValue = Integer.parseInt(value);
-            return returnValue;
-        } catch (NumberFormatException e) {
-            throw new SQLException("Not an Integer value: " + value);
-        }
+	try {
+	    int returnValue = Integer.parseInt(value);
+	    return returnValue;
+	} catch (NumberFormatException e) {
+	    throw new SQLException("Not an Integer value: " + value);
+	}
     }
 
     public static Date getDateValue(String value) throws SQLException {
-   	try {
-   	    Date returnValue = new Date(Long.parseLong(value));
-   	    return returnValue;
-   	} catch (NumberFormatException e) {
-   	    throw new SQLException("Not a Date value: " + value);
-   	}
-       }
-       
-       public static Timestamp getTimestampValue(String value) throws SQLException {
-   	try {
-   	    Timestamp returnValue = new Timestamp(Long.parseLong(value));
-   	    return returnValue;
-   	} catch (NumberFormatException e) {
-   	    throw new SQLException("Not a Timestamp value: " + value);
-   	}
-       }
-       
-       public static float getFloatValue(String value) throws SQLException {
-   	try {
-   	    Float returnValue = Float.parseFloat(value);
-   	    return returnValue;
-   	} catch (NumberFormatException e) {
-   	    throw new SQLException("Not a Float value: " + value);
-   	}
-       }
-
-       public static  double getDoubleValue(String value) throws SQLException {
-   	try {
-   	    Double returnValue = Double.parseDouble(value);
-   	    return returnValue;
-   	} catch (NumberFormatException e) {
-   	    throw new SQLException("Not a Double value: " + value);
-   	}
-       }
-
-       public static short getShortValue(String value) throws SQLException {
-   	try {
-   	    Short returnValue = Short.parseShort(value);
-   	    return returnValue;
-   	} catch (NumberFormatException e) {
-   	    throw new SQLException("Not a Short value: " + value);
-   	}
-       }
-
-    public static BigDecimal getBigDecimalValue(String value) throws SQLException {
-        try {
-            BigDecimal returnValue = new BigDecimal(value);
-            return returnValue;
-        } catch (NumberFormatException e) {
-            throw new SQLException("Not a BigDecimal value: " + value);
-        }
+	try {
+	    Date returnValue = new Date(Long.parseLong(value));
+	    return returnValue;
+	} catch (NumberFormatException e) {
+	    throw new SQLException("Not a Date value: " + value);
+	}
     }
-       
+
+    public static Timestamp getTimestampValue(String value)
+	    throws SQLException {
+	try {
+	    Timestamp returnValue = new Timestamp(Long.parseLong(value));
+	    return returnValue;
+	} catch (NumberFormatException e) {
+	    throw new SQLException("Not a Timestamp value: " + value);
+	}
+    }
+
+    public static float getFloatValue(String value) throws SQLException {
+	try {
+	    Float returnValue = Float.parseFloat(value);
+	    return returnValue;
+	} catch (NumberFormatException e) {
+	    throw new SQLException("Not a Float value: " + value);
+	}
+    }
+
+    public static double getDoubleValue(String value) throws SQLException {
+	try {
+	    Double returnValue = Double.parseDouble(value);
+	    return returnValue;
+	} catch (NumberFormatException e) {
+	    throw new SQLException("Not a Double value: " + value);
+	}
+    }
+
+    public static short getShortValue(String value) throws SQLException {
+	try {
+	    Short returnValue = Short.parseShort(value);
+	    return returnValue;
+	} catch (NumberFormatException e) {
+	    throw new SQLException("Not a Short value: " + value);
+	}
+    }
+
+    public static BigDecimal getBigDecimalValue(String value)
+	    throws SQLException {
+	try {
+	    BigDecimal returnValue = new BigDecimal(value);
+	    return returnValue;
+	} catch (NumberFormatException e) {
+	    throw new SQLException("Not a BigDecimal value: " + value);
+	}
+    }
+
 }

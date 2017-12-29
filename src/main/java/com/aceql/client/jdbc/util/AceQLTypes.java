@@ -32,9 +32,9 @@ public class AceQLTypes {
 
     /** Static class */
     protected AceQLTypes() {
-	
+
     }
-    
+
     public static final String BIGINT = "BIGINT";
     public static final String BINARY = "BINARY";
     public static final String BIT = "BIT";
@@ -58,16 +58,17 @@ public class AceQLTypes {
     public static final String URL = "URL";
     public static final String VARBINARY = "VARBINARY";
     public static final String VARCHAR = "VARCHAR";
-    
+
     // FOR setting NULL values in AceQLPreparedStatement.setNull()
     public static final String TYPE_NULL = "TYPE_NULL";
-    
-    static final String[] SQL_TYPES = { BIGINT, BINARY, BIT, BLOB, CHAR, CHARACTER, CLOB,
-	    DATE, DECIMAL, DOUBLE_PRECISION, FLOAT, INTEGER, LONGVARBINARY,
-	    LONGVARCHAR, NUMERIC, REAL, SMALLINT, TIME, TIMESTAMP, TINYINT,
-	    URL, VARBINARY, VARCHAR, TYPE_NULL };
-    
+
+    static final String[] SQL_TYPES = { BIGINT, BINARY, BIT, BLOB, CHAR,
+	    CHARACTER, CLOB, DATE, DECIMAL, DOUBLE_PRECISION, FLOAT, INTEGER,
+	    LONGVARBINARY, LONGVARCHAR, NUMERIC, REAL, SMALLINT, TIME,
+	    TIMESTAMP, TINYINT, URL, VARBINARY, VARCHAR, TYPE_NULL };
+
     /** All the allowed types in a Set */
-    public static final Set<String> SQL_TYPES_SET = new HashSet<String>(Arrays.asList(SQL_TYPES));
-    
+    public static final Set<String> SQL_TYPES_SET = new HashSet<String>(
+	    Arrays.asList(SQL_TYPES));
+
 }

@@ -37,7 +37,7 @@ import org.apache.commons.io.IOUtils;
 public class StreamResultAnalyzer {
 
     private boolean traceOn = false;
-    
+
     private File jsonFile = null;
 
     private String errorType = null;
@@ -46,19 +46,20 @@ public class StreamResultAnalyzer {
 
     private int httpStatusCode;
     private String httpStatusMessage;
-    
+
     /** Exception when parsing the JSON stream. Futur usage */
     private Exception parseException = null;
 
-
     /**
      * Constructor
-     * @param jsonFile 
+     * 
+     * @param jsonFile
      * @param httpStatusCode
      * @param httpStatusMessage
      * 
      */
-    public StreamResultAnalyzer(File jsonFile, int httpStatusCode, String httpStatusMessage) {
+    public StreamResultAnalyzer(File jsonFile, int httpStatusCode,
+	    String httpStatusMessage) {
 	this.jsonFile = jsonFile;
 	this.httpStatusCode = httpStatusCode;
 	this.httpStatusMessage = httpStatusMessage;
@@ -79,27 +80,28 @@ public class StreamResultAnalyzer {
 
 	// If file does not exist ==> http failure
 	if (!jsonFile.exists()) {
-	    
+
 	    this.errorType = "0";
 	    errorMessage = "Unknown error.";
 	    if (httpStatusCode != HttpURLConnection.HTTP_OK) {
-		errorMessage = "HTTP FAILURE " + httpStatusCode + " (" + httpStatusMessage + ")";
+		errorMessage = "HTTP FAILURE " + httpStatusCode + " ("
+			+ httpStatusMessage + ")";
 	    }
 	    return false;
 	}
-	
+
 	trace();
 	boolean isOk = false;
 	Reader reader = null;
 
 	try {
 	    try {
-		reader = new InputStreamReader(
-			new FileInputStream(jsonFile), "UTF-8");
-	    } catch (Exception  e) {
+		reader = new InputStreamReader(new FileInputStream(jsonFile),
+			"UTF-8");
+	    } catch (Exception e) {
 		throw new SQLException(e);
 	    }
-	    
+
 	    JsonParser parser = Json.createParser(reader);
 
 	    while (parser.hasNext()) {
@@ -116,8 +118,7 @@ public class StreamResultAnalyzer {
 		    break;
 		case KEY_NAME:
 
-		    trace(event.toString() + " "
-			    + parser.getString() + " - ");
+		    trace(event.toString() + " " + parser.getString() + " - ");
 
 		    if (parser.getString().equals("status")) {
 
@@ -125,7 +126,7 @@ public class StreamResultAnalyzer {
 			    parser.next();
 			else
 			    return false;
-			
+
 			if (parser.getString().equals("OK")) {
 			    return true;
 			} else {
@@ -138,8 +139,7 @@ public class StreamResultAnalyzer {
 		case VALUE_STRING:
 		case VALUE_NUMBER:
 		    trace("Should not reach this:");
-		    trace(event.toString() + " "
-			    + parser.getString());
+		    trace(event.toString() + " " + parser.getString());
 		    break;
 		}
 	    }
@@ -147,58 +147,59 @@ public class StreamResultAnalyzer {
 	    return isOk;
 	} catch (Exception e) {
 	    this.parseException = e;
-	    
+
 	    this.errorType = "0";
 	    errorMessage = "Unknown error";
 	    if (httpStatusCode != HttpURLConnection.HTTP_OK) {
-		errorMessage = "HTTP FAILURE " + httpStatusCode + " (" + httpStatusMessage + ")";
+		errorMessage = "HTTP FAILURE " + httpStatusCode + " ("
+			+ httpStatusMessage + ")";
 	    }
-	    
+
 	    return false;
 	} finally {
 	    IOUtils.closeQuietly(reader);
 	}
 
     }
-    
+
     private void parseErrorKeywords(JsonParser parser, JsonParser.Event event) {
-   	while (parser.hasNext()) {
+	while (parser.hasNext()) {
 
-   	    if (parser.hasNext())
-   		event = parser.next();
-   	    else
-   		return;
+	    if (parser.hasNext())
+		event = parser.next();
+	    else
+		return;
 
-   	    if (event != JsonParser.Event.KEY_NAME
-   		    && event != JsonParser.Event.VALUE_STRING
-   		    && event != JsonParser.Event.VALUE_NUMBER) {
-   		continue;
-   	    }
+	    if (event != JsonParser.Event.KEY_NAME
+		    && event != JsonParser.Event.VALUE_STRING
+		    && event != JsonParser.Event.VALUE_NUMBER) {
+		continue;
+	    }
 
-   	    if (parser.getString().equals("error_type")) {
-   		if (parser.hasNext())
-   		    parser.next();
-   		else
-   		    return;
-   		this.errorType = parser.getString();
-   	    }
-   	    if (parser.getString().equals("error_message")) {
-   		if (parser.hasNext())
-   		    parser.next();
-   		else
-   		    return;
-   		this.errorMessage = parser.getString();
-   	    }
-   	    if (parser.getString().equals("stack_trace")) {
-   		if (parser.hasNext())
-   		    parser.next();
-   		else
-   		    return;
-   		this.stackTrace = parser.getString();
-   	    }
-   	}
-       }
-    
+	    if (parser.getString().equals("error_type")) {
+		if (parser.hasNext())
+		    parser.next();
+		else
+		    return;
+		this.errorType = parser.getString();
+	    }
+	    if (parser.getString().equals("error_message")) {
+		if (parser.hasNext())
+		    parser.next();
+		else
+		    return;
+		this.errorMessage = parser.getString();
+	    }
+	    if (parser.getString().equals("stack_trace")) {
+		if (parser.hasNext())
+		    parser.next();
+		else
+		    return;
+		this.stackTrace = parser.getString();
+	    }
+	}
+    }
+
     private void trace() {
 	if (traceOn) {
 	    System.out.println();
@@ -211,7 +212,6 @@ public class StreamResultAnalyzer {
 	}
     }
 
-
     public String getErrorMessage() {
 	return errorMessage;
     }
@@ -223,13 +223,14 @@ public class StreamResultAnalyzer {
     public String getStackTrace() {
 	return stackTrace;
     }
-    
+
     /**
      * Returns the Exception raised when parsing JSON stream
+     * 
      * @return the Exception raised when parsing JSON stream
      */
     public Exception getParseException() {
-        return parseException;
+	return parseException;
     }
 
 }

@@ -25,20 +25,26 @@ import org.kawanfw.sql.version.Version;
  * @author Nicolas de Pomereu Defines the leading Exception tags
  */
 public class Tag {
-    
-    // Common for all producst, as we don't know the product name at run time, we use
+
+    // Common for all producst, as we don't know the product name at run time,
+    // we use
     // generic KAWANSOFT FRAMEWORK
     public static String RUNNING_PRODUCT = "KAWANSOFT FRAMEWORK";
     public static String PRODUCT = "[" + RUNNING_PRODUCT + "]";
     public static String PRODUCT_WARNING = "[" + RUNNING_PRODUCT + " WARNING]";
-    public static String PRODUCT_USER_CONFIG_FAIL = "[" + RUNNING_PRODUCT + " - USER CONFIGURATION FAILURE]";
-    public static String PRODUCT_PRODUCT_FAIL =  "[" + RUNNING_PRODUCT + " FAILURE]"; 
-    public static String PRODUCT_SECURITY = "[" + RUNNING_PRODUCT + " SECURITY]";
-    public static String PRODUCT_EXCEPTION_RAISED =  "[" + RUNNING_PRODUCT + " - EXCEPTION RAISED]"; 
-    
-    // For File Framework only 
-    public static String PRODUCT_START = "[" + Version.PRODUCT.NAME.toUpperCase() + " START]";
-    
+    public static String PRODUCT_USER_CONFIG_FAIL = "[" + RUNNING_PRODUCT
+	    + " - USER CONFIGURATION FAILURE]";
+    public static String PRODUCT_PRODUCT_FAIL = "[" + RUNNING_PRODUCT
+	    + " FAILURE]";
+    public static String PRODUCT_SECURITY = "[" + RUNNING_PRODUCT
+	    + " SECURITY]";
+    public static String PRODUCT_EXCEPTION_RAISED = "[" + RUNNING_PRODUCT
+	    + " - EXCEPTION RAISED]";
+
+    // For File Framework only
+    public static String PRODUCT_START = "["
+	    + Version.PRODUCT.NAME.toUpperCase() + " START]";
+
     public static final String ClassNotFoundException = "ClassNotFoundException";
     public static final String InstantiationException = "InstantiationException";
     public static final String NoSuchMethodException = "NoSuchMethodException";
@@ -50,7 +56,8 @@ public class Tag {
     public static final String IllegalArgumentException = "IllegalArgumentException";
     public static final String FileNotFoundException = "FileNotFoundException";
     public static final String IOException = "IOException";
-    
-    // NIO case the uploaded .class file java version is incompatible with server java version
-    public static final String  UnsupportedClassVersionError = "UnsupportedClassVersionError";
+
+    // NIO case the uploaded .class file java version is incompatible with
+    // server java version
+    public static final String UnsupportedClassVersionError = "UnsupportedClassVersionError";
 }

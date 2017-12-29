@@ -19,7 +19,16 @@ they would for a local database.
 The AceQL Java Client SDK is licensed under the Apache 2.0
 License.
     
-    
+
+AceQL Java Client SDK - Version 1.0.1 - 29-dec-2017
+---------------------------------------------------
+
+What's New:
+ - Authentication using AceQL /connect API is now done
+   with POST method - instead of GET - for better security and 
+   to avoid password presence in URL.
+
+
 AceQL Java Client SDK - Version 1.0 - 20-dec-2017
 -------------------------------------------------
 

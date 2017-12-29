@@ -59,7 +59,7 @@ public abstract class AbstractResultSetMetaData implements ResultSetMetaData {
 	if (isConnectionHttp) {
 	    throw new SQLException(
 		    AbstractConnection.FEATURE_NOT_SUPPORTED_IN_THIS_VERSION
-			    + methodName);
+		    + methodName);
 	}
     }
 

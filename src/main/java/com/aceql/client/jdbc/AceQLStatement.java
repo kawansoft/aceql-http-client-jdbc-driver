@@ -47,14 +47,15 @@ import com.aceql.client.jdbc.util.json.StreamResultAnalyzer;
 class AceQLStatement extends AbstractStatement implements Statement {
 
     private AceQLConnection aceQLConnection = null;
-    
+
     /** The Http instance that does all Http stuff */
     private AceQLHttpApi aceQLHttpApi = null;
-    
+
     private List<File> localResultSetFiles = new ArrayList<File>();
 
     /**
      * Constructor
+     * 
      * @param aceQLConnection
      */
     public AceQLStatement(AceQLConnection aceQLConnection) {
@@ -62,26 +63,34 @@ class AceQLStatement extends AbstractStatement implements Statement {
 	this.aceQLHttpApi = aceQLConnection.aceQLHttpApi;
     }
 
-    /* (non-Javadoc)
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#executeUpdate(java.lang.String)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.kawanfw.driver.jdbc.abstracts.AbstractStatement#executeUpdate(java.
+     * lang.String)
      */
     @Override
     public int executeUpdate(String sql) throws SQLException {
 
 	boolean isPreparedStatement = false;
 	Map<String, String> statementParameters = null;
-	return aceQLHttpApi.executeUpdate(sql, isPreparedStatement, statementParameters);
+	return aceQLHttpApi.executeUpdate(sql, isPreparedStatement,
+		statementParameters);
     }
 
-   
-    /* (non-Javadoc)
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#executeQuery(java.lang.String)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.kawanfw.driver.jdbc.abstracts.AbstractStatement#executeQuery(java.
+     * lang.String)
      */
-    @Override    
+    @Override
     public ResultSet executeQuery(String sql) throws SQLException {
 
 	try {
-	    
+
 	    File file = buildtResultSetFile();
 	    this.localResultSetFiles.add(file);
 
@@ -90,57 +99,58 @@ class AceQLStatement extends AbstractStatement implements Statement {
 
 	    boolean isPreparedStatement = false;
 	    Map<String, String> statementParameters = null;
-	    
-//	    try (InputStream in = aceQLHttpApi.executeQuery(sql,
-//		    isPreparedStatement, statementParameters)) {
-//
-//		OutputStream out = null;
-//
-//		// Do not use resource try {} ==> We don't want to create an empty file
-//		if (in != null) {
-//		    try {
-//			out = new BufferedOutputStream(new FileOutputStream(file));
-//			InputStream inFinal = getFinalInputStream(in,
-//			    aceQLHttpApi.isGzipResult());
-//			IOUtils.copy(inFinal, out);
-//		    } finally {
-//			IOUtils.closeQuietly(out);
-//		    }
-//		}
-//	    }
-	    
+
+	    // try (InputStream in = aceQLHttpApi.executeQuery(sql,
+	    // isPreparedStatement, statementParameters)) {
+	    //
+	    // OutputStream out = null;
+	    //
+	    // // Do not use resource try {} ==> We don't want to create an
+	    // empty file
+	    // if (in != null) {
+	    // try {
+	    // out = new BufferedOutputStream(new FileOutputStream(file));
+	    // InputStream inFinal = getFinalInputStream(in,
+	    // aceQLHttpApi.isGzipResult());
+	    // IOUtils.copy(inFinal, out);
+	    // } finally {
+	    // IOUtils.closeQuietly(out);
+	    // }
+	    // }
+	    // }
+
 	    InputStream in = null;
 	    OutputStream out = null;
-	    
-	    try  {
 
-		in = aceQLHttpApi.executeQuery(sql,
-			isPreparedStatement, statementParameters);
+	    try {
+
+		in = aceQLHttpApi.executeQuery(sql, isPreparedStatement,
+			statementParameters);
 
 		if (in != null) {
-		    out = new BufferedOutputStream(new FileOutputStream(
-			    file));
-		    InputStream inFinal = AceQLStatement
-			    .getFinalInputStream(in,
-				    aceQLHttpApi.isGzipResult());
+		    out = new BufferedOutputStream(new FileOutputStream(file));
+		    InputStream inFinal = AceQLStatement.getFinalInputStream(in,
+			    aceQLHttpApi.isGzipResult());
 		    IOUtils.copy(inFinal, out);
 		}
-	    }
-	    finally {
+	    } finally {
 		IOUtils.closeQuietly(in);
 		IOUtils.closeQuietly(out);
 	    }
 
-	    StreamResultAnalyzer streamResultAnalyzer = new StreamResultAnalyzer(file, aceQLHttpApi.getHttpStatusCode(), aceQLHttpApi.getHttpStatusMessage());
+	    StreamResultAnalyzer streamResultAnalyzer = new StreamResultAnalyzer(
+		    file, aceQLHttpApi.getHttpStatusCode(),
+		    aceQLHttpApi.getHttpStatusMessage());
 	    if (!streamResultAnalyzer.isStatusOk()) {
 		throw new AceQLException(streamResultAnalyzer.getErrorMessage(),
 			streamResultAnalyzer.getErrorId(), null,
-			streamResultAnalyzer.getStackTrace(), aceQLHttpApi.getHttpStatusCode());
+			streamResultAnalyzer.getStackTrace(),
+			aceQLHttpApi.getHttpStatusCode());
 	    }
 
 	    AceQLResultSet aceQLResultSet = new AceQLResultSet(file, this);
 	    return aceQLResultSet;
-		
+
 	} catch (Exception e) {
 	    if (e instanceof AceQLException) {
 		throw (AceQLException) e;
@@ -148,23 +158,24 @@ class AceQLStatement extends AbstractStatement implements Statement {
 		throw new AceQLException(e.getMessage(), 0, e, null,
 			aceQLHttpApi.getHttpStatusCode());
 	    }
-	} 
+	}
     }
 
-    public static InputStream getFinalInputStream(InputStream in, boolean gzipResult)
-	    throws IOException {
-	
+    public static InputStream getFinalInputStream(InputStream in,
+	    boolean gzipResult) throws IOException {
+
 	InputStream inFinal = null;
-	if (! gzipResult) {
+	if (!gzipResult) {
 	    inFinal = in;
-	}
-	else{
+	} else {
 	    inFinal = new GZIPInputStream(in);
 	}
 	return inFinal;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#close()
      */
     @Override
@@ -173,8 +184,10 @@ class AceQLStatement extends AbstractStatement implements Statement {
 	    file.delete();
 	}
     }
-    
-    /* (non-Javadoc)
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#getConnection()
      */
     @Override
@@ -183,7 +196,9 @@ class AceQLStatement extends AbstractStatement implements Statement {
     }
 
     static File buildtResultSetFile() {
-	File file = new File(FrameworkFileUtil.getKawansoftTempDir() + File.separator + "pc-result-set-" + FrameworkFileUtil.getUniqueId() + ".txt");
+	File file = new File(FrameworkFileUtil.getKawansoftTempDir()
+		+ File.separator + "pc-result-set-"
+		+ FrameworkFileUtil.getUniqueId() + ".txt");
 	return file;
     }
 

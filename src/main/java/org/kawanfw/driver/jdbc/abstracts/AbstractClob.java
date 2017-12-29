@@ -304,7 +304,8 @@ public abstract class AbstractClob implements Clob {
      *                if the JDBC driver does not support this method
      * @since 1.6
      */
-    public Reader getCharacterStream(long pos, long length) throws SQLException {
+    public Reader getCharacterStream(long pos, long length)
+	    throws SQLException {
 	return this.clob.getCharacterStream(pos, length);
     }
 

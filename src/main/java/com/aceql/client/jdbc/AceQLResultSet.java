@@ -46,14 +46,14 @@ import com.aceql.client.jdbc.util.json.RowParser;
 class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
 
     public boolean DEBUG = false;
-    
+
     /** A File containing the result set returned by an /execute_query call */
     public File jsonFile = null;
 
     private int rowCount = 0;
     private int currentRowNum = 0;
 
-    //public Map<String, String> valuesPerColName;
+    // public Map<String, String> valuesPerColName;
     public Map<Integer, String> valuesPerColIndex;
 
     private boolean isClosed = false;
@@ -63,23 +63,23 @@ class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
     private RowParser rowParser;
 
     private AceQLHttpApi aceQLHttpApi = null;
-    
-    
+
     /** Says if the last accessed value was null */
     private boolean wasNull = false;
 
-   
     /**
      * Constructor.
      * 
      * @param jsonFile
      *            A file containing the result set returned by an /execute_query
      *            call
-     * @param statement the calling Statement
+     * @param statement
+     *            the calling Statement
      * @throws SQLException
      *             if file is null or does no exist
      */
-    public AceQLResultSet(File jsonFile, Statement statement) throws SQLException {
+    public AceQLResultSet(File jsonFile, Statement statement)
+	    throws SQLException {
 
 	if (jsonFile == null) {
 	    throw new SQLException("jsonFile is null!");
@@ -92,23 +92,24 @@ class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
 
 	this.jsonFile = jsonFile;
 	this.statement = statement;
-	
-	AceQLConnection aceQLConnection = (AceQLConnection)this.getStatement().getConnection();
+
+	AceQLConnection aceQLConnection = (AceQLConnection) this.getStatement()
+		.getConnection();
 	this.aceQLHttpApi = aceQLConnection.aceQLHttpApi;
-	
-	this.rowParser = new RowParser(jsonFile);	
-	
+
+	this.rowParser = new RowParser(jsonFile);
+
 	DEBUG = true;
 	long begin = System.currentTimeMillis();
 	debug(new java.util.Date() + " Begin getRowCount");
-	
+
 	this.rowCount = RowParser.getRowCount(jsonFile);
-	
+
 	long end = System.currentTimeMillis();
 	debug(new java.util.Date() + " End getRowCount: " + rowCount);
 	debug("Elapsed = " + (end - begin));
 	DEBUG = false;
-	
+
     }
 
     /**
@@ -119,7 +120,7 @@ class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
      */
     @Override
     public boolean absolute(int row) throws SQLException {
-	
+
 	if (isClosed) {
 	    throw new SQLException("ResultSet is closed.");
 	}
@@ -127,16 +128,15 @@ class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
 	if (row < 0 || row > rowCount) {
 	    return false;
 	}
-	
+
 	rowParser.resetParser();
-	
+
 	currentRowNum = row;
 	rowParser.buildRowNum(row);
 	return true;
-	
+
     }
-       
-    
+
     /**
      * @return
      * @throws SQLException
@@ -146,48 +146,48 @@ class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
 	if (isClosed) {
 	    throw new SQLException("ResultSet is closed.");
 	}
-	
+
 	if (currentRowNum == 1) {
 	    return false;
 	}
-	
+
 	currentRowNum--;
 	rowParser.buildRowNum(currentRowNum);
-	
+
 	valuesPerColIndex = rowParser.getValuesPerColIndex();
-	//valuesPerColName = rowParser.getValuesPerColName();
-	
+	// valuesPerColName = rowParser.getValuesPerColName();
+
 	debug("");
 	debug("" + valuesPerColIndex);
-	//debug("" + valuesPerColName);
-	    
+	// debug("" + valuesPerColName);
+
 	return true;
     }
-    
-    public boolean next() throws SQLException{
-	
+
+    public boolean next() throws SQLException {
+
 	if (isClosed) {
 	    throw new SQLException("ResltSetWrapper is closed.");
 	}
-	
+
 	if (currentRowNum == rowCount) {
 	    return false;
 	}
-	
+
 	currentRowNum++;
 	rowParser.buildRowNum(currentRowNum);
-	
+
 	valuesPerColIndex = rowParser.getValuesPerColIndex();
-	//valuesPerColName = rowParser.getValuesPerColName();
-	
+	// valuesPerColName = rowParser.getValuesPerColName();
+
 	debug("");
 	debug("valuesPerColIndex: " + valuesPerColIndex);
-	//debug("valuesPerColName :" + valuesPerColName);
-	
+	// debug("valuesPerColName :" + valuesPerColName);
+
 	return true;
-	
+
     }
-    
+
     /**
      * @return
      * @throws SQLException
@@ -205,22 +205,22 @@ class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
     public boolean last() throws SQLException {
 	return absolute(rowCount);
     }
-    
-  
-    
 
     private InputStream getInputStream(String blobId) throws SQLException {
-	
-	//long length = aceQLHttpApi.getBlobLength(blobId);
-	//AceQLConnection aceQLConnection = (AceQLConnection)this.getStatement().getConnection();
-	//blobDownload(blobId, file, aceQLConnection.getProgress(), aceQLConnection.getCancelled(), length);
-	
+
+	// long length = aceQLHttpApi.getBlobLength(blobId);
+	// AceQLConnection aceQLConnection =
+	// (AceQLConnection)this.getStatement().getConnection();
+	// blobDownload(blobId, file, aceQLConnection.getProgress(),
+	// aceQLConnection.getCancelled(), length);
+
 	InputStream in = aceQLHttpApi.blobDownload(blobId);
 	return in;
     }
-    
-    
-    /* (non-Javadoc)
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getStatement()
      */
     @Override
@@ -228,57 +228,56 @@ class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
 	return this.statement;
     }
 
-
     private String getStringValue(int index) throws SQLException {
-	
+
 	if (isClosed) {
 	    throw new SQLException("ResultSet is closed.");
 	}
-	
+
 	String value = valuesPerColIndex.get(index);
-	
+
 	if (value == null) {
 	    throw new SQLException("Invalid column index: " + index);
 	}
-	
+
 	wasNull = false;
 	if (value.equalsIgnoreCase("NULL")) {
 	    wasNull = true;
 	}
-	
+
 	return value;
     }
-    
+
     private String getStringValue(String string) throws SQLException {
-	
+
 	if (isClosed) {
 	    throw new SQLException("ResultSet is closed.");
 	}
-	
+
 	if (string == null) {
 	    throw new SQLException("Invalid column name: " + string);
 	}
-	
+
 	if (rowParser.getIndexsPerColName().get(string) == null) {
 	    throw new SQLException("Invalid column name: " + string);
 	}
-	
+
 	int index = rowParser.getIndexsPerColName().get(string);
-	
+
 	String value = valuesPerColIndex.get(index);
-	
+
 	if (value == null) {
 	    throw new SQLException("Invalid column name: " + string);
 	}
-	
+
 	wasNull = false;
 	if (value.equalsIgnoreCase("NULL")) {
 	    wasNull = true;
 	}
-	
+
 	return value;
     }
-    
+
     /**
      * Reports whether the last column read had a value of SQL <code>NULL</code>
      * . Note that you must first call one of the getter methods on a column to
@@ -291,37 +290,43 @@ class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
      *                if a database access error occurs
      */
     @Override
-    public boolean wasNull() throws SQLException {;
+    public boolean wasNull() throws SQLException {
+	;
 	return wasNull;
     }
-    
-    
-    /* (non-Javadoc)
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getBinaryStream(int)
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getBinaryStream(int)
      */
     @Override
     public InputStream getBinaryStream(int columnIndex) throws SQLException {
 	String value = getString(columnIndex);
-	
+
 	if (value.equals("NULL")) {
 	    return null;
 	}
 	return getInputStream(value);
     }
 
-    /* (non-Javadoc)
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getBinaryStream(java.lang.String)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getBinaryStream(java.
+     * lang.String)
      */
     @Override
     public InputStream getBinaryStream(String columnName) throws SQLException {
 	String value = getString(columnName);
-	
+
 	if (value == null || value.equals("NULL")) {
 	    return null;
 	}
 	return getInputStream(value);
     }
-
 
     public String getString(String columnLabel) throws SQLException {
 	String value = getStringValue(columnLabel);
@@ -330,7 +335,7 @@ class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
 	}
 	return value;
     }
-    
+
     public int getInt(String columnLabel) throws SQLException {
 	String value = getStringValue(columnLabel);
 	if (value == null || value.equals("NULL")) {
@@ -349,7 +354,7 @@ class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
 
     public Date getDate(String columnLabel) throws SQLException {
 	String value = getStringValue(columnLabel);
-	
+
 	if (value == null || value.equals("NULL")) {
 	    return null;
 	}
@@ -358,7 +363,7 @@ class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
 
     public Timestamp getTimestamp(String columnLabel) throws SQLException {
 	String value = getStringValue(columnLabel);
-	
+
 	if (value == null || value.equals("NULL")) {
 	    return null;
 	}
@@ -370,14 +375,14 @@ class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
 	if (value == null || value.equals("NULL")) {
 	    return false;
 	}
-	
+
 	return Boolean.parseBoolean(value);
-	
+
     }
-    
+
     public short getShort(String columnLabel) throws SQLException {
 	String value = getStringValue(columnLabel);
-	
+
 	if (value == null || value.equals("NULL")) {
 	    return 0;
 	}
@@ -386,22 +391,22 @@ class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
 
     public float getFloat(String columnLabel) throws SQLException {
 	String value = getStringValue(columnLabel);
-	
+
 	if (value == null || value.equals("NULL")) {
-	    return (float)0;
+	    return (float) 0;
 	}
 	return AceQLResultSetUtil.getFloatValue(value);
     }
 
     public double getDouble(String columnLabel) throws SQLException {
 	String value = getStringValue(columnLabel);
-	
+
 	if (value == null || value.equals("NULL")) {
-	    return (double)0;
+	    return (double) 0;
 	}
 	return AceQLResultSetUtil.getDoubleValue(value);
     }
-    
+
     public String getString(int columnIndex) throws SQLException {
 	String value = getStringValue(columnIndex);
 	if (value == null || value.equals("NULL")) {
@@ -409,10 +414,10 @@ class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
 	}
 	return value;
     }
-    
+
     public int getInt(int columnIndex) throws SQLException {
 	String value = getStringValue(columnIndex);
-	
+
 	if (value == null || value.equals("NULL")) {
 	    return 0;
 	}
@@ -421,7 +426,7 @@ class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
 
     public BigDecimal getBigDecimal(int columnIndex) throws SQLException {
 	String value = getStringValue(columnIndex);
-	
+
 	if (value == null || value.equals("NULL")) {
 	    return null;
 	}
@@ -430,7 +435,7 @@ class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
 
     public Date getDate(int columnIndex) throws SQLException {
 	String value = getStringValue(columnIndex);
-	
+
 	if (value == null || value.equals("NULL")) {
 	    return null;
 	}
@@ -439,7 +444,7 @@ class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
 
     public Timestamp getTimestamp(int columnIndex) throws SQLException {
 	String value = getStringValue(columnIndex);
-	
+
 	if (value == null || value.equals("NULL")) {
 	    return null;
 	}
@@ -447,17 +452,17 @@ class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
     }
 
     public boolean getBoolean(int columnIndex) throws SQLException {
-	String value = getStringValue(columnIndex);	
+	String value = getStringValue(columnIndex);
 	if (value == null || value.equals("NULL")) {
 	    return false;
 	}
 	return Boolean.parseBoolean(value);
-	
+
     }
-    
+
     public short getShort(int columnIndex) throws SQLException {
 	String value = getStringValue(columnIndex);
-	
+
 	if (value == null || value.equals("NULL")) {
 	    return 0;
 	}
@@ -466,65 +471,63 @@ class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
 
     public float getFloat(int columnIndex) throws SQLException {
 	String value = getStringValue(columnIndex);
-	
+
 	if (value == null || value.equals("NULL")) {
-	    return (float)0;
+	    return (float) 0;
 	}
 	return AceQLResultSetUtil.getFloatValue(value);
     }
 
     public double getDouble(int columnIndex) throws SQLException {
 	String value = getStringValue(columnIndex);
-	
+
 	if (value == null || value.equals("NULL")) {
-	    return (double)0;
+	    return (double) 0;
 	}
 	return AceQLResultSetUtil.getDoubleValue(value);
     }
-    
-    
-   /**
-    * @return
-    * @throws SQLException
-    * @see java.sql.ResultSet#isClosed()
-    */
-   public boolean isClosed() throws SQLException {
+
+    /**
+     * @return
+     * @throws SQLException
+     * @see java.sql.ResultSet#isClosed()
+     */
+    public boolean isClosed() throws SQLException {
 	return isClosed;
-   }
-   
-   public void close() {
+    }
+
+    public void close() {
 	rowParser.close();
 	isClosed = true;
-	
-	if (! DEBUG) {
+
+	if (!DEBUG) {
 	    jsonFile.delete();
 	}
-   }
-       
-   /**
-    * Says if trace is on
-    * 
-    * @return true if trace is on
-    */
-   public boolean isTraceOn() {
-	return rowParser.isTraceOn();
-   }
+    }
 
-   /**
-    * Sets the trace on/off
-    * 
-    * @param traceOn
-    *            if true, trace will be on
-    */
-   public void setTraceOn(boolean traceOn) {
+    /**
+     * Says if trace is on
+     * 
+     * @return true if trace is on
+     */
+    public boolean isTraceOn() {
+	return rowParser.isTraceOn();
+    }
+
+    /**
+     * Sets the trace on/off
+     * 
+     * @param traceOn
+     *            if true, trace will be on
+     */
+    public void setTraceOn(boolean traceOn) {
 	rowParser.setTraceOn(traceOn);
-   }
-   
-   private void debug(String s) {
-       if (DEBUG) {
-	   System.out.println(new java.util.Date() + " " + s);
-       }
-   }
- 
+    }
+
+    private void debug(String s) {
+	if (DEBUG) {
+	    System.out.println(new java.util.Date() + " " + s);
+	}
+    }
 
 }

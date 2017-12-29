@@ -69,7 +69,8 @@ public class AbstractStatement implements Statement {
     /**
      * Will throw a SQL Exception if calling method is not authorized
      **/
-    private void verifyCallAuthorization(String methodName) throws SQLException {
+    private void verifyCallAuthorization(String methodName)
+	    throws SQLException {
 
 	if (isClosed) {
 	    throw new SQLException("Statement is closed.");
@@ -1006,7 +1007,8 @@ public class AbstractStatement implements Statement {
      * 
      * @since 1.4
      */
-    public boolean execute(String sql, int[] columnIndexes) throws SQLException {
+    public boolean execute(String sql, int[] columnIndexes)
+	    throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
 	verifyCallAuthorization(methodName);
@@ -1136,21 +1138,21 @@ public class AbstractStatement implements Statement {
 	return statement.unwrap(arg0);
     }
     ///////////////////////////////////////////////////////////
-    //             JAVA 7 METHOD EMULATION                   //
+    // JAVA 7 METHOD EMULATION //
     ///////////////////////////////////////////////////////////
 
-    //@Override do not override for Java 6 compatibility
+    // @Override do not override for Java 6 compatibility
     public void closeOnCompletion() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
-	verifyCallAuthorization(methodName);	
+	verifyCallAuthorization(methodName);
     }
 
-    //@Override do not override for Java 6 compatibility
+    // @Override do not override for Java 6 compatibility
     public boolean isCloseOnCompletion() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
-	verifyCallAuthorization(methodName);	
+	verifyCallAuthorization(methodName);
 	return false;
     }
 }

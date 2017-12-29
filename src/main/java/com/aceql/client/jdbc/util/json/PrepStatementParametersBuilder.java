@@ -24,7 +24,9 @@ import java.util.Map;
 import com.aceql.client.jdbc.util.AceQLTypes;
 
 /**
- * Helper class to build the JSon String containing all parameters of a prepared statement.
+ * Helper class to build the JSon String containing all parameters of a prepared
+ * statement.
+ * 
  * @author Nicolas de Pomereu
  *
  */
@@ -32,58 +34,65 @@ public class PrepStatementParametersBuilder {
 
     /** Universal and clean line separator */
     private static String CR_LF = System.getProperty("line.separator");
-        
+
     /** The map of (param_type_n, param_value_n) */
     Map<String, String> statementParameters = new LinkedHashMap<String, String>();
-        
+
     /**
      * Default constructor
      */
     public PrepStatementParametersBuilder() {
     }
 
-      
     /**
      * Add the prepared statement parameter to the list of parameters
+     * 
      * @param parameterIndex
      *            the first parameter is 1, the second is 2, ...
-     * @param parameterType the SQL parameter type. See possible values in {@link SqlTypes}.
-     * @param parameterValue the String value of the parameter
+     * @param parameterType
+     *            the SQL parameter type. See possible values in
+     *            {@link SqlTypes}.
+     * @param parameterValue
+     *            the String value of the parameter
      */
-    public void setParameter(int parameterIndex, String parameterType, String parameterValue) {
+    public void setParameter(int parameterIndex, String parameterType,
+	    String parameterValue) {
 
 	if (parameterIndex < 1) {
-	    throw new NullPointerException("Illegal parameter index. Must be > 0: " + parameterIndex);
+	    throw new NullPointerException(
+		    "Illegal parameter index. Must be > 0: " + parameterIndex);
 	}
-	
+
 	if (parameterType == null) {
 	    throw new NullPointerException("parameter type is null");
 	}
-	
-	if (! AceQLTypes.SQL_TYPES_SET.contains(parameterType)) {
-	    throw new IllegalArgumentException("Invalid parameter type: " + parameterType + "." 
-		    + CR_LF + "The valid types are : " + AceQLTypes.SQL_TYPES_SET);
+
+	if (!AceQLTypes.SQL_TYPES_SET.contains(parameterType)) {
+	    throw new IllegalArgumentException("Invalid parameter type: "
+		    + parameterType + "." + CR_LF + "The valid types are : "
+		    + AceQLTypes.SQL_TYPES_SET);
 	}
-	
-	statementParameters.put("param_type_" + parameterIndex , parameterType);
-	
+
+	statementParameters.put("param_type_" + parameterIndex, parameterType);
+
 	if (parameterValue == null) {
 	    parameterValue = "NULL";
 	}
-	
-	statementParameters.put("param_value_" + parameterIndex , parameterValue);
+
+	statementParameters.put("param_value_" + parameterIndex,
+		parameterValue);
     }
-    
-    
+
     /**
      * @return the statementParameters
      */
     public Map<String, String> getStatementParameters() {
-        return statementParameters;
+	return statementParameters;
     }
 
-
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see java.lang.Object#toString()
      */
     @Override

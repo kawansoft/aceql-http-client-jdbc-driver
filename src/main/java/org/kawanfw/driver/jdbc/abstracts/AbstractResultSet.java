@@ -400,7 +400,8 @@ public abstract class AbstractResultSet implements ResultSet {
      * @exception SQLException
      *                if a database access error occurs
      */
-    public java.sql.Timestamp getTimestamp(int columnIndex) throws SQLException {
+    public java.sql.Timestamp getTimestamp(int columnIndex)
+	    throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
 	verifyCallAuthorization(methodName);
@@ -2114,7 +2115,8 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
-    public void updateBoolean(String columnName, boolean x) throws SQLException {
+    public void updateBoolean(String columnName, boolean x)
+	    throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
 	verifyCallAuthorization(methodName);
@@ -3998,22 +4000,22 @@ public abstract class AbstractResultSet implements ResultSet {
     }
 
     ///////////////////////////////////////////////////////////
-    //             JAVA 7 METHOD EMULATION                   //
+    // JAVA 7 METHOD EMULATION //
     ///////////////////////////////////////////////////////////
-    
-    //@Override do not override for Java 6 compatibility
+
+    // @Override do not override for Java 6 compatibility
     public <T> T getObject(int arg0, Class<T> arg1) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
-	verifyCallAuthorization(methodName);	
+	verifyCallAuthorization(methodName);
 	return null;
     }
 
-    //@Override do not override for Java 6 compatibility
+    // @Override do not override for Java 6 compatibility
     public <T> T getObject(String arg0, Class<T> arg1) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
-	verifyCallAuthorization(methodName);	
+	verifyCallAuthorization(methodName);
 	return null;
     }
 }

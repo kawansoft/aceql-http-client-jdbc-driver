@@ -17,6 +17,7 @@
  * limitations under the License. 
  */
 package org.kawanfw.sql.version;
+
 /**
  * Displays the SafeJdbc product Version
  */
@@ -26,7 +27,7 @@ public class Version {
     public static final String getVersion() {
 	return "" + new PRODUCT();
     }
-    
+
     public static final String getFullVersion() {
 	String CR_LF = System.getProperty("line.separator");
 
@@ -44,11 +45,11 @@ public class Version {
 	public static final String VERSION = VersionValues.VERSION;
 	public static final String DESCRIPTION = "JDBC toolkit for AceQL HTTP";
 	public static final String DATE = VersionValues.DATE;
-	
+
 	public String toString() {
-	    return NAME + " " +  VERSION + " - " + DATE;
+	    return NAME + " " + VERSION + " - " + DATE;
 	}
-	
+
     }
 
     public static final class VENDOR {
@@ -80,7 +81,7 @@ public class Version {
      */
 
     public static void main(String[] args) {
-	
+
 	System.out.println(getVersion());
 	System.out.println();
 	System.out.println(getFullVersion());

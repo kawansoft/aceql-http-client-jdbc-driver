@@ -17,13 +17,14 @@
  * limitations under the License. 
  */
 package org.kawanfw.sql.version;
+
 /**
  * Contains the package Version info
  */
 
 public class VersionValues {
     public static final String VERSION = "v1.0";
-    public static final String DATE = "20-dec-2017"; 
+    public static final String DATE = "29-dec-2017";
 }
 
 // End

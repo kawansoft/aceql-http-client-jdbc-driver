@@ -68,7 +68,8 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
     /**
      * Will throw a SQL Exception if calling method is not authorized
      **/
-    private void verifyCallAuthorization(String methodName) throws SQLException {
+    private void verifyCallAuthorization(String methodName)
+	    throws SQLException {
 	if (isConnectionHttp) {
 	    throw new SQLException(
 		    AbstractConnection.FEATURE_NOT_SUPPORTED_IN_THIS_VERSION
@@ -523,7 +524,8 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
 	verifyCallAuthorization(methodName);
-	this.preparedStatement.setObject(parameterIndex, x, targetSqlType, scale);
+	this.preparedStatement.setObject(parameterIndex, x, targetSqlType,
+		scale);
     }
 
     /**
@@ -670,7 +672,8 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
 	verifyCallAuthorization(methodName);
-	this.preparedStatement.setCharacterStream(parameterIndex, reader, length);
+	this.preparedStatement.setCharacterStream(parameterIndex, reader,
+		length);
     }
 
     /**
@@ -1014,7 +1017,8 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * @throws SQLException
      * @see java.sql.PreparedStatement#setBinaryStream(int, java.io.InputStream)
      */
-    public void setBinaryStream(int arg0, InputStream arg1) throws SQLException {
+    public void setBinaryStream(int arg0, InputStream arg1)
+	    throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
 	verifyCallAuthorization(methodName);
@@ -1228,37 +1232,37 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
     }
 
     ///////////////////////////////////////////////////////////
-    //             JAVA 7 METHOD EMULATION                   //
+    // JAVA 7 METHOD EMULATION //
     ///////////////////////////////////////////////////////////
-    
-    //@Override do not override for Java 6 compatibility
+
+    // @Override do not override for Java 6 compatibility
     public ResultSet executeQuery() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
-	verifyCallAuthorization(methodName);	
+	verifyCallAuthorization(methodName);
 	return null;
     }
 
-    //@Override do not override for Java 6 compatibility
+    // @Override do not override for Java 6 compatibility
     public int executeUpdate() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
-	verifyCallAuthorization(methodName);	
+	verifyCallAuthorization(methodName);
 	return 0;
     }
 
-    //@Override do not override for Java 6 compatibility
+    // @Override do not override for Java 6 compatibility
     public void closeOnCompletion() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
-	verifyCallAuthorization(methodName);	
+	verifyCallAuthorization(methodName);
     }
 
-    //@Override do not override for Java 6 compatibility
+    // @Override do not override for Java 6 compatibility
     public boolean isCloseOnCompletion() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
-	verifyCallAuthorization(methodName);	
+	verifyCallAuthorization(methodName);
 	return false;
     }
 }

@@ -168,7 +168,7 @@ public class RowParser {
 		// next line
 		rowCountStr = getFirstLineOfText(rowCountStr);
 		rowCountStr = rowCountStr.trim();
-		//System.out.println("row_count: " + rowCountStr);
+		// System.out.println("row_count: " + rowCountStr);
 
 		if (rowCountStr.contains("}")) {
 		    rowCountStr = StringUtils.substringBefore(rowCountStr, "}");
@@ -223,18 +223,18 @@ public class RowParser {
 	    parser = Json.createParser(reader);
 	}
 
-	// Value needed because we don't want to take columns with "row_xxx" names as row numbers
+	// Value needed because we don't want to take columns with "row_xxx"
+	// names as row numbers
 	boolean firstStartArrayPassed = false;
 	boolean isInsideRowValuesArray = false;
-	
+
 	while (parser.hasNext()) {
 	    JsonParser.Event event = parser.next();
 	    switch (event) {
 	    case START_ARRAY:
-		if (! firstStartArrayPassed) {
+		if (!firstStartArrayPassed) {
 		    firstStartArrayPassed = true;
-		}
-		else {
+		} else {
 		    isInsideRowValuesArray = true;
 		}
 	    case END_ARRAY:
@@ -251,7 +251,8 @@ public class RowParser {
 		trace();
 		trace(event.toString() + " " + parser.getString() + " - ");
 
-		if (parser.getString().equals("row_" + rowNum) && ! isInsideRowValuesArray) {
+		if (parser.getString().equals("row_" + rowNum)
+			&& !isInsideRowValuesArray) {
 
 		    if (parser.hasNext())
 			parser.next();

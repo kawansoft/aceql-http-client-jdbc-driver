@@ -66,7 +66,7 @@ public class AceQLConnectionExample {
 	String serverUrlUnix = "https://www.aceql.com:9443/aceql";
 	String serverUrlUnixNoSSL = "http://www.aceql.com:9090/aceql";
 	
-	String serverUrl = serverUrlUnix;
+	String serverUrl = serverUrlLocalhostEmbedded;
 	String database = "kawansoft_example";
 	String username = "username";
 	char [] password = { 'p', 'a', 's', 's', 'w', 'o', 'r', 'd'};

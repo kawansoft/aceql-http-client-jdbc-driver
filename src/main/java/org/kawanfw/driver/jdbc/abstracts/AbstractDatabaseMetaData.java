@@ -618,7 +618,8 @@ public abstract class AbstractDatabaseMetaData implements DatabaseMetaData {
      * @see java.sql.DatabaseMetaData#supportsDifferentTableCorrelationNames()
      */
     @Override
-    public boolean supportsDifferentTableCorrelationNames() throws SQLException {
+    public boolean supportsDifferentTableCorrelationNames()
+	    throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
 	verifyCallAuthorization(methodName);
@@ -1060,7 +1061,8 @@ public abstract class AbstractDatabaseMetaData implements DatabaseMetaData {
      * @see java.sql.DatabaseMetaData#supportsCatalogsInPrivilegeDefinitions()
      */
     @Override
-    public boolean supportsCatalogsInPrivilegeDefinitions() throws SQLException {
+    public boolean supportsCatalogsInPrivilegeDefinitions()
+	    throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
 	verifyCallAuthorization(methodName);
@@ -1813,8 +1815,8 @@ public abstract class AbstractDatabaseMetaData implements DatabaseMetaData {
      * java.lang.String, java.lang.String)
      */
     @Override
-    public ResultSet getImportedKeys(String catalog, String schema, String table)
-	    throws SQLException {
+    public ResultSet getImportedKeys(String catalog, String schema,
+	    String table) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
 	verifyCallAuthorization(methodName);
@@ -1828,8 +1830,8 @@ public abstract class AbstractDatabaseMetaData implements DatabaseMetaData {
      * java.lang.String, java.lang.String)
      */
     @Override
-    public ResultSet getExportedKeys(String catalog, String schema, String table)
-	    throws SQLException {
+    public ResultSet getExportedKeys(String catalog, String schema,
+	    String table) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
 	verifyCallAuthorization(methodName);
@@ -2316,7 +2318,8 @@ public abstract class AbstractDatabaseMetaData implements DatabaseMetaData {
      * @see java.sql.DatabaseMetaData#supportsStoredFunctionsUsingCallSyntax()
      */
     @Override
-    public boolean supportsStoredFunctionsUsingCallSyntax() throws SQLException {
+    public boolean supportsStoredFunctionsUsingCallSyntax()
+	    throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
 	verifyCallAuthorization(methodName);
@@ -2381,23 +2384,23 @@ public abstract class AbstractDatabaseMetaData implements DatabaseMetaData {
     }
 
     ///////////////////////////////////////////////////////////
-    //             JAVA 7 METHOD EMULATION                   //
+    // JAVA 7 METHOD EMULATION //
     ///////////////////////////////////////////////////////////
-    
-    //@Override do not override for Java 6 compatibility
+
+    // @Override do not override for Java 6 compatibility
     public boolean generatedKeyAlwaysReturned() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
-	verifyCallAuthorization(methodName);	
+	verifyCallAuthorization(methodName);
 	return false;
     }
 
-    //@Override do not override for Java 6 compatibility
+    // @Override do not override for Java 6 compatibility
     public ResultSet getPseudoColumns(String arg0, String arg1, String arg2,
 	    String arg3) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
-	verifyCallAuthorization(methodName);	
+	verifyCallAuthorization(methodName);
 	return null;
     }
 

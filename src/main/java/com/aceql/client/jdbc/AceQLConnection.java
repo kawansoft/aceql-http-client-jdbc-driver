@@ -39,8 +39,7 @@ import com.aceql.client.jdbc.util.AceQLConnectionUtil;
  * Provides a <code>Connection</code> implementation that enable to use a
  * virtual JDBC Connection that is mapped to a Server JDBC
  * <code>Connection</code> in order to access a remote SQL database through
- * HTTP.
- * <br>
+ * HTTP. <br>
  * This class acts as a wrapper of AceQL HTTP APIs.
  * <p>
  * This <code>Connection</code> implementation supports:
@@ -147,7 +146,8 @@ import com.aceql.client.jdbc.util.AceQLConnectionUtil;
  * 
  * <pre>
  * // Attempts to establish a connection to the remote database:
- * Connection connection = new AceQLConnection(url, username, password, database);
+ * Connection connection = new AceQLConnection(url, username, password,
+ * 	database);
  * 
  * // Pass the mutable &amp; sharable progress and canceled to the
  * // underlying AceQLConnection.
@@ -162,16 +162,16 @@ import com.aceql.client.jdbc.util.AceQLConnectionUtil;
  * // Execute JDBC statement
  * </pre>
  * 
- * </blockquote> See the source code of <a href=
- * "http://www.aceql.com/rest/soft/1.0/src/SqlProgressMonitorDemo.java"
+ * </blockquote> See the source code of
+ * <a href= "http://www.aceql.com/rest/soft/1.0/src/SqlProgressMonitorDemo.java"
  * >SqlProgressMonitorDemo.java</a> that demonstrates the use of atomic
  * variables when inserting a Blob.
  * 
  * @author Nicolas de Pomereu
  * 
  */
-public class AceQLConnection extends AbstractConnection implements Connection,
-	Cloneable, Closeable {
+public class AceQLConnection extends AbstractConnection
+	implements Connection, Cloneable, Closeable {
 
     /** The Http instance that does all Http stuff */
     AceQLHttpApi aceQLHttpApi = null;
@@ -316,7 +316,8 @@ public class AceQLConnection extends AbstractConnection implements Connection,
 	try {
 	    aceQLHttpApi.disconnect();
 	} catch (AceQLException e) {
-	    // Because close() can not throw an Exception, we wrap the AceQLException with a RuntimeException
+	    // Because close() can not throw an Exception, we wrap the
+	    // AceQLException with a RuntimeException
 	    throw new RuntimeException(e.getMessage(), e);
 	}
     }
@@ -521,8 +522,8 @@ public class AceQLConnection extends AbstractConnection implements Connection,
     }
 
     /**
-     * Define if SQL result sets are returned compressed with the GZIP file format
-     * before download. Defaults to true.
+     * Define if SQL result sets are returned compressed with the GZIP file
+     * format before download. Defaults to true.
      * 
      * @param gzipResult
      *            if true, sets are compressed before download
@@ -578,6 +579,5 @@ public class AceQLConnection extends AbstractConnection implements Connection,
     public void setProgress(AtomicInteger progress) {
 	aceQLHttpApi.setProgress(progress);
     }
-
 
 }

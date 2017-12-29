@@ -32,7 +32,8 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * @author Nicolas de Pomereu
  * 
- *         Allow to debug files contained in user.home/.kanwansoft/kanwansoft-debug.ini.
+ *         Allow to debug files contained in
+ *         user.home/.kanwansoft/kanwansoft-debug.ini.
  * 
  */
 public class FrameworkDebug {
@@ -79,8 +80,9 @@ public class FrameworkDebug {
 	if (!CLASSES_TO_DEBUG.isEmpty()) {
 	    return;
 	}
-		
-	File kawansoftDir = new File (FrameworkFileUtil.getUserHomeDotKawansoftDir());
+
+	File kawansoftDir = new File(
+		FrameworkFileUtil.getUserHomeDotKawansoftDir());
 	kawansoftDir.mkdirs();
 
 	String file = kawansoftDir + File.separator + KAWANSOFT_DEBUG_INI;
@@ -110,10 +112,12 @@ public class FrameworkDebug {
 	} catch (FileNotFoundException e) {
 	    throw new IllegalArgumentException(
 		    "Wrapped IOException. Impossible to load debug file: "
-			    + file, e);
+			    + file,
+		    e);
 	} catch (IOException e) {
 	    throw new IllegalArgumentException(
-		    "Wrapped IOException. Error reading debug file: " + file, e);
+		    "Wrapped IOException. Error reading debug file: " + file,
+		    e);
 	} finally {
 	    IOUtils.closeQuietly(lineNumberReader);
 	}

@@ -48,8 +48,8 @@ class MultipartUtility {
     public boolean DEBUG = false;
 
     @SuppressWarnings("unused")
-    private static final Logger log = getLogger(MultipartUtility.class
-	    .getName());
+    private static final Logger log = getLogger(
+	    MultipartUtility.class.getName());
 
     // Keep this! No System.getProperty("line.separator") that fails on
     // Android
@@ -74,8 +74,8 @@ class MultipartUtility {
     private long totalLength;
 
     public MultipartUtility(final URL url, HttpURLConnection connection,
-	    int connectTimeout, AtomicInteger progress,
-	    AtomicBoolean cancelled, long totalLength) throws IOException {
+	    int connectTimeout, AtomicInteger progress, AtomicBoolean cancelled,
+	    long totalLength) throws IOException {
 	start = currentTimeMillis();
 
 	if (url == null) {
@@ -151,8 +151,8 @@ class MultipartUtility {
 	writer.flush();
 	// outputStream.flush();
 
-	InputStream inputStream = new BufferedInputStream(new FileInputStream(
-		uploadFile));
+	InputStream inputStream = new BufferedInputStream(
+		new FileInputStream(uploadFile));
 
 	uploadUsingInputStream(inputStream);
 
@@ -172,7 +172,7 @@ class MultipartUtility {
 	    debug("totalLength: " + totalLength);
 	    debug("progress   : " + progress);
 	    debug("cancelled  : " + cancelled);
-	    
+
 	    // Case no progress/cancelled/totaLenth set: direct copy
 	    if (totalLength <= 0 || progress == null || cancelled == null) {
 		IOUtils.copy(inputStream, outputStream);
@@ -185,7 +185,7 @@ class MultipartUtility {
 
 	    while ((n = inputStream.read(buffer)) != -1) {
 		tempLen += n;
-		    
+
 		if (totalLength > 0 && tempLen > totalLength / 100) {
 		    tempLen = 0;
 		    int cpt = progress.get();
