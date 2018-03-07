@@ -4,7 +4,7 @@
 
    * [Fundamentals](#fundamentals)
       * [Technical operating environment](#technical-operating-environment)
-      * [AceQL Server Side compatibility](#aceql-server-side-compatibility)
+      * [AceQL Server side compatibility](#aceql-server-side-compatibility)
       * [License](#license)
       * [SDK instead of JDBC Driver](#sdk-instead-of-jdbc-driver)
       * [AceQL Java Client SDK installation](#aceql-java-client-sdk-installation)
