@@ -42,7 +42,6 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 
 /**
  * 
@@ -165,12 +164,11 @@ public class BlobExample {
 //		}
 		
 		// Java 6 to be compatible with Android Low level
-		InputStream in = null;		
-		try {
-		    in = rs.getBinaryStream("jpeg_image");
+				
+		try (InputStream in = rs.getBinaryStream("jpeg_image");){
 		    FileUtils.copyToFile(in, imageFile);
 		} finally {
-		    IOUtils.closeQuietly(in);
+		    //IOUtils.closeQuietly(in);
 		}
 
 		System.out.println();

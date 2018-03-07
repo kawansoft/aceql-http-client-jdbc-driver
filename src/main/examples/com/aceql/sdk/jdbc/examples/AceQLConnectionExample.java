@@ -28,7 +28,6 @@ import java.sql.Statement;
 import java.util.Date;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 
 import com.aceql.client.jdbc.AceQLConnection;
 
@@ -104,6 +103,16 @@ public class AceQLConnectionExample {
 	System.out.println("aceQLConnection.getTransactionIsolation() : "
 		+ connection.getTransactionIsolation());
 
+	// Close and reopen
+	
+	connection.close();
+	connection = new AceQLConnection(serverUrl, database,
+		username, password);
+	((AceQLConnection) connection).setGzipResult(true);
+	
+	System.out.println("aceQLConnection.getTransactionIsolation() : "
+		+ connection.getTransactionIsolation());
+	
 	connection
 		.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
 	connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
@@ -271,12 +280,10 @@ public class AceQLConnectionExample {
 //		    IOUtils.copy(input, output);
 //		}
 		
-		InputStream in = null;
-		try {
-		    in = rs.getBinaryStream(i++);
+		try (InputStream in = rs.getBinaryStream(i++);){
 		    FileUtils.copyToFile(in, file);
 		} finally {
-		    IOUtils.closeQuietly(in);
+		    //IOUtils.closeQuietly(in);
 		}
 		
 		System.out.println("is_delivered  : " + rs.getBoolean(i++));
@@ -308,6 +315,8 @@ public class AceQLConnectionExample {
 	// aceQLConnection.executeQuery(sql, true);
 
 	connection.close();
+	
+	((AceQLConnection)connection).logout();
 
     }
 

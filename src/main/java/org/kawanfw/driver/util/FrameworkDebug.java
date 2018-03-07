@@ -26,7 +26,6 @@ import java.io.LineNumberReader;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -93,11 +92,9 @@ public class FrameworkDebug {
 	    return;
 	}
 
-	LineNumberReader lineNumberReader = null;
-
-	try {
-	    lineNumberReader = new LineNumberReader(new FileReader(file));
-
+	
+	try(LineNumberReader lineNumberReader = new LineNumberReader(new FileReader(file));) {
+	    
 	    String line = null;
 	    while ((line = lineNumberReader.readLine()) != null) {
 		line = line.trim();
@@ -119,7 +116,7 @@ public class FrameworkDebug {
 		    "Wrapped IOException. Error reading debug file: " + file,
 		    e);
 	} finally {
-	    IOUtils.closeQuietly(lineNumberReader);
+	    //IOUtils.closeQuietly(lineNumberReader);
 	}
     }
 

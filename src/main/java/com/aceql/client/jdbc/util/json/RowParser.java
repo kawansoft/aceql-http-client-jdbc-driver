@@ -35,7 +35,6 @@ import java.util.Map;
 import javax.json.Json;
 import javax.json.stream.JsonParser;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -123,11 +122,11 @@ public class RowParser {
      * @throws SQLException
      */
     public static int getRowCount(File file) throws SQLException {
-	RandomAccessFile raf = null;
 
 	StringBuffer stringBuffer;
-	try {
-	    raf = new RandomAccessFile(file, "r");
+	
+	try (RandomAccessFile raf = new RandomAccessFile(file, "r");){
+	    
 	    long count = 40;
 	    long position = raf.length();
 	    position -= count;
@@ -150,7 +149,7 @@ public class RowParser {
 	} catch (IOException ioe) {
 	    throw new SQLException(ioe);
 	} finally {
-	    IOUtils.closeQuietly(raf);
+	    //IOUtils.closeQuietly(raf);
 	}
 
 	String rowCountStr = stringBuffer.toString();
@@ -391,7 +390,17 @@ public class RowParser {
     }
 
     public void close() {
-	IOUtils.closeQuietly(reader);
+	//IOUtils.closeQuietly(reader);
+	
+	if (reader != null) {
+	    try {
+		reader.close();
+	    }
+	    catch (Exception ignore) {
+		// ignore
+	    }
+	}
+	
 	// Reinit parser:
 	parser = null;
     }

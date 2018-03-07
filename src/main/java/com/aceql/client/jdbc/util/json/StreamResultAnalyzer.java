@@ -28,8 +28,6 @@ import java.sql.SQLException;
 import javax.json.Json;
 import javax.json.stream.JsonParser;
 
-import org.apache.commons.io.IOUtils;
-
 /**
  * @author Nicolas de Pomereu
  *
@@ -157,7 +155,16 @@ public class StreamResultAnalyzer {
 
 	    return false;
 	} finally {
-	    IOUtils.closeQuietly(reader);
+	    //IOUtils.closeQuietly(reader);
+	    
+	    if (reader != null) {
+		try {
+		    reader.close();
+		}
+		catch (Exception ignore) {
+		    // ignore
+		}
+	    }
 	}
 
     }

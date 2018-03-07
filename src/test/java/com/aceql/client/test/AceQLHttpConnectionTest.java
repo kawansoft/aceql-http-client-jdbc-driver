@@ -13,7 +13,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 
 import com.aceql.client.jdbc.AceQLConnection;
@@ -323,12 +322,10 @@ public class AceQLHttpConnectionTest {
 
 		file = new File(OUT_DIRECTORY + "downloaded_new_blob.jpg");
 
-		InputStream in = null;
-		try {
-		    in = rs.getBinaryStream(i++);
+		try (InputStream in = rs.getBinaryStream(i++);){
 		    FileUtils.copyToFile(in, file);
 		} finally {
-		    IOUtils.closeQuietly(in);
+		    //IOUtils.closeQuietly(in);
 		}
 
 		System.out.println("is_delivered  : " + rs.getBoolean(i++));

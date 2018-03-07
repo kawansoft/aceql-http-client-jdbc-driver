@@ -1,4 +1,4 @@
-# AceQL HTTP 1.0 - Java Client SDK
+# AceQL HTTP 2.0 - Java Client SDK
 
 <img src="https://www.aceql.com/favicon.png" alt="AceQ HTTP Icon"/>
 
@@ -34,11 +34,11 @@
 
 This document describes how to use the AceQL Java Client SDK and gives some details about how it operates with the server side.
 
-The AceQL Java Client SDK allows users to wrap the [AceQL HTTP APIs](https://github.com/kawansoft/aceql-http/blob/master/aceql-http-1.0-user-guide-api.md) and eliminate the tedious work of handling communication errors and parsing JSON results.
+The AceQL Java Client SDK allows users to wrap the [AceQL HTTP APIs](https://github.com/kawansoft/aceql-http/blob/master/aceql-http-2.0-user-guide-api.md) and eliminate the tedious work of handling communication errors and parsing JSON results.
 
 Android and Java Desktop application developers can access remote SQL databases and/or SQL databases in the cloud, simply by including standard JDBC calls in their code, just like they would for a local database.
 
-The AceQL Server operation is described in [AceQL HTTP Server Installation and Configuration Guide](https://github.com/kawansoft/aceql-http/blob/master/aceql-http-1.0-user-guide-server.md), whose content is sometimes referred in this User Guide. 
+The AceQL Server operation is described in [AceQL HTTP Server Installation and Configuration Guide](https://github.com/kawansoft/aceql-http/blob/master/aceql-http-.0-user-guide-server.md), whose content is sometimes referred in this User Guide. 
 
 ## Technical operating environment 
 
@@ -55,7 +55,7 @@ The only required third party installation is a recent JVM. The following JVMs a
 
 ## AceQL Server Side compatiblity
 
-This 1.0 SDK version is compatible with both  server side AceQL HTTP v1.0 and  AceQL HTTP v2.0.
+This 2.0 SDK version is compatible with AceQL HTTP server side v2.0. It is not compatible with AceQL HTTP server side v1.0.
 
 ## License 
 
@@ -130,11 +130,11 @@ Note that AceQL is optimized as much as possible:
 
 We will use the same `kawansoft_example` database for all our code samples. 
 
-The schema is available here: [kawansoft_example.txt](http://www.aceql.com/rest/soft/1.0/src/kawansoft_example.txt). 
+The schema is available here: [kawansoft_example.txt](http://www.aceql.com/rest/soft/2.0/src/kawansoft_example.txt). 
 
 ## Connection creation
 
-The  `Connection` to the remote database is created using AceQL’s [AceQLConnection](https://www.aceql.com/rest/soft/1.0/javadoc_sdk/com/aceql/client/jdbc/AceQLConnection.html) class and passing the URL of the `ServerSqlManager` Servlet of your server configuration:
+The  `Connection` to the remote database is created using AceQL’s [AceQLConnection](https://www.aceql.com/rest/soft/2.0/javadoc_sdk/com/aceql/client/jdbc/AceQLConnection.html) class and passing the URL of the `ServerSqlManager` Servlet of your server configuration:
 
 ```java
   // The URL of the AceQL Server servlet
@@ -182,7 +182,7 @@ If proxy requires authentication, pass the credentials using  a `java.net.Passwo
 
 ## Handling Exceptions
 
-Except for `NullPointerException`, exceptions thrown are always an instance of [AceQLException](https://www.aceql.com/rest/soft/1.0/javadoc_sdk/com/aceql/client/jdbc/AceQLException.html).
+Except for `NullPointerException`, exceptions thrown are always an instance of [AceQLException](https://www.aceql.com/rest/soft/2.0/javadoc_sdk/com/aceql/client/jdbc/AceQLException.html).
 
 The `AceQLException` contains 5 pieces of information :
 
@@ -264,9 +264,9 @@ The Stateful Mode is the default when creating a session.
 
 State Management is described in detail in:
 
-[AceQL HTTP Server Installation and Configuration Guide](https://github.com/kawansoft/aceql-http/blob/master/aceql-http-1.0-user-guide-server.md). 
+[AceQL HTTP Server Installation and Configuration Guide](https://github.com/kawansoft/aceql-http/blob/master/aceql-http-2.0-user-guide-server.md). 
 
-You can set the session State *before* creating the `AceQLConnection` instance with a call to: [AceQLConnection.setStateless(booleanstateless)](http://www.aceql.com/rest/soft/1.0/javadoc_sdk/com/aceql/client/jdbc/AceQLConnection.html#setStateless(boolean)).
+You can set the session State *before* creating the `AceQLConnection` instance with a call to: [AceQLConnection.setStateless(booleanstateless)](http://www.aceql.com/rest/soft/2.0/javadoc_sdk/com/aceql/client/jdbc/AceQLConnection.html#setStateless(boolean)).
 
 Note that transactions and Connections modifiers calls are not allowed in Stateless Mode and will raise an `AceQLException` exception.
 
@@ -414,9 +414,9 @@ The atomic variables values will be shared by AceQL download/upload processes an
 
 The values are to be initialized and passed to `AceQLConnection` before the JDBC actions with the static setters:
 
-- [AceQLConnection.setProgress(AtomicInteger progress)](https://www.aceql.com/rest/soft/1.0/javadoc_sdk/com/aceql/client/jdbc/AceQLConnection.html#setProgress(java.util.concurrent.atomic.AtomicInteger))
+- [AceQLConnection.setProgress(AtomicInteger progress)](https://www.aceql.com/rest/soft/2.0/javadoc_sdk/com/aceql/client/jdbc/AceQLConnection.html#setProgress(java.util.concurrent.atomic.AtomicInteger))
 
-- [AceQLConnection.setCancelled(AtomicBoolean cancelled)](https://www.aceql.com/rest/soft/1.0/javadoc_sdk/com/aceql/client/jdbc/AceQLConnection.html#setCancelled(java.util.concurrent.atomic.AtomicBoolean))
+- [AceQLConnection.setCancelled(AtomicBoolean cancelled)](https://www.aceql.com/rest/soft/2.0/javadoc_sdk/com/aceql/client/jdbc/AceQLConnection.html#setCancelled(java.util.concurrent.atomic.AtomicBoolean))
 
 
 Values will then be updated and read:
@@ -535,14 +535,14 @@ Assuming hat you want to display a progress indicator using `SwingWorker`, you w
 	}
 ```
 
-A complete example is available in [SqlProgressMonitorDemo.java](http://www.aceql.com/rest/soft/1.0/src/SqlProgressMonitorDemo.java) and [BlobExample.java](https://www.aceql.com/rest/soft/1.0/src/BlobExample.java) 
+A complete example is available in [SqlProgressMonitorDemo.java](http://www.aceql.com/rest/soft/2.0/src/SqlProgressMonitorDemo.java) and [BlobExample.java](https://www.aceql.com/rest/soft/2.0/src/BlobExample.java) 
 
 ## HTTP session options 
 
 You can set the http timeout values with the static setters to be called before `AceQLConnection` creation:
 
-- [AceQLConnection.setConnectTimeout(int connectTimeout)](https://www.aceql.com/rest/soft/1.0/javadoc_sdk/com/aceql/client/jdbc/AceQLConnection.html#setConnectTimeout(int))
-- [AceQLConnection.setReadTimeout(int readTimeout)](https://www.aceql.com/rest/soft/1.0/javadoc_sdk/com/aceql/client/jdbc/AceQLConnection.html#setReadTimeout(int))
+- [AceQLConnection.setConnectTimeout(int connectTimeout)](https://www.aceql.com/rest/soft/2.0/javadoc_sdk/com/aceql/client/jdbc/AceQLConnection.html#setConnectTimeout(int))
+- [AceQLConnection.setReadTimeout(int readTimeout)](https://www.aceql.com/rest/soft/2.0/javadoc_sdk/com/aceql/client/jdbc/AceQLConnection.html#setReadTimeout(int))
 
 # Limitations
 

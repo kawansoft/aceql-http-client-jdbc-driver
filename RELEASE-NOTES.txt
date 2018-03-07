@@ -1,6 +1,6 @@
 
                  AceQL Java Client SDK
-                      Version 1.0
+                      Version 2.0
                      Release Notes
 
 
@@ -19,6 +19,18 @@ they would for a local database.
 The AceQL Java Client SDK is licensed under the Apache 2.0
 License.
     
+    
+AceQL Java Client SDK - Version 2.0 - 07-mar-2017
+-------------------------------------------------
+
+What's New:
+ - This version is designed to operate with AceQL HTTP v2.0 
+   on server  side.
+ - Creating a new Connection on same database is faster
+   because done without server authentication.
+ - This version is not compatible with AceQL HTTP v1.0 server
+   side.
+   
 
 AceQL Java Client SDK - Version 1.0.1 - 29-dec-2017
 ---------------------------------------------------

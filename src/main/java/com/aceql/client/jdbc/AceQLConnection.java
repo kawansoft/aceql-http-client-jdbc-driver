@@ -106,12 +106,7 @@ import com.aceql.client.jdbc.util.AceQLConnectionUtil;
  *     // Etc.
  * }
  * </pre>
- * 
- * </blockquote> The following static dedicated <code>AceQLConnection</code>
- * method allows to set the session stateless or stateful mode and must the
- * called before the constructor: <br>
- * {@link #setStateless(boolean)}
- * <p>
+ * </blockquote> 
  * The following dedicated <code>AceQLConnection</code> methods are specific to
  * the software and may be accessed with a cast:
  * <ul>
@@ -175,25 +170,9 @@ public class AceQLConnection extends AbstractConnection
 
     /** The Http instance that does all Http stuff */
     AceQLHttpApi aceQLHttpApi = null;
-
-    /**
-     * Says if session is stateless.
-     * 
-     * @return {@code true} if session is stateless, else {@code false}.
-     */
-    public static boolean isStateless() {
-	return AceQLHttpApi.isStateless();
-    }
-
-    /**
-     * Sets the session mode.
-     * 
-     * @param stateless
-     *            if true, the session will be stateless, else stateful.
-     */
-    public static void setStateless(boolean stateless) {
-	AceQLHttpApi.setStateless(stateless);
-    }
+    
+    /** is Connection open or closed */
+    private boolean closed = false;
 
     /**
      * Sets the connect timeout.
@@ -269,11 +248,11 @@ public class AceQLConnection extends AbstractConnection
 	    PasswordAuthentication passwordAuthentication) throws SQLException {
 
 	try {
-	    if (database == null) {
-		throw new NullPointerException("database is null!");
-	    }
 	    if (serverUrl == null) {
 		throw new NullPointerException("serverUrl is null!");
+	    }
+	    if (database == null) {
+		throw new NullPointerException("database is null!");
 	    }
 	    if (username == null) {
 		throw new NullPointerException("username is null!");
@@ -313,14 +292,28 @@ public class AceQLConnection extends AbstractConnection
      */
     @Override
     public void close() {
+	this.closed = true;
 	try {
-	    aceQLHttpApi.disconnect();
+	    aceQLHttpApi.close();
 	} catch (AceQLException e) {
 	    // Because close() can not throw an Exception, we wrap the
 	    // AceQLException with a RuntimeException
 	    throw new RuntimeException(e.getMessage(), e);
 	}
     }
+    
+    public void logout() {
+	try {
+	    aceQLHttpApi.logout();
+	} catch (AceQLException e) {
+	    // Because close() can not throw an Exception, we wrap the
+	    // AceQLException with a RuntimeException
+	    throw new RuntimeException(e.getMessage(), e);
+	}
+    }
+    
+    
+    
 
     /*
      * (non-Javadoc)
@@ -578,6 +571,15 @@ public class AceQLConnection extends AbstractConnection
      */
     public void setProgress(AtomicInteger progress) {
 	aceQLHttpApi.setProgress(progress);
+    }
+    
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.sql.Connection#close()
+     */
+    public boolean isClosed() throws SQLException {
+	return closed;
     }
 
 }

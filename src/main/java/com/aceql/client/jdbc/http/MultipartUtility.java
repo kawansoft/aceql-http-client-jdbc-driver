@@ -211,7 +211,15 @@ class MultipartUtility {
 	    // writer.append(CRLF); // No! will fail by adding it to the
 	    // uploaded file
 	} finally {
-	    IOUtils.closeQuietly(inputStream);
+	    // IOUtils.closeQuietly(inputStream);
+
+	    if (inputStream != null) {
+		try {
+		    inputStream.close();
+		} catch (Exception ignore) {
+		    // ignore
+		}
+	    }
 	}
     }
 

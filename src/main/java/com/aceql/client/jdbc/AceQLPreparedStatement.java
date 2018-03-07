@@ -402,25 +402,22 @@ class AceQLPreparedStatement extends AbstractPreparedStatement
 	    // }
 	    // }
 
-	    InputStream in = null;
-	    OutputStream out = null;
-
-	    try {
-
-		in = aceQLHttpApi.executeQuery(sql, isPreparedStatement,
+	    
+	    try (InputStream in = aceQLHttpApi.executeQuery(sql, isPreparedStatement,
 			statementParameters);
+		    OutputStream out = new BufferedOutputStream(new FileOutputStream(file));){
 
 		if (in != null) {
 		    // Do not use resource try {} ==> We don't want to create an
 		    // empty file
-		    out = new BufferedOutputStream(new FileOutputStream(file));
+		    
 		    InputStream inFinal = AceQLStatement.getFinalInputStream(in,
 			    aceQLHttpApi.isGzipResult());
 		    IOUtils.copy(inFinal, out);
 		}
 	    } finally {
-		IOUtils.closeQuietly(in);
-		IOUtils.closeQuietly(out);
+		//IOUtils.closeQuietly(in);
+		//IOUtils.closeQuietly(out);
 	    }
 
 	    int httpStatusCode = aceQLHttpApi.getHttpStatusCode();
