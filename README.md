@@ -4,7 +4,7 @@
 
    * [Fundamentals](#fundamentals)
       * [Technical operating environment](#technical-operating-environment)
-      * [AceQL Server Side compatiblity](#aceql-server-side-compatiblity)
+      * [AceQL Server Side compatibility](#aceql-server-side-compatibility)
       * [License](#license)
       * [SDK instead of JDBC Driver](#sdk-instead-of-jdbc-driver)
       * [AceQL Java Client SDK installation](#aceql-java-client-sdk-installation)
@@ -53,7 +53,7 @@ The only required third party installation is a recent JVM. The following JVMs a
 | UNIX/Linux     | Oracle Java SE 7, Java SE 8, Java SE 9<br />OpenJDK  7, OpenJDK 8, OpenJDK 9 |
 | OS X  / mac OS | Oracle Java SE 7 for OS X 10.7.3+ <br />Oracle Java SE 8 for OS X 10.8+  <br />Oracle Java SE 9 for mac OS 10.10+ |
 
-## AceQL Server Side compatiblity
+## AceQL Server side compatibility
 
 This 2.0 SDK version is compatible with AceQL HTTP server side v2.0. It is not compatible with AceQL HTTP server side v1.0.
 
