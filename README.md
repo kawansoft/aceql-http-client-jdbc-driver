@@ -21,7 +21,6 @@
          * [Most common AceQL Server messages](#most-common-aceql-server-messages)
          * [HTTP Status Codes](#http-status-codes)
       * [Data types](#data-types)
-      * [State Management](#state-management)
       * [SQL Transactions &amp; Connections modifiers](#sql-transactions--connections-modifiers)
       * [BLOB management](#blob-management)
          * [BLOB creation](#blob-creation)
@@ -209,21 +208,20 @@ The error type allows users to get the type of error and where the error occurre
 ### Most common AceQL Server messages
 
 | AceQL  Sever Error Messages   (AceQLException.getErrorCode()  = 2) |
-| :--------------------------------------- |
-| AceQL  main servlet not found in path    |
-| An error  occurred during Blob download  |
-| An error  occurred during Blob upload    |
+| :----------------------------------------------------------- |
+| AceQL  main servlet not found in path                        |
+| An error  occurred during Blob download                      |
+| An error  occurred during Blob upload                        |
 | Blob  directory defined in `DatabaseConfigurator.getBlobDirectory()` does not exist |
-| Connection  is invalidated (probably expired). |
-| Database  does not exist                 |
-| Invalid  blob_id. Cannot be used to create a file |
-| Invalid  blob_id. No Blob corresponding to blob_id |
-| Invalid  session_id.                     |
-| Invalid  username or password.           |
-| No action  found in request.             |
-| Operation  not allowed in stateless mode. |
-| Unable to  get a `Connection`.           |
-| Unknown  SQL action or not supported by software |
+| Connection  is invalidated (probably expired).               |
+| Database  does not exist                                     |
+| Invalid  blob_id. Cannot be used to create a file            |
+| Invalid  blob_id. No Blob corresponding to blob_id           |
+| Invalid  session_id.                                         |
+| Invalid  username or password.                               |
+| No action  found in request.                                 |
+| Unable to  get a `Connection`.                               |
+| Unknown  SQL action or not supported by software             |
 
 ### HTTP Status Codes
 
@@ -251,34 +249,15 @@ When an error occurs:
 
 Boolean, Blob/Clob, Integer, Short, Double, Float, BigDecimal, Long,String, Date, Time, Timestamp, URL and Array.  
 
-## State Management
-
-The AceQL SDK supports two state management modes:
-
-- The Stateful Mode
-- The Stateless Mode
-
-
-
-The Stateful Mode is the default when creating a session. 
-
-State Management is described in detail in:
-
-[AceQL HTTP Server Installation and Configuration Guide](https://github.com/kawansoft/aceql-http/blob/master/aceql-http-2.0-user-guide-server.md). 
-
-You can set the session State *before* creating the `AceQLConnection` instance with a call to: [AceQLConnection.setStateless(booleanstateless)](http://www.aceql.com/rest/soft/2.0/javadoc_sdk/com/aceql/client/jdbc/AceQLConnection.html#setStateless(boolean)).
-
-Note that transactions and Connections modifiers calls are not allowed in Stateless Mode and will raise an `AceQLException` exception.
-
 ## SQL Transactions & Connections modifiers
 
-The AceQLSDK support SQL transactions in Stateful Mode with:
+The AceQLSDK support SQL transactions with:
 
 - `commit()`
 - `rollback()`
 - `setAutoCommit(boolean autoCommit)`
 
-The following Connections modifiers calls are supported in this version, only in Stateful Mode:
+The following Connections modifiers calls are supported in this version:
 
 - `setHoldability(int holdability)`
 
@@ -289,7 +268,7 @@ The following Connections modifiers calls are supported in this version, only in
 
 ## BLOB management
 
- The AceQL SDK supports BLOB creation and reading. Methods are implemented using streaming techniques to keep memory consumption low, both on the client and server sides.
+The AceQL SDK supports BLOB creation and reading. Methods are implemented using streaming techniques to keep memory consumption low, both on the client and server sides.
 
 CLOB are not supported in this version.
 
