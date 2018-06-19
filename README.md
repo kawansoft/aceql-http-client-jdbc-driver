@@ -129,11 +129,11 @@ Note that AceQL is optimized as much as possible:
 
 We will use the same `kawansoft_example` database for all our code samples. 
 
-The schema is available here: [kawansoft_example.txt](http://www.aceql.com/rest/soft/2.0/src/kawansoft_example.txt). 
+The schema is available here: [kawansoft_example.txt](http://www.aceql.com/rest/soft/2.1/src/kawansoft_example.txt). 
 
 ## Connection creation
 
-The  `Connection` to the remote database is created using AceQL’s [AceQLConnection](https://www.aceql.com/rest/soft/2.0/javadoc_sdk/com/aceql/client/jdbc/AceQLConnection.html) class and passing the URL of the `ServerSqlManager` Servlet of your server configuration:
+The  `Connection` to the remote database is created using AceQL’s [AceQLConnection](https://www.aceql.com/rest/soft/2.1/javadoc_sdk/com/aceql/client/jdbc/AceQLConnection.html) class and passing the URL of the `ServerSqlManager` Servlet of your server configuration:
 
 ```java
   // The URL of the AceQL Server servlet
@@ -181,7 +181,7 @@ If proxy requires authentication, pass the credentials using  a `java.net.Passwo
 
 ## Handling Exceptions
 
-Except for `NullPointerException`, exceptions thrown are always an instance of [AceQLException](https://www.aceql.com/rest/soft/2.0/javadoc_sdk/com/aceql/client/jdbc/AceQLException.html).
+Except for `NullPointerException`, exceptions thrown are always an instance of [AceQLException](https://www.aceql.com/rest/soft/2.1/javadoc_sdk/com/aceql/client/jdbc/AceQLException.html).
 
 The `AceQLException` contains 5 pieces of information :
 
@@ -393,9 +393,9 @@ The atomic variables values will be shared by AceQL download/upload processes an
 
 The values are to be initialized and passed to `AceQLConnection` before the JDBC actions with the static setters:
 
-- [AceQLConnection.setProgress(AtomicInteger progress)](https://www.aceql.com/rest/soft/2.0/javadoc_sdk/com/aceql/client/jdbc/AceQLConnection.html#setProgress(java.util.concurrent.atomic.AtomicInteger))
+- [AceQLConnection.setProgress(AtomicInteger progress)](https://www.aceql.com/rest/soft/2.1/javadoc_sdk/com/aceql/client/jdbc/AceQLConnection.html#setProgress(java.util.concurrent.atomic.AtomicInteger))
 
-- [AceQLConnection.setCancelled(AtomicBoolean cancelled)](https://www.aceql.com/rest/soft/2.0/javadoc_sdk/com/aceql/client/jdbc/AceQLConnection.html#setCancelled(java.util.concurrent.atomic.AtomicBoolean))
+- [AceQLConnection.setCancelled(AtomicBoolean cancelled)](https://www.aceql.com/rest/soft/2.1/javadoc_sdk/com/aceql/client/jdbc/AceQLConnection.html#setCancelled(java.util.concurrent.atomic.AtomicBoolean))
 
 
 Values will then be updated and read:
@@ -514,14 +514,14 @@ Assuming hat you want to display a progress indicator using `SwingWorker`, you w
 	}
 ```
 
-A complete example is available in [SqlProgressMonitorDemo.java](http://www.aceql.com/rest/soft/2.0/src/SqlProgressMonitorDemo.java) and [BlobExample.java](https://www.aceql.com/rest/soft/2.0/src/BlobExample.java) 
+A complete example is available in [SqlProgressMonitorDemo.java](http://www.aceql.com/rest/soft/2.1/src/SqlProgressMonitorDemo.java) and [BlobExample.java](https://www.aceql.com/rest/soft/2.1/src/BlobExample.java) 
 
 ## HTTP session options 
 
 You can set the http timeout values with the static setters to be called before `AceQLConnection` creation:
 
-- [AceQLConnection.setConnectTimeout(int connectTimeout)](https://www.aceql.com/rest/soft/2.0/javadoc_sdk/com/aceql/client/jdbc/AceQLConnection.html#setConnectTimeout(int))
-- [AceQLConnection.setReadTimeout(int readTimeout)](https://www.aceql.com/rest/soft/2.0/javadoc_sdk/com/aceql/client/jdbc/AceQLConnection.html#setReadTimeout(int))
+- [AceQLConnection.setConnectTimeout(int connectTimeout)](https://www.aceql.com/rest/soft/2.1/javadoc_sdk/com/aceql/client/jdbc/AceQLConnection.html#setConnectTimeout(int))
+- [AceQLConnection.setReadTimeout(int readTimeout)](https://www.aceql.com/rest/soft/2.1/javadoc_sdk/com/aceql/client/jdbc/AceQLConnection.html#setReadTimeout(int))
 
 # Limitations
 
