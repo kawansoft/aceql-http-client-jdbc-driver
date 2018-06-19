@@ -1,4 +1,4 @@
-# AceQL HTTP 2.0 - Java Client SDK
+# AceQL HTTP - Java Client SDK v2.0
 
 <img src="https://www.aceql.com/favicon.png" alt="AceQ HTTP Icon"/>
 
