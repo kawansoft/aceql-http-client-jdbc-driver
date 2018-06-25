@@ -115,8 +115,6 @@ public class FrameworkDebug {
 	    throw new IllegalArgumentException(
 		    "Wrapped IOException. Error reading debug file: " + file,
 		    e);
-	} finally {
-	    //IOUtils.closeQuietly(lineNumberReader);
 	}
     }
 

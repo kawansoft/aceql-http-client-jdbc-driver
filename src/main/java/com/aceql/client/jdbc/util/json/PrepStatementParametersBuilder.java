@@ -20,6 +20,7 @@ package com.aceql.client.jdbc.util.json;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 import com.aceql.client.jdbc.util.AceQLTypes;
 
@@ -35,11 +36,17 @@ public class PrepStatementParametersBuilder {
     /** Universal and clean line separator */
     private static String CR_LF = System.getProperty("line.separator");
 
-    /** The map of (param_type_n, param_value_n) */
-    Map<String, String> statementParameters = new LinkedHashMap<String, String>();
+    /** The map of IN parameters of (index, SqlParameter) */
+    private Map<Integer, SqlParameter> statementInParameters = new LinkedHashMap<Integer, SqlParameter>();
+    
+    /** The map of OUT parameters of (index, SqlParameter) */
+    private Map<Integer, SqlParameter> callableOutParameters = new LinkedHashMap<Integer, SqlParameter>(); 
+    
+    /** The map of HTTP formatted parameters (param_type_n, param_value_n) */
+    private Map<String, String> httpFormattedStatementParameters = new LinkedHashMap<String, String>();
 
     /**
-     * Default constructor
+     * Default constructor.
      */
     public PrepStatementParametersBuilder() {
     }
@@ -55,9 +62,9 @@ public class PrepStatementParametersBuilder {
      * @param parameterValue
      *            the String value of the parameter
      */
-    public void setParameter(int parameterIndex, String parameterType,
+    public void setInParameter(int parameterIndex, String parameterType,
 	    String parameterValue) {
-
+	
 	if (parameterIndex < 1) {
 	    throw new NullPointerException(
 		    "Illegal parameter index. Must be > 0: " + parameterIndex);
@@ -72,22 +79,86 @@ public class PrepStatementParametersBuilder {
 		    + parameterType + "." + CR_LF + "The valid types are : "
 		    + AceQLTypes.SQL_TYPES_SET);
 	}
-
-	statementParameters.put("param_type_" + parameterIndex, parameterType);
-
-	if (parameterValue == null) {
-	    parameterValue = "NULL";
+	
+	SqlParameter sqlParameter = new SqlParameter(parameterIndex, parameterType, parameterValue); 
+	statementInParameters.put(parameterIndex, sqlParameter);
+	
+    }
+    
+    
+    /**
+     * Add the prepared statement parameter to the list of parameters
+     * 
+     * @param parameterIndex
+     *            the first parameter is 1, the second is 2, ...
+     * @param parameterType
+     *            the SQL parameter type. See possible values in
+     *            {@link SqlTypes}.
+     * @param parameterValue
+     *            the String value of the parameter
+     */
+    public void setOutParameter(int parameterIndex, String parameterType) {
+	
+	if (parameterIndex < 1) {
+	    throw new NullPointerException(
+		    "Illegal parameter index. Must be > 0: " + parameterIndex);
 	}
 
-	statementParameters.put("param_value_" + parameterIndex,
-		parameterValue);
+	if (parameterType == null) {
+	    throw new NullPointerException("parameter type is null");
+	}
+
+	if (!AceQLTypes.SQL_TYPES_SET.contains(parameterType)) {
+	    throw new IllegalArgumentException("Invalid parameter type: "
+		    + parameterType + "." + CR_LF + "The valid types are : "
+		    + AceQLTypes.SQL_TYPES_SET);
+	}
+	
+	SqlParameter sqlParameter = new SqlParameter(parameterIndex, parameterType, null); 
+	callableOutParameters.put(parameterIndex, sqlParameter);
+	
+    }
+
+    /**
+     * @return the callableOutParameters
+     */
+    public Map<Integer, SqlParameter> getCallableOutParameters() {
+        return callableOutParameters;
     }
 
     /**
      * @return the statementParameters
      */
-    public Map<String, String> getStatementParameters() {
-	return statementParameters;
+    public Map<String, String> getHttpFormattedStatementParameters() {
+	
+	Set<Integer> keySet = statementInParameters.keySet();
+	
+	// For all IN parameters, format HTTP parameters.
+	// If exists a corresponding OUT parameter, final direction is INOUT
+	for (Integer index : keySet) {
+	    SqlParameter sqlParameter = statementInParameters.get(index);
+	    httpFormattedStatementParameters.put("param_type_" + index, sqlParameter.getParameterType());
+	    httpFormattedStatementParameters.put("param_value_" + index, sqlParameter.getParameterValue());
+	    
+	    if (callableOutParameters.containsKey(index)) {
+		httpFormattedStatementParameters.put("param_direction_" + index, ParameterDirection.INOUT.toString().toLowerCase());
+	    }
+	}
+	
+	// Add the OUT only parameter, that not exist in IN Map.
+	keySet = callableOutParameters.keySet();
+
+	for (Integer index : keySet) {
+	    // Must not be an IN parameter
+	    if (!statementInParameters.containsKey(index)) {
+		SqlParameter sqlParameter = callableOutParameters.get(index);
+		httpFormattedStatementParameters.put("param_type_" + index, sqlParameter.getParameterType());
+		httpFormattedStatementParameters.put("param_direction_" + index, ParameterDirection.OUT.toString().toLowerCase());
+	    }
+	}
+	
+	
+	return httpFormattedStatementParameters;
     }
 
     /*
@@ -98,7 +169,7 @@ public class PrepStatementParametersBuilder {
     @Override
     public String toString() {
 	return "PrepStatementParametersBuilder [statementParameters="
-		+ statementParameters + "]";
+		+ httpFormattedStatementParameters + "]";
     }
 
 }

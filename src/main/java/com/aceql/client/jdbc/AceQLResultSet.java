@@ -75,10 +75,11 @@ class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
      *            call
      * @param statement
      *            the calling Statement
+     * @param rowCount the numbers of row in the Json result set file
      * @throws SQLException
      *             if file is null or does no exist
      */
-    public AceQLResultSet(File jsonFile, Statement statement)
+    public AceQLResultSet(File jsonFile, Statement statement, int rowCount)
 	    throws SQLException {
 
 	if (jsonFile == null) {
@@ -89,7 +90,7 @@ class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
 	    throw new SQLException(new FileNotFoundException(
 		    "jsonFile does not exist: " + jsonFile));
 	}
-
+	
 	this.jsonFile = jsonFile;
 	this.statement = statement;
 
@@ -99,17 +100,14 @@ class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
 
 	this.rowParser = new RowParser(jsonFile);
 
-	DEBUG = true;
 	long begin = System.currentTimeMillis();
 	debug(new java.util.Date() + " Begin getRowCount");
 
-	this.rowCount = RowParser.getRowCount(jsonFile);
+	this.rowCount = rowCount;
 
 	long end = System.currentTimeMillis();
 	debug(new java.util.Date() + " End getRowCount: " + rowCount);
 	debug("Elapsed = " + (end - begin));
-	DEBUG = false;
-
     }
 
     /**

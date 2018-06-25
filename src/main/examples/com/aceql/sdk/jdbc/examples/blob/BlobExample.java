@@ -17,18 +17,7 @@
  * limitations under the License. 
  */
 package com.aceql.sdk.jdbc.examples.blob;
-/*
- * This file is part of AceQL
- * AceQL: Remote JDBC access over HTTP.                                     
- * Copyright (C) 2015,  KawanSoft SAS
- * (http://www.kawansoft.com). All rights reserved.  
- * AceQL is distributed in the hope that it will be useful,               
- * but WITHOUT ANY WARRANTY; without even the implied warranty of                
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
- * 
- * Any modifications to this file must keep this entire header
- * intact.                                                                          
- */
+
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -167,8 +156,6 @@ public class BlobExample {
 				
 		try (InputStream in = rs.getBinaryStream("jpeg_image");){
 		    FileUtils.copyToFile(in, imageFile);
-		} finally {
-		    //IOUtils.closeQuietly(in);
 		}
 
 		System.out.println();

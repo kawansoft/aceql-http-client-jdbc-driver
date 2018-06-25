@@ -1,3 +1,22 @@
+/*
+ * This file is part of AceQL Client SDK.
+ * AceQL Client SDK: Remote JDBC access over HTTP with AceQL HTTP.                                 
+ * Copyright (C) 2017,  KawanSoft SAS
+ * (http://www.kawansoft.com). All rights reserved.                                
+ *                                                                               
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License. 
+ */
+
 package com.aceql.client.test;
 
 import static org.junit.Assert.fail;
@@ -13,6 +32,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.SystemUtils;
 import org.junit.Test;
 
 import com.aceql.client.jdbc.AceQLConnection;
@@ -20,14 +40,8 @@ import com.aceql.client.jdbc.AceQLException;
 
 public class AceQLHttpConnectionTest {
 
-    private static String OS = System.getProperty("os.name").toLowerCase();
-    private static String FILE_SEP = File.separator;
-
-    public static final String ROOT = OS.contains("win") ? "c:\\tmp" + FILE_SEP
-	    : FILE_SEP + "tmp" + FILE_SEP;
-
-    public static final String IN_DIRECTORY = ROOT;
-    public static final String OUT_DIRECTORY = ROOT + "out" + FILE_SEP;
+    public static final String IN_DIRECTORY = SystemUtils.USER_HOME + File.separator + "aceql_tests" + File.separator + "IN";
+    public static final String OUT_DIRECTORY = SystemUtils.USER_HOME + File.separator + "aceql_tests" + File.separator + "OUT";
 
     final String serverUrl = "http://localhost:9090/aceql";
     final String username = "username";
@@ -44,7 +58,7 @@ public class AceQLHttpConnectionTest {
 	if (!new File(OUT_DIRECTORY).exists()) {
 	    new File(OUT_DIRECTORY).mkdirs();
 	}
-
+	
 	if (connection == null) {
 	    connection = new AceQLConnection(serverUrl, dbname, username,
 		    password.toCharArray());
@@ -263,7 +277,7 @@ public class AceQLHttpConnectionTest {
 	    int customerId = 1;
 	    int itemId = 1;
 
-	    File file = new File(IN_DIRECTORY + "username_koala.jpg");
+	    File file = new File(IN_DIRECTORY  + File.separator + "username_koala.jpg");
 
 	    if (!file.exists()) {
 		throw new FileNotFoundException("file does not exist:" + file);
@@ -320,12 +334,10 @@ public class AceQLHttpConnectionTest {
 		System.out.println("date_shipped  : " + rs.getTimestamp(i++));
 		System.out.println("jpeg_image    : " + "<binary>");
 
-		file = new File(OUT_DIRECTORY + "downloaded_new_blob.jpg");
+		file = new File(OUT_DIRECTORY + File.separator + "downloaded_new_blob.jpg");
 
 		try (InputStream in = rs.getBinaryStream(i++);){
 		    FileUtils.copyToFile(in, file);
-		} finally {
-		    //IOUtils.closeQuietly(in);
 		}
 
 		System.out.println("is_delivered  : " + rs.getBoolean(i++));

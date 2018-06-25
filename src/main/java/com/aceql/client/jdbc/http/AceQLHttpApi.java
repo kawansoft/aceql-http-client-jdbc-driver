@@ -47,6 +47,7 @@ import org.kawanfw.sql.version.VersionValues;
 
 import com.aceql.client.jdbc.AceQLException;
 import com.aceql.client.jdbc.util.UserLoginStore;
+import com.aceql.client.jdbc.util.json.SqlParameter;
 
 /**
  * @author Nicolas de Pomereu
@@ -92,9 +93,8 @@ public class AceQLHttpApi {
      * 
      * @param readTimeout
      *            an <code>int</code> that specifies the read timeout value, in
-     *            milliseconds, to be used when an http connection is
-     *            established to the remote server. See
-     *            {@link URLConnection#setReadTimeout(int)}
+     *            milliseconds, to be used when an http connection is established to
+     *            the remote server. See {@link URLConnection#setReadTimeout(int)}
      */
     public static void setReadTimeout(int readTimeout) {
 	AceQLHttpApi.readTimeout = readTimeout;
@@ -104,11 +104,11 @@ public class AceQLHttpApi {
      * Sets the connect timeout.
      * 
      * @param connectTimeout
-     *            Sets a specified timeout value, in milliseconds, to be used
-     *            when opening a communications link to the remote server. If
-     *            the timeout expires before the connection can be established,
-     *            a java.net.SocketTimeoutException is raised. A timeout of zero
-     *            is interpreted as an infinite timeout. See
+     *            Sets a specified timeout value, in milliseconds, to be used when
+     *            opening a communications link to the remote server. If the timeout
+     *            expires before the connection can be established, a
+     *            java.net.SocketTimeoutException is raised. A timeout of zero is
+     *            interpreted as an infinite timeout. See
      *            {@link URLConnection#setConnectTimeout(int)}
      */
     public static void setConnectTimeout(int connectTimeout) {
@@ -119,8 +119,7 @@ public class AceQLHttpApi {
      * Login on the AceQL server and connect to a database
      * 
      * @param serverUrl
-     *            the url of the AceQL server. Example:
-     *            http://localhost:9090/aceql
+     *            the url of the AceQL server. Example: http://localhost:9090/aceql
      * @param database
      *            the server database to connect to.
      * @param username
@@ -130,15 +129,13 @@ public class AceQLHttpApi {
      * @param proxy
      *            the proxy to use. null if none.
      * @param passwordAuthentication
-     *            the username and password holder to use for authenticated
-     *            proxy. Null if no proxy or if proxy
+     *            the username and password holder to use for authenticated proxy.
+     *            Null if no proxy or if proxy
      * @throws AceQLException
      *             if any Exception occurs
      */
-    public AceQLHttpApi(String serverUrl, String database, String username,
-	    char[] password, Proxy proxy,
-	    PasswordAuthentication passwordAuthentication)
-	    throws AceQLException {
+    public AceQLHttpApi(String serverUrl, String database, String username, char[] password, Proxy proxy,
+	    PasswordAuthentication passwordAuthentication) throws AceQLException {
 
 	try {
 	    if (database == null) {
@@ -164,61 +161,53 @@ public class AceQLHttpApi {
 	    setProxyCredentials();
 
 	    /*
-	     * BEGIN OLD implementation with GET String url = serverUrl +
-	     * "/database/" + database + "/username/" + username + "/login" +
-	     * "?password=" + new String(password) + "&stateless=" + stateless;
+	     * BEGIN OLD implementation with GET String url = serverUrl + "/database/" +
+	     * database + "/username/" + username + "/login" + "?password=" + new
+	     * String(password) + "&stateless=" + stateless;
 	     * 
 	     * String result = callWithGet(url);
 	     * 
 	     * trace("result: " + result); END OLD implementation with GET
 	     */
 
-	    UserLoginStore userLoginStore = new UserLoginStore(serverUrl, username,
-		    database);
+	    UserLoginStore userLoginStore = new UserLoginStore(serverUrl, username, database);
 
 	    if (userLoginStore.isAlreadyLogged()) {
 		trace("Get a new connection with get_connection");
 		String sessionId = userLoginStore.getSessionId();
-		
+
 		String theUrl = serverUrl + "/session/" + sessionId + "/get_connection";
 		String result = callWithGet(theUrl);
-		
+
 		trace("result: " + result);
-		
-		ResultAnalyzer resultAnalyzer = new ResultAnalyzer(result,
-			httpStatusCode, httpStatusMessage);
+
+		ResultAnalyzer resultAnalyzer = new ResultAnalyzer(result, httpStatusCode, httpStatusMessage);
 
 		if (!resultAnalyzer.isStatusOk()) {
-		    throw new AceQLException(resultAnalyzer.getErrorMessage(),
-			    resultAnalyzer.getErrorType(), null,
+		    throw new AceQLException(resultAnalyzer.getErrorMessage(), resultAnalyzer.getErrorType(), null,
 			    resultAnalyzer.getStackTrace(), httpStatusCode);
 		}
-		
+
 		String connectionId = resultAnalyzer.getValue("connection_id");
 		trace("Ok. New Connection created: " + connectionId);
-		
-		this.url = serverUrl + "/session/" + sessionId + "/connection/"
-			+ connectionId + "/";
-		
+
+		this.url = serverUrl + "/session/" + sessionId + "/connection/" + connectionId + "/";
+
 	    } else {
-		String url = serverUrl + "/database/" + database + "/username/"
-			+ username + "/login";
+		String url = serverUrl + "/database/" + database + "/username/" + username + "/login";
 
 		Map<String, String> parameters = new HashMap<String, String>();
 		parameters.put("password", new String(password));
 		parameters.put("client_version", VersionValues.VERSION);
 
-		String result = callWithPostReturnString(new URL(url),
-			parameters);
+		String result = callWithPostReturnString(new URL(url), parameters);
 
 		trace("result: " + result);
 
-		ResultAnalyzer resultAnalyzer = new ResultAnalyzer(result,
-			httpStatusCode, httpStatusMessage);
+		ResultAnalyzer resultAnalyzer = new ResultAnalyzer(result, httpStatusCode, httpStatusMessage);
 
 		if (!resultAnalyzer.isStatusOk()) {
-		    throw new AceQLException(resultAnalyzer.getErrorMessage(),
-			    resultAnalyzer.getErrorType(), null,
+		    throw new AceQLException(resultAnalyzer.getErrorMessage(), resultAnalyzer.getErrorType(), null,
 			    resultAnalyzer.getStackTrace(), httpStatusCode);
 		}
 
@@ -228,9 +217,8 @@ public class AceQLHttpApi {
 		trace("sessionId   : " + sessionId);
 		trace("connectionId: " + connectionId);
 
-		this.url = serverUrl + "/session/" + sessionId + "/connection/"
-			+ connectionId + "/";
-		
+		this.url = serverUrl + "/session/" + sessionId + "/connection/" + connectionId + "/";
+
 		userLoginStore.setSessionId(sessionId);
 	    }
 
@@ -238,8 +226,7 @@ public class AceQLHttpApi {
 	    if (e instanceof AceQLException) {
 		throw (AceQLException) e;
 	    } else {
-		throw new AceQLException(e.getMessage(), 0, e, null,
-			httpStatusCode);
+		throw new AceQLException(e.getMessage(), 0, e, null, httpStatusCode);
 	    }
 	}
 
@@ -249,8 +236,7 @@ public class AceQLHttpApi {
      * Login on the AceQL server and connect to a database
      * 
      * @param serverUrl
-     *            the url of the AceQL server. Example:
-     *            http://localhost:9090/aceql
+     *            the url of the AceQL server. Example: http://localhost:9090/aceql
      * @param username
      *            the login
      * @param password
@@ -260,8 +246,7 @@ public class AceQLHttpApi {
      * @throws AceQLException
      *             if any Exception occurs
      */
-    public AceQLHttpApi(String serverUrl, String database, String username,
-	    char[] password) throws AceQLException {
+    public AceQLHttpApi(String serverUrl, String database, String username, char[] password) throws AceQLException {
 	this(serverUrl, database, username, password, null, null);
     }
 
@@ -277,8 +262,7 @@ public class AceQLHttpApi {
 	}
     }
 
-    private void callApiNoResult(String commandName, String commandOption)
-	    throws AceQLException {
+    private void callApiNoResult(String commandName, String commandOption) throws AceQLException {
 
 	try {
 
@@ -288,11 +272,9 @@ public class AceQLHttpApi {
 
 	    String result = callWithGet(commandName, commandOption);
 
-	    ResultAnalyzer resultAnalyzer = new ResultAnalyzer(result,
-		    httpStatusCode, httpStatusMessage);
+	    ResultAnalyzer resultAnalyzer = new ResultAnalyzer(result, httpStatusCode, httpStatusMessage);
 	    if (!resultAnalyzer.isStatusOk()) {
-		throw new AceQLException(resultAnalyzer.getErrorMessage(),
-			resultAnalyzer.getErrorType(), null,
+		throw new AceQLException(resultAnalyzer.getErrorMessage(), resultAnalyzer.getErrorType(), null,
 			resultAnalyzer.getStackTrace(), httpStatusCode);
 	    }
 
@@ -300,14 +282,12 @@ public class AceQLHttpApi {
 	    if (e instanceof AceQLException) {
 		throw (AceQLException) e;
 	    } else {
-		throw new AceQLException(e.getMessage(), 0, e, null,
-			httpStatusCode);
+		throw new AceQLException(e.getMessage(), 0, e, null, httpStatusCode);
 	    }
 	}
     }
 
-    private String callApiWithResult(String commandName, String commandOption)
-	    throws AceQLException {
+    private String callApiWithResult(String commandName, String commandOption) throws AceQLException {
 
 	try {
 
@@ -317,11 +297,9 @@ public class AceQLHttpApi {
 
 	    String result = callWithGet(commandName, commandOption);
 
-	    ResultAnalyzer resultAnalyzer = new ResultAnalyzer(result,
-		    httpStatusCode, httpStatusMessage);
+	    ResultAnalyzer resultAnalyzer = new ResultAnalyzer(result, httpStatusCode, httpStatusMessage);
 	    if (!resultAnalyzer.isStatusOk()) {
-		throw new AceQLException(resultAnalyzer.getErrorMessage(),
-			resultAnalyzer.getErrorType(), null,
+		throw new AceQLException(resultAnalyzer.getErrorMessage(), resultAnalyzer.getErrorType(), null,
 			resultAnalyzer.getStackTrace(), httpStatusCode);
 	    }
 
@@ -332,14 +310,12 @@ public class AceQLHttpApi {
 	    if (e instanceof AceQLException) {
 		throw (AceQLException) e;
 	    } else {
-		throw new AceQLException(e.getMessage(), 0, e, null,
-			httpStatusCode);
+		throw new AceQLException(e.getMessage(), 0, e, null, httpStatusCode);
 	    }
 	}
     }
 
-    private String callWithGet(String action, String actionParameter)
-	    throws IOException {
+    private String callWithGet(String action, String actionParameter) throws IOException {
 
 	String urlWithaction = url + action;
 
@@ -367,12 +343,11 @@ public class AceQLHttpApi {
     // }
 
     private InputStream callWithGetReturnStream(String url)
-	    throws MalformedURLException, IOException,
-	    UnsupportedEncodingException {
+	    throws MalformedURLException, IOException, UnsupportedEncodingException {
 
 	/*
-	 * if (httpVersion == 1) { return callWithGetInputStreamHttp11(url); }
-	 * else { return callWithGetInputStreamHttp2(url); }
+	 * if (httpVersion == 1) { return callWithGetInputStreamHttp11(url); } else {
+	 * return callWithGetInputStreamHttp2(url); }
 	 */
 
 	return callWithGetInputStreamHttp11(url);
@@ -413,13 +388,12 @@ public class AceQLHttpApi {
 	return in;
     }
 
-    private String callWithGet(String url) throws MalformedURLException,
-	    IOException, ProtocolException, UnsupportedEncodingException {
+    private String callWithGet(String url)
+	    throws MalformedURLException, IOException, ProtocolException, UnsupportedEncodingException {
 
 	String responseBody;
 
-	
-	try (InputStream in = callWithGetReturnStream(url)){
+	try (InputStream in = callWithGetReturnStream(url)) {
 	    if (in == null)
 		return null;
 
@@ -437,8 +411,6 @@ public class AceQLHttpApi {
 	    trace("----------------------------------------");
 
 	    return responseBody;
-	} finally {
-	    //IOUtils.closeQuietly(in);
 	}
 
     }
@@ -449,13 +421,12 @@ public class AceQLHttpApi {
      * MalformedURLException, IOException, ProtocolException,
      * UnsupportedEncodingException {
      * 
-     * URL theUrl = new URL(url + action); return callWithPost(theUrl,
-     * parameters); }
+     * URL theUrl = new URL(url + action); return callWithPost(theUrl, parameters);
+     * }
      */
 
     private InputStream callWithPost(URL theUrl, Map<String, String> parameters)
-	    throws IOException, ProtocolException, SocketTimeoutException,
-	    UnsupportedEncodingException {
+	    throws IOException, ProtocolException, SocketTimeoutException, UnsupportedEncodingException {
 	HttpURLConnection conn = null;
 
 	if (this.proxy == null) {
@@ -469,18 +440,14 @@ public class AceQLHttpApi {
 	conn.setRequestMethod("POST");
 	conn.setDoOutput(true);
 
-	TimeoutConnector timeoutConnector = new TimeoutConnector(conn,
-		connectTimeout);
+	TimeoutConnector timeoutConnector = new TimeoutConnector(conn, connectTimeout);
 
-	try (OutputStream connOut = timeoutConnector.getOutputStream();){ 
-	    BufferedWriter writer = new BufferedWriter(
-		    new OutputStreamWriter(connOut, "UTF-8"));
+	try (OutputStream connOut = timeoutConnector.getOutputStream();) {
+	    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(connOut, "UTF-8"));
 	    writer.write(AceQLHttpApi.getPostDataString(parameters));
 
 	    // writer.flush();
 	    writer.close();
-	} finally {
-	    //IOUtils.closeQuietly(connOut);
 	}
 
 	trace();
@@ -514,21 +481,18 @@ public class AceQLHttpApi {
 
 	// Sets the credential for authentication
 	if (passwordAuthentication != null) {
-	    final String proxyAuthUsername = passwordAuthentication
-		    .getUserName();
+	    final String proxyAuthUsername = passwordAuthentication.getUserName();
 	    final char[] proxyPassword = passwordAuthentication.getPassword();
 
 	    Authenticator authenticator = new Authenticator() {
 
 		public PasswordAuthentication getPasswordAuthentication() {
-		    return new PasswordAuthentication(proxyAuthUsername,
-			    proxyPassword);
+		    return new PasswordAuthentication(proxyAuthUsername, proxyPassword);
 		}
 	    };
 
 	    if (DEBUG) {
-		System.out.println("passwordAuthentication: "
-			+ proxyAuthUsername + " " + new String(proxyPassword));
+		System.out.println("passwordAuthentication: " + proxyAuthUsername + " " + new String(proxyPassword));
 	    }
 
 	    Authenticator.setDefault(authenticator);
@@ -544,8 +508,7 @@ public class AceQLHttpApi {
     public AceQLHttpApi clone() {
 	AceQLHttpApi aceQLHttpApi;
 	try {
-	    aceQLHttpApi = new AceQLHttpApi(serverUrl, database, username,
-		    password, proxy, passwordAuthentication);
+	    aceQLHttpApi = new AceQLHttpApi(serverUrl, database, username, password, proxy, passwordAuthentication);
 
 	    aceQLHttpApi.setPrettyPrinting(prettyPrinting);
 	    aceQLHttpApi.setGzipResult(gzipResult);
@@ -589,9 +552,9 @@ public class AceQLHttpApi {
      * blob/clob upload or download.
      * 
      * @param cancelled
-     *            the shareable canceled variable that will be used by the
-     *            progress indicator to notify this instance that the end user
-     *            has cancelled the current blob/clob upload or download
+     *            the shareable canceled variable that will be used by the progress
+     *            indicator to notify this instance that the end user has cancelled
+     *            the current blob/clob upload or download
      * 
      */
     public void setCancelled(AtomicBoolean cancelled) {
@@ -599,11 +562,11 @@ public class AceQLHttpApi {
     }
 
     /**
-     * Returns the sharable progress variable that will store blob/clob upload
-     * or download progress between 0 and 100
+     * Returns the sharable progress variable that will store blob/clob upload or
+     * download progress between 0 and 100
      * 
-     * @return the sharable progress variable that will store blob/clob upload
-     *         or download progress between 0 and 100
+     * @return the sharable progress variable that will store blob/clob upload or
+     *         download progress between 0 and 100
      * 
      */
     public AtomicInteger getProgress() {
@@ -612,8 +575,8 @@ public class AceQLHttpApi {
 
     /**
      * Sets the sharable progress variable that will store blob/clob upload or
-     * download progress between 0 and 100. Will be used by progress indicators
-     * to show the progress.
+     * download progress between 0 and 100. Will be used by progress indicators to
+     * show the progress.
      * 
      * @param progress
      *            the sharable progress variable
@@ -746,8 +709,8 @@ public class AceQLHttpApi {
      * Calls /set_auto_commit API
      *
      * @param autoCommit
-     *            <code>true</code> to enable auto-commit mode;
-     *            <code>false</code> to disable it
+     *            <code>true</code> to enable auto-commit mode; <code>false</code>
+     *            to disable it
      * @throws AceQLException
      *             if any Exception occurs
      */
@@ -759,8 +722,8 @@ public class AceQLHttpApi {
      * Calls /get_auto_commit API
      *
      * @param autoCommit
-     *            <code>true</code> to enable auto-commit mode;
-     *            <code>false</code> to disable it
+     *            <code>true</code> to enable auto-commit mode; <code>false</code>
+     *            to disable it
      * @return the current state of this <code>Connection</code> object's
      *         auto-commit mode
      * @throws AceQLException
@@ -822,8 +785,7 @@ public class AceQLHttpApi {
      *             if any Exception occurs
      */
     public String getTransactionIsolation() throws AceQLException {
-	String result = callApiWithResult("get_transaction_isolation_level",
-		null);
+	String result = callApiWithResult("get_transaction_isolation_level", null);
 	return result;
     }
 
@@ -837,17 +799,22 @@ public class AceQLHttpApi {
      * @param isPreparedStatement
      *            if true, the server will generate a prepared statement, else a
      *            simple statement
+     * @param isStoredProcedure
+     *            TODO
      * @param statementParameters
      *            the statement parameters in JSON format. Maybe null for simple
      *            statement call.
-     * @return either the row count for <code>INSERT</code>, <code>UPDATE</code>
-     *         or <code>DELETE</code> statements, or <code>0</code> for SQL
-     *         statements that return nothing
+     * @param callableOutParameters
+     *            the map of OUT parameters
+     * @return either the row count for <code>INSERT</code>, <code>UPDATE</code> or
+     *         <code>DELETE</code> statements, or <code>0</code> for SQL statements
+     *         that return nothing
      * @throws AceQLException
      *             if any Exception occurs
      */
-    public int executeUpdate(String sql, boolean isPreparedStatement,
-	    Map<String, String> statementParameters) throws AceQLException {
+    public int executeUpdate(String sql, boolean isPreparedStatement, boolean isStoredProcedure,
+	    Map<String, String> statementParameters, Map<Integer, SqlParameter> callableOutParameters)
+	    throws AceQLException {
 
 	try {
 	    if (sql == null) {
@@ -856,12 +823,19 @@ public class AceQLHttpApi {
 
 	    String action = "execute_update";
 
+	    // Call raw execute if non query/select stored procedure. (Dirty!! To be
+	    // corrected.)
+	    if (isStoredProcedure) {
+		action = "execute";
+	    }
+
 	    Map<String, String> parametersMap = new HashMap<String, String>();
 	    parametersMap.put("sql", sql);
 
 	    // parametersMap.put("prepared_statement", new Boolean(
 	    // isPreparedStatement).toString());
 	    parametersMap.put("prepared_statement", "" + isPreparedStatement);
+	    parametersMap.put("stored_procedure", "" + isStoredProcedure);
 
 	    trace("sql: " + sql);
 	    trace("statement_parameters: " + statementParameters);
@@ -875,12 +849,14 @@ public class AceQLHttpApi {
 
 	    String result = callWithPostReturnString(theUrl, parametersMap);
 
-	    ResultAnalyzer resultAnalyzer = new ResultAnalyzer(result,
-		    httpStatusCode, httpStatusMessage);
+	    ResultAnalyzer resultAnalyzer = new ResultAnalyzer(result, httpStatusCode, httpStatusMessage);
 	    if (!resultAnalyzer.isStatusOk()) {
-		throw new AceQLException(resultAnalyzer.getErrorMessage(),
-			resultAnalyzer.getErrorType(), null,
+		throw new AceQLException(resultAnalyzer.getErrorMessage(), resultAnalyzer.getErrorType(), null,
 			resultAnalyzer.getStackTrace(), httpStatusCode);
+	    }
+
+	    if (isStoredProcedure) {
+		updateOutParameters(resultAnalyzer, callableOutParameters);
 	    }
 
 	    int rowCount = resultAnalyzer.getIntvalue("row_count");
@@ -890,22 +866,59 @@ public class AceQLHttpApi {
 	    if (e instanceof AceQLException) {
 		throw (AceQLException) e;
 	    } else {
-		throw new AceQLException(e.getMessage(), 0, e, null,
-			httpStatusCode);
+		throw new AceQLException(e.getMessage(), 0, e, null, httpStatusCode);
 	    }
 	}
 
     }
 
-    private String callWithPostReturnString(URL theUrl,
-	    Map<String, String> parametersMap)
-	    throws IOException, ProtocolException, SocketTimeoutException,
-	    UnsupportedEncodingException {
-	
+    /**
+     * Update the Map of callable OUT parameters using the result string in
+     * ResultAnalyzer
+     * 
+     * @param resultAnalyzer
+     *            the JSON container sent by the server afte the update
+     * @param callableOutParameters
+     *            the OUT parameters to update after the execute.
+     * @throws AceQLException
+     *             if server does not return awaited OUT parameters
+     */
+    private static synchronized void updateOutParameters(ResultAnalyzer resultAnalyzer,
+	    Map<Integer, SqlParameter> callableOutParameters) throws AceQLException {
+
+	// Immediate return in case no out parameters set by user
+	if (callableOutParameters == null || callableOutParameters.isEmpty()) {
+	    return;
+	}
+
+	Map<Integer, String> parametersOutPerIndexAfterExecute = resultAnalyzer.getParametersOutPerIndex();
+
+	// Immediate return in case no parameters. This can not happen if
+	// callableOutParameters is not empty
+	if (parametersOutPerIndexAfterExecute == null || parametersOutPerIndexAfterExecute.isEmpty()) {
+	    throw new AceQLException("No stored procedure out parameters returned by AceQL Server", 4, null, null,
+		    HttpURLConnection.HTTP_OK);
+	}
+
+	for (Integer key : callableOutParameters.keySet()) {
+	    if (parametersOutPerIndexAfterExecute.containsKey(key)) {
+		SqlParameter sqlParameter = callableOutParameters.get(key);
+		SqlParameter sqlParameterNew = new SqlParameter(key, sqlParameter.getParameterType(),
+			parametersOutPerIndexAfterExecute.get(key));
+		// Put back new value
+		callableOutParameters.put(key, sqlParameterNew);
+	    }
+	}
+
+    }
+
+    private String callWithPostReturnString(URL theUrl, Map<String, String> parametersMap)
+	    throws IOException, ProtocolException, SocketTimeoutException, UnsupportedEncodingException {
+
 	String result = null;
 
-	try (InputStream in =callWithPost(theUrl, parametersMap);){
-	    
+	try (InputStream in = callWithPost(theUrl, parametersMap);) {
+
 	    if (in != null) {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		IOUtils.copy(in, out);
@@ -913,8 +926,6 @@ public class AceQLHttpApi {
 		result = out.toString("UTF-8");
 		trace("result: " + result);
 	    }
-	} finally {
-	    //IOUtils.closeQuietly(in);
 	}
 	return result;
     }
@@ -929,6 +940,8 @@ public class AceQLHttpApi {
      * @param isPreparedStatement
      *            if true, the server will generate a prepared statement, else a
      *            simple statement
+     * @param isStoredProcedure
+     *            TODO
      * @param statementParameters
      *            the statement parameters in JSON format. Maybe null for simple
      *            statement call.
@@ -937,7 +950,7 @@ public class AceQLHttpApi {
      * @throws AceQLException
      *             if any Exception occurs
      */
-    public InputStream executeQuery(String sql, boolean isPreparedStatement,
+    public InputStream executeQuery(String sql, boolean isPreparedStatement, boolean isStoredProcedure,
 	    Map<String, String> statementParameters) throws AceQLException {
 
 	try {
@@ -958,6 +971,7 @@ public class AceQLHttpApi {
 	    // Boolean(prettyPrinting).toString());
 
 	    parametersMap.put("prepared_statement", "" + isPreparedStatement);
+	    parametersMap.put("stored_procedure", "" + isStoredProcedure);
 	    parametersMap.put("gzip_result", "" + gzipResult);
 	    parametersMap.put("pretty_printing", "" + prettyPrinting);
 
@@ -977,8 +991,7 @@ public class AceQLHttpApi {
 	    if (e instanceof AceQLException) {
 		throw (AceQLException) e;
 	    } else {
-		throw new AceQLException(e.getMessage(), 0, e, null,
-			httpStatusCode);
+		throw new AceQLException(e.getMessage(), 0, e, null, httpStatusCode);
 	    }
 	}
 
@@ -994,8 +1007,7 @@ public class AceQLHttpApi {
      * @throws AceQLException
      *             if any Exception occurs
      */
-    public void blobUpload(String blobId, InputStream inputStream,
-	    long totalLength) throws AceQLException {
+    public void blobUpload(String blobId, InputStream inputStream, long totalLength) throws AceQLException {
 
 	try {
 	    if (blobId == null) {
@@ -1030,8 +1042,8 @@ public class AceQLHttpApi {
 	    conn.setReadTimeout(readTimeout);
 	    conn.setDoOutput(true);
 
-	    final MultipartUtility http = new MultipartUtility(theURL, conn,
-		    connectTimeout, progress, cancelled, totalLength);
+	    final MultipartUtility http = new MultipartUtility(theURL, conn, connectTimeout, progress, cancelled,
+		    totalLength);
 
 	    Map<String, String> parameters = new HashMap<String, String>();
 	    parameters.put("blob_id", blobId);
@@ -1060,30 +1072,25 @@ public class AceQLHttpApi {
 	    InputStream inConn = null;
 
 	    String result;
-	    try {
-		if (httpStatusCode == HttpURLConnection.HTTP_OK) {
-		    inConn = conn.getInputStream();
-		} else {
-		    inConn = conn.getErrorStream();
-		}
 
-		result = null;
-
-		if (inConn != null) {
-		    ByteArrayOutputStream out = new ByteArrayOutputStream();
-		    IOUtils.copy(inConn, out);
-		    result = out.toString("UTF-8");
-		}
-	    } finally {
-		//IOUtils.closeQuietly(inConn);
-		
+	    if (httpStatusCode == HttpURLConnection.HTTP_OK) {
+		inConn = conn.getInputStream();
+	    } else {
+		inConn = conn.getErrorStream();
 	    }
 
-	    ResultAnalyzer resultAnalyzer = new ResultAnalyzer(result,
-		    httpStatusCode, httpStatusMessage);
+	    result = null;
+
+	    if (inConn != null) {
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		IOUtils.copy(inConn, out);
+		result = out.toString("UTF-8");
+	    }
+
+
+	    ResultAnalyzer resultAnalyzer = new ResultAnalyzer(result, httpStatusCode, httpStatusMessage);
 	    if (!resultAnalyzer.isStatusOk()) {
-		throw new AceQLException(resultAnalyzer.getErrorMessage(),
-			resultAnalyzer.getErrorType(), null,
+		throw new AceQLException(resultAnalyzer.getErrorMessage(), resultAnalyzer.getErrorType(), null,
 			resultAnalyzer.getStackTrace(), httpStatusCode);
 	    }
 
@@ -1091,8 +1098,7 @@ public class AceQLHttpApi {
 	    if (e instanceof AceQLException) {
 		throw (AceQLException) e;
 	    } else {
-		throw new AceQLException(e.getMessage(), 0, e, null,
-			httpStatusCode);
+		throw new AceQLException(e.getMessage(), 0, e, null, httpStatusCode);
 	    }
 	}
     }
@@ -1140,23 +1146,19 @@ public class AceQLHttpApi {
 		    result = out.toString("UTF-8");
 		}
 	    } finally {
-		//IOUtils.closeQuietly(in);
 		if (in != null) {
 		    try {
 			in.close();
-		    }
-		    catch (Exception ignore) {
+		    } catch (Exception ignore) {
 			// ignore
 		    }
 		}
 	    }
 
-	    ResultAnalyzer resultAnalyzer = new ResultAnalyzer(result,
-		    httpStatusCode, httpStatusMessage);
+	    ResultAnalyzer resultAnalyzer = new ResultAnalyzer(result, httpStatusCode, httpStatusMessage);
 
 	    if (!resultAnalyzer.isStatusOk()) {
-		throw new AceQLException(resultAnalyzer.getErrorMessage(),
-			resultAnalyzer.getErrorType(), null,
+		throw new AceQLException(resultAnalyzer.getErrorMessage(), resultAnalyzer.getErrorType(), null,
 			resultAnalyzer.getStackTrace(), httpStatusCode);
 	    }
 
@@ -1168,8 +1170,7 @@ public class AceQLHttpApi {
 	    if (e instanceof AceQLException) {
 		throw (AceQLException) e;
 	    } else {
-		throw new AceQLException(e.getMessage(), 0, e, null,
-			httpStatusCode);
+		throw new AceQLException(e.getMessage(), 0, e, null, httpStatusCode);
 	    }
 	}
 
@@ -1215,8 +1216,7 @@ public class AceQLHttpApi {
 	    if (e instanceof AceQLException) {
 		throw (AceQLException) e;
 	    } else {
-		throw new AceQLException(e.getMessage(), 0, e, null,
-			httpStatusCode);
+		throw new AceQLException(e.getMessage(), 0, e, null, httpStatusCode);
 	    }
 	}
     }
@@ -1229,8 +1229,7 @@ public class AceQLHttpApi {
      * @return the formated and URL encoded string for the POST.
      * @throws UnsupportedEncodingException
      */
-    public static String getPostDataString(Map<String, String> requestParams)
-	    throws UnsupportedEncodingException {
+    public static String getPostDataString(Map<String, String> requestParams) throws UnsupportedEncodingException {
 	StringBuilder result = new StringBuilder();
 	boolean first = true;
 

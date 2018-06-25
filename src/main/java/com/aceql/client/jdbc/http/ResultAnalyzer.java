@@ -18,8 +18,11 @@
  */
 package com.aceql.client.jdbc.http;
 
+import java.io.Reader;
 import java.io.StringReader;
 import java.net.HttpURLConnection;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.json.Json;
 import javax.json.JsonNumber;
@@ -27,6 +30,10 @@ import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.json.JsonString;
 import javax.json.JsonStructure;
+import javax.json.stream.JsonParser;
+import javax.json.stream.JsonParser.Event;
+
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * 
@@ -35,7 +42,7 @@ import javax.json.JsonStructure;
  * @author Nicolas de Pomereu
  *
  */
-class ResultAnalyzer {
+public class ResultAnalyzer {
 
     private String jsonResult = null;
     private int httpStatusCode;
@@ -47,6 +54,8 @@ class ResultAnalyzer {
     private Exception parseException = null;
     private String httpStatusMessage;
 
+    private static boolean traceOn = AceQLHttpApi.isTraceOn();
+    
     /**
      * Constructor
      * 
@@ -341,5 +350,114 @@ class ResultAnalyzer {
     public Exception getParseException() {
 	return parseException;
     }
+
+    
+    private static void trace() {
+	if (traceOn) {
+	    System.out.println();
+	}
+    }
+
+    private static void trace(String s) {
+	if (traceOn) {
+	    System.out.println(s);
+	}
+    }
+    
+    /**
+     * Returns after CallablStatement execute/executeQuery the Map of OUT parameter (index, values)
+     * @return the Map of OUT parameter (index, values)
+     */
+    public Map<Integer, String> getParametersOutPerIndex() 
+    {
+	if (jsonResult == null || jsonResult.isEmpty()) {
+	    return null;
+	}
+	
+	Reader reader = new StringReader(jsonResult);
+	
+	if (isInvalidJsonStream()) {
+	    return null;
+	}
+	
+	Map<Integer, String> parametersOutPerIndex = getParametersOutPerIndex(reader);
+	return parametersOutPerIndex;
+    }
+
+    /**
+     * Returns after callable statement execute the Map of OUT parameter (index, values)
+     * @param reader the reader ot use to parse the json content.
+     * @return he Map of OUT parameter (index, values)
+     */
+    public static Map<Integer, String> getParametersOutPerIndex( Reader reader) {
+		
+	Map<Integer, String> parametersOutPerIndex = new HashMap<>();
+	
+	JsonParser parser = Json.createParser(reader);
+
+	while (parser.hasNext()) {
+	    JsonParser.Event event = parser.next();
+	    switch (event) {
+	    case START_ARRAY:
+	    case END_ARRAY:
+	    case START_OBJECT:
+	    case END_OBJECT:
+	    case VALUE_FALSE:
+	    case VALUE_NULL:
+	    case VALUE_TRUE:
+		// System.out.println("---" + event.toString());
+		break;
+	    case KEY_NAME:
+
+		if (parser.getString().equals("parameters_out_per_index")) {
+		    trace();
+		    trace("in parameters_out_per_index");
+		    while(parser.hasNext()) {
+			event = parser.next();
+			
+			// We are done if END_OBJECT
+			if (event.equals(Event.END_OBJECT)) {
+			    trace("exit while loop");
+			    return parametersOutPerIndex;
+			}
+			
+			trace(event.toString());
+			
+			if (event.equals(Event.KEY_NAME)) {
+			    String key = parser.getString();
+			    trace("key: " + key);
+			    
+			    if (parser.hasNext())
+				parser.next();
+			    else
+				return parametersOutPerIndex;
+			    
+			    String value = parser.getString();
+			    trace("value: " + value);
+			    
+			    if (! StringUtils.isNumeric(key)) {
+				throw new IllegalArgumentException("Bad Json returned by server. parameters_out_per_index key is not numeric: " + key);
+			    }
+			    
+			    parametersOutPerIndex.put(Integer.parseInt(key), value);
+			    
+			}
+			
+		    }
+		}
+
+		//break;
+	    case VALUE_STRING:
+	    case VALUE_NUMBER:
+		//trace("Should not reach this:");
+		trace(event.toString() + " " + parser.getString());
+		break;
+	    }
+	}
+	
+	// Should never happen, return is done before
+	return parametersOutPerIndex;
+    }
+
 
 }

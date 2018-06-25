@@ -160,9 +160,7 @@ public class FrameworkFileUtil {
 
 	    String firstLine = bufferedReader.readLine();
 	    return firstLine;
-	} finally {
-	    // IOUtils.closeQuietly(bufferedReader);
-	}
+	} 
     }
 
     /**
@@ -385,9 +383,7 @@ public class FrameworkFileUtil {
 	    }
 
 	    return text;
-	} finally {
-	    //IOUtils.closeQuietly(br);
-	}
+	} 
     }
 
     /**

@@ -16,35 +16,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License. 
  */
-package com.aceql.sdk.http.examples;
-
-import com.aceql.client.jdbc.util.AceQLTypes;
-import com.aceql.client.jdbc.util.json.PrepStatementParametersBuilder;
+package com.aceql.client.jdbc.util.json;
 
 /**
+ * 
  * @author Nicolas de Pomereu
- *
  */
-public class PrepStatementParametersBuilderExample {
-
-    /**
-     * 
-     */
-    public PrepStatementParametersBuilderExample() {
-
-    }
-
-    /**
-     * @param args
-     */
-    public static void main(String[] args) throws Exception{
-        PrepStatementParametersBuilder builder = new PrepStatementParametersBuilder();
-        int j = 1;
-        builder.setInParameter(j++, AceQLTypes.VARCHAR, "Jim");
-        builder.setInParameter(j++, AceQLTypes.INTEGER, 1 + "");
-        System.out.println(builder.getHttpFormattedStatementParameters());
-
-
-    }
-
+public enum ParameterDirection {
+    IN,
+    OUT,
+    INOUT;
 }

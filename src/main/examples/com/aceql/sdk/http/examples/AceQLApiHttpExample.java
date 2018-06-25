@@ -33,6 +33,7 @@ import java.util.Map;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.SystemUtils;
 
 import com.aceql.client.jdbc.http.AceQLHttpApi;
 import com.aceql.client.jdbc.util.AceQLTypes;
@@ -45,23 +46,14 @@ import com.aceql.client.jdbc.util.json.PrepStatementParametersBuilder;
 public class AceQLApiHttpExample {
 
     public static boolean DEBUG = true;
-
-    public static final String IN_DIRECTORY = "c:\\test\\";
-    public static final String OUT_DIRECTORY = "c:\\test\\out\\";
-
-    /**
-     * @param s
-     */
-
-    protected static void debug(String s) {
-	if (DEBUG) {
-	    System.out.println(new Date() + " " + s);
-	}
-    }
+    
+    public static final String IN_DIRECTORY = SystemUtils.USER_HOME + File.separator + "aceql_tests" + File.separator + "IN";
+    public static final String OUT_DIRECTORY = SystemUtils.USER_HOME + File.separator + "aceql_tests" + File.separator + "OUT";
 
     @SuppressWarnings("unused")
     public static void main(String[] args) throws Exception {
 
+	new File(IN_DIRECTORY).mkdirs();
 	new File(OUT_DIRECTORY).mkdirs();
 
 	boolean falseQuery = false;
@@ -75,7 +67,7 @@ public class AceQLApiHttpExample {
 	String localhostUrl = "http://localhost:9090/aceql";
 	String linuxUrl = "https://www.aceql.com:9443/aceql";
 
-	String serverUrl = linuxUrl;
+	String serverUrl = localhostUrl;
 	String database = "kawansoft_example";
 	String username = "username";
 	String password = "password";
@@ -90,7 +82,7 @@ public class AceQLApiHttpExample {
 
 	if (falseQuery) {
 	    sql = "select * from not_exist_table";
-	    InputStream input = aceQLHttpApi.executeQuery(sql, false, null);
+	    InputStream input = aceQLHttpApi.executeQuery(sql, false, false, null);
 	    printResultSet(input);
 	    return;
 	}
@@ -123,7 +115,7 @@ public class AceQLApiHttpExample {
 	    aceQLHttpApi.setAutoCommit(false);
 
 	    sql = "delete from customer where customer_id >= 1 ";
-	    aceQLHttpApi.executeUpdate(sql, false, null);
+	    aceQLHttpApi.executeUpdate(sql, false, false, null, null);
 
 	    for (int i = 1; i < 10; i++) {
 		int customerId = i;
@@ -135,22 +127,22 @@ public class AceQLApiHttpExample {
 
 		PrepStatementParametersBuilder builder = new PrepStatementParametersBuilder();
 		int j = 1;
-		builder.setParameter(j++, AceQLTypes.INTEGER, customerId + "");
-		builder.setParameter(j++, AceQLTypes.VARCHAR, null);
-		builder.setParameter(j++, AceQLTypes.VARCHAR,
+		builder.setInParameter(j++, AceQLTypes.INTEGER, customerId + "");
+		builder.setInParameter(j++, AceQLTypes.VARCHAR, null);
+		builder.setInParameter(j++, AceQLTypes.VARCHAR,
 			"John_" + customerId);
-		builder.setParameter(j++, AceQLTypes.VARCHAR,
+		builder.setInParameter(j++, AceQLTypes.VARCHAR,
 			"Smith_" + customerId);
-		builder.setParameter(j++, AceQLTypes.VARCHAR,
+		builder.setInParameter(j++, AceQLTypes.VARCHAR,
 			customerId + " César Avenue");
-		builder.setParameter(j++, AceQLTypes.VARCHAR,
+		builder.setInParameter(j++, AceQLTypes.VARCHAR,
 			"Town_" + customerId);
-		builder.setParameter(j++, AceQLTypes.VARCHAR, customerId + "");
-		builder.setParameter(j++, AceQLTypes.VARCHAR,
+		builder.setInParameter(j++, AceQLTypes.VARCHAR, customerId + "");
+		builder.setInParameter(j++, AceQLTypes.VARCHAR,
 			customerId + "-12345678");
 
 		aceQLHttpApi.executeUpdate(sql, true,
-			builder.getStatementParameters());
+			false, builder.getHttpFormattedStatementParameters(), null);
 
 	    }
 
@@ -158,13 +150,13 @@ public class AceQLApiHttpExample {
 
 	    if (doRegions) {
 		sql = "delete from regions";
-		aceQLHttpApi.executeUpdate(sql, false, null);
+		aceQLHttpApi.executeUpdate(sql, false, false, null, null);
 
 		sql = "insert into regions values ('NorthEast', '{10022,02110,07399}')";
-		aceQLHttpApi.executeUpdate(sql, false, null);
+		aceQLHttpApi.executeUpdate(sql, false, false, null, null);
 
 		sql = "insert into regions values ('Northwest', '{93101,97201,99210}')";
-		aceQLHttpApi.executeUpdate(sql, false, null);
+		aceQLHttpApi.executeUpdate(sql, false, false, null, null);
 
 		aceQLHttpApi.commit();
 
@@ -175,14 +167,14 @@ public class AceQLApiHttpExample {
 	if (doSelect) {
 	    aceQLHttpApi.setAutoCommit(false);
 	    sql = "select * from orderlog limit 2";
-	    InputStream input = aceQLHttpApi.executeQuery(sql, false, null);
+	    InputStream input = aceQLHttpApi.executeQuery(sql, false, false, null);
 	    printResultSet(input);
 
 	    aceQLHttpApi.setAutoCommit(true);
 
 	    if (doRegions) {
 		sql = "select * from regions";
-		input = aceQLHttpApi.executeQuery(sql, false, null);
+		input = aceQLHttpApi.executeQuery(sql, false, false, null);
 		printResultSet(input);
 	    }
 
@@ -200,7 +192,7 @@ public class AceQLApiHttpExample {
 
 	    sql = "select * from customer where customer_id >= ? order by customer_id limit 3";
 	    InputStream input = aceQLHttpApi.executeQuery(sql, true,
-		    statementParameters);
+		    false, statementParameters);
 	    printResultSet(input);
 
 	}
@@ -210,11 +202,11 @@ public class AceQLApiHttpExample {
 	    aceQLHttpApi.setAutoCommit(true);
 
 	    sql = "delete from orderlog where customer_id >=1 ";
-	    aceQLHttpApi.executeUpdate(sql, false, null);
+	    aceQLHttpApi.executeUpdate(sql, false, false, null, null);
 
 	    aceQLHttpApi.setAutoCommit(false);
 
-	    File file = new File(IN_DIRECTORY + "username_koala.jpg");
+	    File file = new File(IN_DIRECTORY + File.separator + "username_koala.jpg");
 
 	    String blobId = file.getName();
 	    InputStream inputStream = new FileInputStream(file);
@@ -247,32 +239,32 @@ public class AceQLApiHttpExample {
 	    // builder.setParameter(j++, AceQLTypes.INTEGER, new Integer(itemId
 	    // * 1000).toString());
 
-	    builder.setParameter(j++, AceQLTypes.INTEGER, "" + customerId);
-	    builder.setParameter(j++, AceQLTypes.INTEGER, "" + itemId);
-	    builder.setParameter(j++, AceQLTypes.VARCHAR,
+	    builder.setInParameter(j++, AceQLTypes.INTEGER, "" + customerId);
+	    builder.setInParameter(j++, AceQLTypes.INTEGER, "" + itemId);
+	    builder.setInParameter(j++, AceQLTypes.VARCHAR,
 		    "description_" + itemId);
-	    builder.setParameter(j++, AceQLTypes.NUMERIC, "" + (itemId * 1000));
-	    builder.setParameter(j++, AceQLTypes.DATE,
+	    builder.setInParameter(j++, AceQLTypes.NUMERIC, "" + (itemId * 1000));
+	    builder.setInParameter(j++, AceQLTypes.DATE,
 		    "" + System.currentTimeMillis());
-	    builder.setParameter(j++, AceQLTypes.TIMESTAMP,
+	    builder.setInParameter(j++, AceQLTypes.TIMESTAMP,
 		    "" + System.currentTimeMillis());
-	    builder.setParameter(j++, AceQLTypes.BLOB, blobId);
-	    builder.setParameter(j++, AceQLTypes.NUMERIC, "" + 1);
-	    builder.setParameter(j++, AceQLTypes.INTEGER, "" + (itemId * 1000));
+	    builder.setInParameter(j++, AceQLTypes.BLOB, blobId);
+	    builder.setInParameter(j++, AceQLTypes.NUMERIC, "" + 1);
+	    builder.setInParameter(j++, AceQLTypes.INTEGER, "" + (itemId * 1000));
 
 	    aceQLHttpApi.executeUpdate(sql, true,
-		    builder.getStatementParameters());
+		    false, builder.getHttpFormattedStatementParameters(), null);
 
 	    if (doBlobDownload) {
 		sql = "select * from orderlog where customer_id = 1";
-		InputStream input = aceQLHttpApi.executeQuery(sql, false, null);
+		InputStream input = aceQLHttpApi.executeQuery(sql, false, false, null);
 
 		String jsonResultSet = getAsString(input);
 		System.out.println(jsonResultSet);
 
 		blobId = extractBlobId(jsonResultSet);
 
-		file = new File(OUT_DIRECTORY + "downloaded_new_blob.jpg");
+		file = new File(OUT_DIRECTORY + File.separator + "downloaded_new_blob.jpg");
 
 		if (blobId != null) {
 
@@ -285,8 +277,6 @@ public class AceQLApiHttpExample {
 		   
 		    try ( InputStream in = aceQLHttpApi.blobDownload(blobId);){
 			FileUtils.copyToFile(in, file);
-		    } finally {
-			//IOUtils.closeQuietly(in);
 		    }
 
 		} else {
@@ -334,7 +324,6 @@ public class AceQLApiHttpExample {
 	try {
 	    IOUtils.copy(input, output);
 	} finally {
-	    //IOUtils.closeQuietly(input);
 	    if (input != null) {
 		try {
 		   input.close();
@@ -350,6 +339,16 @@ public class AceQLApiHttpExample {
 
     private static void printResultSet(InputStream input) throws IOException {
 	System.out.println(getAsString(input));
+    }
+    
+    /**
+     * @param s
+     */
+
+    protected static void debug(String s) {
+	if (DEBUG) {
+	    System.out.println(new Date() + " " + s);
+	}
     }
 
 }

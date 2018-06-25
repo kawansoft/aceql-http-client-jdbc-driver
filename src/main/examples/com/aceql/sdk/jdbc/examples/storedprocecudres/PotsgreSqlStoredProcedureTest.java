@@ -16,35 +16,47 @@
  * See the License for the specific language governing permissions and
  * limitations under the License. 
  */
-package com.aceql.sdk.http.examples;
+package com.aceql.sdk.jdbc.examples.storedprocecudres;
 
-import com.aceql.client.jdbc.util.AceQLTypes;
-import com.aceql.client.jdbc.util.json.PrepStatementParametersBuilder;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Types;
 
 /**
  * @author Nicolas de Pomereu
  *
  */
-public class PrepStatementParametersBuilderExample {
-
-    /**
-     * 
-     */
-    public PrepStatementParametersBuilderExample() {
-
-    }
+public class PotsgreSqlStoredProcedureTest {
 
     /**
      * @param args
      */
-    public static void main(String[] args) throws Exception{
-        PrepStatementParametersBuilder builder = new PrepStatementParametersBuilder();
-        int j = 1;
-        builder.setInParameter(j++, AceQLTypes.VARCHAR, "Jim");
-        builder.setInParameter(j++, AceQLTypes.INTEGER, 1 + "");
-        System.out.println(builder.getHttpFormattedStatementParameters());
+    public static void main(String[] args) throws Exception {
 
+	//AceQLConnection.setTraceOn(true);
+
+	Connection connection = StoredProcedureUtil.getRemoteConnection();
+
+	if (connection == null) {
+	    throw new NullPointerException("connection is null!");
+	}
+
+	testPostrgreSqlStoredProcedures(connection);
 
     }
+
+    public static void testPostrgreSqlStoredProcedures(Connection conn) throws SQLException {
+	CallableStatement upperProc = conn.prepareCall("{ ? = call upper( ? ) }");
+	upperProc.registerOutParameter(1, Types.VARCHAR);
+	upperProc.setString(2, "lowercase to uppercase");
+	upperProc.executeUpdate();
+	String upperCased = upperProc.getString(1);
+	upperProc.close();
+	
+	System.out.println("upperCased: " + upperCased);
+    }
+    
+
 
 }

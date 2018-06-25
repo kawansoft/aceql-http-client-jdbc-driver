@@ -28,6 +28,7 @@ import java.sql.Statement;
 import java.util.Date;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.SystemUtils;
 
 import com.aceql.client.jdbc.AceQLConnection;
 
@@ -39,14 +40,13 @@ public class AceQLConnectionExample {
 
     private static boolean DEBUG = true;
 
-
-    public static final String IN_DIRECTORY = "c:\\test\\";
-    public static final String OUT_DIRECTORY = "c:\\test\\out\\";
-
+    public static final String IN_DIRECTORY = SystemUtils.USER_HOME + File.separator + "aceql_tests" + File.separator + "IN";
+    public static final String OUT_DIRECTORY = SystemUtils.USER_HOME + File.separator + "aceql_tests" + File.separator + "OUT";
 
     @SuppressWarnings("unused")
     public static void main(String[] args) throws Exception {
 
+	new File(IN_DIRECTORY).mkdirs();
 	new File(OUT_DIRECTORY).mkdirs();
 
 	boolean falseQuery = false;
@@ -171,7 +171,6 @@ public class AceQLConnectionExample {
 	}
 
 	if (doSelect) {
-	    connection.setAutoCommit(false);
 	    sql = "select * from orderlog";
 	    Statement statement = connection.createStatement();
 	    ResultSet rs = statement.executeQuery(sql);
@@ -220,7 +219,7 @@ public class AceQLConnectionExample {
 
 	    connection.setAutoCommit(false);
 
-	    File file = new File(IN_DIRECTORY + "username_koala.jpg");
+	    File file = new File(IN_DIRECTORY + File.separator + "username_koala.jpg");
 
 	    int customerId = 1;
 	    int itemId = 11;
@@ -272,7 +271,7 @@ public class AceQLConnectionExample {
 		System.out.println("date_shipped  : " + rs.getTimestamp(i++));
 		System.out.println("jpeg_image    : " + "<binary>");
 
-		File file = new File(OUT_DIRECTORY + "downloaded_new_blob.jpg");
+		File file = new File(OUT_DIRECTORY + File.separator + "downloaded_new_blob.jpg");
 		
 		// Java 7 syntax
 //		try (InputStream input = rs.getBinaryStream(i++);
@@ -282,8 +281,6 @@ public class AceQLConnectionExample {
 		
 		try (InputStream in = rs.getBinaryStream(i++);){
 		    FileUtils.copyToFile(in, file);
-		} finally {
-		    //IOUtils.closeQuietly(in);
 		}
 		
 		System.out.println("is_delivered  : " + rs.getBoolean(i++));
@@ -309,10 +306,6 @@ public class AceQLConnectionExample {
 	    rs.close();
 	    statement.close();
 	}
-
-	// loopInsertIntoOrderlog(aceQLConnection);
-	sql = "select * from orderlog";
-	// aceQLConnection.executeQuery(sql, true);
 
 	connection.close();
 	

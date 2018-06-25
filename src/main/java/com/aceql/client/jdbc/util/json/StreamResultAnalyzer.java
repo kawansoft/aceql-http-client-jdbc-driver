@@ -24,9 +24,13 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.sql.SQLException;
+import java.util.Map;
 
 import javax.json.Json;
 import javax.json.stream.JsonParser;
+
+import com.aceql.client.jdbc.http.AceQLHttpApi;
+import com.aceql.client.jdbc.http.ResultAnalyzer;
 
 /**
  * @author Nicolas de Pomereu
@@ -34,7 +38,7 @@ import javax.json.stream.JsonParser;
  */
 public class StreamResultAnalyzer {
 
-    private boolean traceOn = false;
+    private static boolean traceOn = AceQLHttpApi.isTraceOn();
 
     private File jsonFile = null;
 
@@ -155,8 +159,6 @@ public class StreamResultAnalyzer {
 
 	    return false;
 	} finally {
-	    //IOUtils.closeQuietly(reader);
-	    
 	    if (reader != null) {
 		try {
 		    reader.close();
@@ -207,13 +209,13 @@ public class StreamResultAnalyzer {
 	}
     }
 
-    private void trace() {
+    private static void trace() {
 	if (traceOn) {
 	    System.out.println();
 	}
     }
 
-    private void trace(String s) {
+    private static void trace(String s) {
 	if (traceOn) {
 	    System.out.println(s);
 	}
@@ -238,6 +240,155 @@ public class StreamResultAnalyzer {
      */
     public Exception getParseException() {
 	return parseException;
+    }
+
+    /**
+     * Returns after CallablStatement execute/executeQuery the Map of OUT parameter (index, values)
+     * @return the Map of OUT parameter (index, values)
+     */
+    public Map<Integer, String> getParametersOutPerIndex()  throws SQLException {
+    
+        // If file does not exist ==> http failure
+        if (!jsonFile.exists()) {
+    
+            this.errorType = "0";
+            errorMessage = "Unknown error.";
+            if (httpStatusCode != HttpURLConnection.HTTP_OK) {
+        	errorMessage = "HTTP FAILURE " + httpStatusCode + " ("
+        		+ httpStatusMessage + ")";
+            }
+            return null;
+           
+        }
+    
+        trace();
+        Reader reader = null;
+    
+        try {
+            try {
+        	reader = new InputStreamReader(new FileInputStream(jsonFile),
+        		"UTF-8");
+            } catch (Exception e) {
+        	throw new SQLException(e);
+            }
+    
+	    Map<Integer, String> parametersOutPerIndex = ResultAnalyzer.getParametersOutPerIndex(reader);
+	    return parametersOutPerIndex;
+    
+        } catch (Exception e) {
+            this.parseException = e;
+    
+            this.errorType = "0";
+            errorMessage = "Unknown error";
+            if (httpStatusCode != HttpURLConnection.HTTP_OK) {
+        	errorMessage = "HTTP FAILURE " + httpStatusCode + " ("
+        		+ httpStatusMessage + ")";
+            }
+    
+            return null;
+        } finally {
+            if (reader != null) {
+        	try {
+        	    reader.close();
+        	}
+        	catch (Exception ignore) {
+        	    // ignore
+        	}
+            }
+        }
+    
+    }
+
+    /**
+     * Returns the "row_count" key int value from the Json file
+     * @return the "row_count" key int value from the Json file
+     * @throws SQLException
+     */
+    public int getRowCount() throws SQLException {
+    
+        // If file does not exist ==> http failure
+        if (!jsonFile.exists()) {
+    
+            this.errorType = "0";
+            errorMessage = "Unknown error.";
+            if (httpStatusCode != HttpURLConnection.HTTP_OK) {
+        	errorMessage = "HTTP FAILURE " + httpStatusCode + " ("
+        		+ httpStatusMessage + ")";
+            }
+            return 0;
+        }
+    
+        trace();
+        Reader reader = null;
+    
+        try {
+            try {
+        	reader = new InputStreamReader(new FileInputStream(jsonFile),
+        		"UTF-8");
+            } catch (Exception e) {
+        	throw new SQLException(e);
+            }
+    
+            JsonParser parser = Json.createParser(reader);
+    
+            while (parser.hasNext()) {
+        	JsonParser.Event event = parser.next();
+        	switch (event) {
+        	case START_ARRAY:
+        	case END_ARRAY:
+        	case START_OBJECT:
+        	case END_OBJECT:
+        	case VALUE_FALSE:
+        	case VALUE_NULL:
+        	case VALUE_TRUE:
+        	    // System.out.println("---" + event.toString());
+        	    break;
+        	case KEY_NAME:
+    
+        	    trace(event.toString() + " " + parser.getString() + " - ");
+        	    if (parser.getString().equals("row_count")) {
+    
+        		if (parser.hasNext())
+        		    parser.next();
+        		else
+        		    return 0;
+    
+        		int rowCount = parser.getInt();
+        		return rowCount;
+        	    }
+    
+        	    break;
+        	case VALUE_STRING:
+        	case VALUE_NUMBER:
+        	    trace("Should not reach this:");
+        	    trace(event.toString() + " " + parser.getString());
+        	    break;
+        	}
+            }
+    
+            return 0;
+        } catch (Exception e) {
+            this.parseException = e;
+    
+            this.errorType = "0";
+            errorMessage = "Unknown error";
+            if (httpStatusCode != HttpURLConnection.HTTP_OK) {
+        	errorMessage = "HTTP FAILURE " + httpStatusCode + " ("
+        		+ httpStatusMessage + ")";
+            }
+    
+            return 0;
+        } finally {
+            if (reader != null) {
+        	try {
+        	    reader.close();
+        	}
+        	catch (Exception ignore) {
+        	    // ignore
+        	}
+            }
+        }
+    
     }
 
 }

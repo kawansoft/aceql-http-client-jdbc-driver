@@ -1,4 +1,4 @@
-# AceQL HTTP - Java Client SDK v2.0
+# AceQL HTTP - Java Client SDK v2.1
 
 <img src="https://www.aceql.com/favicon.png" alt="AceQ HTTP Icon"/>
 
@@ -58,7 +58,7 @@ The SDK is licensed with the liberal [Apache 2.0](https://www.apache.org/license
 
 ## AceQL Server side compatibility
 
-This 2.0 SDK version is compatible with AceQL HTTP server side v2.0. It is not compatible with AceQL HTTP server side v1.0.
+This 2.1 SDK version is compatible with AceQL HTTP server side v2.0+. It is not compatible with AceQL HTTP server side v1.0.
 
 ## SDK instead of JDBC Driver
 
@@ -531,8 +531,6 @@ The following JDBC features are not supported nor implemented in this version:
   - `Connection.getMetaData()`
   - `ResultSet.getMetaData()`.
 - Savepoints are not supported.
-- Stored Procedures are not supported.
-
 - Batch methods are not supported.
 - BLOB syntax is limited in `PreparedStatement` and in `ResultSet`.
 - There are no `java.sql.Blob` and `java.sql.Clob` interface implementation.

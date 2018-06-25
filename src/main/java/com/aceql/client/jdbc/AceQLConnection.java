@@ -23,6 +23,7 @@ import java.net.HttpURLConnection;
 import java.net.PasswordAuthentication;
 import java.net.Proxy;
 import java.net.URLConnection;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -158,7 +159,7 @@ import com.aceql.client.jdbc.util.AceQLConnectionUtil;
  * </pre>
  * 
  * </blockquote> See the source code of
- * <a href= "http://www.aceql.com/rest/soft/1.0/src/SqlProgressMonitorDemo.java"
+ * <a href= "http://www.aceql.com/rest/soft/2.1/src/SqlProgressMonitorDemo.java"
  * >SqlProgressMonitorDemo.java</a> that demonstrates the use of atomic
  * variables when inserting a Blob.
  * 
@@ -446,6 +447,18 @@ public class AceQLConnection extends AbstractConnection
 	AceQLPreparedStatement aceQLPreparedStatement = new AceQLPreparedStatement(
 		this, sql);
 	return aceQLPreparedStatement;
+    }
+    
+    
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#prepareCall(java.lang.String)
+     */
+    @Override
+    public CallableStatement prepareCall(String sql) throws SQLException {
+	AceQLCallableStatement aceQLCallableStatement = new AceQLCallableStatement(
+		this, sql);
+	return aceQLCallableStatement;
     }
 
     /*

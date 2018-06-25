@@ -18,24 +18,17 @@
  */
 package com.aceql.client.jdbc.util.json;
 
-import java.io.BufferedReader;
-import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.RandomAccessFile;
 import java.io.Reader;
-import java.io.StringReader;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.json.Json;
 import javax.json.stream.JsonParser;
-
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author Nicolas de Pomereu
@@ -73,139 +66,6 @@ public class RowParser {
 	this.jsonFile = jsonFile;
     }
 
-    /**
-     * Checks if the JSON content contains a valid {@code ResultSet} dumped by
-     * server side /execute_query API. <br>
-     * Will check the "status" key value. if "status" is "OK", method will
-     * return true, else it will return false. <br>
-     * If method return false, check the error id & message with
-     * {@code getErrorId}, {@code getErrorMessage}.
-     * 
-     * @return true if JSON content contains a valid {@code ResultSet}, else
-     *         false if any error occurred when calling /execute_query
-     */
-    /*
-     * public int getRowCount() throws SQLException {
-     * 
-     * trace(); Reader reader = null;
-     * 
-     * try { reader = getReader(); JsonParser parser =
-     * Json.createParser(reader);
-     * 
-     * while (parser.hasNext()) { JsonParser.Event event = parser.next(); switch
-     * (event) { case START_ARRAY: case END_ARRAY: case START_OBJECT: case
-     * END_OBJECT: case VALUE_FALSE: case VALUE_NULL: case VALUE_TRUE: //
-     * System.out.println("---" + event.toString()); break; case KEY_NAME:
-     * 
-     * trace(event.toString() + " " + parser.getString() + " - ");
-     * 
-     * if (parser.getString().equals("row_count")) { if (parser.hasNext())
-     * parser.next(); else return 0;
-     * 
-     * int rowCount = Integer.parseInt(parser.getString()); return rowCount; }
-     * 
-     * break; case VALUE_STRING: case VALUE_NUMBER:
-     * trace("Should not reach this:"); trace(event.toString() + " " +
-     * parser.getString()); break; } }
-     * 
-     * return 0; } finally { IOUtils.closeQuietly(reader); } }
-     */
-
-    /**
-     * Extract the "row_count" value from JSON file, beginning reading at end of
-     * file
-     * 
-     * @param file
-     * @return the row_count value
-     * @throws FileNotFoundException
-     * @throws IOException
-     * @throws SQLException
-     */
-    public static int getRowCount(File file) throws SQLException {
-
-	StringBuffer stringBuffer;
-	
-	try (RandomAccessFile raf = new RandomAccessFile(file, "r");){
-	    
-	    long count = 40;
-	    long position = raf.length();
-	    position -= count;
-	    if (position < 0)
-		position = 0;
-	    raf.seek(position);
-
-	    stringBuffer = new StringBuffer();
-
-	    while (true) {
-		try {
-		    byte b = raf.readByte();
-		    stringBuffer.append((char) b);
-		} catch (EOFException eofe) {
-		    break;
-		}
-	    }
-	} catch (FileNotFoundException fnfe) {
-	    throw new SQLException("File does not exists: " + file, fnfe);
-	} catch (IOException ioe) {
-	    throw new SQLException(ioe);
-	} finally {
-	    //IOUtils.closeQuietly(raf);
-	}
-
-	String rowCountStr = stringBuffer.toString();
-
-	int rowCount;
-	if (!rowCountStr.contains("row_count")) {
-	    rowCount = 0;
-	} else {
-	    rowCountStr = StringUtils.substringAfterLast(rowCountStr,
-		    "row_count\":");
-	    if (rowCountStr == null) {
-		rowCount = 0;
-	    } else {
-		// Because we may be in pretty printing, the acolade could be on
-		// next line
-		rowCountStr = getFirstLineOfText(rowCountStr);
-		rowCountStr = rowCountStr.trim();
-		// System.out.println("row_count: " + rowCountStr);
-
-		if (rowCountStr.contains("}")) {
-		    rowCountStr = StringUtils.substringBefore(rowCountStr, "}");
-		}
-
-		if (StringUtils.isNumeric(rowCountStr)) {
-		    rowCount = Integer.parseInt(rowCountStr);
-		} else {
-		    rowCount = 0;
-		}
-	    }
-	}
-
-	return rowCount;
-    }
-
-    /**
-     * Returns the first line of a text
-     * 
-     * @param str
-     *            the text
-     * @return the first line of the text
-     * @throws SQLException
-     */
-    private static String getFirstLineOfText(String str) throws SQLException {
-	BufferedReader bufferedReader = new BufferedReader(
-		new StringReader(str));
-
-	String line = null;
-
-	try {
-	    line = bufferedReader.readLine();
-	} catch (IOException e) {
-	    throw new SQLException(e);
-	}
-
-	return line;
-    }
 
     /**
      * Builds the valuesPerColName & valuesPerColIndex for the passed row num
@@ -389,9 +249,7 @@ public class RowParser {
 	}
     }
 
-    public void close() {
-	//IOUtils.closeQuietly(reader);
-	
+    public void close() {	
 	if (reader != null) {
 	    try {
 		reader.close();

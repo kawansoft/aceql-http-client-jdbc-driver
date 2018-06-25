@@ -94,4 +94,14 @@ public class AceQLResultSetUtil {
 	}
     }
 
+    public static long getLongValue(String value) 
+	    throws SQLException {
+	try {
+	    Long returnValue = Long.parseLong(value);
+	    return returnValue;
+	} catch (NumberFormatException e) {
+	    throw new SQLException("Not a Long value: " + value);
+	}
+    }
+
 }

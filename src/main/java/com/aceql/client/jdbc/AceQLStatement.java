@@ -74,9 +74,10 @@ class AceQLStatement extends AbstractStatement implements Statement {
     public int executeUpdate(String sql) throws SQLException {
 
 	boolean isPreparedStatement = false;
+	boolean isStoredProcedure = false;
 	Map<String, String> statementParameters = null;
 	return aceQLHttpApi.executeUpdate(sql, isPreparedStatement,
-		statementParameters);
+		isStoredProcedure, statementParameters, null);
     }
 
     /*
@@ -98,30 +99,11 @@ class AceQLStatement extends AbstractStatement implements Statement {
 	    aceQLHttpApi.trace("gzipResult: " + aceQLHttpApi.isGzipResult());
 
 	    boolean isPreparedStatement = false;
+	    boolean isStoredProcedure = false;
 	    Map<String, String> statementParameters = null;
-
-	    // try (InputStream in = aceQLHttpApi.executeQuery(sql,
-	    // isPreparedStatement, statementParameters)) {
-	    //
-	    // OutputStream out = null;
-	    //
-	    // // Do not use resource try {} ==> We don't want to create an
-	    // empty file
-	    // if (in != null) {
-	    // try {
-	    // out = new BufferedOutputStream(new FileOutputStream(file));
-	    // InputStream inFinal = getFinalInputStream(in,
-	    // aceQLHttpApi.isGzipResult());
-	    // IOUtils.copy(inFinal, out);
-	    // } finally {
-	    // IOUtils.closeQuietly(out);
-	    // }
-	    // }
-	    // }
-
-
+	    
 	    try (InputStream in = aceQLHttpApi.executeQuery(sql, isPreparedStatement,
-			statementParameters);
+			isStoredProcedure, statementParameters);
 		    OutputStream out = new BufferedOutputStream(new FileOutputStream(file));){
 
 		if (in != null) {
@@ -129,9 +111,6 @@ class AceQLStatement extends AbstractStatement implements Statement {
 			    aceQLHttpApi.isGzipResult());
 		    IOUtils.copy(inFinal, out);
 		}
-	    } finally {
-		//IOUtils.closeQuietly(in);
-		//IOUtils.closeQuietly(out);
 	    }
 
 	    StreamResultAnalyzer streamResultAnalyzer = new StreamResultAnalyzer(
@@ -144,7 +123,8 @@ class AceQLStatement extends AbstractStatement implements Statement {
 			aceQLHttpApi.getHttpStatusCode());
 	    }
 
-	    AceQLResultSet aceQLResultSet = new AceQLResultSet(file, this);
+	    int rowCount = streamResultAnalyzer.getRowCount();
+	    AceQLResultSet aceQLResultSet = new AceQLResultSet(file, this, rowCount);
 	    return aceQLResultSet;
 
 	} catch (Exception e) {
