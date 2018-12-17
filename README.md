@@ -43,7 +43,7 @@ The AceQL Server operation is described in [AceQL HTTP Server Installation and C
 
 The AceQL Java Client SDK is entirely written in Java, and functions identically with Microsoft Windows, Linux, and all versions of UNIX supporting Java 7+.
 
-The only required third party installation is a recent JVM. The following JVMs are supported in this version:
+The only required third party installation is a recent JVM:
 
 | OS                                       | **JVM (Java Virtual Machine)** |
 | ---------------------------------------- | ------------------------------ |
