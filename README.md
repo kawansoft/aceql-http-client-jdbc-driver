@@ -45,12 +45,10 @@ The AceQL Java Client SDK is entirely written in Java, and functions identically
 
 The only required third party installation is a recent JVM. The following JVMs are supported in this version:
 
-| OS             | **JVM (Java Virtual Machine)**           |
-| -------------- | ---------------------------------------- |
-| Android        | Android 4.1+                             |
-| Windows        | Oracle Java SE 7, Java SE 8,  Java SE 9  |
-| UNIX/Linux     | Oracle Java SE 7, Java SE 8, Java SE 9<br />OpenJDK  7, OpenJDK 8, OpenJDK 9 |
-| OS X  / mac OS | Oracle Java SE 7 for OS X 10.7.3+ <br />Oracle Java SE 8 for OS X 10.8+  <br />Oracle Java SE 9 for mac OS 10.10+ |
+| OS                                       | **JVM (Java Virtual Machine)** |
+| ---------------------------------------- | ------------------------------ |
+| Android                                  | Android 4.1+                   |
+| Windows <br>UNIX/Linux<br>OS X  / mac OS | Java 7+                        |
 
 ## License
 
@@ -543,6 +541,5 @@ The following JDBC features are not supported nor implemented in this version:
 - Some Statement methods: `getWarnings`, `isPoolable`/`setPoolable`, `getMoreResults`, `setCursorName`.
 - Updatable Result Set.
 - `RowSet` Objects.
-
 
 _________
