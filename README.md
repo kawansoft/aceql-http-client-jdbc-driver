@@ -1,6 +1,6 @@
 # AceQL HTTP 
 
-# Java Client SDK v2.1 - June 2018, 25
+## Java Client SDK v2.1 - June 2018, 25
 
 <img src="https://www.aceql.com/favicon.png" alt="AceQ HTTP Icon"/>
 
