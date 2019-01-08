@@ -97,6 +97,7 @@ public class AbstractStatement implements Statement {
      *                statement produces anything other than a single
      *                <code>ResultSet</code> object
      */
+    @Override
     public ResultSet executeQuery(String sql) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -120,6 +121,7 @@ public class AbstractStatement implements Statement {
      *                if a database access error occurs or the given SQL
      *                statement produces a <code>ResultSet</code> object
      */
+    @Override
     public int executeUpdate(String sql) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -144,6 +146,7 @@ public class AbstractStatement implements Statement {
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public void close() throws SQLException {
 	isClosed = true;
     }
@@ -163,6 +166,7 @@ public class AbstractStatement implements Statement {
      *                if a database access error occurs
      * @see #setMaxFieldSize
      */
+    @Override
     public int getMaxFieldSize() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -187,6 +191,7 @@ public class AbstractStatement implements Statement {
      *                0 is not satisfied
      * @see #getMaxFieldSize
      */
+    @Override
     public void setMaxFieldSize(int max) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -206,6 +211,7 @@ public class AbstractStatement implements Statement {
      *                if a database access error occurs
      * @see #setMaxRows
      */
+    @Override
     public int getMaxRows() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -225,6 +231,7 @@ public class AbstractStatement implements Statement {
      *                0 is not satisfied
      * @see #getMaxRows
      */
+    @Override
     public void setMaxRows(int max) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -247,6 +254,7 @@ public class AbstractStatement implements Statement {
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public void setEscapeProcessing(boolean enable) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -265,6 +273,7 @@ public class AbstractStatement implements Statement {
      *                if a database access error occurs
      * @see #setQueryTimeout
      */
+    @Override
     public int getQueryTimeout() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -285,6 +294,7 @@ public class AbstractStatement implements Statement {
      *                >= 0 is not satisfied
      * @see #getQueryTimeout
      */
+    @Override
     public void setQueryTimeout(int seconds) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -300,6 +310,7 @@ public class AbstractStatement implements Statement {
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public void cancel() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -330,6 +341,7 @@ public class AbstractStatement implements Statement {
      *                if a database access error occurs or this method is called
      *                on a closed statement
      */
+    @Override
     public SQLWarning getWarnings() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -346,6 +358,7 @@ public class AbstractStatement implements Statement {
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public void clearWarnings() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -376,6 +389,7 @@ public class AbstractStatement implements Statement {
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public void setCursorName(String name) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -408,6 +422,7 @@ public class AbstractStatement implements Statement {
      * @see #getUpdateCount
      * @see #getMoreResults
      */
+    @Override
     public boolean execute(String sql) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -426,6 +441,7 @@ public class AbstractStatement implements Statement {
      *                if a database access error occurs
      * @see #execute
      */
+    @Override
     public ResultSet getResultSet() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -444,6 +460,7 @@ public class AbstractStatement implements Statement {
      *                if a database access error occurs
      * @see #execute
      */
+    @Override
     public int getUpdateCount() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -471,6 +488,7 @@ public class AbstractStatement implements Statement {
      *                if a database access error occurs
      * @see #execute
      */
+    @Override
     public boolean getMoreResults() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -500,6 +518,7 @@ public class AbstractStatement implements Statement {
      * @since 1.2
      * @see #getFetchDirection
      */
+    @Override
     public void setFetchDirection(int direction) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -521,6 +540,7 @@ public class AbstractStatement implements Statement {
      * @since 1.2
      * @see #setFetchDirection
      */
+    @Override
     public int getFetchDirection() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -544,6 +564,7 @@ public class AbstractStatement implements Statement {
      * @since 1.2
      * @see #getFetchSize
      */
+    @Override
     public void setFetchSize(int rows) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -565,6 +586,7 @@ public class AbstractStatement implements Statement {
      * @since 1.2
      * @see #setFetchSize
      */
+    @Override
     public int getFetchSize() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -582,6 +604,7 @@ public class AbstractStatement implements Statement {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public int getResultSetConcurrency() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -600,6 +623,7 @@ public class AbstractStatement implements Statement {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public int getResultSetType() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -623,6 +647,7 @@ public class AbstractStatement implements Statement {
      * @see #executeBatch
      * @since 1.2
      */
+    @Override
     public void addBatch(String sql) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -642,6 +667,7 @@ public class AbstractStatement implements Statement {
      * @see #addBatch
      * @since 1.2
      */
+    @Override
     public void clearBatch() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -699,6 +725,7 @@ public class AbstractStatement implements Statement {
      *                return a result set.
      * @since 1.3
      */
+    @Override
     public int[] executeBatch() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -715,6 +742,7 @@ public class AbstractStatement implements Statement {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public Connection getConnection() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -808,6 +836,7 @@ public class AbstractStatement implements Statement {
      * @since 1.4
      * @see #execute
      */
+    @Override
     public boolean getMoreResults(int current) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -828,6 +857,7 @@ public class AbstractStatement implements Statement {
      *                if a database access error occurs
      * @since 1.4
      */
+    @Override
     public ResultSet getGeneratedKeys() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -858,6 +888,7 @@ public class AbstractStatement implements Statement {
      *                constant is not one of those allowed
      * @since 1.4
      */
+    @Override
     public int executeUpdate(String sql, int autoGeneratedKeys)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -887,6 +918,7 @@ public class AbstractStatement implements Statement {
      *                returns a <code>ResultSet</code> object
      * @since 1.4
      */
+    @Override
     public int executeUpdate(String sql, int[] columnIndexes)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -916,6 +948,7 @@ public class AbstractStatement implements Statement {
      * 
      * @since 1.4
      */
+    @Override
     public int executeUpdate(String sql, String[] columnNames)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -961,6 +994,7 @@ public class AbstractStatement implements Statement {
      * 
      * @since 1.4
      */
+    @Override
     public boolean execute(String sql, int autoGeneratedKeys)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -1007,6 +1041,7 @@ public class AbstractStatement implements Statement {
      * 
      * @since 1.4
      */
+    @Override
     public boolean execute(String sql, int[] columnIndexes)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -1052,6 +1087,7 @@ public class AbstractStatement implements Statement {
      * 
      * @since 1.4
      */
+    @Override
     public boolean execute(String sql, String[] columnNames)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -1071,6 +1107,7 @@ public class AbstractStatement implements Statement {
      * 
      * @since 1.4
      */
+    @Override
     public int getResultSetHoldability() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1083,6 +1120,7 @@ public class AbstractStatement implements Statement {
      * @throws SQLException
      * @see java.sql.Statement#isClosed()
      */
+    @Override
     public boolean isClosed() throws SQLException {
 	return isClosed;
     }
@@ -1092,6 +1130,7 @@ public class AbstractStatement implements Statement {
      * @throws SQLException
      * @see java.sql.Statement#isPoolable()
      */
+    @Override
     public boolean isPoolable() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1105,6 +1144,7 @@ public class AbstractStatement implements Statement {
      * @throws SQLException
      * @see java.sql.Wrapper#isWrapperFor(java.lang.Class)
      */
+    @Override
     public boolean isWrapperFor(Class<?> arg0) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1117,6 +1157,7 @@ public class AbstractStatement implements Statement {
      * @throws SQLException
      * @see java.sql.Statement#setPoolable(boolean)
      */
+    @Override
     public void setPoolable(boolean arg0) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1131,6 +1172,7 @@ public class AbstractStatement implements Statement {
      * @throws SQLException
      * @see java.sql.Wrapper#unwrap(java.lang.Class)
      */
+    @Override
     public <T> T unwrap(Class<T> arg0) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1142,6 +1184,7 @@ public class AbstractStatement implements Statement {
     ///////////////////////////////////////////////////////////
 
     // @Override do not override for Java 6 compatibility
+    @Override
     public void closeOnCompletion() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1149,6 +1192,7 @@ public class AbstractStatement implements Statement {
     }
 
     // @Override do not override for Java 6 compatibility
+    @Override
     public boolean isCloseOnCompletion() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();

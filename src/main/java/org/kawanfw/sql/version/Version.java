@@ -35,6 +35,7 @@ public class Version {
 		+ new VENDOR();
     }
 
+    @Override
     public String toString() {
 	return getVersion();
     }
@@ -46,6 +47,7 @@ public class Version {
 	public static final String DESCRIPTION = "JDBC toolkit for AceQL HTTP";
 	public static final String DATE = VersionValues.DATE;
 
+	@Override
 	public String toString() {
 	    return NAME + " " + VERSION + " - " + DATE;
 	}
@@ -58,6 +60,7 @@ public class Version {
 	public static final String COPYRIGHT = "Copyright &copy; 2018";
 	public static final String EMAIL = "contact@kawansoft.com";
 
+	@Override
 	public String toString() {
 	    return VENDOR.NAME + " - " + VENDOR.WEB;
 	}

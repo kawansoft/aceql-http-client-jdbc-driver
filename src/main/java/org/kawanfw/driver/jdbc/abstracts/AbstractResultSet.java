@@ -107,6 +107,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public boolean next() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -130,6 +131,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public void close() throws SQLException {
 	isClosed = true;
     }
@@ -145,6 +147,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public boolean wasNull() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -167,6 +170,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public String getString(int columnIndex) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -186,6 +190,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public boolean getBoolean(int columnIndex) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -205,6 +210,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public byte getByte(int columnIndex) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -224,6 +230,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public short getShort(int columnIndex) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -243,6 +250,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public int getInt(int columnIndex) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -262,6 +270,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public long getLong(int columnIndex) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -281,6 +290,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public float getFloat(int columnIndex) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -300,6 +310,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public double getDouble(int columnIndex) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -322,6 +333,8 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @deprecated
      */
+    @Deprecated
+    @Override
     public BigDecimal getBigDecimal(int columnIndex, int scale)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -343,6 +356,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public byte[] getBytes(int columnIndex) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -362,6 +376,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public java.sql.Date getDate(int columnIndex) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -381,6 +396,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public java.sql.Time getTime(int columnIndex) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -400,6 +416,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public java.sql.Timestamp getTimestamp(int columnIndex)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -431,6 +448,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public java.io.InputStream getAsciiStream(int columnIndex)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -468,6 +486,8 @@ public abstract class AbstractResultSet implements ResultSet {
      * @deprecated use <code>getCharacterStream</code> in place of
      *             <code>getUnicodeStream</code>
      */
+    @Deprecated
+    @Override
     public java.io.InputStream getUnicodeStream(int columnIndex)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -498,6 +518,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public java.io.InputStream getBinaryStream(int columnIndex)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -521,6 +542,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public String getString(String columnName) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -540,6 +562,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public boolean getBoolean(String columnName) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -559,6 +582,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public byte getByte(String columnName) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -578,6 +602,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public short getShort(String columnName) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -597,6 +622,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public int getInt(String columnName) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -616,6 +642,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public long getLong(String columnName) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -635,6 +662,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public float getFloat(String columnName) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -654,6 +682,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public double getDouble(String columnName) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -676,6 +705,8 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @deprecated
      */
+    @Deprecated
+    @Override
     public BigDecimal getBigDecimal(String columnName, int scale)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -697,6 +728,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public byte[] getBytes(String columnName) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -716,6 +748,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public java.sql.Date getDate(String columnName) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -735,6 +768,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public java.sql.Time getTime(String columnName) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -754,6 +788,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public java.sql.Timestamp getTimestamp(String columnName)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -785,6 +820,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public java.io.InputStream getAsciiStream(String columnName)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -819,6 +855,8 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @deprecated use <code>getCharacterStream</code> instead
      */
+    @Deprecated
+    @Override
     public java.io.InputStream getUnicodeStream(String columnName)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -849,6 +887,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public java.io.InputStream getBinaryStream(String columnName)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -883,6 +922,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs or this method is called
      *                on a closed result set
      */
+    @Override
     public SQLWarning getWarnings() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -899,6 +939,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public void clearWarnings() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -932,6 +973,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public String getCursorName() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -947,6 +989,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public ResultSetMetaData getMetaData() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -983,6 +1026,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public Object getObject(int columnIndex) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1018,6 +1062,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public Object getObject(String columnName) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1037,6 +1082,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if the <code>ResultSet</code> object does not contain
      *                <code>columnName</code> or a database access error occurs
      */
+    @Override
     public int findColumn(String columnName) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1061,6 +1107,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public java.io.Reader getCharacterStream(int columnIndex)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -1082,6 +1129,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public java.io.Reader getCharacterStream(String columnName)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -1104,6 +1152,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public BigDecimal getBigDecimal(int columnIndex) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1126,6 +1175,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @since 1.2
      * 
      */
+    @Override
     public BigDecimal getBigDecimal(String columnName) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1147,6 +1197,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public boolean isBeforeFirst() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1165,6 +1216,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public boolean isAfterLast() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1182,6 +1234,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public boolean isFirst() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1202,6 +1255,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public boolean isLast() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1219,6 +1273,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                is <code>TYPE_FORWARD_ONLY</code>
      * @since 1.2
      */
+    @Override
     public void beforeFirst() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1236,6 +1291,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                is <code>TYPE_FORWARD_ONLY</code>
      * @since 1.2
      */
+    @Override
     public void afterLast() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1253,6 +1309,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                is <code>TYPE_FORWARD_ONLY</code>
      * @since 1.2
      */
+    @Override
     public boolean first() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1270,6 +1327,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                is <code>TYPE_FORWARD_ONLY</code>
      * @since 1.2
      */
+    @Override
     public boolean last() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1286,6 +1344,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public int getRow() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1330,6 +1389,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                is <code>TYPE_FORWARD_ONLY</code>
      * @since 1.2
      */
+    @Override
     public boolean absolute(int row) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1362,6 +1422,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                <code>TYPE_FORWARD_ONLY</code>
      * @since 1.2
      */
+    @Override
     public boolean relative(int rows) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1380,6 +1441,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                is <code>TYPE_FORWARD_ONLY</code>
      * @since 1.2
      */
+    @Override
     public boolean previous() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1438,6 +1500,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @see Statement#setFetchDirection
      * @see #getFetchDirection
      */
+    @Override
     public void setFetchDirection(int direction) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1455,6 +1518,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @since 1.2
      * @see #setFetchDirection
      */
+    @Override
     public int getFetchDirection() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1480,6 +1544,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @since 1.2
      * @see #getFetchSize
      */
+    @Override
     public void setFetchSize(int rows) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1496,6 +1561,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @since 1.2
      * @see #setFetchSize
      */
+    @Override
     public int getFetchSize() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1539,6 +1605,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public int getType() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1574,6 +1641,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public int getConcurrency() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1595,6 +1663,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @see DatabaseMetaData#updatesAreDetected
      * @since 1.2
      */
+    @Override
     public boolean rowUpdated() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1615,6 +1684,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @see DatabaseMetaData#insertsAreDetected
      * @since 1.2
      */
+    @Override
     public boolean rowInserted() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1636,6 +1706,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @see DatabaseMetaData#deletesAreDetected
      * @since 1.2
      */
+    @Override
     public boolean rowDeleted() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1657,6 +1728,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public void updateNull(int columnIndex) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1679,6 +1751,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public void updateBoolean(int columnIndex, boolean x) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1702,6 +1775,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public void updateByte(int columnIndex, byte x) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1724,6 +1798,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public void updateShort(int columnIndex, short x) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1746,6 +1821,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public void updateInt(int columnIndex, int x) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1768,6 +1844,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public void updateLong(int columnIndex, long x) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1790,6 +1867,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public void updateFloat(int columnIndex, float x) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1812,6 +1890,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public void updateDouble(int columnIndex, double x) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1834,6 +1913,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public void updateBigDecimal(int columnIndex, BigDecimal x)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -1857,6 +1937,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public void updateString(int columnIndex, String x) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1879,6 +1960,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public void updateBytes(int columnIndex, byte[] x) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1901,6 +1983,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public void updateDate(int columnIndex, java.sql.Date x)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -1924,6 +2007,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public void updateTime(int columnIndex, java.sql.Time x)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -1947,6 +2031,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public void updateTimestamp(int columnIndex, java.sql.Timestamp x)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -1972,6 +2057,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public void updateAsciiStream(int columnIndex, java.io.InputStream x,
 	    int length) throws SQLException {
 	String methodName = new Object() {
@@ -1997,6 +2083,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public void updateBinaryStream(int columnIndex, java.io.InputStream x,
 	    int length) throws SQLException {
 	String methodName = new Object() {
@@ -2022,6 +2109,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public void updateCharacterStream(int columnIndex, java.io.Reader x,
 	    int length) throws SQLException {
 	String methodName = new Object() {
@@ -2050,6 +2138,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public void updateObject(int columnIndex, Object x, int scale)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -2073,6 +2162,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public void updateObject(int columnIndex, Object x) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -2093,6 +2183,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public void updateNull(String columnName) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -2115,6 +2206,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public void updateBoolean(String columnName, boolean x)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -2138,6 +2230,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public void updateByte(String columnName, byte x) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -2160,6 +2253,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public void updateShort(String columnName, short x) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -2182,6 +2276,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public void updateInt(String columnName, int x) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -2204,6 +2299,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public void updateLong(String columnName, long x) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -2226,6 +2322,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public void updateFloat(String columnName, float x) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -2248,6 +2345,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public void updateDouble(String columnName, double x) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -2270,6 +2368,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public void updateBigDecimal(String columnName, BigDecimal x)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -2293,6 +2392,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public void updateString(String columnName, String x) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -2316,6 +2416,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public void updateBytes(String columnName, byte[] x) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -2338,6 +2439,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public void updateDate(String columnName, java.sql.Date x)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -2361,6 +2463,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public void updateTime(String columnName, java.sql.Time x)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -2384,6 +2487,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public void updateTimestamp(String columnName, java.sql.Timestamp x)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -2409,6 +2513,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public void updateAsciiStream(String columnName, java.io.InputStream x,
 	    int length) throws SQLException {
 	String methodName = new Object() {
@@ -2434,6 +2539,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public void updateBinaryStream(String columnName, java.io.InputStream x,
 	    int length) throws SQLException {
 	String methodName = new Object() {
@@ -2460,6 +2566,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public void updateCharacterStream(String columnName, java.io.Reader reader,
 	    int length) throws SQLException {
 	String methodName = new Object() {
@@ -2488,6 +2595,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public void updateObject(String columnName, Object x, int scale)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -2511,6 +2619,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public void updateObject(String columnName, Object x) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -2530,6 +2639,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                given a value
      * @since 1.2
      */
+    @Override
     public void insertRow() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -2547,6 +2657,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                called when the cursor is on the insert row
      * @since 1.2
      */
+    @Override
     public void updateRow() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -2564,6 +2675,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                called when the cursor is on the insert row
      * @since 1.2
      */
+    @Override
     public void deleteRow() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -2595,6 +2707,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                called when the cursor is on the insert row
      * @since 1.2
      */
+    @Override
     public void refreshRow() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -2615,6 +2728,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                called when the cursor is on the insert row
      * @since 1.2
      */
+    @Override
     public void cancelRowUpdates() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -2641,6 +2755,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                updatable
      * @since 1.2
      */
+    @Override
     public void moveToInsertRow() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -2657,6 +2772,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                updatable
      * @since 1.2
      */
+    @Override
     public void moveToCurrentRow() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -2677,6 +2793,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public Statement getStatement() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -2704,6 +2821,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public Object getObject(int i, java.util.Map<String, Class<?>> map)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -2725,6 +2843,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public Ref getRef(int i) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -2745,6 +2864,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public Blob getBlob(int i) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -2765,6 +2885,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public Clob getClob(int i) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -2785,6 +2906,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public Array getArray(int i) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -2811,6 +2933,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public Object getObject(String colName, java.util.Map<String, Class<?>> map)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -2832,6 +2955,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public Ref getRef(String getRef) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -2852,6 +2976,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public Blob getBlob(String colName) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -2872,6 +2997,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public Clob getClob(String colName) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -2892,6 +3018,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public Array getArray(String colName) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -2918,6 +3045,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public java.sql.Date getDate(int columnIndex, Calendar cal)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -2945,6 +3073,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public java.sql.Date getDate(String columnName, Calendar cal)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -2972,6 +3101,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public java.sql.Time getTime(int columnIndex, Calendar cal)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -2999,6 +3129,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public java.sql.Time getTime(String columnName, Calendar cal)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -3026,6 +3157,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public java.sql.Timestamp getTimestamp(int columnIndex, Calendar cal)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -3053,6 +3185,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public java.sql.Timestamp getTimestamp(String columnName, Calendar cal)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -3094,6 +3227,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                malformed
      * @since 1.4
      */
+    @Override
     public java.net.URL getURL(int columnIndex) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -3115,6 +3249,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs or if a URL is malformed
      * @since 1.4
      */
+    @Override
     public java.net.URL getURL(String columnName) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -3137,6 +3272,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.4
      */
+    @Override
     public void updateRef(int columnIndex, java.sql.Ref x) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -3159,6 +3295,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.4
      */
+    @Override
     public void updateRef(String columnName, java.sql.Ref x)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -3182,6 +3319,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.4
      */
+    @Override
     public void updateBlob(int columnIndex, java.sql.Blob x)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -3205,6 +3343,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.4
      */
+    @Override
     public void updateBlob(String columnName, java.sql.Blob x)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -3228,6 +3367,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.4
      */
+    @Override
     public void updateClob(int columnIndex, java.sql.Clob x)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -3251,6 +3391,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.4
      */
+    @Override
     public void updateClob(String columnName, java.sql.Clob x)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -3274,6 +3415,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.4
      */
+    @Override
     public void updateArray(int columnIndex, java.sql.Array x)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -3297,6 +3439,7 @@ public abstract class AbstractResultSet implements ResultSet {
      *                if a database access error occurs
      * @since 1.4
      */
+    @Override
     public void updateArray(String columnName, java.sql.Array x)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -3310,6 +3453,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @throws SQLException
      * @see java.sql.ResultSet#getHoldability()
      */
+    @Override
     public int getHoldability() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -3323,6 +3467,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @throws SQLException
      * @see java.sql.ResultSet#getNCharacterStream(int)
      */
+    @Override
     public Reader getNCharacterStream(int arg0) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -3336,6 +3481,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @throws SQLException
      * @see java.sql.ResultSet#getNCharacterStream(java.lang.String)
      */
+    @Override
     public Reader getNCharacterStream(String arg0) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -3349,6 +3495,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @throws SQLException
      * @see java.sql.ResultSet#getNClob(int)
      */
+    @Override
     public NClob getNClob(int arg0) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -3362,6 +3509,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @throws SQLException
      * @see java.sql.ResultSet#getNClob(java.lang.String)
      */
+    @Override
     public NClob getNClob(String arg0) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -3375,6 +3523,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @throws SQLException
      * @see java.sql.ResultSet#getNString(int)
      */
+    @Override
     public String getNString(int arg0) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -3388,6 +3537,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @throws SQLException
      * @see java.sql.ResultSet#getNString(java.lang.String)
      */
+    @Override
     public String getNString(String arg0) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -3401,6 +3551,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @throws SQLException
      * @see java.sql.ResultSet#getRowId(int)
      */
+    @Override
     public RowId getRowId(int arg0) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -3414,6 +3565,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @throws SQLException
      * @see java.sql.ResultSet#getRowId(java.lang.String)
      */
+    @Override
     public RowId getRowId(String arg0) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -3427,6 +3579,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @throws SQLException
      * @see java.sql.ResultSet#getSQLXML(int)
      */
+    @Override
     public SQLXML getSQLXML(int arg0) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -3440,6 +3593,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @throws SQLException
      * @see java.sql.ResultSet#getSQLXML(java.lang.String)
      */
+    @Override
     public SQLXML getSQLXML(String arg0) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -3452,6 +3606,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @throws SQLException
      * @see java.sql.ResultSet#isClosed()
      */
+    @Override
     public boolean isClosed() throws SQLException {
 	return isClosed;
     }
@@ -3462,6 +3617,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @throws SQLException
      * @see java.sql.Wrapper#isWrapperFor(java.lang.Class)
      */
+    @Override
     public boolean isWrapperFor(Class<?> arg0) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -3476,6 +3632,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @throws SQLException
      * @see java.sql.Wrapper#unwrap(java.lang.Class)
      */
+    @Override
     public <T> T unwrap(Class<T> arg0) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -3490,6 +3647,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @throws SQLException
      * @see java.sql.ResultSet#updateAsciiStream(int, java.io.InputStream, long)
      */
+    @Override
     public void updateAsciiStream(int arg0, InputStream arg1, long arg2)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -3504,6 +3662,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @throws SQLException
      * @see java.sql.ResultSet#updateAsciiStream(int, java.io.InputStream)
      */
+    @Override
     public void updateAsciiStream(int arg0, InputStream arg1)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -3520,6 +3679,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @see java.sql.ResultSet#updateAsciiStream(java.lang.String,
      *      java.io.InputStream, long)
      */
+    @Override
     public void updateAsciiStream(String arg0, InputStream arg1, long arg2)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -3535,6 +3695,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @see java.sql.ResultSet#updateAsciiStream(java.lang.String,
      *      java.io.InputStream)
      */
+    @Override
     public void updateAsciiStream(String arg0, InputStream arg1)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -3551,6 +3712,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @see java.sql.ResultSet#updateBinaryStream(int, java.io.InputStream,
      *      long)
      */
+    @Override
     public void updateBinaryStream(int arg0, InputStream arg1, long arg2)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -3565,6 +3727,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @throws SQLException
      * @see java.sql.ResultSet#updateBinaryStream(int, java.io.InputStream)
      */
+    @Override
     public void updateBinaryStream(int arg0, InputStream arg1)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -3581,6 +3744,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @see java.sql.ResultSet#updateBinaryStream(java.lang.String,
      *      java.io.InputStream, long)
      */
+    @Override
     public void updateBinaryStream(String arg0, InputStream arg1, long arg2)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -3596,6 +3760,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @see java.sql.ResultSet#updateBinaryStream(java.lang.String,
      *      java.io.InputStream)
      */
+    @Override
     public void updateBinaryStream(String arg0, InputStream arg1)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -3611,6 +3776,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @throws SQLException
      * @see java.sql.ResultSet#updateBlob(int, java.io.InputStream, long)
      */
+    @Override
     public void updateBlob(int arg0, InputStream arg1, long arg2)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -3625,6 +3791,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @throws SQLException
      * @see java.sql.ResultSet#updateBlob(int, java.io.InputStream)
      */
+    @Override
     public void updateBlob(int arg0, InputStream arg1) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -3640,6 +3807,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @see java.sql.ResultSet#updateBlob(java.lang.String, java.io.InputStream,
      *      long)
      */
+    @Override
     public void updateBlob(String arg0, InputStream arg1, long arg2)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -3654,6 +3822,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @throws SQLException
      * @see java.sql.ResultSet#updateBlob(java.lang.String, java.io.InputStream)
      */
+    @Override
     public void updateBlob(String arg0, InputStream arg1) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -3668,6 +3837,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @throws SQLException
      * @see java.sql.ResultSet#updateCharacterStream(int, java.io.Reader, long)
      */
+    @Override
     public void updateCharacterStream(int arg0, Reader arg1, long arg2)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -3682,6 +3852,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @throws SQLException
      * @see java.sql.ResultSet#updateCharacterStream(int, java.io.Reader)
      */
+    @Override
     public void updateCharacterStream(int arg0, Reader arg1)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -3698,6 +3869,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @see java.sql.ResultSet#updateCharacterStream(java.lang.String,
      *      java.io.Reader, long)
      */
+    @Override
     public void updateCharacterStream(String arg0, Reader arg1, long arg2)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -3713,6 +3885,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @see java.sql.ResultSet#updateCharacterStream(java.lang.String,
      *      java.io.Reader)
      */
+    @Override
     public void updateCharacterStream(String arg0, Reader arg1)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -3728,6 +3901,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @throws SQLException
      * @see java.sql.ResultSet#updateClob(int, java.io.Reader, long)
      */
+    @Override
     public void updateClob(int arg0, Reader arg1, long arg2)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -3742,6 +3916,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @throws SQLException
      * @see java.sql.ResultSet#updateClob(int, java.io.Reader)
      */
+    @Override
     public void updateClob(int arg0, Reader arg1) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -3757,6 +3932,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @see java.sql.ResultSet#updateClob(java.lang.String, java.io.Reader,
      *      long)
      */
+    @Override
     public void updateClob(String arg0, Reader arg1, long arg2)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -3771,6 +3947,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @throws SQLException
      * @see java.sql.ResultSet#updateClob(java.lang.String, java.io.Reader)
      */
+    @Override
     public void updateClob(String arg0, Reader arg1) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -3785,6 +3962,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @throws SQLException
      * @see java.sql.ResultSet#updateNCharacterStream(int, java.io.Reader, long)
      */
+    @Override
     public void updateNCharacterStream(int arg0, Reader arg1, long arg2)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -3799,6 +3977,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @throws SQLException
      * @see java.sql.ResultSet#updateNCharacterStream(int, java.io.Reader)
      */
+    @Override
     public void updateNCharacterStream(int arg0, Reader arg1)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -3815,6 +3994,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @see java.sql.ResultSet#updateNCharacterStream(java.lang.String,
      *      java.io.Reader, long)
      */
+    @Override
     public void updateNCharacterStream(String arg0, Reader arg1, long arg2)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -3830,6 +4010,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @see java.sql.ResultSet#updateNCharacterStream(java.lang.String,
      *      java.io.Reader)
      */
+    @Override
     public void updateNCharacterStream(String arg0, Reader arg1)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -3844,6 +4025,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @throws SQLException
      * @see java.sql.ResultSet#updateNClob(int, java.sql.NClob)
      */
+    @Override
     public void updateNClob(int arg0, NClob arg1) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -3858,6 +4040,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @throws SQLException
      * @see java.sql.ResultSet#updateNClob(int, java.io.Reader, long)
      */
+    @Override
     public void updateNClob(int arg0, Reader arg1, long arg2)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -3872,6 +4055,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @throws SQLException
      * @see java.sql.ResultSet#updateNClob(int, java.io.Reader)
      */
+    @Override
     public void updateNClob(int arg0, Reader arg1) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -3885,6 +4069,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @throws SQLException
      * @see java.sql.ResultSet#updateNClob(java.lang.String, java.sql.NClob)
      */
+    @Override
     public void updateNClob(String arg0, NClob arg1) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -3900,6 +4085,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @see java.sql.ResultSet#updateNClob(java.lang.String, java.io.Reader,
      *      long)
      */
+    @Override
     public void updateNClob(String arg0, Reader arg1, long arg2)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -3914,6 +4100,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @throws SQLException
      * @see java.sql.ResultSet#updateNClob(java.lang.String, java.io.Reader)
      */
+    @Override
     public void updateNClob(String arg0, Reader arg1) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -3927,6 +4114,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @throws SQLException
      * @see java.sql.ResultSet#updateNString(int, java.lang.String)
      */
+    @Override
     public void updateNString(int arg0, String arg1) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -3940,6 +4128,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @throws SQLException
      * @see java.sql.ResultSet#updateNString(java.lang.String, java.lang.String)
      */
+    @Override
     public void updateNString(String arg0, String arg1) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -3953,6 +4142,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @throws SQLException
      * @see java.sql.ResultSet#updateRowId(int, java.sql.RowId)
      */
+    @Override
     public void updateRowId(int arg0, RowId arg1) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -3966,6 +4156,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @throws SQLException
      * @see java.sql.ResultSet#updateRowId(java.lang.String, java.sql.RowId)
      */
+    @Override
     public void updateRowId(String arg0, RowId arg1) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -3979,6 +4170,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @throws SQLException
      * @see java.sql.ResultSet#updateSQLXML(int, java.sql.SQLXML)
      */
+    @Override
     public void updateSQLXML(int arg0, SQLXML arg1) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -3992,6 +4184,7 @@ public abstract class AbstractResultSet implements ResultSet {
      * @throws SQLException
      * @see java.sql.ResultSet#updateSQLXML(java.lang.String, java.sql.SQLXML)
      */
+    @Override
     public void updateSQLXML(String arg0, SQLXML arg1) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -4004,6 +4197,7 @@ public abstract class AbstractResultSet implements ResultSet {
     ///////////////////////////////////////////////////////////
 
     // @Override do not override for Java 6 compatibility
+    @Override
     public <T> T getObject(int arg0, Class<T> arg1) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -4012,6 +4206,7 @@ public abstract class AbstractResultSet implements ResultSet {
     }
 
     // @Override do not override for Java 6 compatibility
+    @Override
     public <T> T getObject(String arg0, Class<T> arg1) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();

@@ -140,6 +140,7 @@ class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
      * @throws SQLException
      * @see java.sql.ResultSet#previous()
      */
+    @Override
     public boolean previous() throws SQLException {
 	if (isClosed) {
 	    throw new SQLException("ResultSet is closed.");
@@ -162,6 +163,7 @@ class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
 	return true;
     }
 
+    @Override
     public boolean next() throws SQLException {
 
 	if (isClosed) {
@@ -191,6 +193,7 @@ class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
      * @throws SQLException
      * @see java.sql.ResultSet#first()
      */
+    @Override
     public boolean first() throws SQLException {
 	return absolute(1);
     }
@@ -200,6 +203,7 @@ class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
      * @throws SQLException
      * @see java.sql.ResultSet#last()
      */
+    @Override
     public boolean last() throws SQLException {
 	return absolute(rowCount);
     }
@@ -326,6 +330,7 @@ class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
 	return getInputStream(value);
     }
 
+    @Override
     public String getString(String columnLabel) throws SQLException {
 	String value = getStringValue(columnLabel);
 	if (value == null || value.equals("NULL")) {
@@ -334,6 +339,7 @@ class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
 	return value;
     }
 
+    @Override
     public int getInt(String columnLabel) throws SQLException {
 	String value = getStringValue(columnLabel);
 	if (value == null || value.equals("NULL")) {
@@ -342,6 +348,7 @@ class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
 	return AceQLResultSetUtil.getIntValue(value);
     }
 
+    @Override
     public BigDecimal getBigDecimal(String columnLabel) throws SQLException {
 	String value = getStringValue(columnLabel);
 	if (value == null || value.equals("NULL")) {
@@ -350,6 +357,7 @@ class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
 	return AceQLResultSetUtil.getBigDecimalValue(value);
     }
 
+    @Override
     public Date getDate(String columnLabel) throws SQLException {
 	String value = getStringValue(columnLabel);
 
@@ -359,6 +367,7 @@ class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
 	return AceQLResultSetUtil.getDateValue(value);
     }
 
+    @Override
     public Timestamp getTimestamp(String columnLabel) throws SQLException {
 	String value = getStringValue(columnLabel);
 
@@ -368,6 +377,7 @@ class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
 	return AceQLResultSetUtil.getTimestampValue(value);
     }
 
+    @Override
     public boolean getBoolean(String columnLabel) throws SQLException {
 	String value = getStringValue(columnLabel);
 	if (value == null || value.equals("NULL")) {
@@ -378,6 +388,7 @@ class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
 
     }
 
+    @Override
     public short getShort(String columnLabel) throws SQLException {
 	String value = getStringValue(columnLabel);
 
@@ -387,24 +398,27 @@ class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
 	return AceQLResultSetUtil.getShortValue(value);
     }
 
+    @Override
     public float getFloat(String columnLabel) throws SQLException {
 	String value = getStringValue(columnLabel);
 
 	if (value == null || value.equals("NULL")) {
-	    return (float) 0;
+	    return 0;
 	}
 	return AceQLResultSetUtil.getFloatValue(value);
     }
 
+    @Override
     public double getDouble(String columnLabel) throws SQLException {
 	String value = getStringValue(columnLabel);
 
 	if (value == null || value.equals("NULL")) {
-	    return (double) 0;
+	    return 0;
 	}
 	return AceQLResultSetUtil.getDoubleValue(value);
     }
 
+    @Override
     public String getString(int columnIndex) throws SQLException {
 	String value = getStringValue(columnIndex);
 	if (value == null || value.equals("NULL")) {
@@ -413,6 +427,7 @@ class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
 	return value;
     }
 
+    @Override
     public int getInt(int columnIndex) throws SQLException {
 	String value = getStringValue(columnIndex);
 
@@ -422,6 +437,7 @@ class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
 	return AceQLResultSetUtil.getIntValue(value);
     }
 
+    @Override
     public BigDecimal getBigDecimal(int columnIndex) throws SQLException {
 	String value = getStringValue(columnIndex);
 
@@ -431,6 +447,7 @@ class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
 	return AceQLResultSetUtil.getBigDecimalValue(value);
     }
 
+    @Override
     public Date getDate(int columnIndex) throws SQLException {
 	String value = getStringValue(columnIndex);
 
@@ -440,6 +457,7 @@ class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
 	return AceQLResultSetUtil.getDateValue(value);
     }
 
+    @Override
     public Timestamp getTimestamp(int columnIndex) throws SQLException {
 	String value = getStringValue(columnIndex);
 
@@ -449,6 +467,7 @@ class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
 	return AceQLResultSetUtil.getTimestampValue(value);
     }
 
+    @Override
     public boolean getBoolean(int columnIndex) throws SQLException {
 	String value = getStringValue(columnIndex);
 	if (value == null || value.equals("NULL")) {
@@ -458,6 +477,7 @@ class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
 
     }
 
+    @Override
     public short getShort(int columnIndex) throws SQLException {
 	String value = getStringValue(columnIndex);
 
@@ -467,20 +487,22 @@ class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
 	return AceQLResultSetUtil.getShortValue(value);
     }
 
+    @Override
     public float getFloat(int columnIndex) throws SQLException {
 	String value = getStringValue(columnIndex);
 
 	if (value == null || value.equals("NULL")) {
-	    return (float) 0;
+	    return 0;
 	}
 	return AceQLResultSetUtil.getFloatValue(value);
     }
 
+    @Override
     public double getDouble(int columnIndex) throws SQLException {
 	String value = getStringValue(columnIndex);
 
 	if (value == null || value.equals("NULL")) {
-	    return (double) 0;
+	    return 0;
 	}
 	return AceQLResultSetUtil.getDoubleValue(value);
     }
@@ -490,10 +512,12 @@ class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
      * @throws SQLException
      * @see java.sql.ResultSet#isClosed()
      */
+    @Override
     public boolean isClosed() throws SQLException {
 	return isClosed;
     }
 
+    @Override
     public void close() {
 	rowParser.close();
 	isClosed = true;

@@ -2388,6 +2388,7 @@ public abstract class AbstractDatabaseMetaData implements DatabaseMetaData {
     ///////////////////////////////////////////////////////////
 
     // @Override do not override for Java 6 compatibility
+    @Override
     public boolean generatedKeyAlwaysReturned() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -2396,6 +2397,7 @@ public abstract class AbstractDatabaseMetaData implements DatabaseMetaData {
     }
 
     // @Override do not override for Java 6 compatibility
+    @Override
     public ResultSet getPseudoColumns(String arg0, String arg1, String arg2,
 	    String arg3) throws SQLException {
 	String methodName = new Object() {

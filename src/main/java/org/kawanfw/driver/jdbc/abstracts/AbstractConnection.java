@@ -98,6 +98,7 @@ public class AbstractConnection implements Connection {
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public Statement createStatement() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -135,6 +136,7 @@ public class AbstractConnection implements Connection {
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public PreparedStatement prepareStatement(String sql) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -169,6 +171,7 @@ public class AbstractConnection implements Connection {
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public CallableStatement prepareCall(String sql) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -190,6 +193,7 @@ public class AbstractConnection implements Connection {
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public String nativeSQL(String sql) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -224,6 +228,7 @@ public class AbstractConnection implements Connection {
      *                if a database access error occurs
      * @see #getAutoCommit
      */
+    @Override
     public void setAutoCommit(boolean autoCommit) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -241,6 +246,7 @@ public class AbstractConnection implements Connection {
      *                if a database access error occurs
      * @see #setAutoCommit
      */
+    @Override
     public boolean getAutoCommit() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -259,6 +265,7 @@ public class AbstractConnection implements Connection {
      *                <code>Connection</code> object is in auto-commit mode
      * @see #setAutoCommit
      */
+    @Override
     public void commit() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -276,6 +283,7 @@ public class AbstractConnection implements Connection {
      *                <code>Connection</code> object is in auto-commit mode
      * @see #setAutoCommit
      */
+    @Override
     public void rollback() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -298,6 +306,7 @@ public class AbstractConnection implements Connection {
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public void close() throws SQLException {
 	this.connection.close();
     }
@@ -319,6 +328,7 @@ public class AbstractConnection implements Connection {
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public boolean isClosed() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -340,6 +350,7 @@ public class AbstractConnection implements Connection {
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public DatabaseMetaData getMetaData() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -361,6 +372,7 @@ public class AbstractConnection implements Connection {
      *                if a database access error occurs or this method is called
      *                during a transaction
      */
+    @Override
     public void setReadOnly(boolean readOnly) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -377,6 +389,7 @@ public class AbstractConnection implements Connection {
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public boolean isReadOnly() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -398,6 +411,7 @@ public class AbstractConnection implements Connection {
      *                if a database access error occurs
      * @see #getCatalog
      */
+    @Override
     public void setCatalog(String catalog) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -413,6 +427,7 @@ public class AbstractConnection implements Connection {
      *                if a database access error occurs
      * @see #setCatalog
      */
+    @Override
     public String getCatalog() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -486,6 +501,7 @@ public class AbstractConnection implements Connection {
      * @see DatabaseMetaData#supportsTransactionIsolationLevel
      * @see #getTransactionIsolation
      */
+    @Override
     public void setTransactionIsolation(int level) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -508,6 +524,7 @@ public class AbstractConnection implements Connection {
      *                if a database access error occurs
      * @see #setTransactionIsolation
      */
+    @Override
     public int getTransactionIsolation() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -535,6 +552,7 @@ public class AbstractConnection implements Connection {
      *                on a closed connection
      * @see SQLWarning
      */
+    @Override
     public SQLWarning getWarnings() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -551,6 +569,7 @@ public class AbstractConnection implements Connection {
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public void clearWarnings() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -583,6 +602,7 @@ public class AbstractConnection implements Connection {
      *                and concurrency
      * @since 1.2
      */
+    @Override
     public Statement createStatement(int resultSetType,
 	    int resultSetConcurrency) throws SQLException {
 	String methodName = new Object() {
@@ -620,6 +640,7 @@ public class AbstractConnection implements Connection {
      *                and concurrency
      * @since 1.2
      */
+    @Override
     public PreparedStatement prepareStatement(String sql, int resultSetType,
 	    int resultSetConcurrency) throws SQLException {
 	String methodName = new Object() {
@@ -657,6 +678,7 @@ public class AbstractConnection implements Connection {
      *                and concurrency
      * @since 1.2
      */
+    @Override
     public CallableStatement prepareCall(String sql, int resultSetType,
 	    int resultSetConcurrency) throws SQLException {
 	String methodName = new Object() {
@@ -678,6 +700,7 @@ public class AbstractConnection implements Connection {
      * @since 1.2
      * @see #setTypeMap
      */
+    @Override
     public java.util.Map<String, Class<?>> getTypeMap() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -700,6 +723,7 @@ public class AbstractConnection implements Connection {
      * @since 1.2
      * @see #getTypeMap
      */
+    @Override
     public void setTypeMap(java.util.Map<String, Class<?>> map)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -726,6 +750,7 @@ public class AbstractConnection implements Connection {
      * @see ResultSet
      * @since 1.4
      */
+    @Override
     public void setHoldability(int holdability) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -746,6 +771,7 @@ public class AbstractConnection implements Connection {
      * @see ResultSet
      * @since 1.4
      */
+    @Override
     public int getHoldability() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -765,6 +791,7 @@ public class AbstractConnection implements Connection {
      * @see Savepoint
      * @since 1.4
      */
+    @Override
     public Savepoint setSavepoint() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -786,6 +813,7 @@ public class AbstractConnection implements Connection {
      * @see Savepoint
      * @since 1.4
      */
+    @Override
     public Savepoint setSavepoint(String name) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -810,6 +838,7 @@ public class AbstractConnection implements Connection {
      * @see #rollback
      * @since 1.4
      */
+    @Override
     public void rollback(Savepoint savepoint) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -830,6 +859,7 @@ public class AbstractConnection implements Connection {
      *                the current transaction
      * @since 1.4
      */
+    @Override
     public void releaseSavepoint(Savepoint savepoint) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -867,6 +897,7 @@ public class AbstractConnection implements Connection {
      * @see ResultSet
      * @since 1.4
      */
+    @Override
     public Statement createStatement(int resultSetType,
 	    int resultSetConcurrency, int resultSetHoldability)
 	    throws SQLException {
@@ -913,6 +944,7 @@ public class AbstractConnection implements Connection {
      * @see ResultSet
      * @since 1.4
      */
+    @Override
     public PreparedStatement prepareStatement(String sql, int resultSetType,
 	    int resultSetConcurrency, int resultSetHoldability)
 	    throws SQLException {
@@ -957,6 +989,7 @@ public class AbstractConnection implements Connection {
      * @see ResultSet
      * @since 1.4
      */
+    @Override
     public CallableStatement prepareCall(String sql, int resultSetType,
 	    int resultSetConcurrency, int resultSetHoldability)
 	    throws SQLException {
@@ -1010,6 +1043,7 @@ public class AbstractConnection implements Connection {
      *                constant of Statement.RETURN_GENERATED_KEYS
      * @since 1.4
      */
+    @Override
     public PreparedStatement prepareStatement(String sql, int autoGeneratedKeys)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -1057,6 +1091,7 @@ public class AbstractConnection implements Connection {
      * 
      * @since 1.4
      */
+    @Override
     public PreparedStatement prepareStatement(String sql, int[] columnIndexes)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -1103,6 +1138,7 @@ public class AbstractConnection implements Connection {
      * 
      * @since 1.4
      */
+    @Override
     public PreparedStatement prepareStatement(String sql, String[] columnNames)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -1145,6 +1181,7 @@ public class AbstractConnection implements Connection {
      *             if the JDBC driver does not support this data type
      * @since 1.6
      */
+    @Override
     public Array createArrayOf(String typeName, Object[] elements)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -1170,6 +1207,7 @@ public class AbstractConnection implements Connection {
      *
      * @since 1.6
      */
+    @Override
     public Blob createBlob() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1194,6 +1232,7 @@ public class AbstractConnection implements Connection {
      *
      * @since 1.6
      */
+    @Override
     public Clob createClob() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1218,6 +1257,7 @@ public class AbstractConnection implements Connection {
      *
      * @since 1.6
      */
+    @Override
     public NClob createNClob() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1241,6 +1281,7 @@ public class AbstractConnection implements Connection {
      *                if the JDBC driver does not support this data type
      * @since 1.6
      */
+    @Override
     public SQLXML createSQLXML() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1269,6 +1310,7 @@ public class AbstractConnection implements Connection {
      *             if the JDBC driver does not support this data type
      * @since 1.6
      */
+    @Override
     public Struct createStruct(String typeName, Object[] attributes)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -1296,6 +1338,7 @@ public class AbstractConnection implements Connection {
      * @since 1.6
      */
 
+    @Override
     public Properties getClientInfo() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1329,6 +1372,7 @@ public class AbstractConnection implements Connection {
      *        <p>
      * @see java.sql.DatabaseMetaData#getClientInfoProperties
      */
+    @Override
     public String getClientInfo(String name) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1360,6 +1404,7 @@ public class AbstractConnection implements Connection {
      *        <p>
      * @see java.sql.DatabaseMetaData#getClientInfoProperties
      */
+    @Override
     public boolean isValid(int timeout) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1389,6 +1434,7 @@ public class AbstractConnection implements Connection {
      *             wrapper for an object with the given interface.
      * @since 1.6
      */
+    @Override
     public boolean isWrapperFor(Class<?> iface) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1430,6 +1476,7 @@ public class AbstractConnection implements Connection {
      *             <p>
      */
 
+    @Override
     public void setClientInfo(Properties properties)
 	    throws SQLClientInfoException {
 	if (isConnectionHttp) {
@@ -1494,6 +1541,7 @@ public class AbstractConnection implements Connection {
      *             <p>
      * @since 1.6
      */
+    @Override
     public void setClientInfo(String name, String value)
 	    throws SQLClientInfoException {
 	if (isConnectionHttp) {
@@ -1522,6 +1570,7 @@ public class AbstractConnection implements Connection {
      *             If no object found that implements the interface
      * @since 1.6
      */
+    @Override
     public <T> T unwrap(Class<T> iface) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1534,6 +1583,7 @@ public class AbstractConnection implements Connection {
     ///////////////////////////////////////////////////////////
 
     // @Override do not override for Java 6 compatibility
+    @Override
     public void abort(Executor arg0) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1541,6 +1591,7 @@ public class AbstractConnection implements Connection {
     }
 
     // @Override do not override for Java 6 compatibility
+    @Override
     public int getNetworkTimeout() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1549,6 +1600,7 @@ public class AbstractConnection implements Connection {
     }
 
     // @Override do not override for Java 6 compatibility
+    @Override
     public String getSchema() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1557,6 +1609,7 @@ public class AbstractConnection implements Connection {
     }
 
     // @Override do not override for Java 6 compatibility
+    @Override
     public void setNetworkTimeout(Executor arg0, int arg1) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1564,6 +1617,7 @@ public class AbstractConnection implements Connection {
     }
 
     // @Override do not override for Java 6 compatibility
+    @Override
     public void setSchema(String arg0) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();

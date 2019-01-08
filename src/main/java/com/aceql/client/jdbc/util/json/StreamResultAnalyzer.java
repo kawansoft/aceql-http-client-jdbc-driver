@@ -24,12 +24,12 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.Map;
 
 import javax.json.Json;
 import javax.json.stream.JsonParser;
 
-import com.aceql.client.jdbc.http.AceQLHttpApi;
 import com.aceql.client.jdbc.http.ResultAnalyzer;
 
 /**
@@ -38,357 +38,344 @@ import com.aceql.client.jdbc.http.ResultAnalyzer;
  */
 public class StreamResultAnalyzer {
 
-    private static boolean traceOn = AceQLHttpApi.isTraceOn();
+	public static boolean DEBUG = false;
 
-    private File jsonFile = null;
+	private File jsonFile = null;
 
-    private String errorType = null;
-    private String errorMessage = null;
-    private String stackTrace = null;
+	private String errorType = null;
+	private String errorMessage = null;
+	private String stackTrace = null;
 
-    private int httpStatusCode;
-    private String httpStatusMessage;
+	private int httpStatusCode;
+	private String httpStatusMessage;
 
-    /** Exception when parsing the JSON stream. Futur usage */
-    private Exception parseException = null;
+	/** Exception when parsing the JSON stream. Futur usage */
+	private Exception parseException = null;
 
-    /**
-     * Constructor
-     * 
-     * @param jsonFile
-     * @param httpStatusCode
-     * @param httpStatusMessage
-     * 
-     */
-    public StreamResultAnalyzer(File jsonFile, int httpStatusCode,
-	    String httpStatusMessage) {
-	this.jsonFile = jsonFile;
-	this.httpStatusCode = httpStatusCode;
-	this.httpStatusMessage = httpStatusMessage;
-    }
-
-    /**
-     * Checks if the JSON content contains a valid {@code ResultSet} dumped by
-     * server side /execute_query API. <br>
-     * Will check the "status" key value. if "status" is "OK", method will
-     * return true, else it will return false. <br>
-     * If method return false, check the error id & message with
-     * {@code getErrorId}, {@code getErrorMessage}.
-     * 
-     * @return true if JSON content contains a valid {@code ResultSet}, else
-     *         false if any error occurred when calling /execute_query
-     */
-    public boolean isStatusOk() throws SQLException {
-
-	// If file does not exist ==> http failure
-	if (!jsonFile.exists()) {
-
-	    this.errorType = "0";
-	    errorMessage = "Unknown error.";
-	    if (httpStatusCode != HttpURLConnection.HTTP_OK) {
-		errorMessage = "HTTP FAILURE " + httpStatusCode + " ("
-			+ httpStatusMessage + ")";
-	    }
-	    return false;
+	/**
+	 * Constructor
+	 * 
+	 * @param jsonFile
+	 * @param httpStatusCode
+	 * @param httpStatusMessage
+	 * 
+	 */
+	public StreamResultAnalyzer(File jsonFile, int httpStatusCode, String httpStatusMessage) {
+		this.jsonFile = jsonFile;
+		this.httpStatusCode = httpStatusCode;
+		this.httpStatusMessage = httpStatusMessage;
 	}
 
-	trace();
-	boolean isOk = false;
-	Reader reader = null;
+	/**
+	 * Checks if the JSON content contains a valid {@code ResultSet} dumped by
+	 * server side /execute_query API. <br>
+	 * Will check the "status" key value. if "status" is "OK", method will return
+	 * true, else it will return false. <br>
+	 * If method return false, check the error id & message with {@code getErrorId},
+	 * {@code getErrorMessage}.
+	 * 
+	 * @return true if JSON content contains a valid {@code ResultSet}, else false
+	 *         if any error occurred when calling /execute_query
+	 */
+	public boolean isStatusOk() throws SQLException {
 
-	try {
-	    try {
-		reader = new InputStreamReader(new FileInputStream(jsonFile),
-			"UTF-8");
-	    } catch (Exception e) {
-		throw new SQLException(e);
-	    }
+		// If file does not exist ==> http failure
+		if (!jsonFile.exists()) {
 
-	    JsonParser parser = Json.createParser(reader);
+			this.errorType = "0";
+			errorMessage = "Unknown error.";
+			if (httpStatusCode != HttpURLConnection.HTTP_OK) {
+				errorMessage = "HTTP FAILURE " + httpStatusCode + " (" + httpStatusMessage + ")";
+			}
+			return false;
+		}
 
-	    while (parser.hasNext()) {
-		JsonParser.Event event = parser.next();
-		switch (event) {
-		case START_ARRAY:
-		case END_ARRAY:
-		case START_OBJECT:
-		case END_OBJECT:
-		case VALUE_FALSE:
-		case VALUE_NULL:
-		case VALUE_TRUE:
-		    // System.out.println("---" + event.toString());
-		    break;
-		case KEY_NAME:
+		debug("");
+		boolean isOk = false;
+		Reader reader = null;
 
-		    trace(event.toString() + " " + parser.getString() + " - ");
+		try {
+			try {
+				reader = new InputStreamReader(new FileInputStream(jsonFile), "UTF-8");
+			} catch (Exception e) {
+				throw new SQLException(e);
+			}
 
-		    if (parser.getString().equals("status")) {
+			JsonParser parser = Json.createParser(reader);
+
+			while (parser.hasNext()) {
+				JsonParser.Event event = parser.next();
+				switch (event) {
+				case START_ARRAY:
+				case END_ARRAY:
+				case START_OBJECT:
+				case END_OBJECT:
+				case VALUE_FALSE:
+				case VALUE_NULL:
+				case VALUE_TRUE:
+					// System.out.println("---" + event.toString());
+					break;
+				case KEY_NAME:
+
+					debug(event.toString() + " " + parser.getString() + " - ");
+
+					if (parser.getString().equals("status")) {
+
+						if (parser.hasNext())
+							parser.next();
+						else
+							return false;
+
+						if (parser.getString().equals("OK")) {
+							return true;
+						} else {
+							parseErrorKeywords(parser, event);
+							return false;
+						}
+					}
+
+					break;
+				case VALUE_STRING:
+				case VALUE_NUMBER:
+					debug("Should not reach this:");
+					debug(event.toString() + " " + parser.getString());
+					break;
+				}
+			}
+
+			return isOk;
+		} catch (Exception e) {
+			this.parseException = e;
+
+			this.errorType = "0";
+			errorMessage = "Unknown error";
+			if (httpStatusCode != HttpURLConnection.HTTP_OK) {
+				errorMessage = "HTTP FAILURE " + httpStatusCode + " (" + httpStatusMessage + ")";
+			}
+
+			return false;
+		} finally {
+			if (reader != null) {
+				try {
+					reader.close();
+				} catch (Exception ignore) {
+					// ignore
+				}
+			}
+		}
+
+	}
+
+	private void parseErrorKeywords(JsonParser parser, JsonParser.Event event) {
+		while (parser.hasNext()) {
 
 			if (parser.hasNext())
-			    parser.next();
+				event = parser.next();
 			else
-			    return false;
+				return;
 
-			if (parser.getString().equals("OK")) {
-			    return true;
-			} else {
-			    parseErrorKeywords(parser, event);
-			    return false;
+			if (event != JsonParser.Event.KEY_NAME && event != JsonParser.Event.VALUE_STRING
+					&& event != JsonParser.Event.VALUE_NUMBER) {
+				continue;
 			}
-		    }
 
-		    break;
-		case VALUE_STRING:
-		case VALUE_NUMBER:
-		    trace("Should not reach this:");
-		    trace(event.toString() + " " + parser.getString());
-		    break;
+			if (parser.getString().equals("error_type")) {
+				if (parser.hasNext())
+					parser.next();
+				else
+					return;
+				this.errorType = parser.getString();
+			}
+			if (parser.getString().equals("error_message")) {
+				if (parser.hasNext())
+					parser.next();
+				else
+					return;
+				this.errorMessage = parser.getString();
+			}
+			if (parser.getString().equals("stack_trace")) {
+				if (parser.hasNext())
+					parser.next();
+				else
+					return;
+				this.stackTrace = parser.getString();
+			}
 		}
-	    }
+	}
 
-	    return isOk;
-	} catch (Exception e) {
-	    this.parseException = e;
+	public String getErrorMessage() {
+		return errorMessage;
+	}
 
-	    this.errorType = "0";
-	    errorMessage = "Unknown error";
-	    if (httpStatusCode != HttpURLConnection.HTTP_OK) {
-		errorMessage = "HTTP FAILURE " + httpStatusCode + " ("
-			+ httpStatusMessage + ")";
-	    }
+	public int getErrorId() {
+		return Integer.parseInt(errorType);
+	}
 
-	    return false;
-	} finally {
-	    if (reader != null) {
+	public String getStackTrace() {
+		return stackTrace;
+	}
+
+	/**
+	 * Returns the Exception raised when parsing JSON stream
+	 * 
+	 * @return the Exception raised when parsing JSON stream
+	 */
+	public Exception getParseException() {
+		return parseException;
+	}
+
+	/**
+	 * Returns after CallablStatement execute/executeQuery the Map of OUT parameter
+	 * (index, values)
+	 * 
+	 * @return the Map of OUT parameter (index, values)
+	 */
+	public Map<Integer, String> getParametersOutPerIndex() throws SQLException {
+
+		// If file does not exist ==> http failure
+		if (!jsonFile.exists()) {
+
+			this.errorType = "0";
+			errorMessage = "Unknown error.";
+			if (httpStatusCode != HttpURLConnection.HTTP_OK) {
+				errorMessage = "HTTP FAILURE " + httpStatusCode + " (" + httpStatusMessage + ")";
+			}
+			return null;
+
+		}
+
+		debug("");
+		Reader reader = null;
+
 		try {
-		    reader.close();
+			try {
+				reader = new InputStreamReader(new FileInputStream(jsonFile), "UTF-8");
+			} catch (Exception e) {
+				throw new SQLException(e);
+			}
+
+			Map<Integer, String> parametersOutPerIndex = ResultAnalyzer.getParametersOutPerIndex(reader);
+			return parametersOutPerIndex;
+
+		} catch (Exception e) {
+			this.parseException = e;
+
+			this.errorType = "0";
+			errorMessage = "Unknown error";
+			if (httpStatusCode != HttpURLConnection.HTTP_OK) {
+				errorMessage = "HTTP FAILURE " + httpStatusCode + " (" + httpStatusMessage + ")";
+			}
+
+			return null;
+		} finally {
+			if (reader != null) {
+				try {
+					reader.close();
+				} catch (Exception ignore) {
+					// ignore
+				}
+			}
 		}
-		catch (Exception ignore) {
-		    // ignore
+
+	}
+
+	/**
+	 * Returns the "row_count" key int value from the Json file
+	 * 
+	 * @return the "row_count" key int value from the Json file
+	 * @throws SQLException
+	 */
+	public int getRowCount() throws SQLException {
+
+		// If file does not exist ==> http failure
+		if (!jsonFile.exists()) {
+
+			this.errorType = "0";
+			errorMessage = "Unknown error.";
+			if (httpStatusCode != HttpURLConnection.HTTP_OK) {
+				errorMessage = "HTTP FAILURE " + httpStatusCode + " (" + httpStatusMessage + ")";
+			}
+			return 0;
 		}
-	    }
+
+		debug("");
+		Reader reader = null;
+
+		try {
+			try {
+				reader = new InputStreamReader(new FileInputStream(jsonFile), "UTF-8");
+			} catch (Exception e) {
+				throw new SQLException(e);
+			}
+
+			JsonParser parser = Json.createParser(reader);
+
+			while (parser.hasNext()) {
+				JsonParser.Event event = parser.next();
+				switch (event) {
+				case START_ARRAY:
+				case END_ARRAY:
+				case START_OBJECT:
+				case END_OBJECT:
+				case VALUE_FALSE:
+				case VALUE_NULL:
+				case VALUE_TRUE:
+					// System.out.println("---" + event.toString());
+					break;
+				case KEY_NAME:
+
+					debug(event.toString() + " " + parser.getString() + " - ");
+					if (parser.getString().equals("row_count")) {
+
+						if (parser.hasNext())
+							parser.next();
+						else
+							return 0;
+
+						int rowCount = parser.getInt();
+						return rowCount;
+					}
+
+					break;
+				case VALUE_STRING:
+				case VALUE_NUMBER:
+					debug("Should not reach this:");
+					debug(event.toString() + " " + parser.getString());
+					break;
+				}
+			}
+
+			return 0;
+		} catch (Exception e) {
+			this.parseException = e;
+
+			this.errorType = "0";
+			errorMessage = "Unknown error";
+			if (httpStatusCode != HttpURLConnection.HTTP_OK) {
+				errorMessage = "HTTP FAILURE " + httpStatusCode + " (" + httpStatusMessage + ")";
+			}
+
+			return 0;
+		} finally {
+			if (reader != null) {
+				try {
+					reader.close();
+				} catch (Exception ignore) {
+					// ignore
+				}
+			}
+		}
+
 	}
 
-    }
+	/**
+	 * @param s
+	 */
 
-    private void parseErrorKeywords(JsonParser parser, JsonParser.Event event) {
-	while (parser.hasNext()) {
-
-	    if (parser.hasNext())
-		event = parser.next();
-	    else
-		return;
-
-	    if (event != JsonParser.Event.KEY_NAME
-		    && event != JsonParser.Event.VALUE_STRING
-		    && event != JsonParser.Event.VALUE_NUMBER) {
-		continue;
-	    }
-
-	    if (parser.getString().equals("error_type")) {
-		if (parser.hasNext())
-		    parser.next();
-		else
-		    return;
-		this.errorType = parser.getString();
-	    }
-	    if (parser.getString().equals("error_message")) {
-		if (parser.hasNext())
-		    parser.next();
-		else
-		    return;
-		this.errorMessage = parser.getString();
-	    }
-	    if (parser.getString().equals("stack_trace")) {
-		if (parser.hasNext())
-		    parser.next();
-		else
-		    return;
-		this.stackTrace = parser.getString();
-	    }
+	protected static void debug(String s) {
+		if (DEBUG) {
+			System.out.println(new Date() + " " + s);
+		}
 	}
-    }
-
-    private static void trace() {
-	if (traceOn) {
-	    System.out.println();
-	}
-    }
-
-    private static void trace(String s) {
-	if (traceOn) {
-	    System.out.println(s);
-	}
-    }
-
-    public String getErrorMessage() {
-	return errorMessage;
-    }
-
-    public int getErrorId() {
-	return Integer.parseInt(errorType);
-    }
-
-    public String getStackTrace() {
-	return stackTrace;
-    }
-
-    /**
-     * Returns the Exception raised when parsing JSON stream
-     * 
-     * @return the Exception raised when parsing JSON stream
-     */
-    public Exception getParseException() {
-	return parseException;
-    }
-
-    /**
-     * Returns after CallablStatement execute/executeQuery the Map of OUT parameter (index, values)
-     * @return the Map of OUT parameter (index, values)
-     */
-    public Map<Integer, String> getParametersOutPerIndex()  throws SQLException {
-    
-        // If file does not exist ==> http failure
-        if (!jsonFile.exists()) {
-    
-            this.errorType = "0";
-            errorMessage = "Unknown error.";
-            if (httpStatusCode != HttpURLConnection.HTTP_OK) {
-        	errorMessage = "HTTP FAILURE " + httpStatusCode + " ("
-        		+ httpStatusMessage + ")";
-            }
-            return null;
-           
-        }
-    
-        trace();
-        Reader reader = null;
-    
-        try {
-            try {
-        	reader = new InputStreamReader(new FileInputStream(jsonFile),
-        		"UTF-8");
-            } catch (Exception e) {
-        	throw new SQLException(e);
-            }
-    
-	    Map<Integer, String> parametersOutPerIndex = ResultAnalyzer.getParametersOutPerIndex(reader);
-	    return parametersOutPerIndex;
-    
-        } catch (Exception e) {
-            this.parseException = e;
-    
-            this.errorType = "0";
-            errorMessage = "Unknown error";
-            if (httpStatusCode != HttpURLConnection.HTTP_OK) {
-        	errorMessage = "HTTP FAILURE " + httpStatusCode + " ("
-        		+ httpStatusMessage + ")";
-            }
-    
-            return null;
-        } finally {
-            if (reader != null) {
-        	try {
-        	    reader.close();
-        	}
-        	catch (Exception ignore) {
-        	    // ignore
-        	}
-            }
-        }
-    
-    }
-
-    /**
-     * Returns the "row_count" key int value from the Json file
-     * @return the "row_count" key int value from the Json file
-     * @throws SQLException
-     */
-    public int getRowCount() throws SQLException {
-    
-        // If file does not exist ==> http failure
-        if (!jsonFile.exists()) {
-    
-            this.errorType = "0";
-            errorMessage = "Unknown error.";
-            if (httpStatusCode != HttpURLConnection.HTTP_OK) {
-        	errorMessage = "HTTP FAILURE " + httpStatusCode + " ("
-        		+ httpStatusMessage + ")";
-            }
-            return 0;
-        }
-    
-        trace();
-        Reader reader = null;
-    
-        try {
-            try {
-        	reader = new InputStreamReader(new FileInputStream(jsonFile),
-        		"UTF-8");
-            } catch (Exception e) {
-        	throw new SQLException(e);
-            }
-    
-            JsonParser parser = Json.createParser(reader);
-    
-            while (parser.hasNext()) {
-        	JsonParser.Event event = parser.next();
-        	switch (event) {
-        	case START_ARRAY:
-        	case END_ARRAY:
-        	case START_OBJECT:
-        	case END_OBJECT:
-        	case VALUE_FALSE:
-        	case VALUE_NULL:
-        	case VALUE_TRUE:
-        	    // System.out.println("---" + event.toString());
-        	    break;
-        	case KEY_NAME:
-    
-        	    trace(event.toString() + " " + parser.getString() + " - ");
-        	    if (parser.getString().equals("row_count")) {
-    
-        		if (parser.hasNext())
-        		    parser.next();
-        		else
-        		    return 0;
-    
-        		int rowCount = parser.getInt();
-        		return rowCount;
-        	    }
-    
-        	    break;
-        	case VALUE_STRING:
-        	case VALUE_NUMBER:
-        	    trace("Should not reach this:");
-        	    trace(event.toString() + " " + parser.getString());
-        	    break;
-        	}
-            }
-    
-            return 0;
-        } catch (Exception e) {
-            this.parseException = e;
-    
-            this.errorType = "0";
-            errorMessage = "Unknown error";
-            if (httpStatusCode != HttpURLConnection.HTTP_OK) {
-        	errorMessage = "HTTP FAILURE " + httpStatusCode + " ("
-        		+ httpStatusMessage + ")";
-            }
-    
-            return 0;
-        } finally {
-            if (reader != null) {
-        	try {
-        	    reader.close();
-        	}
-        	catch (Exception ignore) {
-        	    // ignore
-        	}
-            }
-        }
-    
-    }
 
 }

@@ -54,14 +54,17 @@ public class SslUtil {
 	// Create a trust manager that does not validate certificate chains
 	TrustManager[] trustAllCerts = new TrustManager[] {
 		new X509TrustManager() {
+		    @Override
 		    public java.security.cert.X509Certificate[] getAcceptedIssuers() {
 			return null;
 		    }
 
+		    @Override
 		    public void checkClientTrusted(X509Certificate[] certs,
 			    String authType) {
 		    }
 
+		    @Override
 		    public void checkServerTrusted(X509Certificate[] certs,
 			    String authType) {
 		    }
@@ -74,6 +77,7 @@ public class SslUtil {
 
 	// Create all-trusting host name verifier
 	HostnameVerifier allHostsValid = new HostnameVerifier() {
+	    @Override
 	    public boolean verify(String hostname, SSLSession session) {
 		return true;
 	    }

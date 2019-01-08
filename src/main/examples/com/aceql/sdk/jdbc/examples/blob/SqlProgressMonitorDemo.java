@@ -140,12 +140,14 @@ PropertyChangeListener {
     /**
      * Invoked when the user presses the start button.
      */
+    @Override
     public void actionPerformed(ActionEvent evt) {
 	progressMonitor = new ProgressMonitor(SqlProgressMonitorDemo.this,
 		"Insert with BLOB upload", "", 0, 100);
 	progressMonitor.setProgress(0);
 
 	Thread t = new Thread() {
+	    @Override
 	    public void run() {
 		doInsert();
 	    }
@@ -162,6 +164,7 @@ PropertyChangeListener {
     /**
      * Invoked when task's progress property changes.
      */
+    @Override
     public void propertyChange(PropertyChangeEvent evt) {
 	if ("progress" == evt.getPropertyName()) {
 	    int progress = (Integer) evt.getNewValue();
@@ -263,6 +266,7 @@ PropertyChangeListener {
 	// Schedule a job for the event-dispatching thread:
 	// creating and showing this application's GUI.
 	javax.swing.SwingUtilities.invokeLater(new Runnable() {
+	    @Override
 	    public void run() {
 		createAndShowGUI();
 	    }

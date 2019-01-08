@@ -56,6 +56,7 @@ public abstract class AbstractClob implements Clob {
      *                <code>CLOB</code> value
      * @since 1.2
      */
+    @Override
     public long length() throws SQLException {
 	return this.clob.length();
     }
@@ -78,6 +79,7 @@ public abstract class AbstractClob implements Clob {
      *                if there is an error accessing the <code>CLOB</code> value
      * @since 1.2
      */
+    @Override
     public String getSubString(long pos, int length) throws SQLException {
 	return this.clob.getSubString(pos, length);
     }
@@ -94,6 +96,7 @@ public abstract class AbstractClob implements Clob {
      * @see #setCharacterStream
      * @since 1.2
      */
+    @Override
     public Reader getCharacterStream() throws SQLException {
 	return this.clob.getCharacterStream();
     }
@@ -109,6 +112,7 @@ public abstract class AbstractClob implements Clob {
      * @see #setAsciiStream
      * @since 1.2
      */
+    @Override
     public InputStream getAsciiStream() throws SQLException {
 	return this.clob.getAsciiStream();
     }
@@ -130,6 +134,7 @@ public abstract class AbstractClob implements Clob {
      *                if there is an error accessing the <code>CLOB</code> value
      * @since 1.2
      */
+    @Override
     public long position(String searchstr, long start) throws SQLException {
 	return this.clob.position(searchstr, start);
     }
@@ -150,6 +155,7 @@ public abstract class AbstractClob implements Clob {
      *                if there is an error accessing the <code>CLOB</code> value
      * @since 1.2
      */
+    @Override
     public long position(Clob searchstr, long start) throws SQLException {
 	return this.clob.position(searchstr, start);
     }
@@ -174,6 +180,7 @@ public abstract class AbstractClob implements Clob {
      * 
      * @since 1.4
      */
+    @Override
     public int setString(long pos, String str) throws SQLException {
 	return this.clob.setString(pos, str);
     }
@@ -200,6 +207,7 @@ public abstract class AbstractClob implements Clob {
      * 
      * @since 1.4
      */
+    @Override
     public int setString(long pos, String str, int offset, int len)
 	    throws SQLException {
 	return this.clob.setString(pos, str, offset, len);
@@ -220,6 +228,7 @@ public abstract class AbstractClob implements Clob {
      * 
      * @since 1.4
      */
+    @Override
     public OutputStream setAsciiStream(long pos) throws SQLException {
 	return this.clob.setAsciiStream(pos);
     }
@@ -240,6 +249,7 @@ public abstract class AbstractClob implements Clob {
      * 
      * @since 1.4
      */
+    @Override
     public Writer setCharacterStream(long pos) throws SQLException {
 	return this.clob.setCharacterStream(pos);
     }
@@ -256,6 +266,7 @@ public abstract class AbstractClob implements Clob {
      * 
      * @since 1.4
      */
+    @Override
     public void truncate(long len) throws SQLException {
 	this.clob.truncate(len);
     }
@@ -278,6 +289,7 @@ public abstract class AbstractClob implements Clob {
      *                if the JDBC driver does not support this method
      * @since 1.6
      */
+    @Override
     public void free() throws SQLException {
 	this.clob.free();
     }
@@ -304,6 +316,7 @@ public abstract class AbstractClob implements Clob {
      *                if the JDBC driver does not support this method
      * @since 1.6
      */
+    @Override
     public Reader getCharacterStream(long pos, long length)
 	    throws SQLException {
 	return this.clob.getCharacterStream(pos, length);

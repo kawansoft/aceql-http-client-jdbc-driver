@@ -106,6 +106,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public void setNull(int parameterIndex, int sqlType) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -125,6 +126,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public void setBoolean(int parameterIndex, boolean x) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -144,6 +146,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public void setByte(int parameterIndex, byte x) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -163,6 +166,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public void setShort(int parameterIndex, short x) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -182,6 +186,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public void setInt(int parameterIndex, int x) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -201,6 +206,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public void setLong(int parameterIndex, long x) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -220,6 +226,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public void setFloat(int parameterIndex, float x) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -239,6 +246,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public void setDouble(int parameterIndex, double x) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -258,6 +266,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public void setBigDecimal(int parameterIndex, BigDecimal x)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -280,6 +289,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public void setString(int parameterIndex, String x) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -301,6 +311,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public void setBytes(int parameterIndex, byte[] x) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -320,6 +331,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public void setDate(int parameterIndex, java.sql.Date x)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -340,6 +352,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public void setTime(int parameterIndex, java.sql.Time x)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -360,6 +373,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public void setTimestamp(int parameterIndex, java.sql.Timestamp x)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -389,6 +403,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public void setAsciiStream(int parameterIndex, java.io.InputStream x,
 	    int length) throws SQLException {
 	String methodName = new Object() {
@@ -424,6 +439,8 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * @deprecated
      */
 
+    @Deprecated
+    @Override
     public void setUnicodeStream(int parameterIndex, java.io.InputStream x,
 	    int length) throws SQLException {
 	String methodName = new Object() {
@@ -453,6 +470,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public void setBinaryStream(int parameterIndex, java.io.InputStream x,
 	    int length) throws SQLException {
 	String methodName = new Object() {
@@ -473,6 +491,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public void clearParameters() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -519,6 +538,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      *                if a database access error occurs
      * @see Types
      */
+    @Override
     public void setObject(int parameterIndex, Object x, int targetSqlType,
 	    int scale) throws SQLException {
 	String methodName = new Object() {
@@ -543,6 +563,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * @exception SQLException
      *                if a database access error occurs
      */
+    @Override
     public void setObject(int parameterIndex, Object x, int targetSqlType)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -588,6 +609,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      *                if a database access error occurs or the type of the given
      *                object is ambiguous
      */
+    @Override
     public void setObject(int parameterIndex, Object x) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -619,6 +641,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * @see Statement#getUpdateCount
      * @see Statement#getMoreResults
      */
+    @Override
     public boolean execute() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -636,6 +659,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * @see Statement#addBatch
      * @since 1.2
      */
+    @Override
     public void addBatch() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -667,6 +691,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public void setCharacterStream(int parameterIndex, java.io.Reader reader,
 	    int length) throws SQLException {
 	String methodName = new Object() {
@@ -689,6 +714,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public void setRef(int iParam, Ref x) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -710,6 +736,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public void setBlob(int iParam, Blob x) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -731,6 +758,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public void setClob(int iParam, Clob x) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -752,6 +780,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public void setArray(int iParam, Array x) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -783,6 +812,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public ResultSetMetaData getMetaData() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -811,6 +841,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public void setDate(int parameterIndex, java.sql.Date x, Calendar cal)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -840,6 +871,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public void setTime(int parameterIndex, java.sql.Time x, Calendar cal)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -870,6 +902,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public void setTimestamp(int parameterIndex, java.sql.Timestamp x,
 	    Calendar cal) throws SQLException {
 	String methodName = new Object() {
@@ -908,6 +941,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      *                if a database access error occurs
      * @since 1.2
      */
+    @Override
     public void setNull(int paramIndex, int sqlType, String typeName)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -930,6 +964,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      *                if a database access error occurs
      * @since 1.4
      */
+    @Override
     public void setURL(int parameterIndex, java.net.URL x) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -949,6 +984,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * @see ParameterMetaData
      * @since 1.4
      */
+    @Override
     public ParameterMetaData getParameterMetaData() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -962,6 +998,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * @throws SQLException
      * @see java.sql.Wrapper#isWrapperFor(java.lang.Class)
      */
+    @Override
     public boolean isWrapperFor(Class<?> arg0) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -977,6 +1014,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * @see java.sql.PreparedStatement#setAsciiStream(int, java.io.InputStream,
      *      long)
      */
+    @Override
     public void setAsciiStream(int arg0, InputStream arg1, long arg2)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -991,6 +1029,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * @throws SQLException
      * @see java.sql.PreparedStatement#setAsciiStream(int, java.io.InputStream)
      */
+    @Override
     public void setAsciiStream(int arg0, InputStream arg1) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1006,6 +1045,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * @see java.sql.PreparedStatement#setBinaryStream(int, java.io.InputStream,
      *      long)
      */
+    @Override
     public void setBinaryStream(int arg0, InputStream arg1, long arg2)
 	    throws SQLException {
 	preparedStatement.setBinaryStream(arg0, arg1, arg2);
@@ -1017,6 +1057,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * @throws SQLException
      * @see java.sql.PreparedStatement#setBinaryStream(int, java.io.InputStream)
      */
+    @Override
     public void setBinaryStream(int arg0, InputStream arg1)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -1032,6 +1073,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * @throws SQLException
      * @see java.sql.PreparedStatement#setBlob(int, java.io.InputStream, long)
      */
+    @Override
     public void setBlob(int arg0, InputStream arg1, long arg2)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -1046,6 +1088,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * @throws SQLException
      * @see java.sql.PreparedStatement#setBlob(int, java.io.InputStream)
      */
+    @Override
     public void setBlob(int arg0, InputStream arg1) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1061,6 +1104,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * @see java.sql.PreparedStatement#setCharacterStream(int, java.io.Reader,
      *      long)
      */
+    @Override
     public void setCharacterStream(int arg0, Reader arg1, long arg2)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -1075,6 +1119,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * @throws SQLException
      * @see java.sql.PreparedStatement#setCharacterStream(int, java.io.Reader)
      */
+    @Override
     public void setCharacterStream(int arg0, Reader arg1) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1089,6 +1134,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * @throws SQLException
      * @see java.sql.PreparedStatement#setClob(int, java.io.Reader, long)
      */
+    @Override
     public void setClob(int arg0, Reader arg1, long arg2) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1102,6 +1148,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * @throws SQLException
      * @see java.sql.PreparedStatement#setClob(int, java.io.Reader)
      */
+    @Override
     public void setClob(int arg0, Reader arg1) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1117,6 +1164,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * @see java.sql.PreparedStatement#setNCharacterStream(int, java.io.Reader,
      *      long)
      */
+    @Override
     public void setNCharacterStream(int arg0, Reader arg1, long arg2)
 	    throws SQLException {
 	String methodName = new Object() {
@@ -1131,6 +1179,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * @throws SQLException
      * @see java.sql.PreparedStatement#setNCharacterStream(int, java.io.Reader)
      */
+    @Override
     public void setNCharacterStream(int arg0, Reader arg1) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1144,6 +1193,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * @throws SQLException
      * @see java.sql.PreparedStatement#setNClob(int, java.sql.NClob)
      */
+    @Override
     public void setNClob(int arg0, NClob arg1) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1158,6 +1208,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * @throws SQLException
      * @see java.sql.PreparedStatement#setNClob(int, java.io.Reader, long)
      */
+    @Override
     public void setNClob(int arg0, Reader arg1, long arg2) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1171,6 +1222,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * @throws SQLException
      * @see java.sql.PreparedStatement#setNClob(int, java.io.Reader)
      */
+    @Override
     public void setNClob(int arg0, Reader arg1) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1184,6 +1236,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * @throws SQLException
      * @see java.sql.PreparedStatement#setNString(int, java.lang.String)
      */
+    @Override
     public void setNString(int arg0, String arg1) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1197,6 +1250,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * @throws SQLException
      * @see java.sql.PreparedStatement#setRowId(int, java.sql.RowId)
      */
+    @Override
     public void setRowId(int arg0, RowId arg1) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1210,6 +1264,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * @throws SQLException
      * @see java.sql.PreparedStatement#setSQLXML(int, java.sql.SQLXML)
      */
+    @Override
     public void setSQLXML(int arg0, SQLXML arg1) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1224,6 +1279,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * @throws SQLException
      * @see java.sql.Wrapper#unwrap(java.lang.Class)
      */
+    @Override
     public <T> T unwrap(Class<T> arg0) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1236,6 +1292,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
     ///////////////////////////////////////////////////////////
 
     // @Override do not override for Java 6 compatibility
+    @Override
     public ResultSet executeQuery() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1244,6 +1301,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
     }
 
     // @Override do not override for Java 6 compatibility
+    @Override
     public int executeUpdate() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1252,6 +1310,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
     }
 
     // @Override do not override for Java 6 compatibility
+    @Override
     public void closeOnCompletion() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -1259,6 +1318,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
     }
 
     // @Override do not override for Java 6 compatibility
+    @Override
     public boolean isCloseOnCompletion() throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();

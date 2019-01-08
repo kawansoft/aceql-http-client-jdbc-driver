@@ -76,6 +76,7 @@ class TimeoutConnector {
 	exception = null;
 
 	Thread t = new Thread() {
+	    @Override
 	    public void run() {
 		try {
 		    os = conn.getOutputStream();

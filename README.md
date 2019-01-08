@@ -1,6 +1,6 @@
 # AceQL HTTP 
 
-## Java Client SDK v2.1 - June 2018, 25
+## Java Client SDK v3.0 - January 2019, 8
 
 <img src="https://www.aceql.com/favicon.png" alt="AceQ HTTP Icon"/>
 
@@ -39,7 +39,7 @@ The AceQL Java Client SDK allows users to wrap the [AceQL HTTP APIs](https://git
 
 Android and Java Desktop application developers can access remote SQL databases and/or SQL databases in the cloud, simply by including standard JDBC calls in their code, just like they would for a local database.
 
-The AceQL Server operation is described in [AceQL HTTP Server Installation and Configuration Guide](https://github.com/kawansoft/aceql-http/blob/master/aceql-http-2.1-user-guide-server.md), whose content is sometimes referred in this User Guide. 
+The AceQL Server operation is described in [AceQL HTTP Server Installation and Configuration Guide](https://github.com/kawansoft/aceql-http/blob/master/aceql-http-3.1-user-guide-server.md), whose content is sometimes referred in this User Guide. 
 
 ## Technical operating environment 
 
@@ -58,7 +58,7 @@ The SDK is licensed with the liberal [Apache 2.0](https://www.apache.org/license
 
 ## AceQL Server side compatibility
 
-This 2.1 SDK version is compatible with AceQL HTTP server side v2.0+. It is not compatible with AceQL HTTP server side v1.0.
+This 3.0 SDK version is compatible with AceQL HTTP server side v2.1, v3.0 and v3.1. It is not compatible with AceQL HTTP server side v1.0.
 
 ## SDK instead of JDBC Driver
 
@@ -129,11 +129,11 @@ Note that AceQL is optimized as much as possible:
 
 We will use the same `kawansoft_example` database for all our code samples. 
 
-The schema is available here: [kawansoft_example.txt](http://www.aceql.com/rest/soft/2.1/src/kawansoft_example.txt). 
+The schema is available here: [kawansoft_example.txt](http://www.aceql.com/rest/soft/3.1/src/kawansoft_example.txt). 
 
 ## Connection creation
 
-The  `Connection` to the remote database is created using AceQL’s [AceQLConnection](https://www.aceql.com/rest/soft/2.1/javadoc_sdk/com/aceql/client/jdbc/AceQLConnection.html) class and passing the URL of the `ServerSqlManager` Servlet of your server configuration:
+The  `Connection` to the remote database is created using AceQL’s [AceQLConnection](https://www.aceql.com/rest/soft/3.1/javadoc_sdk/com/aceql/client/jdbc/AceQLConnection.html) class and passing the URL of the `ServerSqlManager` Servlet of your server configuration:
 
 ```java
   // The URL of the AceQL Server servlet
@@ -181,7 +181,7 @@ If proxy requires authentication, pass the credentials using  a `java.net.Passwo
 
 ## Handling Exceptions
 
-Except for `NullPointerException`, exceptions thrown are always an instance of [AceQLException](https://www.aceql.com/rest/soft/2.1/javadoc_sdk/com/aceql/client/jdbc/AceQLException.html).
+Except for `NullPointerException`, exceptions thrown are always an instance of [AceQLException](https://www.aceql.com/rest/soft/3.1/javadoc_sdk/com/aceql/client/jdbc/AceQLException.html).
 
 The `AceQLException` contains 5 pieces of information :
 
@@ -393,9 +393,9 @@ The atomic variables values will be shared by AceQL download/upload processes an
 
 The values are to be initialized and passed to `AceQLConnection` before the JDBC actions with the static setters:
 
-- [AceQLConnection.setProgress(AtomicInteger progress)](https://www.aceql.com/rest/soft/2.1/javadoc_sdk/com/aceql/client/jdbc/AceQLConnection.html#setProgress(java.util.concurrent.atomic.AtomicInteger))
+- [AceQLConnection.setProgress(AtomicInteger progress)](https://www.aceql.com/rest/soft/3.1/javadoc_sdk/com/aceql/client/jdbc/AceQLConnection.html#setProgress(java.util.concurrent.atomic.AtomicInteger))
 
-- [AceQLConnection.setCancelled(AtomicBoolean cancelled)](https://www.aceql.com/rest/soft/2.1/javadoc_sdk/com/aceql/client/jdbc/AceQLConnection.html#setCancelled(java.util.concurrent.atomic.AtomicBoolean))
+- [AceQLConnection.setCancelled(AtomicBoolean cancelled)](https://www.aceql.com/rest/soft/3.1/javadoc_sdk/com/aceql/client/jdbc/AceQLConnection.html#setCancelled(java.util.concurrent.atomic.AtomicBoolean))
 
 
 Values will then be updated and read:
@@ -514,14 +514,14 @@ Assuming hat you want to display a progress indicator using `SwingWorker`, you w
 	}
 ```
 
-A complete example is available in [SqlProgressMonitorDemo.java](http://www.aceql.com/rest/soft/2.1/src/SqlProgressMonitorDemo.java) and [BlobExample.java](https://www.aceql.com/rest/soft/2.1/src/BlobExample.java) 
+A complete example is available in [SqlProgressMonitorDemo.java](http://www.aceql.com/rest/soft/3.1/src/SqlProgressMonitorDemo.java) and [BlobExample.java](https://www.aceql.com/rest/soft/3.1/src/BlobExample.java) 
 
 ## HTTP session options 
 
 You can set the http timeout values with the static setters to be called before `AceQLConnection` creation:
 
-- [AceQLConnection.setConnectTimeout(int connectTimeout)](https://www.aceql.com/rest/soft/2.1/javadoc_sdk/com/aceql/client/jdbc/AceQLConnection.html#setConnectTimeout(int))
-- [AceQLConnection.setReadTimeout(int readTimeout)](https://www.aceql.com/rest/soft/2.1/javadoc_sdk/com/aceql/client/jdbc/AceQLConnection.html#setReadTimeout(int))
+- [AceQLConnection.setConnectTimeout(int connectTimeout)](https://www.aceql.com/rest/soft/3.1/javadoc_sdk/com/aceql/client/jdbc/AceQLConnection.html#setConnectTimeout(int))
+- [AceQLConnection.setReadTimeout(int readTimeout)](https://www.aceql.com/rest/soft/3.1/javadoc_sdk/com/aceql/client/jdbc/AceQLConnection.html#setReadTimeout(int))
 
 # Limitations
 

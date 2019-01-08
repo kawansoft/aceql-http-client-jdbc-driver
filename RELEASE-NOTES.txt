@@ -1,6 +1,6 @@
 
                  AceQL Java Client SDK
-                      Version 2.1
+                      Version 3.0
                      Release Notes
 
 
@@ -19,6 +19,15 @@ they would for a local database.
 The AceQL Java Client SDK is licensed under the Apache 2.0
 License.
     
+    
+AceQL Java Client SDK - Version 3.0 - 08-jan-2018
+-------------------------------------------------
+
+What's New:
+- Trace API is not any more static.
+- Uses now latest Apache Commons Lang 3.8.
+
+
 
 AceQL Java Client SDK - Version 2.1 - 25-jun-2018
 -------------------------------------------------

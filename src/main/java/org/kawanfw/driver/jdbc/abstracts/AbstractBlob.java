@@ -54,6 +54,7 @@ public abstract class AbstractBlob implements Blob {
      *                <code>BLOB</code>
      * @since 1.2
      */
+    @Override
     public long length() throws SQLException {
 	return this.blob.length();
     }
@@ -79,6 +80,7 @@ public abstract class AbstractBlob implements Blob {
      * @see #setBytes
      * @since 1.2
      */
+    @Override
     public byte[] getBytes(long pos, int length) throws SQLException {
 	return this.blob.getBytes(pos, length);
     }
@@ -93,6 +95,7 @@ public abstract class AbstractBlob implements Blob {
      * @see #setBinaryStream
      * @since 1.2
      */
+    @Override
     public InputStream getBinaryStream() throws SQLException {
 	return this.blob.getBinaryStream();
     }
@@ -113,6 +116,7 @@ public abstract class AbstractBlob implements Blob {
      *                if there is an error accessing the <code>BLOB</code>
      * @since 1.2
      */
+    @Override
     public long position(byte[] pattern, long start) throws SQLException {
 	return this.blob.position(pattern, start);
     }
@@ -133,6 +137,7 @@ public abstract class AbstractBlob implements Blob {
      *                if there is an error accessing the <code>BLOB</code> value
      * @since 1.2
      */
+    @Override
     public long position(Blob pattern, long start) throws SQLException {
 	return this.blob.position(pattern, start);
     }
@@ -160,6 +165,7 @@ public abstract class AbstractBlob implements Blob {
      * @see #getBytes
      * @since 1.4
      */
+    @Override
     public int setBytes(long pos, byte[] bytes) throws SQLException {
 	return this.blob.setBytes(pos, bytes);
     }
@@ -189,6 +195,7 @@ public abstract class AbstractBlob implements Blob {
      * @see #getBytes
      * @since 1.4
      */
+    @Override
     public int setBytes(long pos, byte[] bytes, int offset, int len)
 	    throws SQLException {
 	return this.blob.setBytes(pos, bytes, offset, len);
@@ -209,6 +216,7 @@ public abstract class AbstractBlob implements Blob {
      * @see #getBinaryStream
      * @since 1.4
      */
+    @Override
     public OutputStream setBinaryStream(long pos) throws SQLException {
 	return this.blob.setBinaryStream(pos);
     }
@@ -225,6 +233,7 @@ public abstract class AbstractBlob implements Blob {
      *                if there is an error accessing the <code>BLOB</code> value
      * @since 1.4
      */
+    @Override
     public void truncate(long len) throws SQLException {
 	this.blob.truncate(len);
     }
@@ -246,6 +255,7 @@ public abstract class AbstractBlob implements Blob {
      *                if the JDBC driver does not support this method
      * @since 1.6
      */
+    @Override
     public void free() throws SQLException {
 	this.blob.free();
     }
@@ -272,6 +282,7 @@ public abstract class AbstractBlob implements Blob {
      *                if the JDBC driver does not support this method
      * @since 1.6
      */
+    @Override
     public InputStream getBinaryStream(long pos, long length)
 	    throws SQLException {
 	return this.blob.getBinaryStream(pos, length);
