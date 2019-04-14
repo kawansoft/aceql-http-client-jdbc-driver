@@ -20,7 +20,7 @@ The AceQL Java Client SDK is licensed under the Apache 2.0
 License.
     
     
-AceQL Java Client SDK - Version 3.0 - 08-jan-2018
+AceQL Java Client SDK - Version 3.0 - 08-jan-2019
 -------------------------------------------------
 
 What's New:
