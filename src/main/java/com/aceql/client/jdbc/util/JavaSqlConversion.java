@@ -57,7 +57,12 @@ public class JavaSqlConversion {
 	    javaType = Types.BIT;
 	} else if (sqlParamType.equals(AceQLTypes.NUMERIC)) {
 	    javaType = Types.NUMERIC;
-	} else if (sqlParamType.equals(AceQLTypes.TINYINT)) {
+	} 
+	// HACK Version 3.0.1: add AceQLTypes.DECIMAL
+	else if (sqlParamType.equals(AceQLTypes.DECIMAL)) {
+	    javaType = Types.DECIMAL;
+	}
+	else if (sqlParamType.equals(AceQLTypes.TINYINT)) {
 	    javaType = Types.TINYINT;
 	} else if (sqlParamType.equals(AceQLTypes.SMALLINT)) {
 	    javaType = Types.SMALLINT;

@@ -95,14 +95,14 @@ import com.aceql.client.jdbc.util.AceQLConnectionUtil;
  * 
  * ResultSet rs = prepStatement.executeQuery();
  * while (rs.next()) {
- * 	String customerId = rs.getString(&quot;customer_id&quot;);
- * 	String fname = rs.getString(&quot;fname&quot;);
- * 	String lname = rs.getString(&quot;lname&quot;);
+ *     String customerId = rs.getString(&quot;customer_id&quot;);
+ *     String fname = rs.getString(&quot;fname&quot;);
+ *     String lname = rs.getString(&quot;lname&quot;);
  * 
- * 	System.out.println(&quot;customer_id: &quot; + customerId);
- * 	System.out.println(&quot;fname      : &quot; + fname);
- * 	System.out.println(&quot;lname      : &quot; + lname);
- * 	// Etc.
+ *     System.out.println(&quot;customer_id: &quot; + customerId);
+ *     System.out.println(&quot;fname      : &quot; + fname);
+ *     System.out.println(&quot;lname      : &quot; + lname);
+ *     // Etc.
  * }
  * </pre>
  * 
@@ -165,417 +165,401 @@ import com.aceql.client.jdbc.util.AceQLConnectionUtil;
  */
 public class AceQLConnection extends AbstractConnection implements Connection, Cloneable, Closeable {
 
-	/** The Http instance that does all Http stuff */
-	AceQLHttpApi aceQLHttpApi = null;
+    /** The Http instance that does all Http stuff */
+    AceQLHttpApi aceQLHttpApi = null;
 
-	/** is Connection open or closed */
-	private boolean closed = false;
+    /** is Connection open or closed */
+    private boolean closed = false;
 
-	/**
-	 * Sets the connect timeout.
-	 * 
-	 * @param connectTimeout
-	 *            Sets a specified timeout value, in milliseconds, to be used when
-	 *            opening a communications link to the remote server. If the timeout
-	 *            expires before the connection can be established, a
-	 *            java.net.SocketTimeoutException is raised. A timeout of zero is
-	 *            interpreted as an infinite timeout. See
-	 *            {@link URLConnection#setConnectTimeout(int)}
-	 */
-	public static void setConnectTimeout(int connectTimeout) {
-		AceQLHttpApi.setConnectTimeout(connectTimeout);
+    /**
+     * Sets the connect timeout.
+     * 
+     * @param connectTimeout Sets a specified timeout value, in milliseconds, to be
+     *                       used when opening a communications link to the remote
+     *                       server. If the timeout expires before the connection
+     *                       can be established, a java.net.SocketTimeoutException
+     *                       is raised. A timeout of zero is interpreted as an
+     *                       infinite timeout. See
+     *                       {@link URLConnection#setConnectTimeout(int)}
+     */
+    public static void setConnectTimeout(int connectTimeout) {
+	AceQLHttpApi.setConnectTimeout(connectTimeout);
+    }
+
+    /**
+     * Sets the read timeout.
+     * 
+     * @param readTimeout an <code>int</code> that specifies the read timeout value,
+     *                    in milliseconds, to be used when an http connection is
+     *                    established to the remote server. See
+     *                    {@link URLConnection#setReadTimeout(int)}
+     */
+    public static void setReadTimeout(int readTimeout) {
+	AceQLHttpApi.setReadTimeout(readTimeout);
+    }
+
+    /**
+     * Login on the AceQL server and connect to a database
+     * 
+     * @param serverUrl the URL of the AceQL server. Example:
+     *                  http://localhost:9090/aceql
+     * @param database  the server database to connect to.
+     * @param username  the login
+     * @param password  the password
+     * @throws SQLException if any I/O error occurs
+     */
+    public AceQLConnection(String serverUrl, String database, String username, char[] password) throws SQLException {
+	this(serverUrl, database, username, password, null, null);
+    }
+
+    /**
+     * Login on the AceQL server and connect to a database
+     * 
+     * @param serverUrl              the URL of the AceQL server. Example:
+     *                               http://localhost:9090/aceql
+     * @param database               the server database to connect to.
+     * @param username               the login
+     * @param password               the password
+     * @param proxy                  the proxy to use. null if none.
+     * @param passwordAuthentication the username and password holder to use for
+     *                               authenticated proxy. Null if no proxy or if
+     *                               proxy does not require authentication.
+     * @throws SQLException if any I/O error occurs
+     */
+    public AceQLConnection(String serverUrl, String database, String username, char[] password, Proxy proxy,
+	    PasswordAuthentication passwordAuthentication) throws SQLException {
+
+	try {
+	    if (serverUrl == null) {
+		throw new NullPointerException("serverUrl is null!");
+	    }
+	    if (database == null) {
+		throw new NullPointerException("database is null!");
+	    }
+	    if (username == null) {
+		throw new NullPointerException("username is null!");
+	    }
+	    if (password == null) {
+		throw new NullPointerException("password is null!");
+	    }
+
+	    aceQLHttpApi = new AceQLHttpApi(serverUrl, database, username, password, proxy, passwordAuthentication);
+
+	} catch (Exception e) {
+	    if (e instanceof AceQLException) {
+		throw (AceQLException) e;
+	    } else {
+		throw new AceQLException(e.getMessage(), 0, e, null, HttpURLConnection.HTTP_OK);
+	    }
 	}
 
-	/**
-	 * Sets the read timeout.
-	 * 
-	 * @param readTimeout
-	 *            an <code>int</code> that specifies the read timeout value, in
-	 *            milliseconds, to be used when an http connection is established to
-	 *            the remote server. See {@link URLConnection#setReadTimeout(int)}
-	 */
-	public static void setReadTimeout(int readTimeout) {
-		AceQLHttpApi.setReadTimeout(readTimeout);
+    }
+
+    /**
+     * Private constructor for Clone
+     * 
+     * @param aceQLHttpApi the AceQL http Api Clone
+     */
+    private AceQLConnection(AceQLHttpApi aceQLHttpApi) {
+	this.aceQLHttpApi = aceQLHttpApi;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.sql.Connection#close()
+     */
+    @Override
+    public void close() {
+	this.closed = true;
+	try {
+	    aceQLHttpApi.close();
+	} catch (AceQLException e) {
+	    // Because close() can not throw an Exception, we wrap the
+	    // AceQLException with a RuntimeException
+	    throw new RuntimeException(e.getMessage(), e);
 	}
+    }
 
-	/**
-	 * Login on the AceQL server and connect to a database
-	 * 
-	 * @param serverUrl
-	 *            the URL of the AceQL server. Example: http://localhost:9090/aceql
-	 * @param database
-	 *            the server database to connect to.
-	 * @param username
-	 *            the login
-	 * @param password
-	 *            the password
-	 * @throws SQLException
-	 *             if any I/O error occurs
-	 */
-	public AceQLConnection(String serverUrl, String database, String username, char[] password) throws SQLException {
-		this(serverUrl, database, username, password, null, null);
+    public void logout() {
+	try {
+	    aceQLHttpApi.logout();
+	} catch (AceQLException e) {
+	    // Because close() can not throw an Exception, we wrap the
+	    // AceQLException with a RuntimeException
+	    throw new RuntimeException(e.getMessage(), e);
 	}
+    }
 
-	/**
-	 * Login on the AceQL server and connect to a database
-	 * 
-	 * @param serverUrl
-	 *            the URL of the AceQL server. Example: http://localhost:9090/aceql
-	 * @param database
-	 *            the server database to connect to.
-	 * @param username
-	 *            the login
-	 * @param password
-	 *            the password
-	 * @param proxy
-	 *            the proxy to use. null if none.
-	 * @param passwordAuthentication
-	 *            the username and password holder to use for authenticated proxy.
-	 *            Null if no proxy or if proxy does not require authentication.
-	 * @throws SQLException
-	 *             if any I/O error occurs
-	 */
-	public AceQLConnection(String serverUrl, String database, String username, char[] password, Proxy proxy,
-			PasswordAuthentication passwordAuthentication) throws SQLException {
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.sql.Connection#commit()
+     */
+    @Override
+    public void commit() throws SQLException {
+	aceQLHttpApi.commit();
+    }
 
-		try {
-			if (serverUrl == null) {
-				throw new NullPointerException("serverUrl is null!");
-			}
-			if (database == null) {
-				throw new NullPointerException("database is null!");
-			}
-			if (username == null) {
-				throw new NullPointerException("username is null!");
-			}
-			if (password == null) {
-				throw new NullPointerException("password is null!");
-			}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.sql.Connection#rollback()
+     */
+    @Override
+    public void rollback() throws SQLException {
+	aceQLHttpApi.rollback();
+    }
 
-			aceQLHttpApi = new AceQLHttpApi(serverUrl, database, username, password, proxy, passwordAuthentication);
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.sql.Connection#setHoldability(int)
+     */
+    @Override
+    public void setTransactionIsolation(int level) throws SQLException {
+	String levelStr = AceQLConnectionUtil.getTransactionIsolationAsString(level);
+	aceQLHttpApi.setTransactionIsolation(levelStr);
+    }
 
-		} catch (Exception e) {
-			if (e instanceof AceQLException) {
-				throw (AceQLException) e;
-			} else {
-				throw new AceQLException(e.getMessage(), 0, e, null, HttpURLConnection.HTTP_OK);
-			}
-		}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.sql.Connection#setHoldability(int)
+     */
+    @Override
+    public void setHoldability(int holdability) throws SQLException {
+	String holdabilityStr = AceQLConnectionUtil.getHoldabilityAsString(holdability);
+	aceQLHttpApi.setHoldability(holdabilityStr);
+    }
 
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.sql.Connection#setAutoCommit(boolean)
+     */
+    @Override
+    public void setAutoCommit(boolean autoCommit) throws SQLException {
+	aceQLHttpApi.setAutoCommit(autoCommit);
+    }
 
-	/**
-	 * Private constructor for Clone
-	 * 
-	 * @param aceQLHttpApi
-	 *            the AceQL http Api Clone
-	 */
-	private AceQLConnection(AceQLHttpApi aceQLHttpApi) {
-		this.aceQLHttpApi = aceQLHttpApi;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.sql.Connection#isReadOnly()
+     */
+    @Override
+    public boolean getAutoCommit() throws SQLException {
+	return aceQLHttpApi.getAutoCommit();
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.sql.Connection#close()
-	 */
-	@Override
-	public void close() {
-		this.closed = true;
-		try {
-			aceQLHttpApi.close();
-		} catch (AceQLException e) {
-			// Because close() can not throw an Exception, we wrap the
-			// AceQLException with a RuntimeException
-			throw new RuntimeException(e.getMessage(), e);
-		}
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.kawanfw.driver.jdbc.abstracts.AbstractConnection#setReadOnly(boolean)
+     */
+    @Override
+    public void setReadOnly(boolean readOnly) throws SQLException {
+	// TODO Auto-generated method stub
+	aceQLHttpApi.setReadOnly(readOnly);
+    }
 
-	public void logout() {
-		try {
-			aceQLHttpApi.logout();
-		} catch (AceQLException e) {
-			// Because close() can not throw an Exception, we wrap the
-			// AceQLException with a RuntimeException
-			throw new RuntimeException(e.getMessage(), e);
-		}
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.sql.Connection#isReadOnly()
+     */
+    @Override
+    public boolean isReadOnly() throws SQLException {
+	return aceQLHttpApi.isReadOnly();
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.sql.Connection#commit()
-	 */
-	@Override
-	public void commit() throws SQLException {
-		aceQLHttpApi.commit();
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.sql.Connection#getHoldability()
+     */
+    @Override
+    public int getHoldability() throws SQLException {
+	String result = aceQLHttpApi.getHoldability();
+	return AceQLConnectionUtil.getHoldability(result);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.sql.Connection#rollback()
-	 */
-	@Override
-	public void rollback() throws SQLException {
-		aceQLHttpApi.rollback();
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.sql.Connection#getTransactionIsolation()
+     */
+    @Override
+    public int getTransactionIsolation() throws SQLException {
+	String result = aceQLHttpApi.getTransactionIsolation();
+	return AceQLConnectionUtil.getTransactionIsolation(result);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.sql.Connection#setHoldability(int)
-	 */
-	@Override
-	public void setTransactionIsolation(int level) throws SQLException {
-		String levelStr = AceQLConnectionUtil.getTransactionIsolationAsString(level);
-		aceQLHttpApi.setTransactionIsolation(levelStr);
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.sql.Connection##createStatement()
+     */
+    @Override
+    public Statement createStatement() throws SQLException {
+	AceQLStatement aceQLStatement = new AceQLStatement(this);
+	return aceQLStatement;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.sql.Connection#setHoldability(int)
-	 */
-	@Override
-	public void setHoldability(int holdability) throws SQLException {
-		String holdabilityStr = AceQLConnectionUtil.getHoldabilityAsString(holdability);
-		aceQLHttpApi.setHoldability(holdabilityStr);
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#prepareStatement
+     * (java.lang.String)
+     */
+    @Override
+    public PreparedStatement prepareStatement(String sql) throws SQLException {
+	AceQLPreparedStatement aceQLPreparedStatement = new AceQLPreparedStatement(this, sql);
+	return aceQLPreparedStatement;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.sql.Connection#setAutoCommit(boolean)
-	 */
-	@Override
-	public void setAutoCommit(boolean autoCommit) throws SQLException {
-		aceQLHttpApi.setAutoCommit(autoCommit);
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.kawanfw.driver.jdbc.abstracts.AbstractConnection#prepareCall(java.lang.
+     * String)
+     */
+    @Override
+    public CallableStatement prepareCall(String sql) throws SQLException {
+	AceQLCallableStatement aceQLCallableStatement = new AceQLCallableStatement(this, sql);
+	return aceQLCallableStatement;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.sql.Connection#isReadOnly()
-	 */
-	@Override
-	public boolean getAutoCommit() throws SQLException {
-		return aceQLHttpApi.getAutoCommit();
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#clone()
+     */
+    @Override
+    public Connection clone() {
+	AceQLHttpApi aceQLHttpApi = this.aceQLHttpApi.clone();
+	AceQLConnection aceQLConnection = new AceQLConnection(aceQLHttpApi);
+	return aceQLConnection;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.kawanfw.driver.jdbc.abstracts.AbstractConnection#setReadOnly(boolean)
-	 */
-	@Override
-	public void setReadOnly(boolean readOnly) throws SQLException {
-		// TODO Auto-generated method stub
-		aceQLHttpApi.setReadOnly(readOnly);
-	}
+    // //////////////////////////////////////////////////////////////
+    // / AceQLConnection methods //
+    // /////////////////////////////////////////////////////////////
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.sql.Connection#isReadOnly()
-	 */
-	@Override
-	public boolean isReadOnly() throws SQLException {
-		return aceQLHttpApi.isReadOnly();
-	}
+    /**
+     * Returns the SDK current Version.
+     * 
+     * @return the SDK current Version
+     */
+    public String getClientVersion() {
+	return aceQLHttpApi.getClientVersion();
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.sql.Connection#getHoldability()
-	 */
-	@Override
-	public int getHoldability() throws SQLException {
-		String result = aceQLHttpApi.getHoldability();
-		return AceQLConnectionUtil.getHoldability(result);
-	}
+    /**
+     * Returns the server product version
+     * 
+     * @return the server product version
+     * 
+     * @throws AceQLException if any Exception occurs
+     */
+    public String getServerVersion() throws AceQLException {
+	return aceQLHttpApi.getServerVersion();
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.sql.Connection#getTransactionIsolation()
-	 */
-	@Override
-	public int getTransactionIsolation() throws SQLException {
-		String result = aceQLHttpApi.getTransactionIsolation();
-		return AceQLConnectionUtil.getTransactionIsolation(result);
-	}
+    /**
+     * Says if trace is on
+     * 
+     * @return true if trace is on
+     */
+    public boolean isTraceOn() {
+	return aceQLHttpApi.isTraceOn();
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.sql.Connection##createStatement()
-	 */
-	@Override
-	public Statement createStatement() throws SQLException {
-		AceQLStatement aceQLStatement = new AceQLStatement(this);
-		return aceQLStatement;
-	}
+    /**
+     * Sets the trace on/off
+     * 
+     * @param traceOn if true, trace will be on
+     */
+    public void setTraceOn(boolean traceOn) {
+	aceQLHttpApi.setTraceOn(traceOn);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#prepareStatement
-	 * (java.lang.String)
-	 */
-	@Override
-	public PreparedStatement prepareStatement(String sql) throws SQLException {
-		AceQLPreparedStatement aceQLPreparedStatement = new AceQLPreparedStatement(this, sql);
-		return aceQLPreparedStatement;
-	}
+    /**
+     * Says if JSON contents are to be pretty printed. Defaults to false.
+     * 
+     * @param prettyPrinting if true, JSON contents are to be pretty printed
+     */
+    public void setPrettyPrinting(boolean prettyPrinting) {
+	aceQLHttpApi.setPrettyPrinting(prettyPrinting);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.kawanfw.driver.jdbc.abstracts.AbstractConnection#prepareCall(java.lang.
-	 * String)
-	 */
-	@Override
-	public CallableStatement prepareCall(String sql) throws SQLException {
-		AceQLCallableStatement aceQLCallableStatement = new AceQLCallableStatement(this, sql);
-		return aceQLCallableStatement;
-	}
+    /**
+     * Define if SQL result sets are returned compressed with the GZIP file format
+     * before download. Defaults to true.
+     * 
+     * @param gzipResult if true, sets are compressed before download
+     */
+    public void setGzipResult(boolean gzipResult) {
+	aceQLHttpApi.setGzipResult(gzipResult);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#clone()
-	 */
-	@Override
-	public Connection clone() {
-		AceQLHttpApi aceQLHttpApi = this.aceQLHttpApi.clone();
-		AceQLConnection aceQLConnection = new AceQLConnection(aceQLHttpApi);
-		return aceQLConnection;
-	}
+    /**
+     * Returns the cancelled value set by the progress indicator
+     * 
+     * @return the cancelled value set by the progress indicator
+     */
+    public AtomicBoolean getCancelled() {
+	return aceQLHttpApi.getCancelled();
+    }
 
-	// //////////////////////////////////////////////////////////////
-	// / AceQLConnection methods //
-	// /////////////////////////////////////////////////////////////
+    /**
+     * Sets the sharable canceled variable that will be used by the progress
+     * indicator to notify this instance that the user has cancelled the current
+     * Blob/Clob upload or download.
+     * 
+     * @param cancelled the Sharable canceled variable that will be used by the
+     *                  progress indicator to notify this instance that the end user
+     *                  has cancelled the current Blob/Clob upload or download
+     * 
+     */
+    public void setCancelled(AtomicBoolean cancelled) {
+	aceQLHttpApi.setCancelled(cancelled);
+    }
 
-	/**
-	 * Returns the SDK current Version.
-	 * 
-	 * @return the SDK current Version
-	 */
-	public String getClientVersion() {
-		return aceQLHttpApi.getClientVersion();
-	}
+    /**
+     * Returns the sharable progress variable that will store Blob/Clob upload or
+     * download progress between 0 and 100
+     * 
+     * @return the sharable progress variable that will store Blob/Clob upload or
+     *         download progress between 0 and 100
+     * 
+     */
+    public AtomicInteger getProgress() {
+	return aceQLHttpApi.getProgress();
+    }
 
-	/**
-	 * Returns the server product version
-	 * 
-	 * @return the server product version
-	 * 
-	 * @throws AceQLException
-	 *             if any Exception occurs
-	 */
-	public String getServerVersion() throws AceQLException {
-		return aceQLHttpApi.getServerVersion();
-	}
+    /**
+     * Sets the sharable progress variable that will store Blob/Clob upload or
+     * download progress between 0 and 100. Will be used by progress indicators to
+     * show the progress.
+     * 
+     * @param progress the sharable progress variable
+     */
+    public void setProgress(AtomicInteger progress) {
+	aceQLHttpApi.setProgress(progress);
+    }
 
-	/**
-	 * Says if trace is on
-	 * 
-	 * @return true if trace is on
-	 */
-	public boolean isTraceOn() {
-		return aceQLHttpApi.isTraceOn();
-	}
-
-	/**
-	 * Sets the trace on/off
-	 * 
-	 * @param traceOn
-	 *            if true, trace will be on
-	 */
-	public void setTraceOn(boolean traceOn) {
-		aceQLHttpApi.setTraceOn(traceOn);
-	}
-
-	/**
-	 * Says if JSON contents are to be pretty printed. Defaults to false.
-	 * 
-	 * @param prettyPrinting
-	 *            if true, JSON contents are to be pretty printed
-	 */
-	public void setPrettyPrinting(boolean prettyPrinting) {
-		aceQLHttpApi.setPrettyPrinting(prettyPrinting);
-	}
-
-	/**
-	 * Define if SQL result sets are returned compressed with the GZIP file format
-	 * before download. Defaults to true.
-	 * 
-	 * @param gzipResult
-	 *            if true, sets are compressed before download
-	 */
-	public void setGzipResult(boolean gzipResult) {
-		aceQLHttpApi.setGzipResult(gzipResult);
-	}
-
-	/**
-	 * Returns the cancelled value set by the progress indicator
-	 * 
-	 * @return the cancelled value set by the progress indicator
-	 */
-	public AtomicBoolean getCancelled() {
-		return aceQLHttpApi.getCancelled();
-	}
-
-	/**
-	 * Sets the sharable canceled variable that will be used by the progress
-	 * indicator to notify this instance that the user has cancelled the current
-	 * Blob/Clob upload or download.
-	 * 
-	 * @param cancelled
-	 *            the Sharable canceled variable that will be used by the progress
-	 *            indicator to notify this instance that the end user has cancelled
-	 *            the current Blob/Clob upload or download
-	 * 
-	 */
-	public void setCancelled(AtomicBoolean cancelled) {
-		aceQLHttpApi.setCancelled(cancelled);
-	}
-
-	/**
-	 * Returns the sharable progress variable that will store Blob/Clob upload or
-	 * download progress between 0 and 100
-	 * 
-	 * @return the sharable progress variable that will store Blob/Clob upload or
-	 *         download progress between 0 and 100
-	 * 
-	 */
-	public AtomicInteger getProgress() {
-		return aceQLHttpApi.getProgress();
-	}
-
-	/**
-	 * Sets the sharable progress variable that will store Blob/Clob upload or
-	 * download progress between 0 and 100. Will be used by progress indicators to
-	 * show the progress.
-	 * 
-	 * @param progress
-	 *            the sharable progress variable
-	 */
-	public void setProgress(AtomicInteger progress) {
-		aceQLHttpApi.setProgress(progress);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.sql.Connection#close()
-	 */
-	@Override
-	public boolean isClosed() throws SQLException {
-		return closed;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.sql.Connection#close()
+     */
+    @Override
+    public boolean isClosed() throws SQLException {
+	return closed;
+    }
 
 }

@@ -29,6 +29,7 @@ import java.sql.Clob;
 import java.sql.Date;
 import java.sql.NClob;
 import java.sql.Ref;
+import java.sql.ResultSet;
 import java.sql.RowId;
 import java.sql.SQLException;
 import java.sql.SQLXML;
@@ -46,6 +47,8 @@ import com.aceql.client.jdbc.util.json.SqlParameter;
  * @author Nicolas de Pomereu
  *
  */
+//HACK Version 3.0.1: test on null is done ignoring case: 
+//     value.equalsIgnoreCase("NULL")
 public class AceQLCallableStatement extends AceQLPreparedStatement implements CallableStatement {
 
     private static final String FEATURE_NOT_SUPPORTED_IN_THIS_VERSION = "Method is not yet implemented: ";
@@ -72,6 +75,18 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 	return false; // It's not a query
     }
     
+    
+    
+    /*
+     * (non-Javadoc)
+     * @see com.aceql.client.jdbc.AceQLPreparedStatement#executeQuery()
+     */
+    @Override
+    public ResultSet executeQuery() throws SQLException {
+	//HACK Version 3.0.1: future usage
+	return super.executeQuery();
+    }
+
     /*
      * (non-Javadoc)
      * 
@@ -79,7 +94,6 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
      */
     @Override
     public void registerOutParameter(int parameterIndex, int sqlType) throws SQLException {
-	JavaSqlConversion.fromJavaToSql(sqlType);
 	builder.setOutParameter(parameterIndex, JavaSqlConversion.fromJavaToSql(sqlType));
     }
 
@@ -129,7 +143,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 	    
 	    String value = sqlParameter.getParameterValue();
 	    
-	    if (value.equals("NULL")) {
+	    if (value.equalsIgnoreCase("NULL")) {
 		wasNull = true;
 		return null;
 	    }
@@ -151,7 +165,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
     public boolean getBoolean(int parameterIndex) throws SQLException {
 	
 	String value = getString(parameterIndex);
-	if (value == null || value.equals("NULL")) {
+	if (value == null || value.equalsIgnoreCase("NULL")) {
 	    return false;
 	}
 	return Boolean.parseBoolean(value);
@@ -177,7 +191,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
     @Override
     public short getShort(int parameterIndex) throws SQLException {
 	String value = getString(parameterIndex);
-	if (value == null || value.equals("NULL")) {
+	if (value == null || value.equalsIgnoreCase("NULL")) {
 	    return 0;
 	}
 	return AceQLResultSetUtil.getShortValue(value);
@@ -191,7 +205,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
     @Override
     public int getInt(int parameterIndex) throws SQLException {
 	String value = getString(parameterIndex);
-	if (value == null || value.equals("NULL")) {
+	if (value == null || value.equalsIgnoreCase("NULL")) {
 	    return 0;
 	}
 	return AceQLResultSetUtil.getIntValue(value);
@@ -206,7 +220,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
     public long getLong(int parameterIndex) throws SQLException {
 
 	String value = getString(parameterIndex);
-	if (value == null || value.equals("NULL")) {
+	if (value == null || value.equalsIgnoreCase("NULL")) {
 	    return 0;
 	}
 	return AceQLResultSetUtil.getLongValue(value);
@@ -221,7 +235,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
     public float getFloat(int parameterIndex) throws SQLException {
 	
 	String value = getString(parameterIndex);
-	if (value == null || value.equals("NULL")) {
+	if (value == null || value.equalsIgnoreCase("NULL")) {
 	    return 0;
 	}
 	return AceQLResultSetUtil.getFloatValue(value);
@@ -235,7 +249,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
     @Override
     public double getDouble(int parameterIndex) throws SQLException {
 	String value = getString(parameterIndex);
-	if (value == null || value.equals("NULL")) {
+	if (value == null || value.equalsIgnoreCase("NULL")) {
 	    return 0;
 	}
 	return AceQLResultSetUtil.getDoubleValue(value);
@@ -273,7 +287,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
     @Override
     public Date getDate(int parameterIndex) throws SQLException {
 	String value = getString(parameterIndex);
-	if (value == null || value.equals("NULL")) {
+	if (value == null || value.equalsIgnoreCase("NULL")) {
 	    return null;
 	}
 	return AceQLResultSetUtil.getDateValue(value);
@@ -299,7 +313,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
     @Override
     public Timestamp getTimestamp(int parameterIndex) throws SQLException {
 	String value = getString(parameterIndex);
-	if (value == null || value.equals("NULL")) {
+	if (value == null || value.equalsIgnoreCase("NULL")) {
 	    return null;
 	}
 	return AceQLResultSetUtil.getTimestampValue(value);
@@ -325,7 +339,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
     @Override
     public BigDecimal getBigDecimal(int parameterIndex) throws SQLException {
 	String value = getString(parameterIndex);
-	if (value == null || value.equals("NULL")) {
+	if (value == null || value.equalsIgnoreCase("NULL")) {
 	    return null;
 	}
 	return AceQLResultSetUtil.getBigDecimalValue(value);
@@ -399,7 +413,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
     @Override
     public Date getDate(int parameterIndex, Calendar cal) throws SQLException {
 	String value = getString(parameterIndex);
-	if (value == null || value.equals("NULL")) {
+	if (value == null || value.equalsIgnoreCase("NULL")) {
 	    return null;
 	}
 	return AceQLResultSetUtil.getDateValue(value);

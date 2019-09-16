@@ -44,8 +44,8 @@ public class AceQLHttpConnectionTest {
     public static final String OUT_DIRECTORY = SystemUtils.USER_HOME + File.separator + "aceql_tests" + File.separator + "OUT";
 
     final String serverUrl = "http://localhost:9090/aceql";
-    final String username = "username";
-    final String password = "password";
+    final String username = "user1";
+    final String password = "password1";
     final String dbname = "kawansoft_example";
 
     private AceQLConnection connection = null;

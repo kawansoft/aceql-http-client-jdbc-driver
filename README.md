@@ -1,6 +1,6 @@
 # AceQL HTTP 
 
-## Java Client SDK v3.0 - January 2019, 8
+## Java Client SDK v3.0.1 - September 2019, 16
 
 <img src="https://www.aceql.com/favicon.png" alt="AceQ HTTP Icon"/>
 
@@ -23,7 +23,7 @@
          * [Most common AceQL Server messages](#most-common-aceql-server-messages)
          * [HTTP Status Codes](#http-status-codes)
       * [Data types](#data-types)
-      * [SQL Transactions &amp; Connections modifiers](#sql-transactions--connections-modifiers)
+      * [SQL Transactions and Connections modifiers](#sql-transactions-and-connections-modifiers)
       * [BLOB management](#blob-management)
          * [BLOB creation](#blob-creation)
          * [BLOB reading](#blob-reading)
@@ -58,7 +58,7 @@ The SDK is licensed with the liberal [Apache 2.0](https://www.apache.org/license
 
 ## AceQL Server side compatibility
 
-This 3.0 SDK version is compatible with AceQL HTTP server side v2.1, v3.0 and v3.1. It is not compatible with AceQL HTTP server side v1.0.
+This 3.0.x SDK version is compatible with AceQL HTTP server side v2.1, v3.0 and v3.1. It is not compatible with AceQL HTTP server side v1.0.
 
 ## SDK instead of JDBC Driver
 
@@ -249,7 +249,7 @@ When an error occurs:
 
 Boolean, Blob/Clob, Integer, Short, Double, Float, BigDecimal, Long,String, Date, Time, Timestamp, URL and Array.  
 
-## SQL Transactions & Connections modifiers
+## SQL Transactions and Connections modifiers
 
 The AceQLSDK support SQL transactions with:
 
