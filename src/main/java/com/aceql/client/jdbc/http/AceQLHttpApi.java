@@ -1,20 +1,20 @@
 /*
  * This file is part of AceQL Client SDK.
- * AceQL Client SDK: Remote JDBC access over HTTP with AceQL HTTP.                                 
- * Copyright (C) 2017,  KawanSoft SAS
- * (http://www.kawansoft.com). All rights reserved.                                
- *                                                                               
+ * AceQL Client SDK: Remote JDBC access over HTTP with AceQL HTTP.
+ * Copyright (C) 2020,  KawanSoft SAS
+ * (http://www.kawansoft.com). All rights reserved.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  */
 package com.aceql.client.jdbc.http;
 
@@ -48,13 +48,18 @@ import org.kawanfw.sql.version.VersionValues;
 import com.aceql.client.jdbc.AceQLException;
 import com.aceql.client.jdbc.util.UserLoginStore;
 import com.aceql.client.jdbc.util.json.SqlParameter;
+import com.aceql.client.metadata.TableName;
+import com.aceql.client.metadata.dto.JdbcDatabaseMetaDataDto;
+import com.aceql.client.metadata.dto.TableDto;
+import com.aceql.client.metadata.dto.TableNamesDto;
+import com.aceql.client.metadata.util.GsonWsUtil;
 
 /**
  * @author Nicolas de Pomereu
- * 
+ *
  *         AceQL Rest wrapper for AceQL http/REST apis that take care of all
  *         http calls and operations.
- * 
+ *
  *         All Exceptions are trapped with a {#link AceQLException} that allows
  *         to retrieve the detail of the Exceptions
  */
@@ -90,7 +95,7 @@ public class AceQLHttpApi {
 
     /**
      * Sets the read timeout.
-     * 
+     *
      * @param readTimeout an <code>int</code> that specifies the read timeout value,
      *                    in milliseconds, to be used when an http connection is
      *                    established to the remote server. See
@@ -102,7 +107,7 @@ public class AceQLHttpApi {
 
     /**
      * Sets the connect timeout.
-     * 
+     *
      * @param connectTimeout Sets a specified timeout value, in milliseconds, to be
      *                       used when opening a communications link to the remote
      *                       server. If the timeout expires before the connection
@@ -117,7 +122,7 @@ public class AceQLHttpApi {
 
     /**
      * Login on the AceQL server and connect to a database
-     * 
+     *
      * @param serverUrl              the url of the AceQL server. Example:
      *                               http://localhost:9090/aceql
      * @param database               the server database to connect to.
@@ -159,9 +164,9 @@ public class AceQLHttpApi {
 	     * BEGIN OLD implementation with GET String url = serverUrl + "/database/" +
 	     * database + "/username/" + username + "/login" + "?password=" + new
 	     * String(password) + "&stateless=" + stateless;
-	     * 
+	     *
 	     * String result = callWithGet(url);
-	     * 
+	     *
 	     * trace("result: " + result); END OLD implementation with GET
 	     */
 
@@ -229,7 +234,7 @@ public class AceQLHttpApi {
 
     /**
      * Login on the AceQL server and connect to a database
-     * 
+     *
      * @param serverUrl the url of the AceQL server. Example:
      *                  http://localhost:9090/aceql
      * @param username  the login
@@ -411,7 +416,7 @@ public class AceQLHttpApi {
      * callWithPost(String action, Map<String, String> parameters) throws
      * MalformedURLException, IOException, ProtocolException,
      * UnsupportedEncodingException {
-     * 
+     *
      * URL theUrl = new URL(url + action); return callWithPost(theUrl, parameters);
      * }
      */
@@ -512,7 +517,7 @@ public class AceQLHttpApi {
 
     /**
      * Says if trace is on
-     * 
+     *
      * @return true if trace is on
      */
     public boolean isTraceOn() {
@@ -521,7 +526,7 @@ public class AceQLHttpApi {
 
     /**
      * Sets the trace on/off
-     * 
+     *
      * @param TRACE_ON if true, trace will be on
      */
     public void setTraceOn(boolean traceOn) {
@@ -530,7 +535,7 @@ public class AceQLHttpApi {
 
     /**
      * Returns the cancelled value set by the progress indicator
-     * 
+     *
      * @return the cancelled value set by the progress indicator
      */
     public AtomicBoolean getCancelled() {
@@ -541,11 +546,11 @@ public class AceQLHttpApi {
      * Sets the shareable canceled variable that will be used by the progress
      * indicator to notify this instance that the user has cancelled the current
      * blob/clob upload or download.
-     * 
+     *
      * @param cancelled the shareable canceled variable that will be used by the
      *                  progress indicator to notify this instance that the end user
      *                  has cancelled the current blob/clob upload or download
-     * 
+     *
      */
     public void setCancelled(AtomicBoolean cancelled) {
 	this.cancelled = cancelled;
@@ -554,10 +559,10 @@ public class AceQLHttpApi {
     /**
      * Returns the sharable progress variable that will store blob/clob upload or
      * download progress between 0 and 100
-     * 
+     *
      * @return the sharable progress variable that will store blob/clob upload or
      *         download progress between 0 and 100
-     * 
+     *
      */
     public AtomicInteger getProgress() {
 	return progress;
@@ -567,7 +572,7 @@ public class AceQLHttpApi {
      * Sets the sharable progress variable that will store blob/clob upload or
      * download progress between 0 and 100. Will be used by progress indicators to
      * show the progress.
-     * 
+     *
      * @param progress the sharable progress variable
      */
     public void setProgress(AtomicInteger progress) {
@@ -583,7 +588,7 @@ public class AceQLHttpApi {
 
     /**
      * Says the query result is returned compressed with the GZIP file format.
-     * 
+     *
      * @return the gzipResult
      */
     public boolean isGzipResult() {
@@ -592,7 +597,7 @@ public class AceQLHttpApi {
 
     /**
      * Says if JSON contents are to be pretty printed. Defaults to false.
-     * 
+     *
      * @param prettyPrinting if true, JSON contents are to be pretty printed
      */
     public void setPrettyPrinting(boolean prettyPrinting) {
@@ -601,7 +606,7 @@ public class AceQLHttpApi {
 
     /**
      * Define if result sets are compressed before download. Defaults to true.
-     * 
+     *
      * @param gzipResult if true, sets are compressed before download
      */
     public void setGzipResult(boolean gzipResult) {
@@ -610,7 +615,7 @@ public class AceQLHttpApi {
 
     /**
      * Calls /get_version API
-     * 
+     *
      * @throws AceQLException if any Exception occurs
      */
     public String getServerVersion() throws AceQLException {
@@ -620,7 +625,7 @@ public class AceQLHttpApi {
 
     /**
      * Gets the SDK version
-     * 
+     *
      * @throws AceQLException if any Exception occurs
      */
     public String getClientVersion() {
@@ -636,7 +641,7 @@ public class AceQLHttpApi {
 
     /**
      * Calls /logout API
-     * 
+     *
      * @throws AceQLException if any Exception occurs
      */
     public void logout() throws AceQLException {
@@ -647,7 +652,7 @@ public class AceQLHttpApi {
 
     /**
      * Calls /commit API
-     * 
+     *
      * @throws AceQLException if any Exception occurs
      */
     public void commit() throws AceQLException {
@@ -656,7 +661,7 @@ public class AceQLHttpApi {
 
     /**
      * Calls /rollback API
-     * 
+     *
      * @throws AceQLException if any Exception occurs
      */
     public void rollback() throws AceQLException {
@@ -665,7 +670,7 @@ public class AceQLHttpApi {
 
     /**
      * Calls /set_transaction_isolation_level API
-     * 
+     *
      * @param level the isolation level
      * @throws AceQLException if any Exception occurs
      */
@@ -675,7 +680,7 @@ public class AceQLHttpApi {
 
     /**
      * Calls /set_holdability API
-     * 
+     *
      * @param holdability the holdability
      * @throws AceQLException if any Exception occurs
      */
@@ -761,7 +766,7 @@ public class AceQLHttpApi {
 
     /**
      * Calls /execute_update API
-     * 
+     *
      * @param sql                   an SQL <code>INSERT</code>, <code>UPDATE</code>
      *                              or <code>DELETE</code> statement or an SQL
      *                              statement that returns nothing
@@ -839,7 +844,7 @@ public class AceQLHttpApi {
     /**
      * Update the Map of callable OUT parameters using the result string in
      * ResultAnalyzer
-     * 
+     *
      * @param resultAnalyzer        the JSON container sent by the server afte the
      *                              update
      * @param callableOutParameters the OUT parameters to update after the execute.
@@ -894,7 +899,7 @@ public class AceQLHttpApi {
 
     /**
      * Calls /execute_query API
-     * 
+     *
      * @param sql                 an SQL <code>INSERT</code>, <code>UPDATE</code> or
      *                            <code>DELETE</code> statement or an SQL statement
      *                            that returns nothing
@@ -956,7 +961,7 @@ public class AceQLHttpApi {
 
     /**
      * Calls /blob_upload API
-     * 
+     *
      * @param blobId      the Blob/Clob Id
      * @param inputStream the local Blob/Clob local file input stream
      * @throws AceQLException if any Exception occurs
@@ -1058,7 +1063,7 @@ public class AceQLHttpApi {
 
     /**
      * Calls /get_blob_length API
-     * 
+     *
      * @param blobId the Blob/Clob Id
      * @return the server Blob/Clob length
      * @throws AceQLException if any Exception occurs
@@ -1127,9 +1132,121 @@ public class AceQLHttpApi {
 
     }
 
+    public InputStream dbSchemaDownload(String format, String tableName) throws AceQLException {
+	try {
+
+	    if (format == null) {
+		throw new NullPointerException("format is null!");
+	    }
+
+	    String action = "metadata_query/db_schema_download";
+
+	    Map<String, String> parameters = new HashMap<String, String>();
+	    parameters.put("format", format);
+	    if (tableName != null) {
+		parameters.put("table_name", tableName);
+	    }
+
+	    InputStream in = null;
+
+	    URL theUrl = new URL(url + action);
+
+	    in = callWithPost(theUrl, parameters);
+	    return in;
+
+	} catch (Exception e) {
+	    if (e instanceof AceQLException) {
+		throw (AceQLException) e;
+	    } else {
+		throw new AceQLException(e.getMessage(), 0, e, null, httpStatusCode);
+	    }
+	}
+
+    }
+
+    public JdbcDatabaseMetaDataDto getDbMetadata() throws AceQLException {
+	try {
+	    String action = "metadata_query/get_db_metadata";
+	    String result = callWithGet(url + action);
+
+	    ResultAnalyzer resultAnalyzer = new ResultAnalyzer(result, httpStatusCode, httpStatusMessage);
+	    if (!resultAnalyzer.isStatusOk()) {
+		throw new AceQLException(resultAnalyzer.getErrorMessage(), resultAnalyzer.getErrorType(), null,
+			resultAnalyzer.getStackTrace(), httpStatusCode);
+	    }
+
+	    // If result is OK, it's a DTO
+	    JdbcDatabaseMetaDataDto jdbcDatabaseMetaDataDto = GsonWsUtil.fromJson(result, JdbcDatabaseMetaDataDto.class);
+	    return jdbcDatabaseMetaDataDto;
+	} catch (Exception e) {
+	    if (e instanceof AceQLException) {
+		throw (AceQLException) e;
+	    } else {
+		throw new AceQLException(e.getMessage(), 0, e, null, httpStatusCode);
+	    }
+	}
+    }
+
+    public TableNamesDto getTableNames(String tableType) throws AceQLException {
+	try {
+	    String action = "metadata_query/get_table_names";
+
+	    Map<String, String> parameters = new HashMap<String, String>();
+	    if (tableType != null) {
+		parameters.put("table_type", tableType);
+	    }
+
+	    String result = callWithPostReturnString(new URL(url + action), parameters);
+
+	    ResultAnalyzer resultAnalyzer = new ResultAnalyzer(result, httpStatusCode, httpStatusMessage);
+	    if (!resultAnalyzer.isStatusOk()) {
+		throw new AceQLException(resultAnalyzer.getErrorMessage(), resultAnalyzer.getErrorType(), null,
+			resultAnalyzer.getStackTrace(), httpStatusCode);
+	    }
+
+	    // If result is OK, it's a DTO
+	    TableNamesDto tableNamesDto = GsonWsUtil.fromJson(result, TableNamesDto.class);
+	    return tableNamesDto;
+	} catch (Exception e) {
+	    if (e instanceof AceQLException) {
+		throw (AceQLException) e;
+	    } else {
+		throw new AceQLException(e.getMessage(), 0, e, null, httpStatusCode);
+	    }
+	}
+    }
+
+    public TableDto getTable(TableName tableName) throws AceQLException {
+	try {
+	    String action = "metadata_query/get_table";
+
+	    Map<String, String> parameters = new HashMap<String, String>();
+	    parameters.put("table_name", tableName.getName());
+
+	    String result = callWithPostReturnString(new URL(url + action), parameters);
+
+	    ResultAnalyzer resultAnalyzer = new ResultAnalyzer(result, httpStatusCode, httpStatusMessage);
+	    if (!resultAnalyzer.isStatusOk()) {
+		throw new AceQLException(resultAnalyzer.getErrorMessage(), resultAnalyzer.getErrorType(), null,
+			resultAnalyzer.getStackTrace(), httpStatusCode);
+	    }
+
+	    // If result is OK, it's a DTO
+	    TableDto tableDto = GsonWsUtil.fromJson(result, TableDto.class);
+	    return tableDto;
+	} catch (Exception e) {
+	    if (e instanceof AceQLException) {
+		throw (AceQLException) e;
+	    } else {
+		throw new AceQLException(e.getMessage(), 0, e, null, httpStatusCode);
+	    }
+	}
+    }
+
+
     /**
      * Calls /blob_download API
-     * 
+     *
      * @param blobId the Blob/Clob Id
      * @return the input stream containing either an error, or the result set in
      *         JSON format. See user documentation.
@@ -1172,7 +1289,7 @@ public class AceQLHttpApi {
 
     /**
      * Formats & URL encode the the post data for POST.
-     * 
+     *
      * @param params the parameter names and values
      * @return the formated and URL encoded string for the POST.
      * @throws UnsupportedEncodingException
@@ -1210,5 +1327,8 @@ public class AceQLHttpApi {
     public String getHttpStatusMessage() {
 	return httpStatusMessage;
     }
+
+
+
 
 }
