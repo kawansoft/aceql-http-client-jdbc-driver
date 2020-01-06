@@ -65,10 +65,10 @@ public class RemoteDatabaseMetaData {
     }
 
     /**
-     * Downloads the schema extract for a table name in the specified format.
+     * Downloads the schema extract for a table name in the specified HTML or test format.
      *
      * @param file      the file to download the remote schema in
-     * @param format    the format to use: "html" or "text". Defaults to "html" if
+     * @param format    the format to use: "html" or "text". Defaults to "Text" if
      *                  null.
      * @param tableName the table name, without dot separator. Defaults to all tables if null.
      * @throws IOException    if any local I/O Exception occurs
@@ -95,7 +95,7 @@ public class RemoteDatabaseMetaData {
 
     /**
      * Downloads the whole schema of the remote database in the passed file, in
-     * specified HTML or Text format.
+     * the specified HTML or Text format.
      *
      * @param file   the file to download the remote schema in
      * @param format the format to use: "html" or "text". Defaults to "html" if
@@ -109,8 +109,7 @@ public class RemoteDatabaseMetaData {
     }
 
     /**
-     * Downloads the whole schema of the remote database in the passed file, in HTML
-     * format.
+     * Downloads in HTML format the whole schema of the remote database in the passed file,
      *
      * @param file the file to download the remote schema in
      * @throws NullPointerException if file is null
@@ -123,8 +122,8 @@ public class RemoteDatabaseMetaData {
 
 
     /**
-     * Returns the basic meta data values sent by the the remote JDBC Driver.
-     * @return the basic meta data values sent by the the remote JDBC Driver.
+     * Returns the basic meta data values sent by the the remote JDBC Driver of the remote database.
+     * @return the basic meta data values sent by the the remote JDBC Driver of the remote database.
      * @throws AceQLException if any Exception occurs
      */
     public JdbcDatabaseMetaData getJdbcDatabaseMetaData() throws AceQLException {
@@ -133,7 +132,7 @@ public class RemoteDatabaseMetaData {
     }
 
     /**
-     * Returns the table names and types of the database.
+     * Returns the table names and types of the remote database.
      * @return the table names and types of the database.
      * @throws AceQLException if any Exception occurs
      */
@@ -144,7 +143,7 @@ public class RemoteDatabaseMetaData {
     }
 
     /**
-     * Returns the table names and types of the database.
+     * Returns the table names and types of the remote database.
      * @param tableType the table type. Can be null. Possible values: "table", "view", etc. Defaults to all types if null passed.
      * @return the table names and types of the database.
      * @throws AceQLException if any Exception occurs
@@ -156,17 +155,17 @@ public class RemoteDatabaseMetaData {
     }
 
     /**
-     * Returns a table object with all it's properties: columns, indexes, etc.
-     * @param tableName	the table to get
-     * @return the table to get
+     * Returns a table object with all it's elements from the remote database.
+     * @param name	the name table to get
+     * @return the fetched table
      * @throws NullPointerException if tableName is null
      * @throws AceQLException if any Exception occurs
      */
-    public Table getTable(TableName tableName) throws AceQLException {
-	if (tableName == null) {
+    public Table getTable(String name) throws AceQLException {
+	if (name == null) {
 	    throw new NullPointerException("tableName is null!");
 	}
-	TableDto tableDto = aceQLHttpApi.getTable(tableName);
+	TableDto tableDto = aceQLHttpApi.getTable(name);
 	Table table = tableDto.getTable();
 	return table;
     }

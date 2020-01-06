@@ -91,8 +91,7 @@ public class AceQLConnectionSchemaExample {
 	if (format.equals("html")) {
 	    Desktop desktop = Desktop.getDesktop();
 	    desktop.browse(file.toURI());
-	}
-	else {
+	} else {
 	    String content = FileUtils.readFileToString(file, "UTF-8");
 	    System.out.println(content);
 	}
@@ -104,17 +103,19 @@ public class AceQLConnectionSchemaExample {
 	List<TableName> tableNames = remoteDatabaseMetaData.getTableNames();
 	System.out.println(new Date() + " " + tableNames);
 
-	System.out.println();
-	Table table = remoteDatabaseMetaData.getTable(tableNames.get(0));
-	System.out.println(new Date() + " Table:" + table);
+	for (TableName tableName : tableNames) {
+	    System.out.println();
+	    Table table = remoteDatabaseMetaData.getTable(tableName.getName());
+	    System.out.println(new Date() + " Table:" + table);
 
-	System.out.println();
-	System.out.println(new Date() + " Ctl & Schema :" + table.getCatalog() + " " + table.getSchema());
-	System.out.println(new Date() + " Columns      :" + table.getColumns());
-	System.out.println(new Date() + " Indexes      :" + table.getIndexes());
-	System.out.println(new Date() + " Primary Keys :" + table.getPrimaryKeys());
-	System.out.println(new Date() + " Exported Keys:" + table.getExportedforeignKeys());
-	System.out.println(new Date() + " Imported Keys:" + table.getImportedforeignKeys());
+	    System.out.println();
+	    System.out.println(new Date() + " Ctl & Schema : " + table.getCatalog() + " " + table.getSchema());
+	    System.out.println(new Date() + " Columns      : " + table.getColumns());
+	    System.out.println(new Date() + " Indexes      : " + table.getIndexes());
+	    System.out.println(new Date() + " Primary Keys : " + table.getPrimaryKeys());
+	    System.out.println(new Date() + " Exported Keys: " + table.getExportedforeignKeys());
+	    System.out.println(new Date() + " Imported Keys: " + table.getImportedforeignKeys());
+	}
 
 	connection.close();
 	((AceQLConnection) connection).logout();

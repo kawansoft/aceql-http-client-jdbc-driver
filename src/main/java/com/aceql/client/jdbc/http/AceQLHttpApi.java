@@ -48,7 +48,6 @@ import org.kawanfw.sql.version.VersionValues;
 import com.aceql.client.jdbc.AceQLException;
 import com.aceql.client.jdbc.util.UserLoginStore;
 import com.aceql.client.jdbc.util.json.SqlParameter;
-import com.aceql.client.metadata.TableName;
 import com.aceql.client.metadata.dto.JdbcDatabaseMetaDataDto;
 import com.aceql.client.metadata.dto.TableDto;
 import com.aceql.client.metadata.dto.TableNamesDto;
@@ -1144,6 +1143,7 @@ public class AceQLHttpApi {
 	    Map<String, String> parameters = new HashMap<String, String>();
 	    parameters.put("format", format);
 	    if (tableName != null) {
+		tableName = tableName.toLowerCase();
 		parameters.put("table_name", tableName);
 	    }
 
@@ -1216,12 +1216,12 @@ public class AceQLHttpApi {
 	}
     }
 
-    public TableDto getTable(TableName tableName) throws AceQLException {
+    public TableDto getTable(String tableName) throws AceQLException {
 	try {
 	    String action = "metadata_query/get_table";
 
 	    Map<String, String> parameters = new HashMap<String, String>();
-	    parameters.put("table_name", tableName.getName());
+	    parameters.put("table_name", tableName);
 
 	    String result = callWithPostReturnString(new URL(url + action), parameters);
 
