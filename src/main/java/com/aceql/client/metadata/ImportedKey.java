@@ -19,7 +19,8 @@
 package com.aceql.client.metadata;
 
 /**
-* A SQL Foreign Key.
+ * A SQL Foreign Key.
+ *
  * @author Nicolas de Pomereu
  *
  */
