@@ -1176,7 +1176,8 @@ public class AceQLHttpApi {
 	    }
 
 	    // If result is OK, it's a DTO
-	    JdbcDatabaseMetaDataDto jdbcDatabaseMetaDataDto = GsonWsUtil.fromJson(result, JdbcDatabaseMetaDataDto.class);
+	    JdbcDatabaseMetaDataDto jdbcDatabaseMetaDataDto = GsonWsUtil.fromJson(result,
+		    JdbcDatabaseMetaDataDto.class);
 	    return jdbcDatabaseMetaDataDto;
 	} catch (Exception e) {
 	    if (e instanceof AceQLException) {
@@ -1242,7 +1243,6 @@ public class AceQLHttpApi {
 	    }
 	}
     }
-
 
     /**
      * Calls /blob_download API
@@ -1327,8 +1327,5 @@ public class AceQLHttpApi {
     public String getHttpStatusMessage() {
 	return httpStatusMessage;
     }
-
-
-
 
 }
