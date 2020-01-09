@@ -22,8 +22,7 @@ import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 
 /**
- * Contains main SQL meta info sent by remote JDBC Driver.
- * <br>
+ * Contains main SQL meta info sent by remote JDBC Driver. <br>
  * The info matches the JDBC {@link DatabaseMetaData} main values.
  *
  * @author Nicolas de Pomereu
@@ -33,21 +32,19 @@ public class JdbcDatabaseMetaData {
 
     public static boolean DEBUG = false;
 
-    private String status = "OK";
-
-    private java.lang.String getURL;
+    private String getURL;
     private boolean isReadOnly;
     private boolean allProceduresAreCallable;
     private boolean allTablesAreSelectable;
-    private java.lang.String getUserName;
+    private String getUserName;
     private boolean nullsAreSortedHigh;
     private boolean nullsAreSortedLow;
     private boolean nullsAreSortedAtStart;
     private boolean nullsAreSortedAtEnd;
-    private java.lang.String getDatabaseProductName;
-    private java.lang.String getDatabaseProductVersion;
-    private java.lang.String getDriverName;
-    private java.lang.String getDriverVersion;
+    private String getDatabaseProductName;
+    private String getDatabaseProductVersion;
+    private String getDriverName;
+    private String getDriverVersion;
     private int getDriverMajorVersion;
     private int getDriverMinorVersion;
     private boolean usesLocalFiles;
@@ -60,14 +57,14 @@ public class JdbcDatabaseMetaData {
     private boolean storesUpperCaseQuotedIdentifiers;
     private boolean storesLowerCaseQuotedIdentifiers;
     private boolean storesMixedCaseQuotedIdentifiers;
-    private java.lang.String getIdentifierQuoteString;
-    private java.lang.String getSQLKeywords;
-    private java.lang.String getNumericFunctions;
-    private java.lang.String getStringFunctions;
-    private java.lang.String getSystemFunctions;
-    private java.lang.String getTimeDateFunctions;
-    private java.lang.String getSearchStringEscape;
-    private java.lang.String getExtraNameCharacters;
+    private String getIdentifierQuoteString;
+    private String getSQLKeywords;
+    private String getNumericFunctions;
+    private String getStringFunctions;
+    private String getSystemFunctions;
+    private String getTimeDateFunctions;
+    private String getSearchStringEscape;
+    private String getExtraNameCharacters;
     private boolean supportsAlterTableWithAddColumn;
     private boolean supportsAlterTableWithDropColumn;
     private boolean supportsColumnAliasing;
@@ -94,11 +91,11 @@ public class JdbcDatabaseMetaData {
     private boolean supportsOuterJoins;
     private boolean supportsFullOuterJoins;
     private boolean supportsLimitedOuterJoins;
-    private java.lang.String getSchemaTerm;
-    private java.lang.String getProcedureTerm;
-    private java.lang.String getCatalogTerm;
+    private String getSchemaTerm;
+    private String getProcedureTerm;
+    private String getCatalogTerm;
     private boolean isCatalogAtStart;
-    private java.lang.String getCatalogSeparator;
+    private String getCatalogSeparator;
     private boolean supportsSchemasInDataManipulation;
     private boolean supportsSchemasInProcedureCalls;
     private boolean supportsSchemasInTableDefinitions;
@@ -163,7 +160,6 @@ public class JdbcDatabaseMetaData {
     private int getSQLStateType;
     private boolean locatorsUpdateCopy;
     private boolean supportsStatementPooling;
-    private java.sql.RowIdLifetime getRowIdLifetime;
     private boolean supportsStoredFunctionsUsingCallSyntax;
     private boolean autoCommitFailureClosesAllResultSets;
     private int getResultSetHoldability;
@@ -172,844 +168,7 @@ public class JdbcDatabaseMetaData {
      * Constructor
      */
     public JdbcDatabaseMetaData() {
-	super();
-    }
 
-    public void setDatabaseMetaDataHolder(DatabaseMetaData wrapper) {
-
-	try {
-	    getURL = wrapper.getURL();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    isReadOnly = wrapper.isReadOnly();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    allProceduresAreCallable = wrapper.allProceduresAreCallable();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    allTablesAreSelectable = wrapper.allTablesAreSelectable();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    getUserName = wrapper.getUserName();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    nullsAreSortedHigh = wrapper.nullsAreSortedHigh();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    nullsAreSortedLow = wrapper.nullsAreSortedLow();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    nullsAreSortedAtStart = wrapper.nullsAreSortedAtStart();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    nullsAreSortedAtEnd = wrapper.nullsAreSortedAtEnd();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    getDatabaseProductName = wrapper.getDatabaseProductName();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    getDatabaseProductVersion = wrapper.getDatabaseProductVersion();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    getDriverName = wrapper.getDriverName();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    getDriverVersion = wrapper.getDriverVersion();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    getDriverMajorVersion = wrapper.getDriverMajorVersion();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    getDriverMinorVersion = wrapper.getDriverMinorVersion();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    usesLocalFiles = wrapper.usesLocalFiles();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    usesLocalFilePerTable = wrapper.usesLocalFilePerTable();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsMixedCaseIdentifiers = wrapper
-		    .supportsMixedCaseIdentifiers();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    storesUpperCaseIdentifiers = wrapper.storesUpperCaseIdentifiers();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    storesLowerCaseIdentifiers = wrapper.storesLowerCaseIdentifiers();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    storesMixedCaseIdentifiers = wrapper.storesMixedCaseIdentifiers();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsMixedCaseQuotedIdentifiers = wrapper
-		    .supportsMixedCaseQuotedIdentifiers();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    storesUpperCaseQuotedIdentifiers = wrapper
-		    .storesUpperCaseQuotedIdentifiers();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    storesLowerCaseQuotedIdentifiers = wrapper
-		    .storesLowerCaseQuotedIdentifiers();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    storesMixedCaseQuotedIdentifiers = wrapper
-		    .storesMixedCaseQuotedIdentifiers();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    getIdentifierQuoteString = wrapper.getIdentifierQuoteString();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    getSQLKeywords = wrapper.getSQLKeywords();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    getNumericFunctions = wrapper.getNumericFunctions();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    getStringFunctions = wrapper.getStringFunctions();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    getSystemFunctions = wrapper.getSystemFunctions();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    getTimeDateFunctions = wrapper.getTimeDateFunctions();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    getSearchStringEscape = wrapper.getSearchStringEscape();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    getExtraNameCharacters = wrapper.getExtraNameCharacters();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsAlterTableWithAddColumn = wrapper
-		    .supportsAlterTableWithAddColumn();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsAlterTableWithDropColumn = wrapper
-		    .supportsAlterTableWithDropColumn();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsColumnAliasing = wrapper.supportsColumnAliasing();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    nullPlusNonNullIsNull = wrapper.nullPlusNonNullIsNull();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsConvert = wrapper.supportsConvert();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsTableCorrelationNames = wrapper
-		    .supportsTableCorrelationNames();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsDifferentTableCorrelationNames = wrapper
-		    .supportsDifferentTableCorrelationNames();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsExpressionsInOrderBy = wrapper
-		    .supportsExpressionsInOrderBy();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsOrderByUnrelated = wrapper.supportsOrderByUnrelated();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsGroupBy = wrapper.supportsGroupBy();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsGroupByUnrelated = wrapper.supportsGroupByUnrelated();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsGroupByBeyondSelect = wrapper.supportsGroupByBeyondSelect();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsLikeEscapeClause = wrapper.supportsLikeEscapeClause();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsMultipleResultSets = wrapper.supportsMultipleResultSets();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsMultipleTransactions = wrapper
-		    .supportsMultipleTransactions();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsNonNullableColumns = wrapper.supportsNonNullableColumns();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsMinimumSQLGrammar = wrapper.supportsMinimumSQLGrammar();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsCoreSQLGrammar = wrapper.supportsCoreSQLGrammar();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsExtendedSQLGrammar = wrapper.supportsExtendedSQLGrammar();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsANSI92EntryLevelSQL = wrapper.supportsANSI92EntryLevelSQL();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsANSI92IntermediateSQL = wrapper
-		    .supportsANSI92IntermediateSQL();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsANSI92FullSQL = wrapper.supportsANSI92FullSQL();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsIntegrityEnhancementFacility = wrapper
-		    .supportsIntegrityEnhancementFacility();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsOuterJoins = wrapper.supportsOuterJoins();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsFullOuterJoins = wrapper.supportsFullOuterJoins();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsLimitedOuterJoins = wrapper.supportsLimitedOuterJoins();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    getSchemaTerm = wrapper.getSchemaTerm();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    getProcedureTerm = wrapper.getProcedureTerm();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    getCatalogTerm = wrapper.getCatalogTerm();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    isCatalogAtStart = wrapper.isCatalogAtStart();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    getCatalogSeparator = wrapper.getCatalogSeparator();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsSchemasInDataManipulation = wrapper
-		    .supportsSchemasInDataManipulation();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsSchemasInProcedureCalls = wrapper
-		    .supportsSchemasInProcedureCalls();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsSchemasInTableDefinitions = wrapper
-		    .supportsSchemasInTableDefinitions();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsSchemasInIndexDefinitions = wrapper
-		    .supportsSchemasInIndexDefinitions();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsSchemasInPrivilegeDefinitions = wrapper
-		    .supportsSchemasInPrivilegeDefinitions();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsCatalogsInDataManipulation = wrapper
-		    .supportsCatalogsInDataManipulation();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsCatalogsInProcedureCalls = wrapper
-		    .supportsCatalogsInProcedureCalls();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsCatalogsInTableDefinitions = wrapper
-		    .supportsCatalogsInTableDefinitions();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsCatalogsInIndexDefinitions = wrapper
-		    .supportsCatalogsInIndexDefinitions();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsCatalogsInPrivilegeDefinitions = wrapper
-		    .supportsCatalogsInPrivilegeDefinitions();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsPositionedDelete = wrapper.supportsPositionedDelete();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsPositionedUpdate = wrapper.supportsPositionedUpdate();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsSelectForUpdate = wrapper.supportsSelectForUpdate();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsStoredProcedures = wrapper.supportsStoredProcedures();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsSubqueriesInComparisons = wrapper
-		    .supportsSubqueriesInComparisons();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsSubqueriesInExists = wrapper.supportsSubqueriesInExists();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsSubqueriesInIns = wrapper.supportsSubqueriesInIns();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsSubqueriesInQuantifieds = wrapper
-		    .supportsSubqueriesInQuantifieds();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsCorrelatedSubqueries = wrapper
-		    .supportsCorrelatedSubqueries();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsUnion = wrapper.supportsUnion();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsUnionAll = wrapper.supportsUnionAll();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsOpenCursorsAcrossCommit = wrapper
-		    .supportsOpenCursorsAcrossCommit();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsOpenCursorsAcrossRollback = wrapper
-		    .supportsOpenCursorsAcrossRollback();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsOpenStatementsAcrossCommit = wrapper
-		    .supportsOpenStatementsAcrossCommit();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsOpenStatementsAcrossRollback = wrapper
-		    .supportsOpenStatementsAcrossRollback();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    getMaxBinaryLiteralLength = wrapper.getMaxBinaryLiteralLength();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    getMaxCharLiteralLength = wrapper.getMaxCharLiteralLength();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    getMaxColumnNameLength = wrapper.getMaxColumnNameLength();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    getMaxColumnsInGroupBy = wrapper.getMaxColumnsInGroupBy();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    getMaxColumnsInIndex = wrapper.getMaxColumnsInIndex();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    getMaxColumnsInOrderBy = wrapper.getMaxColumnsInOrderBy();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    getMaxColumnsInSelect = wrapper.getMaxColumnsInSelect();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    getMaxColumnsInTable = wrapper.getMaxColumnsInTable();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    getMaxConnections = wrapper.getMaxConnections();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    getMaxCursorNameLength = wrapper.getMaxCursorNameLength();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    getMaxIndexLength = wrapper.getMaxIndexLength();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    getMaxSchemaNameLength = wrapper.getMaxSchemaNameLength();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    getMaxProcedureNameLength = wrapper.getMaxProcedureNameLength();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    getMaxCatalogNameLength = wrapper.getMaxCatalogNameLength();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    getMaxRowSize = wrapper.getMaxRowSize();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    doesMaxRowSizeIncludeBlobs = wrapper.doesMaxRowSizeIncludeBlobs();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    getMaxStatementLength = wrapper.getMaxStatementLength();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    getMaxStatements = wrapper.getMaxStatements();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    getMaxTableNameLength = wrapper.getMaxTableNameLength();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    getMaxTablesInSelect = wrapper.getMaxTablesInSelect();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    getMaxUserNameLength = wrapper.getMaxUserNameLength();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    getDefaultTransactionIsolation = wrapper
-		    .getDefaultTransactionIsolation();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsTransactions = wrapper.supportsTransactions();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsDataDefinitionAndDataManipulationTransactions = wrapper
-		    .supportsDataDefinitionAndDataManipulationTransactions();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsDataManipulationTransactionsOnly = wrapper
-		    .supportsDataManipulationTransactionsOnly();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    dataDefinitionCausesTransactionCommit = wrapper
-		    .dataDefinitionCausesTransactionCommit();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    dataDefinitionIgnoredInTransactions = wrapper
-		    .dataDefinitionIgnoredInTransactions();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsBatchUpdates = wrapper.supportsBatchUpdates();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsSavepoints = wrapper.supportsSavepoints();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsNamedParameters = wrapper.supportsNamedParameters();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsMultipleOpenResults = wrapper.supportsMultipleOpenResults();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsGetGeneratedKeys = wrapper.supportsGetGeneratedKeys();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    getDatabaseMajorVersion = wrapper.getDatabaseMajorVersion();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    getDatabaseMinorVersion = wrapper.getDatabaseMinorVersion();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    getJDBCMajorVersion = wrapper.getJDBCMajorVersion();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    getJDBCMinorVersion = wrapper.getJDBCMinorVersion();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    getSQLStateType = wrapper.getSQLStateType();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    locatorsUpdateCopy = wrapper.locatorsUpdateCopy();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsStatementPooling = wrapper.supportsStatementPooling();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    getRowIdLifetime = wrapper.getRowIdLifetime();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    supportsStoredFunctionsUsingCallSyntax = wrapper
-		    .supportsStoredFunctionsUsingCallSyntax();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    autoCommitFailureClosesAllResultSets = wrapper
-		    .autoCommitFailureClosesAllResultSets();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-
-	try {
-	    getResultSetHoldability = wrapper.getResultSetHoldability();
-	} catch (Throwable t) {
-	    debug("Remote Driver Thrown Exception: " + t.toString());
-	}
-    }
-
-
-    public String getStatus() {
-        return status;
     }
 
     public java.lang.String getURL() throws SQLException {
@@ -1460,13 +619,11 @@ public class JdbcDatabaseMetaData {
 	return supportsTransactions;
     }
 
-    public boolean supportsDataDefinitionAndDataManipulationTransactions()
-	    throws SQLException {
+    public boolean supportsDataDefinitionAndDataManipulationTransactions() throws SQLException {
 	return supportsDataDefinitionAndDataManipulationTransactions;
     }
 
-    public boolean supportsDataManipulationTransactionsOnly()
-	    throws SQLException {
+    public boolean supportsDataManipulationTransactionsOnly() throws SQLException {
 	return supportsDataManipulationTransactionsOnly;
     }
 
@@ -1526,10 +683,6 @@ public class JdbcDatabaseMetaData {
 	return supportsStatementPooling;
     }
 
-    public java.sql.RowIdLifetime getRowIdLifetime() throws SQLException {
-	return getRowIdLifetime;
-    }
-
     public boolean supportsStoredFunctionsUsingCallSyntax() throws SQLException {
 	return supportsStoredFunctionsUsingCallSyntax;
     }
@@ -1544,7 +697,7 @@ public class JdbcDatabaseMetaData {
 
     @Override
     public String toString() {
-	return "JdbcDatabaseMetaData [status=" + status + ", getURL=" + getURL + ", isReadOnly=" + isReadOnly
+	return "JdbcDatabaseMetaData [getURL=" + getURL + ", isReadOnly=" + isReadOnly
 		+ ", allProceduresAreCallable=" + allProceduresAreCallable + ", allTablesAreSelectable="
 		+ allTablesAreSelectable + ", getUserName=" + getUserName + ", nullsAreSortedHigh=" + nullsAreSortedHigh
 		+ ", nullsAreSortedLow=" + nullsAreSortedLow + ", nullsAreSortedAtStart=" + nullsAreSortedAtStart
@@ -1629,12 +782,12 @@ public class JdbcDatabaseMetaData {
 		+ ", getDatabaseMinorVersion=" + getDatabaseMinorVersion + ", getJDBCMajorVersion="
 		+ getJDBCMajorVersion + ", getJDBCMinorVersion=" + getJDBCMinorVersion + ", getSQLStateType="
 		+ getSQLStateType + ", locatorsUpdateCopy=" + locatorsUpdateCopy + ", supportsStatementPooling="
-		+ supportsStatementPooling + ", getRowIdLifetime=" + getRowIdLifetime
-		+ ", supportsStoredFunctionsUsingCallSyntax=" + supportsStoredFunctionsUsingCallSyntax
-		+ ", autoCommitFailureClosesAllResultSets=" + autoCommitFailureClosesAllResultSets
-		+ ", getResultSetHoldability=" + getResultSetHoldability + "]";
+		+ supportsStatementPooling + ", supportsStoredFunctionsUsingCallSyntax="
+		+ supportsStoredFunctionsUsingCallSyntax + ", autoCommitFailureClosesAllResultSets="
+		+ autoCommitFailureClosesAllResultSets + ", getResultSetHoldability=" + getResultSetHoldability + "]";
     }
 
+    @SuppressWarnings("unused")
     private static void debug(String s) {
 	// Do not use ServerLogger! This class is both used by client and server
 	// side
