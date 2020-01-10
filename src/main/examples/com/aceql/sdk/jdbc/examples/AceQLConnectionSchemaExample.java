@@ -35,7 +35,6 @@ import com.aceql.client.jdbc.AceQLException;
 import com.aceql.client.metadata.JdbcDatabaseMetaData;
 import com.aceql.client.metadata.RemoteDatabaseMetaData;
 import com.aceql.client.metadata.Table;
-import com.aceql.client.metadata.TableName;
 
 /**
  * @author Nicolas de Pomereu
@@ -100,12 +99,12 @@ public class AceQLConnectionSchemaExample {
 	System.out.println(new Date() + " jdbcDatabaseMetaData: " + jdbcDatabaseMetaData);
 
 	System.out.println();
-	List<TableName> tableNames = remoteDatabaseMetaData.getTableNames();
+	List<String> tableNames = remoteDatabaseMetaData.getTableNames();
 	System.out.println(new Date() + " " + tableNames);
 
-	for (TableName tableName : tableNames) {
+	for (String tableName : tableNames) {
 	    System.out.println();
-	    Table table = remoteDatabaseMetaData.getTable(tableName.getName());
+	    Table table = remoteDatabaseMetaData.getTable(tableName);
 	    System.out.println(new Date() + " Table:" + table);
 
 	    System.out.println();

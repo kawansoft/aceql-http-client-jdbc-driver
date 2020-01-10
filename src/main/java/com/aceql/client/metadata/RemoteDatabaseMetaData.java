@@ -132,25 +132,25 @@ public class RemoteDatabaseMetaData {
     }
 
     /**
-     * Returns the table names and types of the remote database.
-     * @return the table names and types of the database.
+     * Returns the table names of the remote database.
+     * @return the database table names (all types).
      * @throws AceQLException if any Exception occurs
      */
-    public List<TableName> getTableNames() throws AceQLException {
+    public List<String> getTableNames() throws AceQLException {
 	TableNamesDto tableNamesDto = aceQLHttpApi.getTableNames(null);
-	List<TableName> tableNames = tableNamesDto.getTableNames();
+	List<String> tableNames = tableNamesDto.getTableNames();
 	return tableNames;
     }
 
     /**
-     * Returns the table names and types of the remote database.
+     * Returns the table names of the remote database.
      * @param tableType the table type. Can be null. Possible values: "table", "view", etc. Defaults to all types if null passed.
-     * @return the table names and types of the database.
+     * @return the database table names for the passed tabe type.
      * @throws AceQLException if any Exception occurs
      */
-    public List<TableName> getTableNames(String tableType) throws AceQLException {
+    public List<String> getTableNames(String tableType) throws AceQLException {
 	TableNamesDto tableNamesDto = aceQLHttpApi.getTableNames(tableType);
-	List<TableName> tableNames = tableNamesDto.getTableNames();
+	List<String> tableNames = tableNamesDto.getTableNames();
 	return tableNames;
     }
 

@@ -21,8 +21,6 @@ package com.aceql.client.metadata.dto;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.aceql.client.metadata.TableName;
-
 /**
  * Contains the list of tables of the database.
  * @author Nicolas de Pomereu
@@ -31,9 +29,9 @@ import com.aceql.client.metadata.TableName;
 public class TableNamesDto {
 
     private String status = "OK";
-    private List<TableName> tableNames = new ArrayList<>();
+    private List<String> tableNames = new ArrayList<>();
 
-    public TableNamesDto(List<TableName> tableNames) {
+    public TableNamesDto(List<String> tableNames) {
 	this.tableNames = tableNames;
     }
 
@@ -41,7 +39,7 @@ public class TableNamesDto {
         return status;
     }
 
-    public List<TableName> getTableNames() {
+    public List<String> getTableNames() {
         return tableNames;
     }
 
