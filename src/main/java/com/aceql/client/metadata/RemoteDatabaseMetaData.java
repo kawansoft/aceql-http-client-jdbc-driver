@@ -68,7 +68,7 @@ public class RemoteDatabaseMetaData {
      * Downloads the schema extract for a table name in the specified HTML or test format.
      *
      * @param file      the file to download the remote schema in
-     * @param format    the format to use: "html" or "text". Defaults to "Text" if
+     * @param format    the format to use: "html" or "text". Defaults to "text" if
      *                  null.
      * @param tableName the table name, without dot separator. Defaults to all tables if null.
      * @throws IOException    if any local I/O Exception occurs
@@ -145,7 +145,7 @@ public class RemoteDatabaseMetaData {
     /**
      * Returns the table names of the remote database.
      * @param tableType the table type. Can be null. Possible values: "table", "view", etc. Defaults to all types if null passed.
-     * @return the database table names for the passed tabe type.
+     * @return the database table names for the passed table type.
      * @throws AceQLException if any Exception occurs
      */
     public List<String> getTableNames(String tableType) throws AceQLException {
