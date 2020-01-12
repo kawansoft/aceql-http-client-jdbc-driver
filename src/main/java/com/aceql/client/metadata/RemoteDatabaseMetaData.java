@@ -39,7 +39,7 @@ import com.aceql.client.metadata.dto.TableNamesDto;
 /**
  * Allows to retrieve metadata info of the remote SQL database:
  * <ul>
- * <li>Schema description.</li>
+ * <li>Schema description in HTML or Text format.</li>
  * <li>Databases object wrappers: Tables, Columns, Indexes, etc.</li>
  * </ul>
  *
@@ -65,12 +65,14 @@ public class RemoteDatabaseMetaData {
     }
 
     /**
-     * Downloads the schema extract for a table name in the specified HTML or test format.
+     * Downloads the schema extract for a table name in the specified HTML or Text
+     * format.
      *
      * @param file      the file to download the remote schema in
      * @param format    the format to use: "html" or "text". Defaults to "text" if
      *                  null.
-     * @param tableName the table name, without dot separator. Defaults to all tables if null.
+     * @param tableName the table name filter, without dot separator. All tables are
+     *                  downloaded if null.
      * @throws IOException    if any local I/O Exception occurs
      * @throws AceQLException if any other Exception occurs
      */
@@ -94,36 +96,39 @@ public class RemoteDatabaseMetaData {
     }
 
     /**
-     * Downloads the whole schema of the remote database in the passed file, in
-     * the specified HTML or Text format.
+     * Downloads the whole schema of the remote database in the passed file, in the
+     * specified HTML or Text format.
      *
      * @param file   the file to download the remote schema in
      * @param format the format to use: "html" or "text". Defaults to "html" if
      *               null.
      * @throws NullPointerException if file is null
-     * @throws IOException    if any local I/O Exception occurs
-     * @throws AceQLException if any other Exception occurs
+     * @throws IOException          if any local I/O Exception occurs
+     * @throws AceQLException       if any other Exception occurs
      */
     public void dbSchemaDownload(File file, String format) throws IOException, AceQLException {
 	dbSchemaDownload(file, format, null);
     }
 
     /**
-     * Downloads in HTML format the whole schema of the remote database in the passed file,
+     * Downloads in HTML format the whole schema of the remote database in the
+     * passed file.
      *
      * @param file the file to download the remote schema in
      * @throws NullPointerException if file is null
-     * @throws IOException if any local I/O Exception occurs
-     * @throws AceQLException if any Exception occurs
+     * @throws IOException          if any local I/O Exception occurs
+     * @throws AceQLException       if any Exception occurs
      */
     public void dbSchemaDownload(File file) throws IOException, AceQLException {
 	dbSchemaDownload(file, null, null);
     }
 
-
     /**
-     * Returns the basic meta data values sent by the the remote JDBC Driver of the remote database.
-     * @return the basic meta data values sent by the the remote JDBC Driver of the remote database.
+     * Returns the basic meta data values of the remote database, as sent by the the
+     * remote JDBC Driver of the remote database.
+     *
+     * @return the basic meta data values sent by the the remote JDBC Driver of the
+     *         remote database.
      * @throws AceQLException if any Exception occurs
      */
     public JdbcDatabaseMetaData getJdbcDatabaseMetaData() throws AceQLException {
@@ -133,6 +138,7 @@ public class RemoteDatabaseMetaData {
 
     /**
      * Returns the table names of the remote database.
+     *
      * @return the database table names (all types).
      * @throws AceQLException if any Exception occurs
      */
@@ -144,7 +150,9 @@ public class RemoteDatabaseMetaData {
 
     /**
      * Returns the table names of the remote database.
-     * @param tableType the table type. Can be null. Possible values: "table", "view", etc. Defaults to all types if null passed.
+     *
+     * @param tableType the table type. Can be null. Possible values: "table",
+     *                  "view", etc. Defaults to all types if tableType is null.
      * @return the database table names for the passed table type.
      * @throws AceQLException if any Exception occurs
      */
@@ -155,11 +163,12 @@ public class RemoteDatabaseMetaData {
     }
 
     /**
-     * Returns a table object with all it's elements from the remote database.
-     * @param name	the name table to get
+     * Returns from the remote database a Table object that contains all the table's details.
+     *
+     * @param name the name table to get
      * @return the fetched table
      * @throws NullPointerException if tableName is null
-     * @throws AceQLException if any Exception occurs
+     * @throws AceQLException       if any Exception occurs
      */
     public Table getTable(String name) throws AceQLException {
 	if (name == null) {
