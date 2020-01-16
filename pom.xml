@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.aceql</groupId>
   <artifactId>aceql-http-client-sdk</artifactId>
-  <version>3.0.1</version>
+  <version>4.0</version>
   <dependencies>
       <dependency>
       <groupId>junit</groupId>
@@ -75,4 +75,8 @@
   <description>The AceQL Java Client SDK allows to wrap the AceQL HTTP APIs and eliminate the tedious works of handling communications errors and parsing JSON results.
 
 Android and Java Desktop application developers can access remote SQL databases and/or SQL databases in the cloud by simply including standard JDBC calls in their code, just like they would for a local database.</description>
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
 </project>

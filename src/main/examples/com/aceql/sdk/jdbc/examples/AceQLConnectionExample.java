@@ -77,7 +77,7 @@ public class AceQLConnectionExample {
 	String serverUrlLocalhostTomcat = "http://localhost:8080/aceql-test/aceql";
 	String serverUrlLocalhostTomcatPro = "http://localhost:8080/aceql-test-pro/aceql";
 	String serverUrlUnix = "https://www.aceql.com:9443/aceql";
-	String serverUrlUnixNoSSL = "http://www.aceql.com:9090/aceql";
+	String serverUrlUnixNoSSL = "http://www.aceql.com:8081/aceql";
 
 	String serverUrl = serverUrlLocalhostEmbedded;
 	String database = "kawansoft_example";
