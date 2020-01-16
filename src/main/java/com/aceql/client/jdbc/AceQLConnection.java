@@ -1,20 +1,20 @@
 /*
  * This file is part of AceQL Client SDK.
- * AceQL Client SDK: Remote JDBC access over HTTP with AceQL HTTP.                                 
- * Copyright (C) 2017,  KawanSoft SAS
- * (http://www.kawansoft.com). All rights reserved.                                
- *                                                                               
+ * AceQL Client SDK: Remote JDBC access over HTTP with AceQL HTTP.
+ * Copyright (C) 2020,  KawanSoft SAS
+ * (http://www.kawansoft.com). All rights reserved.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  */
 package com.aceql.client.jdbc;
 
@@ -35,6 +35,7 @@ import org.kawanfw.driver.jdbc.abstracts.AbstractConnection;
 
 import com.aceql.client.jdbc.http.AceQLHttpApi;
 import com.aceql.client.jdbc.util.AceQLConnectionUtil;
+import com.aceql.client.metadata.RemoteDatabaseMetaData;
 
 /**
  * Provides a <code>Connection</code> implementation that enable to use a
@@ -56,7 +57,7 @@ import com.aceql.client.jdbc.util.AceQLConnectionUtil;
  * <p>
  * Supplementary specific methods that are not of instance of Connection are
  * also added.
- * 
+ *
  * After creating the <code>AceQLConnection</code>, just use it like a regular
  * <code>Connection</code> to execute your <code>PreparedStatement</code> and
  * <code>Statement</code>, and to navigate through your <code>ResultSet</code>.
@@ -69,13 +70,13 @@ import com.aceql.client.jdbc.util.AceQLConnectionUtil;
  * is available with {@link AceQLException#getRemoteStackTrace()}
  * <p>
  * Example: <blockquote>
- * 
+ *
  * <pre>
  * // Define URL of the path to the AceQL Manager Servlet
  * // We will use a secure SSL/TLS session. All uploads/downloads of SQL
  * // commands &amp; data will be encrypted.
  * String url = &quot;https://www.acme.org:9443/aceql&quot;;
- * 
+ *
  * // The login info for strong authentication on server side.
  * // These are *not* the username/password of the remote JDBC Driver,
  * // but are the auth info checked by remote server
@@ -83,29 +84,29 @@ import com.aceql.client.jdbc.util.AceQLConnectionUtil;
  * String database = &quot;mydatabase&quot;;
  * String username = &quot;MyUsername&quot;;
  * String password = &quot;MyPassword&quot;;
- * 
+ *
  * // Attempts to establish a connection to the remote database:
  * Connection connection = new AceQLConnection(serverUrl, database, username, password);
- * 
+ *
  * // We can now use our remote JDBC Connection as a regular JDBC
  * // Connection for our queries and updates:
  * String sql = &quot;SELECT CUSTOMER_ID, FNAME, LNAME FROM CUSTOMER &quot; + &quot;WHERE CUSTOMER_ID = ?&quot;;
  * PreparedStatement prepStatement = connection.prepareStatement(sql);
  * prepStatement.setInt(1, 1);
- * 
+ *
  * ResultSet rs = prepStatement.executeQuery();
  * while (rs.next()) {
  *     String customerId = rs.getString(&quot;customer_id&quot;);
  *     String fname = rs.getString(&quot;fname&quot;);
  *     String lname = rs.getString(&quot;lname&quot;);
- * 
+ *
  *     System.out.println(&quot;customer_id: &quot; + customerId);
  *     System.out.println(&quot;fname      : &quot; + fname);
  *     System.out.println(&quot;lname      : &quot; + lname);
  *     // Etc.
  * }
  * </pre>
- * 
+ *
  * </blockquote> The following dedicated <code>AceQLConnection</code> methods
  * are specific to the software and may be accessed with a cast:
  * <ul>
@@ -135,33 +136,33 @@ import com.aceql.client.jdbc.util.AceQLConnectionUtil;
  * {@link AceQLConnection#setProgress(AtomicInteger)} <br>
  * {@link AceQLConnection#setCancelled(AtomicBoolean)}
  * <p>
- * 
+ *
  * Example: <blockquote>
- * 
+ *
  * <pre>
  * // Attempts to establish a connection to the remote database:
  * Connection connection = new AceQLConnection(url, username, password, database);
- * 
+ *
  * // Pass the mutable &amp; sharable progress and canceled to the
  * // underlying AceQLConnection.
  * // - progress value will be updated by the AceQLConnection and
  * // retrieved by progress monitors to increment the progress.
  * // - cancelled value will be updated to true if user cancels the
  * // task and AceQLConnection will interrupt the blob(s) transfer.
- * 
+ *
  * ((AceQLConnection) connection).setProgress(progress);
  * ((AceQLConnection) connection).setCancelled(cancelled);
- * 
+ *
  * // Execute JDBC statement
  * </pre>
- * 
+ *
  * </blockquote> See the source code of
  * <a href= "http://www.aceql.com/rest/soft/2.1/src/SqlProgressMonitorDemo.java"
  * >SqlProgressMonitorDemo.java</a> that demonstrates the use of atomic
  * variables when inserting a Blob.
- * 
+ *
  * @author Nicolas de Pomereu
- * 
+ *
  */
 public class AceQLConnection extends AbstractConnection implements Connection, Cloneable, Closeable {
 
@@ -173,7 +174,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 
     /**
      * Sets the connect timeout.
-     * 
+     *
      * @param connectTimeout Sets a specified timeout value, in milliseconds, to be
      *                       used when opening a communications link to the remote
      *                       server. If the timeout expires before the connection
@@ -188,7 +189,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 
     /**
      * Sets the read timeout.
-     * 
+     *
      * @param readTimeout an <code>int</code> that specifies the read timeout value,
      *                    in milliseconds, to be used when an http connection is
      *                    established to the remote server. See
@@ -200,7 +201,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 
     /**
      * Login on the AceQL server and connect to a database
-     * 
+     *
      * @param serverUrl the URL of the AceQL server. Example:
      *                  http://localhost:9090/aceql
      * @param database  the server database to connect to.
@@ -214,7 +215,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 
     /**
      * Login on the AceQL server and connect to a database
-     * 
+     *
      * @param serverUrl              the URL of the AceQL server. Example:
      *                               http://localhost:9090/aceql
      * @param database               the server database to connect to.
@@ -257,16 +258,25 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 
     /**
      * Private constructor for Clone
-     * 
+     *
      * @param aceQLHttpApi the AceQL http Api Clone
      */
     private AceQLConnection(AceQLHttpApi aceQLHttpApi) {
 	this.aceQLHttpApi = aceQLHttpApi;
     }
 
+    /**
+     * Returns a RemoteDatabaseMetaData instance in order to retrieve metadata info.
+     * @return a RemoteDatabaseMetaData instance in order to retrieve metadata info.
+     */
+    public RemoteDatabaseMetaData getRemoteDatabaseMetaData() {
+	RemoteDatabaseMetaData remoteDatabaseMetaData = new RemoteDatabaseMetaData(this);
+	return remoteDatabaseMetaData;
+    }
+
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.Connection#close()
      */
     @Override
@@ -293,7 +303,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.Connection#commit()
      */
     @Override
@@ -303,7 +313,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.Connection#rollback()
      */
     @Override
@@ -313,7 +323,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.Connection#setHoldability(int)
      */
     @Override
@@ -324,7 +334,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.Connection#setHoldability(int)
      */
     @Override
@@ -335,7 +345,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.Connection#setAutoCommit(boolean)
      */
     @Override
@@ -345,7 +355,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.Connection#isReadOnly()
      */
     @Override
@@ -355,7 +365,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.kawanfw.driver.jdbc.abstracts.AbstractConnection#setReadOnly(boolean)
      */
@@ -367,7 +377,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.Connection#isReadOnly()
      */
     @Override
@@ -377,7 +387,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.Connection#getHoldability()
      */
     @Override
@@ -388,7 +398,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.Connection#getTransactionIsolation()
      */
     @Override
@@ -399,7 +409,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.Connection##createStatement()
      */
     @Override
@@ -410,7 +420,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#prepareStatement
      * (java.lang.String)
      */
@@ -422,7 +432,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.kawanfw.driver.jdbc.abstracts.AbstractConnection#prepareCall(java.lang.
      * String)
@@ -435,7 +445,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.lang.Object#clone()
      */
     @Override
@@ -451,18 +461,20 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 
     /**
      * Returns the SDK current Version.
-     * 
+     *
      * @return the SDK current Version
      */
     public String getClientVersion() {
 	return aceQLHttpApi.getClientVersion();
     }
 
+
+
     /**
      * Returns the server product version
-     * 
+     *
      * @return the server product version
-     * 
+     *
      * @throws AceQLException if any Exception occurs
      */
     public String getServerVersion() throws AceQLException {
@@ -471,7 +483,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 
     /**
      * Says if trace is on
-     * 
+     *
      * @return true if trace is on
      */
     public boolean isTraceOn() {
@@ -480,7 +492,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 
     /**
      * Sets the trace on/off
-     * 
+     *
      * @param traceOn if true, trace will be on
      */
     public void setTraceOn(boolean traceOn) {
@@ -489,7 +501,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 
     /**
      * Says if JSON contents are to be pretty printed. Defaults to false.
-     * 
+     *
      * @param prettyPrinting if true, JSON contents are to be pretty printed
      */
     public void setPrettyPrinting(boolean prettyPrinting) {
@@ -499,7 +511,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     /**
      * Define if SQL result sets are returned compressed with the GZIP file format
      * before download. Defaults to true.
-     * 
+     *
      * @param gzipResult if true, sets are compressed before download
      */
     public void setGzipResult(boolean gzipResult) {
@@ -508,7 +520,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 
     /**
      * Returns the cancelled value set by the progress indicator
-     * 
+     *
      * @return the cancelled value set by the progress indicator
      */
     public AtomicBoolean getCancelled() {
@@ -519,11 +531,11 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      * Sets the sharable canceled variable that will be used by the progress
      * indicator to notify this instance that the user has cancelled the current
      * Blob/Clob upload or download.
-     * 
+     *
      * @param cancelled the Sharable canceled variable that will be used by the
      *                  progress indicator to notify this instance that the end user
      *                  has cancelled the current Blob/Clob upload or download
-     * 
+     *
      */
     public void setCancelled(AtomicBoolean cancelled) {
 	aceQLHttpApi.setCancelled(cancelled);
@@ -532,10 +544,10 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     /**
      * Returns the sharable progress variable that will store Blob/Clob upload or
      * download progress between 0 and 100
-     * 
+     *
      * @return the sharable progress variable that will store Blob/Clob upload or
      *         download progress between 0 and 100
-     * 
+     *
      */
     public AtomicInteger getProgress() {
 	return aceQLHttpApi.getProgress();
@@ -545,7 +557,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      * Sets the sharable progress variable that will store Blob/Clob upload or
      * download progress between 0 and 100. Will be used by progress indicators to
      * show the progress.
-     * 
+     *
      * @param progress the sharable progress variable
      */
     public void setProgress(AtomicInteger progress) {
@@ -554,7 +566,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.Connection#close()
      */
     @Override

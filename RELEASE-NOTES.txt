@@ -1,7 +1,7 @@
 
                  AceQL Java Client SDK
-                      Version 3.0.1
-                      Release Notes
+                      Version 4.0
+                     Release Notes
 
 
 Introduction
@@ -19,7 +19,21 @@ they would for a local database.
 The AceQL Java Client SDK is licensed under the Apache 2.0
 License.
     
+    
+AceQL Java Client SDK - Version 4.0 - 16-Jan-2020
+-------------------------------------------------
 
+- The new metadata API allows downloading a remote database schema
+  in HTML or text format, to get a remote database main properties, 
+  to get the list of tables, and to get the details of each table. 
+  It also allows wrapping remote tables, columns, indexes, etc into
+  easy to use provided Java classes: Table, Index, Column, etc.
+  The metadata API allows exposing more easily the databases along with the 
+  schemas, without any need to communicate or synchronize separated  
+  documentation for the API users. Users are thus autonomous to explore 
+  the metadata and schema of the exposed databases. 
+  
+  
 AceQL Java Client SDK - Version 3.0.1 - 16-Sep-2019
 ---------------------------------------------------
 
