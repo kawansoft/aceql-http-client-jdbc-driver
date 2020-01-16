@@ -1,6 +1,6 @@
 # AceQL HTTP 
 
-## Java Client SDK v3.5 - January 2020, 15
+## Java Client SDK v4.0 - January 2020, 16
 
 <img src="https://www.aceql.com/favicon.png" alt="AceQ HTTP Icon"/>
 
@@ -62,7 +62,7 @@ This 3.5.x SDK version is compatible with AceQL HTTP server side v2.1, v3.0, v3.
 
 ## SDK instead of JDBC Driver
 
- Note that the SDK is *not *a real JDBC Driver, because it lacks important metadata call capabilities:
+Note that the SDK is *not *a real JDBC Driver, because it lacks important metadata call capabilities:
 
 - `Connection.getMetaData()`.
 - `ResultSet.getMetaData()`.
