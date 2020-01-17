@@ -80,11 +80,11 @@ Note that we will soon release a real JDBC Driver. Please contact us at [contact
 ### Maven
 
 ```xml
-	<dependency>
-		<groupId>com.aceql</groupId>
-		<artifactId>aceql-http-client-sdk</artifactId>
-		<version>4.0.1</version>
-	</dependency>
+<dependency>
+    <groupId>com.aceql</groupId>
+    <artifactId>aceql-http-client-sdk</artifactId>
+    <version>4.0.1</version>
+</dependency>
 ```
 ### Single Jar 
 
