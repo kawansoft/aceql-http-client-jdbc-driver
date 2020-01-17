@@ -4,17 +4,20 @@
 
 <img src="https://www.aceql.com/favicon.png" alt="AceQ HTTP Icon"/>
 
-   * [Fundamentals](#fundamentals)
+* [Fundamentals](#fundamentals)
       * [Technical operating environment](#technical-operating-environment)
       * [License](#license)
       * [AceQL Server side compatibility](#aceql-server-side-compatibility)
       * [SDK instead of JDBC Driver](#sdk-instead-of-jdbc-driver)
       * [AceQL Java Client SDK installation](#aceql-java-client-sdk-installation)
+         * [Maven](#maven)
+         * [Single Jar](#single-jar)
          * [Android Project settings](#android-project-settings)
       * [Data transport](#data-transport)
          * [Transport format](#transport-format)
          * [Content streaming and memory management](#content-streaming-and-memory-management)
       * [Best practices for fast response time](#best-practices-for-fast-response-time)
+  
    * [Using the AceQL Java Client SDK](#using-the-aceql-java-client-sdk)
       * [Connection creation](#connection-creation)
       * [Using a Proxy](#using-a-proxy)
@@ -31,15 +34,16 @@
       * [HTTP session options](#http-session-options)
    * [Limitations](#limitations)
 
+
 # Fundamentals 
 
 This document describes how to use the AceQL Java Client SDK and gives some details about how it operates with the server side.
 
-The AceQL Java Client SDK allows users to wrap the [AceQL HTTP APIs](https://github.com/kawansoft/aceql-http/blob/master/aceql-http-2.1-user-guide-api.md) and eliminate the tedious work of handling communication errors and parsing JSON results.
+The AceQL Java Client SDK allows users to wrap the [AceQL HTTP APIs](https://github.com/kawansoft/aceql-http/blob/master/aceql-http-4.0-user-guide-api.md) and eliminate the tedious work of handling communication errors and parsing JSON results.
 
 Android and Java Desktop application developers can access remote SQL databases and/or SQL databases in the cloud, simply by including standard JDBC calls in their code, just like they would for a local database.
 
-The AceQL Server operation is described in [AceQL HTTP Server Installation and Configuration Guide](https://github.com/kawansoft/aceql-http/blob/master/aceql-http-3.1-user-guide-server.md), whose content is sometimes referred in this User Guide. 
+The AceQL Server operation is described in [AceQL HTTP Server Installation and Configuration Guide](https://github.com/kawansoft/aceql-http/blob/master/aceql-http-4.0-user-guide-server.md), whose content is sometimes referred in this User Guide. 
 
 ## Technical operating environment 
 
@@ -73,7 +77,18 @@ Note that we will soon release a real JDBC Driver. Please contact us at [contact
 
 ## AceQL Java Client SDK installation
 
-Go to the [download page](https://www.aceql.com/download) and follow the instructions to download and install the SDK.
+### Maven
+
+```xml
+	<dependency>
+		<groupId>com.aceql</groupId>
+		<artifactId>aceql-http-client-sdk</artifactId>
+		<version>4.0.1</version>
+	</dependency>
+```
+### Single Jar 
+
+For non Maven users: a single jar with all dependencies is available on the [download page](https://www.aceql.com/aceql-download-page.html).
 
 ### Android Project settings
 
