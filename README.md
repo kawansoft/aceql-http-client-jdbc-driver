@@ -4,7 +4,7 @@
 
 <img src="https://www.aceql.com/favicon.png" alt="AceQ HTTP Icon"/>
 
-* [Fundamentals](#fundamentals)
+  * [Fundamentals](#fundamentals)
       * [Technical operating environment](#technical-operating-environment)
       * [License](#license)
       * [AceQL Server side compatibility](#aceql-server-side-compatibility)
@@ -17,7 +17,6 @@
          * [Transport format](#transport-format)
          * [Content streaming and memory management](#content-streaming-and-memory-management)
       * [Best practices for fast response time](#best-practices-for-fast-response-time)
-  
    * [Using the AceQL Java Client SDK](#using-the-aceql-java-client-sdk)
       * [Connection creation](#connection-creation)
       * [Using a Proxy](#using-a-proxy)
@@ -32,6 +31,10 @@
          * [BLOB reading](#blob-reading)
          * [Using Progress Bars with Blobs](#using-progress-bars-with-blobs)
       * [HTTP session options](#http-session-options)
+   * [Using the Metadata Query API](#using-the-metadata-query-api)
+      * [Downloading database schema into a file](#downloading-database-schema-into-a-file)
+      * [Accessing remote database main properties](#accessing-remote-database-main-properties)
+      * [Getting Details of Tables and Columns](#getting-details-of-tables-and-columns)
    * [Limitations](#limitations)
 
 
@@ -538,7 +541,69 @@ You can set the http timeout values with the static setters to be called before 
 - [AceQLConnection.setConnectTimeout(int connectTimeout)](https://www.aceql.com/rest/soft/4.0/javadoc_sdk/com/aceql/client/jdbc/AceQLConnection.html#setConnectTimeout(int))
 - [AceQLConnection.setReadTimeout(int readTimeout)](https://www.aceql.com/rest/soft/4.0/javadoc_sdk/com/aceql/client/jdbc/AceQLConnection.html#setReadTimeout(int))
 
-# Limitations
+# Using the Metadata Query API 
+
+The metadata API allows:
+
+- downloading a remote database schema
+  in HTML or text format
+- to get a remote database main properties.
+- to get the list of tables, 
+- to get the details of each table. 
+
+It also allows wrapping remote tables, columns, indexes, etc. into
+easy to use provided Java classes: Table, Index, Column, etc.
+
+First step is to get an instance of `RemoteDatabaseMetaData`:
+
+```java
+RemoteDatabaseMetaData remoteDatabaseMetaData = 
+    ((AceQLConnection) connection).getRemoteDatabaseMetaData();
+```
+
+## Downloading database schema into a file
+
+Downloading a schema into a Java `File` is done through the method. See the `RemoteDatabaseMetaData` [javadoc](https://www.aceql.com/rest/soft/4.0/javadoc_sdk/com/aceql/client/metadata/RemoteDatabaseMetaData.html): 
+
+```java
+File file = new File("db_schema.out.html");
+remoteDatabaseMetaData.dbSchemaDownload(file);
+```
+See an example of the built HTML schema:  [db_schema.out.html](https://www.aceql.com/rest/soft/4.0/src/db_schema.out.html)
+
+## Accessing remote database main properties
+
+The [JdbcDatabaseMetaData](https://www.aceql.com/rest/soft/4.0/javadoc_sdk/com/aceql/client/metadata/JdbcDatabaseMetaData.html) class wraps instance the main value retrieved by a remote JDBC call to `Connection.getMetaData`(): 
+
+```java
+JdbcDatabaseMetaData jdbcDatabaseMetaData = remoteDatabaseMetaData.getJdbcDatabaseMetaData();
+	System.out.println("Major Version: " + jdbcDatabaseMetaData.getDatabaseMajorVersion());
+	System.out.println("Minor Version: " + jdbcDatabaseMetaData.getDatabaseMinorVersion());
+	System.out.println("isReadOnly   : " + jdbcDatabaseMetaData.isReadOnly());
+```
+
+## Getting Details of Tables and Columns
+
+See the [javadoc](https://www.aceql.com/rest/soft/4.0/javadoc_sdk/com/aceql/client/metadata/package-summary.html) of the `com.aceql.client.metadata` package: 
+
+```java
+System.out.println("Get the table names:");
+List<String> tableNames = remoteDatabaseMetaData.getTableNames();
+
+System.out.println("Print the details of each table:");
+for (String tableName : tableNames) {
+    System.out.println();
+    Table table = remoteDatabaseMetaData.getTable(tableName);
+
+    System.out.println();
+    System.out.println("Columns      : " + table.getColumns());
+    System.out.println("Indexes      : " + table.getIndexes());
+    System.out.println("Primary Keys : " + table.getPrimaryKeys());
+    System.out.println("Exported Keys: " + table.getExportedforeignKeys());
+    System.out.println("Imported Keys: " + table.getImportedforeignKeys());
+}
+```
+# Limitations 
 
 The following JDBC features are not supported nor implemented in this version: 
 
