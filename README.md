@@ -65,7 +65,9 @@ The SDK is licensed with the liberal [Apache 2.0](https://www.apache.org/license
 
 ## AceQL Server side compatibility
 
-This 3.5.x SDK version is compatible with AceQL HTTP server side v2.1, v3.0, v3.1 and v4.0.. It is not compatible with AceQL HTTP server side v1.0.
+This 4.0.x SDK version is compatible with AceQL HTTP server side v2.1, v3.0, v3.1 and v4.0. 
+
+AceQL HTTP v4.0+ is required for metadata calls.
 
 ## SDK instead of JDBC Driver
 
