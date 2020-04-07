@@ -25,8 +25,9 @@ AceQL Java Client SDK - Version 4.0.2 - 07-Apr-2020
 
 What's New:
 - The AceQLConnection.setPrettyPrinting(boolean prettyPrinting)
-  method has been removed, as the server requires prettyPrinting  
-  to always be on in order to avoid hazardous line splitting.   
+  method has been removed, as the server requires JSON 
+  pretty printing to always be on in order to avoid hazardous 
+  line splitting.   
 
 Bugs fixed:
 - null values were not correctly supported when using the
