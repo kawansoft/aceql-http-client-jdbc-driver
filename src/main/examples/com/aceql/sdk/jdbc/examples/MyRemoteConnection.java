@@ -60,7 +60,7 @@ public class MyRemoteConnection {
 	String url = "http://localhost:9090/aceql";
 
 	// The remote database to use:
-	String database = "kawansoft_example";
+	String database = "sampledb";
 
 	// (username, password) for authentication on server side.
 	// No authentication will be done for our Quick Start:

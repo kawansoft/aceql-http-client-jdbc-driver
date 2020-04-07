@@ -500,15 +500,6 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     }
 
     /**
-     * Says if JSON contents are to be pretty printed. Defaults to false.
-     *
-     * @param prettyPrinting if true, JSON contents are to be pretty printed
-     */
-    public void setPrettyPrinting(boolean prettyPrinting) {
-	aceQLHttpApi.setPrettyPrinting(prettyPrinting);
-    }
-
-    /**
      * Define if SQL result sets are returned compressed with the GZIP file format
      * before download. Defaults to true.
      *

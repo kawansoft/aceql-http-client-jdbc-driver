@@ -1,20 +1,20 @@
 /*
  * This file is part of AceQL Client SDK.
- * AceQL Client SDK: Remote JDBC access over HTTP with AceQL HTTP.                                 
+ * AceQL Client SDK: Remote JDBC access over HTTP with AceQL HTTP.
  * Copyright (C) 2020,  KawanSoft SAS
- * (http://www.kawansoft.com). All rights reserved.                                
- *                                                                               
+ * (http://www.kawansoft.com). All rights reserved.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  */
 package com.aceql.client.jdbc;
 
@@ -54,7 +54,7 @@ import com.aceql.client.jdbc.util.json.StreamResultAnalyzer;
 class AceQLPreparedStatement extends AbstractPreparedStatement implements PreparedStatement {
 
     private static boolean DEBUG = false;
-    
+
     private AceQLConnection aceQLConnection = null;
     private String sql = null;
 
@@ -73,7 +73,7 @@ class AceQLPreparedStatement extends AbstractPreparedStatement implements Prepar
 
     /**
      * Constructor
-     * 
+     *
      * @param aceQLConnection
      *            the Connection to the the remote database
      * @param sql
@@ -89,7 +89,7 @@ class AceQLPreparedStatement extends AbstractPreparedStatement implements Prepar
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.kawanfw.driver.jdbc.abstracts.AbstractPreparedStatement#setNull(int,
      * int)
      */
@@ -100,7 +100,7 @@ class AceQLPreparedStatement extends AbstractPreparedStatement implements Prepar
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.kawanfw.driver.jdbc.abstracts.AbstractPreparedStatement#setBoolean
      * (int, boolean)
      */
@@ -113,7 +113,7 @@ class AceQLPreparedStatement extends AbstractPreparedStatement implements Prepar
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.kawanfw.driver.jdbc.abstracts.AbstractPreparedStatement#setShort(int,
      * short)
@@ -127,7 +127,7 @@ class AceQLPreparedStatement extends AbstractPreparedStatement implements Prepar
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.kawanfw.driver.jdbc.abstracts.AbstractPreparedStatement#setInt(int,
      * int)
      */
@@ -140,7 +140,7 @@ class AceQLPreparedStatement extends AbstractPreparedStatement implements Prepar
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.kawanfw.driver.jdbc.abstracts.AbstractPreparedStatement#setLong(int,
      * long)
      */
@@ -153,7 +153,7 @@ class AceQLPreparedStatement extends AbstractPreparedStatement implements Prepar
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.kawanfw.driver.jdbc.abstracts.AbstractPreparedStatement#setFloat(int,
      * float)
@@ -167,7 +167,7 @@ class AceQLPreparedStatement extends AbstractPreparedStatement implements Prepar
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.kawanfw.driver.jdbc.abstracts.AbstractPreparedStatement#setDouble
      * (int, double)
      */
@@ -180,19 +180,26 @@ class AceQLPreparedStatement extends AbstractPreparedStatement implements Prepar
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.kawanfw.driver.jdbc.abstracts.AbstractPreparedStatement#setBigDecimal
      * (int, java.math.BigDecimal)
      */
     @Override
     public void setBigDecimal(int parameterIndex, BigDecimal x) throws SQLException {
-	builder.setInParameter(parameterIndex, AceQLTypes.DOUBLE_PRECISION, x.toString());
+
+	String strValue = null;
+	if (x != null) {
+	    strValue = x.toString();
+	}
+
+	//builder.setInParameter(parameterIndex, AceQLTypes.DOUBLE_PRECISION, x.toString());
+	builder.setInParameter(parameterIndex, AceQLTypes.DOUBLE_PRECISION, strValue);
     }
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.kawanfw.driver.jdbc.abstracts.AbstractPreparedStatement#setString
      * (int, java.lang.String)
      */
@@ -203,46 +210,57 @@ class AceQLPreparedStatement extends AbstractPreparedStatement implements Prepar
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.kawanfw.driver.jdbc.abstracts.AbstractPreparedStatement#setDate(int,
      * java.sql.Date)
      */
     @Override
     public void setDate(int parameterIndex, Date x) throws SQLException {
-	// builder.setParameter(parameterIndex, AceQLTypes.DATE, new
-	// Long(x.getTime()).toString());
-	builder.setInParameter(parameterIndex, AceQLTypes.DATE, "" + x.getTime());
+
+	String strValue = null;
+	if (x != null) {
+	    strValue = "" + x.getTime();
+	}
+
+	//builder.setInParameter(parameterIndex, AceQLTypes.DATE, "" + x.getTime());
+	builder.setInParameter(parameterIndex, AceQLTypes.DATE, strValue);
     }
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.kawanfw.driver.jdbc.abstracts.AbstractPreparedStatement#setTime(int,
      * java.sql.Time)
      */
     @Override
     public void setTime(int parameterIndex, Time x) throws SQLException {
-	// builder.setParameter(parameterIndex, AceQLTypes.TIME, new
-	// Long(x.getTime()).toString());
-	builder.setInParameter(parameterIndex, AceQLTypes.TIME, "" + x.getTime());
+	String strValue = null;
+	if (x != null) {
+	    strValue = "" + x.getTime();
+	}
+	//builder.setInParameter(parameterIndex, AceQLTypes.TIME, "" + x.getTime());
+	builder.setInParameter(parameterIndex, AceQLTypes.TIME, strValue);
     }
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.kawanfw.driver.jdbc.abstracts.AbstractPreparedStatement#setTimestamp
      * (int, java.sql.Timestamp)
      */
     @Override
     public void setTimestamp(int parameterIndex, Timestamp x) throws SQLException {
-	// builder.setParameter(parameterIndex, AceQLTypes.TIMESTAMP, new
-	// Long(x.getTime()).toString());
-	builder.setInParameter(parameterIndex, AceQLTypes.TIMESTAMP, "" + x.getTime());
+	String strValue = null;
+	if (x != null) {
+	    strValue = "" + x.getTime();
+	}
+	//builder.setInParameter(parameterIndex, AceQLTypes.TIMESTAMP, "" + x.getTime());
+	builder.setInParameter(parameterIndex, AceQLTypes.TIMESTAMP, strValue);
     }
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.kawanfw.driver.jdbc.abstracts.AbstractPreparedStatement#setArray(int,
      * java.sql.Array)
@@ -256,18 +274,23 @@ class AceQLPreparedStatement extends AbstractPreparedStatement implements Prepar
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.kawanfw.driver.jdbc.abstracts.AbstractPreparedStatement#setURL(int,
      * java.net.URL)
      */
     @Override
     public void setURL(int parameterIndex, URL x) throws SQLException {
-	builder.setInParameter(parameterIndex, AceQLTypes.URL, x.toString());
+	String strValue = null;
+	if (x != null) {
+	    strValue = x.toString();
+	}
+	//builder.setInParameter(parameterIndex, AceQLTypes.URL, x.toString());
+	builder.setInParameter(parameterIndex, AceQLTypes.URL, strValue);
     }
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.kawanfw.driver.jdbc.abstracts.AbstractPreparedStatement#
      * setBinaryStream( int, java.io.InputStream, int)
      */
@@ -278,7 +301,7 @@ class AceQLPreparedStatement extends AbstractPreparedStatement implements Prepar
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.kawanfw.driver.jdbc.abstracts.AbstractPreparedStatement#
      * setBinaryStream( int, java.io.InputStream)
      */
@@ -289,7 +312,7 @@ class AceQLPreparedStatement extends AbstractPreparedStatement implements Prepar
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.kawanfw.driver.jdbc.abstracts.AbstractPreparedStatement#
      * setBinaryStream (int, java.io.InputStream, long)
      */
@@ -317,7 +340,7 @@ class AceQLPreparedStatement extends AbstractPreparedStatement implements Prepar
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.kawanfw.driver.jdbc.abstracts.AbstractPreparedStatement#executeUpdate ()
      */
@@ -347,7 +370,7 @@ class AceQLPreparedStatement extends AbstractPreparedStatement implements Prepar
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.kawanfw.driver.jdbc.abstracts.AbstractPreparedStatement#executeQuery
      * ()
      */
@@ -375,8 +398,8 @@ class AceQLPreparedStatement extends AbstractPreparedStatement implements Prepar
 		    InputStream inFinal = AceQLStatement.getFinalInputStream(in, aceQLHttpApi.isGzipResult());
 		    IOUtils.copy(inFinal, out);
 		}
-	    } 
-	    
+	    }
+
 	    int httpStatusCode = aceQLHttpApi.getHttpStatusCode();
 
 	    StreamResultAnalyzer streamResultAnalyzer = new StreamResultAnalyzer(file, httpStatusCode,
@@ -385,7 +408,7 @@ class AceQLPreparedStatement extends AbstractPreparedStatement implements Prepar
 		throw new AceQLException(streamResultAnalyzer.getErrorMessage(), streamResultAnalyzer.getErrorId(),
 			null, streamResultAnalyzer.getStackTrace(), httpStatusCode);
 	    }
-	   
+
 	    if (isStoredProcedure) {
 		Map<Integer, SqlParameter> callableOutParameters = builder.getCallableOutParameters();
 		debug("callableOutParameters: " + callableOutParameters);
@@ -398,7 +421,7 @@ class AceQLPreparedStatement extends AbstractPreparedStatement implements Prepar
 		debug(fileContent);
 	    }
 	    */
-	    
+
 	    int rowCount = streamResultAnalyzer.getRowCount();
 	    AceQLResultSet aceQLResultSet = new AceQLResultSet(file, this, rowCount);
 	    return aceQLResultSet;
@@ -422,7 +445,7 @@ class AceQLPreparedStatement extends AbstractPreparedStatement implements Prepar
 	Map<Integer, String> parametersOutPerIndexAfterExecute = streamResultAnalyzer.getParametersOutPerIndex();
 
 	debug("parametersOutPerIndexAfterExecute: " + parametersOutPerIndexAfterExecute);
-	
+
 	// Immediate return in case no parameters. This can not happen if
 	// callableOutParameters is not empty
 	if (parametersOutPerIndexAfterExecute == null || parametersOutPerIndexAfterExecute.isEmpty()) {
@@ -439,14 +462,14 @@ class AceQLPreparedStatement extends AbstractPreparedStatement implements Prepar
 		callableOutParameters.put(key, sqlParameterNew);
 	    }
 	}
-	
+
 	debug("callableOutParameters after execute: " + callableOutParameters);
 
     }
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#getConnection()
      */
     @Override
@@ -456,7 +479,7 @@ class AceQLPreparedStatement extends AbstractPreparedStatement implements Prepar
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#close()
      */
     @Override
@@ -471,5 +494,5 @@ class AceQLPreparedStatement extends AbstractPreparedStatement implements Prepar
 	    System.out.println(new java.util.Date() + " " + s);
 	}
     }
-    
+
 }

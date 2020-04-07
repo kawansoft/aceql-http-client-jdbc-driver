@@ -70,7 +70,7 @@ public class AceQLApiHttpExample {
 		String linuxUrl = "https://www.aceql.com:9443/aceql";
 
 		String serverUrl = localhostUrl;
-		String database = "kawansoft_example";
+		String database = "sampledb";
 		String username = "username";
 		String password = "password";
 

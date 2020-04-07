@@ -53,7 +53,7 @@ public class AceQLHttpConnectionTestColumnAsKeyName {
     final String serverUrl = "http://localhost:9090/aceql";
     final String username = "username";
     final String password = "password";
-    final String dbname = "kawansoft_example";
+    final String dbname = "sampledb";
 
     private AceQLConnection connection = null;
 

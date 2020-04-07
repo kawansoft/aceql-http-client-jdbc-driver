@@ -80,7 +80,7 @@ public class AceQLConnectionExample {
 	String serverUrlUnixNoSSL = "http://www.aceql.com:8081/aceql";
 
 	String serverUrl = serverUrlLocalhostEmbedded;
-	String database = "kawansoft_example";
+	String database = "sampledb";
 	String username = "username";
 	char[] password = { 'p', 'a', 's', 's', 'w', 'o', 'r', 'd' };
 
@@ -123,6 +123,8 @@ public class AceQLConnectionExample {
 	connection.setHoldability(ResultSet.HOLD_CURSORS_OVER_COMMIT);
 	connection.setHoldability(ResultSet.CLOSE_CURSORS_AT_COMMIT);
 
+	int records = 300;
+
 	if (doInsert) {
 
 	    connection.setAutoCommit(false);
@@ -131,7 +133,7 @@ public class AceQLConnectionExample {
 	    Statement statement = connection.createStatement();
 	    statement.executeUpdate(sql);
 
-	    for (int i = 1; i < 11; i++) {
+	    for (int i = 1; i < records; i++) {
 		int customerId = i;
 
 		sql = "insert into customer values (?, ?, ?, ?, ?, ?, ?, ?)";
@@ -151,7 +153,7 @@ public class AceQLConnectionExample {
 		preparedStatement.close();
 	    }
 
-	    sql = "insert into customer values (11, 'Sir', 'Doe', 'André', '1600 Pennsylvania Ave NW', 'Washington', 'DC 20500', NULL)";
+	    sql = "insert into customer values (" + records + ", 'Sir', 'Doe', 'André', '1600 Pennsylvania Ave NW', 'Washington', 'DC 20500', NULL)";
 	    statement = connection.createStatement();
 	    statement.executeUpdate(sql);
 
@@ -223,7 +225,7 @@ public class AceQLConnectionExample {
 	    File file = new File(IN_DIRECTORY + File.separator + "username_koala.jpg");
 
 	    int customerId = 1;
-	    int itemId = 11;
+	    int itemId = records;
 
 	    sql = "insert into orderlog values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	    PreparedStatement preparedStatement = connection.prepareStatement(sql);

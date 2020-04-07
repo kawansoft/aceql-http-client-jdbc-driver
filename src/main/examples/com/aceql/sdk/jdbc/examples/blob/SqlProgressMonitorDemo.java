@@ -195,7 +195,7 @@ PropertyChangeListener {
 
 	    // Port number is the port number used to start the Web Server:
 	    String url = "http://localhost:9090/aceql";
-	    String database = "kawansoft_example";
+	    String database = "sampledb";
 	    String username = "username";
 	    char [] password = { 'p', 'a', 's', 's', 'w', 'o', 'r', 'd'};
 	    File imageFile = 

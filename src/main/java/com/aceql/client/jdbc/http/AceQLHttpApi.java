@@ -82,7 +82,9 @@ public class AceQLHttpApi {
     private static int connectTimeout = 0;
     private static int readTimeout = 0;
 
-    private boolean prettyPrinting = false;
+    /** Always true and can not be changed */
+    private final boolean prettyPrinting = true;
+
     private boolean gzipResult = true;
 
     private String url = null;
@@ -505,8 +507,6 @@ public class AceQLHttpApi {
 	AceQLHttpApi aceQLHttpApi;
 	try {
 	    aceQLHttpApi = new AceQLHttpApi(serverUrl, database, username, password, proxy, passwordAuthentication);
-
-	    aceQLHttpApi.setPrettyPrinting(prettyPrinting);
 	    aceQLHttpApi.setGzipResult(gzipResult);
 	} catch (SQLException e) {
 	    throw new IllegalStateException(e);
@@ -579,28 +579,12 @@ public class AceQLHttpApi {
     }
 
     /**
-     * @return the prettyPrinting
-     */
-    public boolean isPrettyPrinting() {
-	return prettyPrinting;
-    }
-
-    /**
      * Says the query result is returned compressed with the GZIP file format.
      *
      * @return the gzipResult
      */
     public boolean isGzipResult() {
 	return gzipResult;
-    }
-
-    /**
-     * Says if JSON contents are to be pretty printed. Defaults to false.
-     *
-     * @param prettyPrinting if true, JSON contents are to be pretty printed
-     */
-    public void setPrettyPrinting(boolean prettyPrinting) {
-	this.prettyPrinting = prettyPrinting;
     }
 
     /**
