@@ -112,7 +112,6 @@ import com.aceql.client.metadata.RemoteDatabaseMetaData;
  * <ul>
  * <li>{@link #setCancelled(AtomicBoolean)}</li>
  * <li>{@link #setGzipResult(boolean)}</li>
- * <li>{@link #setPrettyPrinting(boolean)}</li>
  * <li>{@link #setProgress(AtomicInteger)}</li>
  * </ul>
  * <p>
@@ -157,7 +156,7 @@ import com.aceql.client.metadata.RemoteDatabaseMetaData;
  * </pre>
  *
  * </blockquote> See the source code of
- * <a href= "http://www.aceql.com/rest/soft/2.1/src/SqlProgressMonitorDemo.java"
+ * <a href= "http://www.aceql.com/rest/soft/5.0/src/SqlProgressMonitorDemo.java"
  * >SqlProgressMonitorDemo.java</a> that demonstrates the use of atomic
  * variables when inserting a Blob.
  *
