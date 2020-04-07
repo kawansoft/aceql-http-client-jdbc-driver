@@ -97,24 +97,23 @@ public class AceQLConnectionSchemaExample {
 
 	JdbcDatabaseMetaData jdbcDatabaseMetaData = remoteDatabaseMetaData.getJdbcDatabaseMetaData();
 	System.out.println(new Date() + " jdbcDatabaseMetaData: " + jdbcDatabaseMetaData);
-	System.out.println("Major Version: " + jdbcDatabaseMetaData.getDatabaseMajorVersion());
-	System.out.println("Minor Version: " + jdbcDatabaseMetaData.getDatabaseMinorVersion());
-	System.out.println("isReadOnly   : " + jdbcDatabaseMetaData.isReadOnly());
 
-	System.out.println("Get the table names:");
+	System.out.println();
 	List<String> tableNames = remoteDatabaseMetaData.getTableNames();
+	System.out.println(new Date() + " " + tableNames);
 
-	System.out.println("Print the details of each table:");
 	for (String tableName : tableNames) {
 	    System.out.println();
 	    Table table = remoteDatabaseMetaData.getTable(tableName);
+	    System.out.println(new Date() + " Table:" + table);
 
 	    System.out.println();
-	    System.out.println("Columns      : " + table.getColumns());
-	    System.out.println("Indexes      : " + table.getIndexes());
-	    System.out.println("Primary Keys : " + table.getPrimaryKeys());
-	    System.out.println("Exported Keys: " + table.getExportedforeignKeys());
-	    System.out.println("Imported Keys: " + table.getImportedforeignKeys());
+	    System.out.println(new Date() + " Ctl & Schema : " + table.getCatalog() + " " + table.getSchema());
+	    System.out.println(new Date() + " Columns      : " + table.getColumns());
+	    System.out.println(new Date() + " Indexes      : " + table.getIndexes());
+	    System.out.println(new Date() + " Primary Keys : " + table.getPrimaryKeys());
+	    System.out.println(new Date() + " Exported Keys: " + table.getExportedforeignKeys());
+	    System.out.println(new Date() + " Imported Keys: " + table.getImportedforeignKeys());
 	}
 
 	connection.close();
