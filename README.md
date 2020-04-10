@@ -42,11 +42,11 @@
 
 This document describes how to use the AceQL Java Client SDK and gives some details about how it operates with the server side.
 
-The AceQL Java Client SDK allows users to wrap the [AceQL HTTP APIs](https://github.com/kawansoft/aceql-http/blob/master/aceql-http-4.0-user-guide-api.md) and eliminate the tedious work of handling communication errors and parsing JSON results.
+The AceQL Java Client SDK allows users to wrap the [AceQL HTTP APIs](https://github.com/kawansoft/aceql-http/blob/master/aceql-http-5.0.1-user-guide-api.md) and eliminate the tedious work of handling communication errors and parsing JSON results.
 
 Android and Java Desktop application developers can access remote SQL databases and/or SQL databases in the cloud, simply by including standard JDBC calls in their code, just like they would for a local database.
 
-The AceQL Server operation is described in [AceQL HTTP Server Installation and Configuration Guide](https://github.com/kawansoft/aceql-http/blob/master/aceql-http-4.0-user-guide-server.md), whose content is sometimes referred in this User Guide. 
+The AceQL Server operation is described in [AceQL HTTP Server Installation and Configuration Guide](https://github.com/kawansoft/aceql-http/blob/master/README.md), whose content is sometimes referred in this User Guide. 
 
 ## Technical operating environment 
 
@@ -147,9 +147,9 @@ Note that AceQL is optimized as much as possible:
 
 # Using the AceQL Java Client SDK
 
-We will use the same `kawansoft_example` database for all our code samples. 
+We will use the same `sampledb` database for all our code samples. 
 
-The schema is available here: [kawansoft_example.txt](http://www.aceql.com/rest/soft/4.0/src/kawansoft_example.txt). 
+The schema is available here: [sampledb.txt](http://www.aceql.com/rest/soft/5.0.1/src/sampledb.txt). 
 
 ## Connection creation
 
@@ -161,7 +161,7 @@ The  `Connection` to the remote database is created using AceQL’s [AceQLConnec
   String url = "https://www.acme.com:9443/aceql";
 
   // The remote database to use:
-  String database = "kawansoft_example";
+  String database = "sampledb";
 
   // (username, password) for authentication on server side.
   // No authentication will be done for our Quick Start:
@@ -201,7 +201,7 @@ If proxy requires authentication, pass the credentials using  a `java.net.Passwo
 
 ## Handling Exceptions
 
-Except for `NullPointerException`, exceptions thrown are always an instance of [AceQLException](https://www.aceql.com/rest/soft/4.0/javadoc_sdk/com/aceql/client/jdbc/AceQLException.html).
+Except for `NullPointerException`, exceptions thrown are always an instance of [AceQLException](https://www.aceql.com/rest/soft/5.0.1/javadoc_sdk/com/aceql/client/jdbc/AceQLException.html).
 
 The `AceQLException` contains 5 pieces of information :
 

@@ -30,7 +30,7 @@ import java.sql.Types;
  *
  */
 public class MySqlStoredProcedureTest {
-
+ 
     /**
      * @param args
      */
