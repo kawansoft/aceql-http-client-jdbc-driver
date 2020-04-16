@@ -73,8 +73,10 @@ public class FieldsDumper {
 	    }
 
 	    String  type = field.getGenericType().getTypeName();
-	    if (type.endsWith("String")) type = "str";
-	    if (type.equals("boolean")) type = "bool";
+	    if (type.endsWith("String")) type = "Optional[str]";
+	    if (type.equals("boolean")) type = "Optional[bool]";
+	    if (type.equals("int")) type = "Optional[int]";
+	    if (type.equals("short")) type = "Optional[int]";
 
 	    System.out.println(FOUR_BLANKS + field.getName() + ": " + type);
 	    names.add(field.getName());
@@ -86,7 +88,6 @@ public class FieldsDumper {
 	System.out.println(FOUR_BLANKS + "class Meta:");
 	System.out.println(FOUR_BLANKS + FOUR_BLANKS + "ordered = True");
 
-	System.out.println();
 	System.out.println();
 
 	/**
