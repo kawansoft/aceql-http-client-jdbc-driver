@@ -172,7 +172,7 @@ public class RemoteDatabaseMetaData {
      */
     public Table getTable(String name) throws AceQLException {
 	if (name == null) {
-	    throw new NullPointerException("tableName is null!");
+	    throw new NullPointerException("table name is null!");
 	}
 	TableDto tableDto = aceQLHttpApi.getTable(name);
 	Table table = tableDto.getTable();
