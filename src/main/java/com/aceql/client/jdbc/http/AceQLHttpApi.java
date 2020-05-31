@@ -72,6 +72,7 @@ public class AceQLHttpApi {
     private String serverUrl;
     private String username;
     private char[] password;
+    private String sessionId;
     private String database;
 
     /** Proxy to use with HttpUrlConnection */
@@ -93,6 +94,7 @@ public class AceQLHttpApi {
 
     private AtomicBoolean cancelled;
     private AtomicInteger progress;
+
 
     /**
      * Sets the read timeout.
@@ -134,28 +136,53 @@ public class AceQLHttpApi {
      *                               authenticated proxy. Null if no proxy or if
      *                               proxy
      * @throws AceQLException if any Exception occurs
+     * @deprecated Use {@link #AceQLHttpApi(String,String,String,char[],String,Proxy,PasswordAuthentication)} instead
      */
+    @Deprecated
     public AceQLHttpApi(String serverUrl, String database, String username, char[] password, Proxy proxy,
-	    PasswordAuthentication passwordAuthentication) throws AceQLException {
+            PasswordAuthentication passwordAuthentication) throws AceQLException {
+        	this(serverUrl, database, username, password, null, proxy, passwordAuthentication);
+            }
+
+    /**
+     * Login on the AceQL server and connect to a database
+     *
+     * @param serverUrl              the url of the AceQL server. Example:
+     *                               http://localhost:9090/aceql
+     * @param database               the server database to connect to.
+     * @param username               the login
+     * @param password               the password
+     * @param sessionId		     the session ID, if no password authentication
+     * @param proxy                  the proxy to use. null if none.
+     * @param passwordAuthentication the username and password holder to use for
+     *                               authenticated proxy. Null if no proxy or if
+     *                               proxy
+     * @throws AceQLException if any Exception occurs
+     */
+    public AceQLHttpApi(String serverUrl, String database, String username, char[] password, String sessionId,
+	    Proxy proxy, PasswordAuthentication passwordAuthentication) throws AceQLException {
 
 	try {
-	    if (database == null) {
-		throw new NullPointerException("database is null!");
-	    }
 	    if (serverUrl == null) {
 		throw new NullPointerException("serverUrl is null!");
+	    }
+	    if (database == null) {
+		throw new NullPointerException("database is null!");
 	    }
 	    if (username == null) {
 		throw new NullPointerException("username is null!");
 	    }
-	    if (password == null) {
-		throw new NullPointerException("password is null!");
+
+	    if (password == null && sessionId == null) {
+		throw new NullPointerException("password and sessionId are both null!");
 	    }
 
 	    this.serverUrl = serverUrl;
 	    this.username = username;
-	    this.password = password;
 	    this.database = database;
+	    this.password = password;
+	    this.sessionId = sessionId;
+
 	    this.proxy = proxy;
 	    this.passwordAuthentication = passwordAuthentication;
 
@@ -171,11 +198,17 @@ public class AceQLHttpApi {
 	     * trace("result: " + result); END OLD implementation with GET
 	     */
 
+
 	    UserLoginStore userLoginStore = new UserLoginStore(serverUrl, username, database);
+
+            if (sessionId != null)
+            {
+                userLoginStore.setSessionId(sessionId);
+            }
 
 	    if (userLoginStore.isAlreadyLogged()) {
 		trace("Get a new connection with get_connection");
-		String sessionId = userLoginStore.getSessionId();
+		sessionId = userLoginStore.getSessionId();
 
 		String theUrl = serverUrl + "/session/" + sessionId + "/get_connection";
 		String result = callWithGet(theUrl);
@@ -213,7 +246,7 @@ public class AceQLHttpApi {
 		}
 
 		trace("Ok. Connected! ");
-		String sessionId = resultAnalyzer.getValue("session_id");
+		sessionId = resultAnalyzer.getValue("session_id");
 		String connectionId = resultAnalyzer.getValue("connection_id");
 		trace("sessionId   : " + sessionId);
 		trace("connectionId: " + connectionId);
@@ -231,20 +264,6 @@ public class AceQLHttpApi {
 	    }
 	}
 
-    }
-
-    /**
-     * Login on the AceQL server and connect to a database
-     *
-     * @param serverUrl the url of the AceQL server. Example:
-     *                  http://localhost:9090/aceql
-     * @param username  the login
-     * @param password  the password
-     * @param database  the server database to connect to.
-     * @throws AceQLException if any Exception occurs
-     */
-    public AceQLHttpApi(String serverUrl, String database, String username, char[] password) throws AceQLException {
-	this(serverUrl, database, username, password, null, null);
     }
 
     public void trace() {
@@ -506,7 +525,7 @@ public class AceQLHttpApi {
     public AceQLHttpApi clone() {
 	AceQLHttpApi aceQLHttpApi;
 	try {
-	    aceQLHttpApi = new AceQLHttpApi(serverUrl, database, username, password, proxy, passwordAuthentication);
+	    aceQLHttpApi = new AceQLHttpApi(serverUrl, database, username, password, sessionId, proxy, passwordAuthentication);
 	    aceQLHttpApi.setGzipResult(gzipResult);
 	} catch (SQLException e) {
 	    throw new IllegalStateException(e);

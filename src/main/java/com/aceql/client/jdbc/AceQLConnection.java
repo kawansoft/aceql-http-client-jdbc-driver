@@ -199,7 +199,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     }
 
     /**
-     * Login on the AceQL server and connect to a database
+     * Login on the AceQL server and connect to a database.
      *
      * @param serverUrl the URL of the AceQL server. Example:
      *                  http://localhost:9090/aceql
@@ -213,7 +213,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     }
 
     /**
-     * Login on the AceQL server and connect to a database
+     * Login on the AceQL server and connect to a database.
      *
      * @param serverUrl              the URL of the AceQL server. Example:
      *                               http://localhost:9090/aceql
@@ -243,7 +243,66 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 		throw new NullPointerException("password is null!");
 	    }
 
-	    aceQLHttpApi = new AceQLHttpApi(serverUrl, database, username, password, proxy, passwordAuthentication);
+	    aceQLHttpApi = new AceQLHttpApi(serverUrl, database, username, password, null, proxy, passwordAuthentication);
+
+	} catch (Exception e) {
+	    if (e instanceof AceQLException) {
+		throw (AceQLException) e;
+	    } else {
+		throw new AceQLException(e.getMessage(), 0, e, null, HttpURLConnection.HTTP_OK);
+	    }
+	}
+
+    }
+
+    /**
+     * Connect to a database using an AceQL existing session ID instead of a
+     * password.
+     *
+     * @param serverUrl the URL of the AceQL server. Example:
+     *                  http://localhost:9090/aceql
+     * @param database  the server database to connect to
+     * @param username  the login
+     * @param sessionId the existing AceQL session ID
+     * @throws SQLException if any I/O error occurs
+     */
+    public AceQLConnection(String serverUrl, String database, String username, String sessionId) throws SQLException {
+	this(serverUrl, database, username, sessionId, null, null);
+    }
+
+    /**
+     * Connect to a database using an AceQL existing session ID instead of a
+     * password.
+     *
+     * @param serverUrl              the URL of the AceQL server. Example:
+     *                               http://localhost:9090/aceql
+     * @param database               the server database to connect to
+     * @param username               the login
+     * @param sessionId              the existing AceQL session ID
+     * @param proxy                  the proxy to use. null if none.
+     * @param passwordAuthentication the username and password holder to use for
+     *                               authenticated proxy. Null if no proxy or if
+     *                               proxy does not require authentication.
+     * @throws SQLException if any I/O error occurs
+     */
+    public AceQLConnection(String serverUrl, String database, String username, String sessionId, Proxy proxy,
+	    PasswordAuthentication passwordAuthentication) throws SQLException {
+
+	try {
+	    if (serverUrl == null) {
+		throw new NullPointerException("serverUrl is null!");
+	    }
+	    if (database == null) {
+		throw new NullPointerException("database is null!");
+	    }
+	    if (username == null) {
+		throw new NullPointerException("username is null!");
+	    }
+	    if (sessionId == null) {
+		throw new NullPointerException("sessionId is null!");
+	    }
+
+	    aceQLHttpApi = new AceQLHttpApi(serverUrl, database, username, null, sessionId, proxy, passwordAuthentication);
 
 	} catch (Exception e) {
 	    if (e instanceof AceQLException) {
