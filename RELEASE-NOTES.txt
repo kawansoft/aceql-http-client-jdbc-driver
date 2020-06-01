@@ -1,6 +1,6 @@
 
                  AceQL Java Client SDK
-                      Version 4.0.2
+                      Version 4.1
                      Release Notes
 
 
@@ -20,7 +20,7 @@ The AceQL Java Client SDK is licensed under the Apache 2.0
 License.
 
 
-AceQL Java Client SDK - Version 4.1 - 31-May-2020
+AceQL Java Client SDK - Version 4.1 - 01-Jun-2020
 -------------------------------------------------
  
 What's New:
