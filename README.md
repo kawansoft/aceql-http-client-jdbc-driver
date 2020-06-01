@@ -1,10 +1,10 @@
 # AceQL HTTP 
 
-## Java Client SDK v4.0.2 - April 2020, 7
+## Java Client SDK v4.1 - June 2020, 7
 
 <img src="https://www.aceql.com/favicon.png" alt="AceQ HTTP Icon"/>
 
-  * [Fundamentals](#fundamentals)
+   * [Fundamentals](#fundamentals)
       * [Technical operating environment](#technical-operating-environment)
       * [License](#license)
       * [AceQL Server side compatibility](#aceql-server-side-compatibility)
@@ -31,6 +31,7 @@
          * [BLOB reading](#blob-reading)
          * [Using Progress Bars with Blobs](#using-progress-bars-with-blobs)
       * [HTTP session options](#http-session-options)
+      * [Using outer Authentication without a password  and with an AceQL Session ID](#using-outer-authentication-without-a-password--and-with-an-aceql-session-id)
    * [Using the Metadata Query API](#using-the-metadata-query-api)
       * [Downloading database schema into a file](#downloading-database-schema-into-a-file)
       * [Accessing remote database main properties](#accessing-remote-database-main-properties)
@@ -50,14 +51,14 @@ The AceQL Server operation is described in [AceQL HTTP Server Installation and C
 
 ## Technical operating environment 
 
-The AceQL Java Client SDK is entirely written in Java, and functions identically with Microsoft Windows, Linux, and all versions of UNIX supporting Java 7+.
+The AceQL Java Client SDK is entirely written in Java, and functions identically with Microsoft Windows, Linux, and all versions of UNIX supporting Java 8+.
 
 The only required third party installation is a recent JVM:
 
 | OS                                       | **JVM (Java Virtual Machine)** |
 | ---------------------------------------- | ------------------------------ |
 | Android                                  | Android 4.1+                   |
-| Windows <br>UNIX/Linux<br>OS X  / mac OS | Java 7+                        |
+| Windows <br>UNIX/Linux<br>OS X  / mac OS | Java 8+                        |
 
 ## License
 
@@ -65,9 +66,7 @@ The SDK is licensed with the liberal [Apache 2.0](https://www.apache.org/license
 
 ## AceQL Server side compatibility
 
-This 4.0.x SDK version is compatible with AceQL HTTP server side v2.1, v3.0, v3.1 and v4.0. 
-
-AceQL HTTP v4.0+ is required for metadata calls.
+This 4.0.x SDK version is compatible with AceQL HTTP server side v5.0.2+.
 
 ## SDK instead of JDBC Driver
 
@@ -542,6 +541,33 @@ You can set the http timeout values with the static setters to be called before 
 
 - [AceQLConnection.setConnectTimeout(int connectTimeout)](https://www.aceql.com/rest/soft/5.0.1/javadoc_sdk/com/aceql/client/jdbc/AceQLConnection.html#setConnectTimeout(int))
 - [AceQLConnection.setReadTimeout(int readTimeout)](https://www.aceql.com/rest/soft/5.0.1/javadoc_sdk/com/aceql/client/jdbc/AceQLConnection.html#setReadTimeout(int))
+
+## Using outer Authentication without a password  and with an AceQL Session ID
+
+Some working environments (Intranet, etc.) require that the client user authenticates himself without a password. Thus, it is not possible for this users to authenticate though the AceQL client SDK.
+
+In this case, you may use directly the native HTTP [login](https://github.com/kawansoft/aceql-http/blob/master/aceql-http-5.0.2-user-guide-api.md#login) API to authenticate the users and retrieve the `session_id` returned by the API.
+
+The `session_id` value will be passed to the dedicated `AceQLConnection` constructor:
+
+```java
+  // The URL of the AceQL Server servlet
+  // Port number is the port number used to start the Web Server:
+  String url = "https://www.acme.com:9443/aceql";
+
+  // The remote database to use:
+  String database = "sampledb";
+
+  // (username, sessIonId) for authentication on server side.
+  String username = "MyUsername";
+  String sessionId = getMySessionIdFromApiLogin();
+
+  // Attempt to establish a connection to the remote database:
+  Connection connection = new AceQLConnection(url, database, username,
+      sessionId);
+```
+
+
 
 # Using the Metadata Query API 
 

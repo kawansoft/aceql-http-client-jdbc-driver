@@ -256,14 +256,14 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     }
 
     /**
-     * Connect to a database using an AceQL existing session ID instead of a
+     * Connect to a database using an AceQL existing Session ID instead of a
      * password.
      *
      * @param serverUrl the URL of the AceQL server. Example:
      *                  http://localhost:9090/aceql
      * @param database  the server database to connect to
      * @param username  the login
-     * @param sessionId the existing AceQL session ID
+     * @param sessionId the existing AceQL Session ID
      * @throws SQLException if any I/O error occurs
      */
     public AceQLConnection(String serverUrl, String database, String username, String sessionId) throws SQLException {
@@ -271,14 +271,14 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     }
 
     /**
-     * Connect to a database using an AceQL existing session ID instead of a
+     * Connect to a database using an AceQL existing Session ID instead of a
      * password.
      *
      * @param serverUrl              the URL of the AceQL server. Example:
      *                               http://localhost:9090/aceql
      * @param database               the server database to connect to
      * @param username               the login
-     * @param sessionId              the existing AceQL session ID
+     * @param sessionId              the existing AceQL Session ID
      * @param proxy                  the proxy to use. null if none.
      * @param passwordAuthentication the username and password holder to use for
      *                               authenticated proxy. Null if no proxy or if

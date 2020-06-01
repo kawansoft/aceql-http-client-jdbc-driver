@@ -53,7 +53,7 @@ public class AceQLConnectionSessionIdExample {
 	String serverUrl = serverUrlLocalhostEmbedded;
 	String database = "sampledb";
 	String username = "username";
-	String sessionId = "sm9zynsnyqv87fv28shyz8vkr3";
+	String sessionId = getSessionIdFromApiLogin();
 
 	// Get a real Connection instance that points to remote AceQL server
 	Connection connection = new AceQLConnection(serverUrl, database, username, sessionId);
@@ -93,6 +93,13 @@ public class AceQLConnectionSessionIdExample {
 	connection.close();
 
 	((AceQLConnection) connection).logout();
+    }
+
+    /**
+     * @return
+     */
+    private static String getSessionIdFromApiLogin() {
+	return "iolluz22yk0iflzrwu2kp7i0g6";
     }
 
     /**

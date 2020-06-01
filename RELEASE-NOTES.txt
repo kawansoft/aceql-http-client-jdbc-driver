@@ -24,11 +24,12 @@ AceQL Java Client SDK - Version 4.1 - 31-May-2020
 -------------------------------------------------
  
 What's New:
-    AceQL allows now client authentication without a password using directly 
-    an existing AceQL Session ID.
+  - AceQL allows now client supplementary authentication without a password
+    using directly an existing AceQL Session ID.
     This has been asked by our users, because some working environments
-    (Intranet, etc.) require that the client user authenticates himself without 
-    a password. 
+    (Intranet, etc.) may require that the client user authenticates himself 
+    without a password. 
+  - This version requires Java 8+.
     
 
 AceQL Java Client SDK - Version 4.0.2 - 07-Apr-2020
