@@ -84,6 +84,14 @@ public class AceQLConnectionExample {
 	String username = "username";
 	char[] password = { 'p', 'a', 's', 's', 'w', 'o', 'r', 'd' };
 
+        boolean useLdapAuth = true;
+        //LDAP Tests
+        if (useLdapAuth)
+        {
+            username = "cn=read-only-admin,dc=example,dc=com";
+            //username = "CN=L. Eagle,O=Sue\\2C Grabbit and Runn,C=GB";
+        }
+
 	// Get a real Connection instance that points to remote AceQL server
 	Connection connection = new AceQLConnection(serverUrl, database, username, password);
 
