@@ -3,7 +3,6 @@
                       Version 4.1
                      Release Notes
 
-
 Introduction
 ------------
 
