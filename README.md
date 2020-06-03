@@ -31,7 +31,7 @@
          * [BLOB reading](#blob-reading)
          * [Using Progress Bars with Blobs](#using-progress-bars-with-blobs)
       * [HTTP session options](#http-session-options)
-      * [Using outer Authentication without a password  and with an AceQL Session ID](#using-outer-authentication-without-a-password--and-with-an-aceql-session-id)
+      * [Using outer authentication without a password  and with an AceQL Session ID](#using-outer-authentication-without-a-password--and-with-an-aceql-session-id)
    * [Using the Metadata Query API](#using-the-metadata-query-api)
       * [Downloading database schema into a file](#downloading-database-schema-into-a-file)
       * [Accessing remote database main properties](#accessing-remote-database-main-properties)
@@ -87,7 +87,7 @@ Note that we will soon release a real JDBC Driver. Please contact us at [contact
 <dependency>
     <groupId>com.aceql</groupId>
     <artifactId>aceql-http-client-sdk</artifactId>
-    <version>4.0.2</version>
+    <version>4.1</version>
 </dependency>
 ```
 ### Single Jar 
@@ -542,7 +542,7 @@ You can set the http timeout values with the static setters to be called before 
 - [AceQLConnection.setConnectTimeout(int connectTimeout)](https://www.aceql.com/rest/soft/5.0.1/javadoc_sdk/com/aceql/client/jdbc/AceQLConnection.html#setConnectTimeout(int))
 - [AceQLConnection.setReadTimeout(int readTimeout)](https://www.aceql.com/rest/soft/5.0.1/javadoc_sdk/com/aceql/client/jdbc/AceQLConnection.html#setReadTimeout(int))
 
-## Using outer Authentication without a password  and with an AceQL Session ID
+## Using outer authentication without a password  and with an AceQL Session ID
 
 Some working environments (Intranet, etc.) require that the client user authenticates himself without a password. Thus, it is not possible for this users to authenticate though the AceQL client SDK.
 
