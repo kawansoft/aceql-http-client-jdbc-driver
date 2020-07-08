@@ -1,3 +1,8 @@
+![GitHub top language](https://img.shields.io/github/languages/top/kawansoft/aceql-http-client-sdk) ![GitHub issues](https://img.shields.io/github/issues/kawansoft/aceql-http-client-sdk) 
+![GitHub](https://img.shields.io/github/license/kawansoft/aceql-http-client-sdk) ![Maven Central](https://img.shields.io/maven-central/v/com.aceql/aceql-http-client-sdk)
+![GitHub last commit (branch)](https://img.shields.io/github/last-commit/kawansoft/aceql-http-client-sdk/master) ![GitHub contributors](https://img.shields.io/github/contributors/kawansoft/aceql-http-client-sdk)
+
+
 # AceQL HTTP 
 
 ## Java Client SDK v4.1 - June 2020, 1
