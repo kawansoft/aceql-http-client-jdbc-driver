@@ -1,20 +1,20 @@
 /*
  * This file is part of AceQL Client SDK.
- * AceQL Client SDK: Remote JDBC access over HTTP with AceQL HTTP.                                 
+ * AceQL Client SDK: Remote JDBC access over HTTP with AceQL HTTP.
  * Copyright (C) 2020,  KawanSoft SAS
- * (http://www.kawansoft.com). All rights reserved.                                
- *                                                                               
+ * (http://www.kawansoft.com). All rights reserved.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  */
 package org.kawanfw.driver.jdbc.abstracts;
 
@@ -47,393 +47,6 @@ import java.util.concurrent.Executor;
 public class AbstractConnection implements Connection {
 
     static final String FEATURE_NOT_SUPPORTED_IN_THIS_VERSION = "Method is not yet implemented: ";
-
-    /** SQL JDBC connection */
-    private Connection connection;
-
-    /** Flag that says the caller is ConnectionHttp */
-    private boolean isConnectionHttp = false;
-
-    /**
-     * Void Constructor Needed for HTTP usage because there is no Connection
-     */
-    public AbstractConnection() {
-	isConnectionHttp = true;
-    }
-
-    /**
-     * Constructor
-     * 
-     * @param connection
-     *            actual SQL/JDBC Connection in use to wrap
-     */
-    public AbstractConnection(Connection connection) {
-	this.connection = connection;
-    }
-
-    /**
-     * Will throw a SQL Exception if calling method is not authorized
-     **/
-    private void verifyCallAuthorization(String methodName)
-	    throws SQLException {
-	if (isConnectionHttp) {
-	    throw new SQLException(
-		    AbstractConnection.FEATURE_NOT_SUPPORTED_IN_THIS_VERSION
-			    + methodName);
-	}
-    }
-
-    /**
-     * Creates a <code>Statement</code> object for sending SQL statements to the
-     * database. SQL statements without parameters are normally executed using
-     * <code>Statement</code> objects. If the same SQL statement is executed
-     * many times, it may be more efficient to use a
-     * <code>PreparedStatement</code> object.
-     * <P>
-     * Result sets created using the returned <code>Statement</code> object will
-     * by default be type <code>TYPE_FORWARD_ONLY</code> and have a concurrency
-     * level of <code>CONCUR_READ_ONLY</code>.
-     * 
-     * @return a new default <code>Statement</code> object
-     * @exception SQLException
-     *                if a database access error occurs
-     */
-    @Override
-    public Statement createStatement() throws SQLException {
-	String methodName = new Object() {
-	}.getClass().getEnclosingMethod().getName();
-	verifyCallAuthorization(methodName);
-	return this.connection.createStatement();
-    }
-
-    /**
-     * Creates a <code>PreparedStatement</code> object for sending parameterized
-     * SQL statements to the database.
-     * <P>
-     * A SQL statement with or without IN parameters can be pre-compiled and
-     * stored in a <code>PreparedStatement</code> object. This object can then
-     * be used to efficiently execute this statement multiple times.
-     * 
-     * <P>
-     * <B>Note:</B> This method is optimized for handling parametric SQL
-     * statements that benefit from precompilation. If the driver supports
-     * precompilation, the method <code>prepareStatement</code> will send the
-     * statement to the database for precompilation. Some drivers may not
-     * support precompilation. In this case, the statement may not be sent to
-     * the database until the <code>PreparedStatement</code> object is executed.
-     * This has no direct effect on users; however, it does affect which methods
-     * throw certain <code>SQLException</code> objects.
-     * <P>
-     * Result sets created using the returned <code>PreparedStatement</code>
-     * object will by default be type <code>TYPE_FORWARD_ONLY</code> and have a
-     * concurrency level of <code>CONCUR_READ_ONLY</code>.
-     * 
-     * @param sql
-     *            an SQL statement that may contain one or more '?' IN parameter
-     *            placeholders
-     * @return a new default <code>PreparedStatement</code> object containing
-     *         the pre-compiled SQL statement
-     * @exception SQLException
-     *                if a database access error occurs
-     */
-    @Override
-    public PreparedStatement prepareStatement(String sql) throws SQLException {
-	String methodName = new Object() {
-	}.getClass().getEnclosingMethod().getName();
-	verifyCallAuthorization(methodName);
-	return this.connection.prepareStatement(sql);
-    }
-
-    /**
-     * Creates a <code>CallableStatement</code> object for calling database
-     * stored procedures. The <code>CallableStatement</code> object provides
-     * methods for setting up its IN and OUT parameters, and methods for
-     * executing the call to a stored procedure.
-     * 
-     * <P>
-     * <B>Note:</B> This method is optimized for handling stored procedure call
-     * statements. Some drivers may send the call statement to the database when
-     * the method <code>prepareCall</code> is done; others may wait until the
-     * <code>CallableStatement</code> object is executed. This has no direct
-     * effect on users; however, it does affect which method throws certain
-     * SQLExceptions.
-     * <P>
-     * Result sets created using the returned <code>CallableStatement</code>
-     * object will by default be type <code>TYPE_FORWARD_ONLY</code> and have a
-     * concurrency level of <code>CONCUR_READ_ONLY</code>.
-     * 
-     * @param sql
-     *            an SQL statement that may contain one or more '?' parameter
-     *            placeholders. Typically this statement is a JDBC function call
-     *            escape string.
-     * @return a new default <code>CallableStatement</code> object containing
-     *         the pre-compiled SQL statement
-     * @exception SQLException
-     *                if a database access error occurs
-     */
-    @Override
-    public CallableStatement prepareCall(String sql) throws SQLException {
-	String methodName = new Object() {
-	}.getClass().getEnclosingMethod().getName();
-	verifyCallAuthorization(methodName);
-
-	return this.connection.prepareCall(sql);
-    }
-
-    /**
-     * Converts the given SQL statement into the system's native SQL grammar. A
-     * driver may convert the JDBC SQL grammar into its system's native SQL
-     * grammar prior to sending it. This method returns the native form of the
-     * statement that the driver would have sent.
-     * 
-     * @param sql
-     *            an SQL statement that may contain one or more '?' parameter
-     *            placeholders
-     * @return the native form of this statement
-     * @exception SQLException
-     *                if a database access error occurs
-     */
-    @Override
-    public String nativeSQL(String sql) throws SQLException {
-	String methodName = new Object() {
-	}.getClass().getEnclosingMethod().getName();
-	verifyCallAuthorization(methodName);
-	return this.connection.nativeSQL(sql);
-    }
-
-    /**
-     * Sets this connection's auto-commit mode to the given state. If a
-     * connection is in auto-commit mode, then all its SQL statements will be
-     * executed and committed as individual transactions. Otherwise, its SQL
-     * statements are grouped into transactions that are terminated by a call to
-     * either the method <code>commit</code> or the method <code>rollback</code>
-     * . By default, new connections are in auto-commit mode.
-     * <P>
-     * The commit occurs when the statement completes or the next execute
-     * occurs, whichever comes first. In the case of statements returning a
-     * <code>ResultSet</code> object, the statement completes when the last row
-     * of the <code>ResultSet</code> object has been retrieved or the
-     * <code>ResultSet</code> object has been closed. In advanced cases, a
-     * single statement may return multiple results as well as output parameter
-     * values. In these cases, the commit occurs when all results and output
-     * parameter values have been retrieved.
-     * <P>
-     * <B>NOTE:</B> If this method is called during a transaction, the
-     * transaction is committed.
-     * 
-     * @param autoCommit
-     *            <code>true</code> to enable auto-commit mode;
-     *            <code>false</code> to disable it
-     * @exception SQLException
-     *                if a database access error occurs
-     * @see #getAutoCommit
-     */
-    @Override
-    public void setAutoCommit(boolean autoCommit) throws SQLException {
-	String methodName = new Object() {
-	}.getClass().getEnclosingMethod().getName();
-	verifyCallAuthorization(methodName);
-	this.connection.setAutoCommit(autoCommit);
-    }
-
-    /**
-     * Retrieves the current auto-commit mode for this <code>Connection</code>
-     * object.
-     * 
-     * @return the current state of this <code>Connection</code> object's
-     *         auto-commit mode
-     * @exception SQLException
-     *                if a database access error occurs
-     * @see #setAutoCommit
-     */
-    @Override
-    public boolean getAutoCommit() throws SQLException {
-	String methodName = new Object() {
-	}.getClass().getEnclosingMethod().getName();
-	verifyCallAuthorization(methodName);
-	return this.connection.getAutoCommit();
-    }
-
-    /**
-     * Makes all changes made since the previous commit/rollback permanent and
-     * releases any database locks currently held by this
-     * <code>Connection</code> object. This method should be used only when
-     * auto-commit mode has been disabled.
-     * 
-     * @exception SQLException
-     *                if a database access error occurs or this
-     *                <code>Connection</code> object is in auto-commit mode
-     * @see #setAutoCommit
-     */
-    @Override
-    public void commit() throws SQLException {
-	String methodName = new Object() {
-	}.getClass().getEnclosingMethod().getName();
-	verifyCallAuthorization(methodName);
-	this.connection.commit();
-    }
-
-    /**
-     * Undoes all changes made in the current transaction and releases any
-     * database locks currently held by this <code>Connection</code> object.
-     * This method should be used only when auto-commit mode has been disabled.
-     * 
-     * @exception SQLException
-     *                if a database access error occurs or this
-     *                <code>Connection</code> object is in auto-commit mode
-     * @see #setAutoCommit
-     */
-    @Override
-    public void rollback() throws SQLException {
-	String methodName = new Object() {
-	}.getClass().getEnclosingMethod().getName();
-	verifyCallAuthorization(methodName);
-	this.connection.rollback();
-    }
-
-    /**
-     * Releases this <code>Connection</code> object's database and JDBC
-     * resources immediately instead of waiting for them to be automatically
-     * released.
-     * <P>
-     * Calling the method <code>close</code> on a <code>Connection</code> object
-     * that is already closed is a no-op.
-     * <P>
-     * <B>Note:</B> A <code>Connection</code> object is automatically closed
-     * when it is garbage collected. Certain fatal errors also close a
-     * <code>Connection</code> object.
-     * 
-     * @exception SQLException
-     *                if a database access error occurs
-     */
-    @Override
-    public void close() throws SQLException {
-	this.connection.close();
-    }
-
-    /**
-     * Retrieves whether this <code>Connection</code> object has been closed. A
-     * connection is closed if the method <code>close</code> has been called on
-     * it or if certain fatal errors have occurred. This method is guaranteed to
-     * return <code>true</code> only when it is called after the method
-     * <code>Connection.close</code> has been called.
-     * <P>
-     * This method generally cannot be called to determine whether a connection
-     * to a database is valid or invalid. A typical client can determine that a
-     * connection is invalid by catching any exceptions that might be thrown
-     * when an operation is attempted.
-     * 
-     * @return <code>true</code> if this <code>Connection</code> object is
-     *         closed; <code>false</code> if it is still open
-     * @exception SQLException
-     *                if a database access error occurs
-     */
-    @Override
-    public boolean isClosed() throws SQLException {
-	String methodName = new Object() {
-	}.getClass().getEnclosingMethod().getName();
-	verifyCallAuthorization(methodName);
-	return this.connection.isClosed();
-    }
-
-    // ======================================================================
-    // Advanced features:
-    /**
-     * Retrieves a <code>DatabaseMetaData</code> object that contains metadata
-     * about the database to which this <code>Connection</code> object
-     * represents a connection. The metadata includes information about the
-     * database's tables, its supported SQL grammar, its stored procedures, the
-     * capabilities of this connection, and so on.
-     * 
-     * @return a <code>DatabaseMetaData</code> object for this
-     *         <code>Connection</code> object
-     * @exception SQLException
-     *                if a database access error occurs
-     */
-    @Override
-    public DatabaseMetaData getMetaData() throws SQLException {
-	String methodName = new Object() {
-	}.getClass().getEnclosingMethod().getName();
-	verifyCallAuthorization(methodName);
-	return this.connection.getMetaData();
-    }
-
-    /**
-     * Puts this connection in read-only mode as a hint to the driver to enable
-     * database optimizations.
-     * 
-     * <P>
-     * <B>Note:</B> This method cannot be called during a transaction.
-     * 
-     * @param readOnly
-     *            <code>true</code> enables read-only mode; <code>false</code>
-     *            disables it
-     * @exception SQLException
-     *                if a database access error occurs or this method is called
-     *                during a transaction
-     */
-    @Override
-    public void setReadOnly(boolean readOnly) throws SQLException {
-	String methodName = new Object() {
-	}.getClass().getEnclosingMethod().getName();
-	verifyCallAuthorization(methodName);
-	this.connection.setReadOnly(readOnly);
-    }
-
-    /**
-     * Retrieves whether this <code>Connection</code> object is in read-only
-     * mode.
-     * 
-     * @return <code>true</code> if this <code>Connection</code> object is
-     *         read-only; <code>false</code> otherwise
-     * @exception SQLException
-     *                if a database access error occurs
-     */
-    @Override
-    public boolean isReadOnly() throws SQLException {
-	String methodName = new Object() {
-	}.getClass().getEnclosingMethod().getName();
-	verifyCallAuthorization(methodName);
-	return this.connection.isReadOnly();
-    }
-
-    /**
-     * Sets the given catalog name in order to select a subspace of this
-     * <code>Connection</code> object's database in which to work.
-     * <P>
-     * If the driver does not support catalogs, it will silently ignore this
-     * request.
-     * 
-     * @param catalog
-     *            the name of a catalog (subspace in this
-     *            <code>Connection</code> object's database) in which to work
-     * @exception SQLException
-     *                if a database access error occurs
-     * @see #getCatalog
-     */
-    @Override
-    public void setCatalog(String catalog) throws SQLException {
-	String methodName = new Object() {
-	}.getClass().getEnclosingMethod().getName();
-	verifyCallAuthorization(methodName);
-	this.connection.setCatalog(catalog);
-    }
-
-    /**
-     * Retrieves this <code>Connection</code> object's current catalog name.
-     * 
-     * @return the current catalog name or <code>null</code> if there is none
-     * @exception SQLException
-     *                if a database access error occurs
-     * @see #setCatalog
-     */
-    @Override
-    public String getCatalog() throws SQLException {
-	String methodName = new Object() {
-	}.getClass().getEnclosingMethod().getName();
-	verifyCallAuthorization(methodName);
-	return this.connection.getCatalog();
-    }
 
     /**
      * A constant indicating that transactions are not supported.
@@ -478,6 +91,395 @@ public class AbstractConnection implements Connection {
      */
     protected int TRANSACTION_SERIALIZABLE = 8;
 
+    /** SQL JDBC connection */
+    private Connection connection;
+
+    /** Flag that says the caller is ConnectionHttp */
+    private boolean isConnectionHttp = false;
+
+    /**
+     * Void Constructor Needed for HTTP usage because there is no Connection
+     */
+    public AbstractConnection() {
+	isConnectionHttp = true;
+    }
+
+    /**
+     * Constructor
+     *
+     * @param connection
+     *            actual SQL/JDBC Connection in use to wrap
+     */
+    public AbstractConnection(Connection connection) {
+	this.connection = connection;
+    }
+
+    /**
+     * Will throw a SQL Exception if calling method is not authorized
+     **/
+    private void verifyCallAuthorization(String methodName)
+	    throws SQLException {
+	if (isConnectionHttp) {
+	    throw new SQLException(
+		    AbstractConnection.FEATURE_NOT_SUPPORTED_IN_THIS_VERSION
+			    + methodName);
+	}
+    }
+
+    /**
+     * Creates a <code>Statement</code> object for sending SQL statements to the
+     * database. SQL statements without parameters are normally executed using
+     * <code>Statement</code> objects. If the same SQL statement is executed
+     * many times, it may be more efficient to use a
+     * <code>PreparedStatement</code> object.
+     * <P>
+     * Result sets created using the returned <code>Statement</code> object will
+     * by default be type <code>TYPE_FORWARD_ONLY</code> and have a concurrency
+     * level of <code>CONCUR_READ_ONLY</code>.
+     *
+     * @return a new default <code>Statement</code> object
+     * @exception SQLException
+     *                if a database access error occurs
+     */
+    @Override
+    public Statement createStatement() throws SQLException {
+	String methodName = new Object() {
+	}.getClass().getEnclosingMethod().getName();
+	verifyCallAuthorization(methodName);
+	return this.connection.createStatement();
+    }
+
+    /**
+     * Creates a <code>PreparedStatement</code> object for sending parameterized
+     * SQL statements to the database.
+     * <P>
+     * A SQL statement with or without IN parameters can be pre-compiled and
+     * stored in a <code>PreparedStatement</code> object. This object can then
+     * be used to efficiently execute this statement multiple times.
+     *
+     * <P>
+     * <B>Note:</B> This method is optimized for handling parametric SQL
+     * statements that benefit from precompilation. If the driver supports
+     * precompilation, the method <code>prepareStatement</code> will send the
+     * statement to the database for precompilation. Some drivers may not
+     * support precompilation. In this case, the statement may not be sent to
+     * the database until the <code>PreparedStatement</code> object is executed.
+     * This has no direct effect on users; however, it does affect which methods
+     * throw certain <code>SQLException</code> objects.
+     * <P>
+     * Result sets created using the returned <code>PreparedStatement</code>
+     * object will by default be type <code>TYPE_FORWARD_ONLY</code> and have a
+     * concurrency level of <code>CONCUR_READ_ONLY</code>.
+     *
+     * @param sql
+     *            an SQL statement that may contain one or more '?' IN parameter
+     *            placeholders
+     * @return a new default <code>PreparedStatement</code> object containing
+     *         the pre-compiled SQL statement
+     * @exception SQLException
+     *                if a database access error occurs
+     */
+    @Override
+    public PreparedStatement prepareStatement(String sql) throws SQLException {
+	String methodName = new Object() {
+	}.getClass().getEnclosingMethod().getName();
+	verifyCallAuthorization(methodName);
+	return this.connection.prepareStatement(sql);
+    }
+
+    /**
+     * Creates a <code>CallableStatement</code> object for calling database
+     * stored procedures. The <code>CallableStatement</code> object provides
+     * methods for setting up its IN and OUT parameters, and methods for
+     * executing the call to a stored procedure.
+     *
+     * <P>
+     * <B>Note:</B> This method is optimized for handling stored procedure call
+     * statements. Some drivers may send the call statement to the database when
+     * the method <code>prepareCall</code> is done; others may wait until the
+     * <code>CallableStatement</code> object is executed. This has no direct
+     * effect on users; however, it does affect which method throws certain
+     * SQLExceptions.
+     * <P>
+     * Result sets created using the returned <code>CallableStatement</code>
+     * object will by default be type <code>TYPE_FORWARD_ONLY</code> and have a
+     * concurrency level of <code>CONCUR_READ_ONLY</code>.
+     *
+     * @param sql
+     *            an SQL statement that may contain one or more '?' parameter
+     *            placeholders. Typically this statement is a JDBC function call
+     *            escape string.
+     * @return a new default <code>CallableStatement</code> object containing
+     *         the pre-compiled SQL statement
+     * @exception SQLException
+     *                if a database access error occurs
+     */
+    @Override
+    public CallableStatement prepareCall(String sql) throws SQLException {
+	String methodName = new Object() {
+	}.getClass().getEnclosingMethod().getName();
+	verifyCallAuthorization(methodName);
+
+	return this.connection.prepareCall(sql);
+    }
+
+    /**
+     * Converts the given SQL statement into the system's native SQL grammar. A
+     * driver may convert the JDBC SQL grammar into its system's native SQL
+     * grammar prior to sending it. This method returns the native form of the
+     * statement that the driver would have sent.
+     *
+     * @param sql
+     *            an SQL statement that may contain one or more '?' parameter
+     *            placeholders
+     * @return the native form of this statement
+     * @exception SQLException
+     *                if a database access error occurs
+     */
+    @Override
+    public String nativeSQL(String sql) throws SQLException {
+	String methodName = new Object() {
+	}.getClass().getEnclosingMethod().getName();
+	verifyCallAuthorization(methodName);
+	return this.connection.nativeSQL(sql);
+    }
+
+    /**
+     * Sets this connection's auto-commit mode to the given state. If a
+     * connection is in auto-commit mode, then all its SQL statements will be
+     * executed and committed as individual transactions. Otherwise, its SQL
+     * statements are grouped into transactions that are terminated by a call to
+     * either the method <code>commit</code> or the method <code>rollback</code>
+     * . By default, new connections are in auto-commit mode.
+     * <P>
+     * The commit occurs when the statement completes or the next execute
+     * occurs, whichever comes first. In the case of statements returning a
+     * <code>ResultSet</code> object, the statement completes when the last row
+     * of the <code>ResultSet</code> object has been retrieved or the
+     * <code>ResultSet</code> object has been closed. In advanced cases, a
+     * single statement may return multiple results as well as output parameter
+     * values. In these cases, the commit occurs when all results and output
+     * parameter values have been retrieved.
+     * <P>
+     * <B>NOTE:</B> If this method is called during a transaction, the
+     * transaction is committed.
+     *
+     * @param autoCommit
+     *            <code>true</code> to enable auto-commit mode;
+     *            <code>false</code> to disable it
+     * @exception SQLException
+     *                if a database access error occurs
+     * @see #getAutoCommit
+     */
+    @Override
+    public void setAutoCommit(boolean autoCommit) throws SQLException {
+	String methodName = new Object() {
+	}.getClass().getEnclosingMethod().getName();
+	verifyCallAuthorization(methodName);
+	this.connection.setAutoCommit(autoCommit);
+    }
+
+    /**
+     * Retrieves the current auto-commit mode for this <code>Connection</code>
+     * object.
+     *
+     * @return the current state of this <code>Connection</code> object's
+     *         auto-commit mode
+     * @exception SQLException
+     *                if a database access error occurs
+     * @see #setAutoCommit
+     */
+    @Override
+    public boolean getAutoCommit() throws SQLException {
+	String methodName = new Object() {
+	}.getClass().getEnclosingMethod().getName();
+	verifyCallAuthorization(methodName);
+	return this.connection.getAutoCommit();
+    }
+
+    /**
+     * Makes all changes made since the previous commit/rollback permanent and
+     * releases any database locks currently held by this
+     * <code>Connection</code> object. This method should be used only when
+     * auto-commit mode has been disabled.
+     *
+     * @exception SQLException
+     *                if a database access error occurs or this
+     *                <code>Connection</code> object is in auto-commit mode
+     * @see #setAutoCommit
+     */
+    @Override
+    public void commit() throws SQLException {
+	String methodName = new Object() {
+	}.getClass().getEnclosingMethod().getName();
+	verifyCallAuthorization(methodName);
+	this.connection.commit();
+    }
+
+    /**
+     * Undoes all changes made in the current transaction and releases any
+     * database locks currently held by this <code>Connection</code> object.
+     * This method should be used only when auto-commit mode has been disabled.
+     *
+     * @exception SQLException
+     *                if a database access error occurs or this
+     *                <code>Connection</code> object is in auto-commit mode
+     * @see #setAutoCommit
+     */
+    @Override
+    public void rollback() throws SQLException {
+	String methodName = new Object() {
+	}.getClass().getEnclosingMethod().getName();
+	verifyCallAuthorization(methodName);
+	this.connection.rollback();
+    }
+
+    /**
+     * Releases this <code>Connection</code> object's database and JDBC
+     * resources immediately instead of waiting for them to be automatically
+     * released.
+     * <P>
+     * Calling the method <code>close</code> on a <code>Connection</code> object
+     * that is already closed is a no-op.
+     * <P>
+     * <B>Note:</B> A <code>Connection</code> object is automatically closed
+     * when it is garbage collected. Certain fatal errors also close a
+     * <code>Connection</code> object.
+     *
+     * @exception SQLException
+     *                if a database access error occurs
+     */
+    @Override
+    public void close() throws SQLException {
+	this.connection.close();
+    }
+
+    /**
+     * Retrieves whether this <code>Connection</code> object has been closed. A
+     * connection is closed if the method <code>close</code> has been called on
+     * it or if certain fatal errors have occurred. This method is guaranteed to
+     * return <code>true</code> only when it is called after the method
+     * <code>Connection.close</code> has been called.
+     * <P>
+     * This method generally cannot be called to determine whether a connection
+     * to a database is valid or invalid. A typical client can determine that a
+     * connection is invalid by catching any exceptions that might be thrown
+     * when an operation is attempted.
+     *
+     * @return <code>true</code> if this <code>Connection</code> object is
+     *         closed; <code>false</code> if it is still open
+     * @exception SQLException
+     *                if a database access error occurs
+     */
+    @Override
+    public boolean isClosed() throws SQLException {
+	String methodName = new Object() {
+	}.getClass().getEnclosingMethod().getName();
+	verifyCallAuthorization(methodName);
+	return this.connection.isClosed();
+    }
+
+    // ======================================================================
+    // Advanced features:
+    /**
+     * Retrieves a <code>DatabaseMetaData</code> object that contains metadata
+     * about the database to which this <code>Connection</code> object
+     * represents a connection. The metadata includes information about the
+     * database's tables, its supported SQL grammar, its stored procedures, the
+     * capabilities of this connection, and so on.
+     *
+     * @return a <code>DatabaseMetaData</code> object for this
+     *         <code>Connection</code> object
+     * @exception SQLException
+     *                if a database access error occurs
+     */
+    @Override
+    public DatabaseMetaData getMetaData() throws SQLException {
+	String methodName = new Object() {
+	}.getClass().getEnclosingMethod().getName();
+	verifyCallAuthorization(methodName);
+	return this.connection.getMetaData();
+    }
+
+    /**
+     * Puts this connection in read-only mode as a hint to the driver to enable
+     * database optimizations.
+     *
+     * <P>
+     * <B>Note:</B> This method cannot be called during a transaction.
+     *
+     * @param readOnly
+     *            <code>true</code> enables read-only mode; <code>false</code>
+     *            disables it
+     * @exception SQLException
+     *                if a database access error occurs or this method is called
+     *                during a transaction
+     */
+    @Override
+    public void setReadOnly(boolean readOnly) throws SQLException {
+	String methodName = new Object() {
+	}.getClass().getEnclosingMethod().getName();
+	verifyCallAuthorization(methodName);
+	this.connection.setReadOnly(readOnly);
+    }
+
+    /**
+     * Retrieves whether this <code>Connection</code> object is in read-only
+     * mode.
+     *
+     * @return <code>true</code> if this <code>Connection</code> object is
+     *         read-only; <code>false</code> otherwise
+     * @exception SQLException
+     *                if a database access error occurs
+     */
+    @Override
+    public boolean isReadOnly() throws SQLException {
+	String methodName = new Object() {
+	}.getClass().getEnclosingMethod().getName();
+	verifyCallAuthorization(methodName);
+	return this.connection.isReadOnly();
+    }
+
+    /**
+     * Sets the given catalog name in order to select a subspace of this
+     * <code>Connection</code> object's database in which to work.
+     * <P>
+     * If the driver does not support catalogs, it will silently ignore this
+     * request.
+     *
+     * @param catalog
+     *            the name of a catalog (subspace in this
+     *            <code>Connection</code> object's database) in which to work
+     * @exception SQLException
+     *                if a database access error occurs
+     * @see #getCatalog
+     */
+    @Override
+    public void setCatalog(String catalog) throws SQLException {
+	String methodName = new Object() {
+	}.getClass().getEnclosingMethod().getName();
+	verifyCallAuthorization(methodName);
+	this.connection.setCatalog(catalog);
+    }
+
+    /**
+     * Retrieves this <code>Connection</code> object's current catalog name.
+     *
+     * @return the current catalog name or <code>null</code> if there is none
+     * @exception SQLException
+     *                if a database access error occurs
+     * @see #setCatalog
+     */
+    @Override
+    public String getCatalog() throws SQLException {
+	String methodName = new Object() {
+	}.getClass().getEnclosingMethod().getName();
+	verifyCallAuthorization(methodName);
+	return this.connection.getCatalog();
+    }
+
+
+
     /**
      * Attempts to change the transaction isolation level for this
      * <code>Connection</code> object to the one given. The constants defined in
@@ -486,7 +488,7 @@ public class AbstractConnection implements Connection {
      * <P>
      * <B>Note:</B> If this method is called during a transaction, the result is
      * implementation-defined.
-     * 
+     *
      * @param level
      *            one of the following <code>Connection</code> constants:
      *            <code>Connection.TRANSACTION_READ_UNCOMMITTED</code>,
@@ -512,7 +514,7 @@ public class AbstractConnection implements Connection {
     /**
      * Retrieves this <code>Connection</code> object's current transaction
      * isolation level.
-     * 
+     *
      * @return the current transaction isolation level, which will be one of the
      *         following constants:
      *         <code>Connection.TRANSACTION_READ_UNCOMMITTED</code>,
@@ -541,10 +543,10 @@ public class AbstractConnection implements Connection {
      * <P>
      * This method may not be called on a closed connection; doing so will cause
      * an <code>SQLException</code> to be thrown.
-     * 
+     *
      * <P>
      * <B>Note:</B> Subsequent warnings will be chained to this SQLWarning.
-     * 
+     *
      * @return the first <code>SQLWarning</code> object or <code>null</code> if
      *         there are none
      * @exception SQLException
@@ -565,7 +567,7 @@ public class AbstractConnection implements Connection {
      * After a call to this method, the method <code>getWarnings</code> returns
      * <code>null</code> until a new warning is reported for this
      * <code>Connection</code> object.
-     * 
+     *
      * @exception SQLException
      *                if a database access error occurs
      */
@@ -583,7 +585,7 @@ public class AbstractConnection implements Connection {
      * <code>ResultSet</code> objects with the given type and concurrency. This
      * method is the same as the <code>createStatement</code> method above, but
      * it allows the default result set type and concurrency to be overridden.
-     * 
+     *
      * @param resultSetType
      *            a result set type; one of
      *            <code>ResultSet.TYPE_FORWARD_ONLY</code>,
@@ -613,12 +615,12 @@ public class AbstractConnection implements Connection {
     }
 
     /**
-     * 
+     *
      * Creates a <code>PreparedStatement</code> object that will generate
      * <code>ResultSet</code> objects with the given type and concurrency. This
      * method is the same as the <code>prepareStatement</code> method above, but
      * it allows the default result set type and concurrency to be overridden.
-     * 
+     *
      * @param sql
      *            a <code>String</code> object that is the SQL statement to be
      *            sent to the database; may contain one or more ? IN parameters
@@ -655,7 +657,7 @@ public class AbstractConnection implements Connection {
      * <code>ResultSet</code> objects with the given type and concurrency. This
      * method is the same as the <code>prepareCall</code> method above, but it
      * allows the default result set type and concurrency to be overridden.
-     * 
+     *
      * @param sql
      *            a <code>String</code> object that is the SQL statement to be
      *            sent to the database; may contain on or more ? parameters
@@ -692,7 +694,7 @@ public class AbstractConnection implements Connection {
      * Retrieves the <code>Map</code> object associated with this
      * <code>Connection</code> object. Unless the application has added an
      * entry, the type map returned will be empty.
-     * 
+     *
      * @return the <code>java.util.Map</code> object associated with this
      *         <code>Connection</code> object
      * @exception SQLException
@@ -712,7 +714,7 @@ public class AbstractConnection implements Connection {
      * Installs the given <code>TypeMap</code> object as the type map for this
      * <code>Connection</code> object. The type map will be used for the custom
      * mapping of SQL structured types and distinct types.
-     * 
+     *
      * @param map
      *            the <code>java.util.Map</code> object to install as the
      *            replacement for this <code>Connection</code> object's default
@@ -737,7 +739,7 @@ public class AbstractConnection implements Connection {
     /**
      * Changes the holdability of <code>ResultSet</code> objects created using
      * this <code>Connection</code> object to the given holdability.
-     * 
+     *
      * @param holdability
      *            a <code>ResultSet</code> holdability constant; one of
      *            <code>ResultSet.HOLD_CURSORS_OVER_COMMIT</code> or
@@ -761,7 +763,7 @@ public class AbstractConnection implements Connection {
     /**
      * Retrieves the current holdability of <code>ResultSet</code> objects
      * created using this <code>Connection</code> object.
-     * 
+     *
      * @return the holdability, one of
      *         <code>ResultSet.HOLD_CURSORS_OVER_COMMIT</code> or
      *         <code>ResultSet.CLOSE_CURSORS_AT_COMMIT</code>
@@ -782,7 +784,7 @@ public class AbstractConnection implements Connection {
     /**
      * Creates an unnamed savepoint in the current transaction and returns the
      * new <code>Savepoint</code> object that represents it.
-     * 
+     *
      * @return the new <code>Savepoint</code> object
      * @exception SQLException
      *                if a database access error occurs or this
@@ -802,7 +804,7 @@ public class AbstractConnection implements Connection {
     /**
      * Creates a savepoint with the given name in the current transaction and
      * returns the new <code>Savepoint</code> object that represents it.
-     * 
+     *
      * @param name
      *            a <code>String</code> containing the name of the savepoint
      * @return the new <code>Savepoint</code> object
@@ -826,7 +828,7 @@ public class AbstractConnection implements Connection {
      * set.
      * <P>
      * This method should be used only when auto-commit has been disabled.
-     * 
+     *
      * @param savepoint
      *            the <code>Savepoint</code> object to roll back to
      * @exception SQLException
@@ -850,7 +852,7 @@ public class AbstractConnection implements Connection {
      * Removes the given <code>Savepoint</code> object from the current
      * transaction. Any reference to the savepoint after it have been removed
      * will cause an <code>SQLException</code> to be thrown.
-     * 
+     *
      * @param savepoint
      *            the <code>Savepoint</code> object to be removed
      * @exception SQLException
@@ -873,7 +875,7 @@ public class AbstractConnection implements Connection {
      * holdability. This method is the same as the <code>createStatement</code>
      * method above, but it allows the default result set type, concurrency, and
      * holdability to be overridden.
-     * 
+     *
      * @param resultSetType
      *            one of the following <code>ResultSet</code> constants:
      *            <code>ResultSet.TYPE_FORWARD_ONLY</code>,
@@ -916,7 +918,7 @@ public class AbstractConnection implements Connection {
      * This method is the same as the <code>prepareStatement</code> method
      * above, but it allows the default result set type, concurrency, and
      * holdability to be overridden.
-     * 
+     *
      * @param sql
      *            a <code>String</code> object that is the SQL statement to be
      *            sent to the database; may contain one or more ? IN parameters
@@ -961,7 +963,7 @@ public class AbstractConnection implements Connection {
      * method is the same as the <code>prepareCall</code> method above, but it
      * allows the default result set type, result set concurrency type and
      * holdability to be overridden.
-     * 
+     *
      * @param sql
      *            a <code>String</code> object that is the SQL statement to be
      *            sent to the database; may contain on or more ? parameters
@@ -1075,7 +1077,7 @@ public class AbstractConnection implements Connection {
      * Result sets created using the returned <code>PreparedStatement</code>
      * object will by default be type <code>TYPE_FORWARD_ONLY</code> and have a
      * concurrency level of <code>CONCUR_READ_ONLY</code>.
-     * 
+     *
      * @param sql
      *            an SQL statement that may contain one or more '?' IN parameter
      *            placeholders
@@ -1088,7 +1090,7 @@ public class AbstractConnection implements Connection {
      *         indexes
      * @exception SQLException
      *                if a database access error occurs
-     * 
+     *
      * @since 1.4
      */
     @Override
@@ -1123,7 +1125,7 @@ public class AbstractConnection implements Connection {
      * Result sets created using the returned <code>PreparedStatement</code>
      * object will by default be type <code>TYPE_FORWARD_ONLY</code> and have a
      * concurrency level of <code>CONCUR_READ_ONLY</code>.
-     * 
+     *
      * @param sql
      *            an SQL statement that may contain one or more '?' IN parameter
      *            placeholders
@@ -1135,7 +1137,7 @@ public class AbstractConnection implements Connection {
      *         auto-generated keys designated by the given array of column names
      * @exception SQLException
      *                if a database access error occurs
-     * 
+     *
      * @since 1.4
      */
     @Override
@@ -1196,7 +1198,7 @@ public class AbstractConnection implements Connection {
      * <code>setBinaryStream</code> and <code>setBytes</code> methods of the
      * <code>Blob</code> interface may be used to add data to the
      * <code>Blob</code>.
-     * 
+     *
      * @return An object that implements the <code>Blob</code> interface
      * @throws SQLException
      *             if an object that implements the <code>Blob</code> interface
@@ -1221,7 +1223,7 @@ public class AbstractConnection implements Connection {
      * <code>setAsciiStream</code>, <code>setCharacterStream</code> and
      * <code>setString</code> methods of the <code>Clob</code> interface may be
      * used to add data to the <code>Clob</code>.
-     * 
+     *
      * @return An object that implements the <code>Clob</code> interface
      * @throws SQLException
      *             if an object that implements the <code>Clob</code> interface
@@ -1246,7 +1248,7 @@ public class AbstractConnection implements Connection {
      * <code>setAsciiStream</code>, <code>setCharacterStream</code> and
      * <code>setString</code> methods of the <code>NClob</code> interface may be
      * used to add data to the <code>NClob</code>.
-     * 
+     *
      * @return An object that implements the <code>NClob</code> interface
      * @throws SQLException
      *             if an object that implements the <code>NClob</code> interface
@@ -1271,7 +1273,7 @@ public class AbstractConnection implements Connection {
      * <code>createXmlStreamWriter</code> object and <code>setString</code>
      * method of the <code>SQLXML</code> interface may be used to add data to
      * the <code>SQLXML</code> object.
-     * 
+     *
      * @return An object that implements the <code>SQLXML</code> interface
      * @throws SQLException
      *             if an object that implements the <code>SQLXML</code>
@@ -1298,7 +1300,7 @@ public class AbstractConnection implements Connection {
      *            of a user-defined type that has been defined for this
      *            database. It is the value returned by
      *            <code>Struct.getSQLTypeName</code>.
-     * 
+     *
      * @param attributes
      *            the attributes that populate the returned object
      * @return a Struct object that maps to the given SQL type and is populated
@@ -1325,7 +1327,7 @@ public class AbstractConnection implements Connection {
      * be null if the property has not been set and does not have a default
      * value.
      * <p>
-     * 
+     *
      * @return A <code>Properties</code> object that contains the name and
      *         current value of each of the client info properties supported by
      *         the driver.
@@ -1357,7 +1359,7 @@ public class AbstractConnection implements Connection {
      * <code>DatabaseMetaData.getClientInfoProperties</code> method to determine
      * the client info properties supported by the driver.
      * <p>
-     * 
+     *
      * @param name
      *            The name of the client info property to retrieve
      *            <p>
@@ -1388,7 +1390,7 @@ public class AbstractConnection implements Connection {
      * <p>
      * The query submitted by the driver to validate the connection shall be
      * executed in the context of the current transaction.
-     * 
+     *
      * @param timeout
      *            - The time in seconds to wait for the database operation used
      *            to validate the connection to complete. If the timeout period
@@ -1461,7 +1463,7 @@ public class AbstractConnection implements Connection {
      * properties to be set atomically. For those databases, one or more
      * properties may have been set before the error occurred.
      * <p>
-     * 
+     *
      * @param properties
      *            the list of client info properties to set
      *            <p>
@@ -1527,7 +1529,7 @@ public class AbstractConnection implements Connection {
      * the connection is running on.</li>
      * </ul>
      * <p>
-     * 
+     *
      * @param name
      *            The name of the client info property to set
      * @param value
@@ -1553,7 +1555,7 @@ public class AbstractConnection implements Connection {
     /**
      * Returns an object that implements the given interface to allow access to
      * non-standard methods, or standard methods not exposed by the proxy.
-     * 
+     *
      * If the receiver implements the interface then the result is the receiver
      * or a proxy for the receiver. If the receiver is a wrapper and the wrapped
      * object implements the interface then the result is the wrapped object or

@@ -1,20 +1,20 @@
 /*
  * This file is part of AceQL Client SDK.
- * AceQL Client SDK: Remote JDBC access over HTTP with AceQL HTTP.                                 
+ * AceQL Client SDK: Remote JDBC access over HTTP with AceQL HTTP.
  * Copyright (C) 2020,  KawanSoft SAS
- * (http://www.kawansoft.com). All rights reserved.                                
- *                                                                               
+ * (http://www.kawansoft.com). All rights reserved.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  */
 package org.kawanfw.driver.jdbc.abstracts;
 
@@ -36,7 +36,7 @@ public abstract class AbstractBlob implements Blob {
 
     /**
      * Constructor
-     * 
+     *
      * @param blob
      *            actual SQL/JDBC Blob in use to wrap.
      */
@@ -47,7 +47,7 @@ public abstract class AbstractBlob implements Blob {
     /**
      * Returns the number of bytes in the <code>BLOB</code> value designated by
      * this <code>Blob</code> object.
-     * 
+     *
      * @return length of the <code>BLOB</code> in bytes
      * @exception SQLException
      *                if there is an error accessing the length of the
@@ -64,7 +64,7 @@ public abstract class AbstractBlob implements Blob {
      * <code>Blob</code> object represents, as an array of bytes. This
      * <code>byte</code> array contains up to <code>length</code> consecutive
      * bytes starting at position <code>pos</code>.
-     * 
+     *
      * @param pos
      *            the ordinal position of the first byte in the
      *            <code>BLOB</code> value to be extracted; the first byte is at
@@ -88,7 +88,7 @@ public abstract class AbstractBlob implements Blob {
     /**
      * Retrieves the <code>BLOB</code> value designated by this
      * <code>Blob</code> instance as a stream.
-     * 
+     *
      * @return a stream containing the <code>BLOB</code> data
      * @exception SQLException
      *                if there is an error accessing the <code>BLOB</code> value
@@ -105,7 +105,7 @@ public abstract class AbstractBlob implements Blob {
      * <code>pattern</code> begins within the <code>BLOB</code> value that this
      * <code>Blob</code> object represents. The search for <code>pattern</code>
      * begins at position <code>start</code>.
-     * 
+     *
      * @param pattern
      *            the byte array for which to search
      * @param start
@@ -125,7 +125,7 @@ public abstract class AbstractBlob implements Blob {
      * Retrieves the byte position in the <code>BLOB</code> value designated by
      * this <code>Blob</code> object at which <code>pattern</code> begins. The
      * search begins at position <code>start</code>.
-     * 
+     *
      * @param pattern
      *            the <code>Blob</code> object designating the <code>BLOB</code>
      *            value for which to search
@@ -152,7 +152,7 @@ public abstract class AbstractBlob implements Blob {
      * Writes the given array of bytes to the <code>BLOB</code> value that this
      * <code>Blob</code> object represents, starting at position
      * <code>pos</code>, and returns the number of bytes written.
-     * 
+     *
      * @param pos
      *            the position in the <code>BLOB</code> object at which to start
      *            writing
@@ -176,7 +176,7 @@ public abstract class AbstractBlob implements Blob {
      * returns the number of bytes written. Writing starts at position
      * <code>pos</code> in the <code>BLOB</code> value; <code>len</code> bytes
      * from the given byte array are written.
-     * 
+     *
      * @param pos
      *            the position in the <code>BLOB</code> object at which to start
      *            writing
@@ -205,7 +205,7 @@ public abstract class AbstractBlob implements Blob {
      * Retrieves a stream that can be used to write to the <code>BLOB</code>
      * value that this <code>Blob</code> object represents. The stream begins at
      * position <code>pos</code>.
-     * 
+     *
      * @param pos
      *            the position in the <code>BLOB</code> value at which to start
      *            writing
@@ -224,7 +224,7 @@ public abstract class AbstractBlob implements Blob {
     /**
      * Truncates the <code>BLOB</code> value that this <code>Blob</code> object
      * represents to be <code>len</code> bytes in length.
-     * 
+     *
      * @param len
      *            the length, in bytes, to which the <code>BLOB</code> value
      *            that this <code>Blob</code> object represents should be
@@ -248,7 +248,7 @@ public abstract class AbstractBlob implements Blob {
      * being thrown. If <code>free</code> is called multiple times, the
      * subsequent calls to <code>free</code> are treated as a no-op.
      * <p>
-     * 
+     *
      * @throws SQLException
      *             if an error occurs releasing the Blob's resources
      * @exception SQLFeatureNotSupportedException
@@ -264,7 +264,7 @@ public abstract class AbstractBlob implements Blob {
      * Returns an <code>InputStream</code> object that contains a partial
      * <code>Blob</code> value, starting with the byte specified by pos, which
      * is length bytes in length.
-     * 
+     *
      * @param pos
      *            the offset to the first byte of the partial value to be
      *            retrieved. The first byte in the <code>Blob</code> is at
@@ -277,7 +277,7 @@ public abstract class AbstractBlob implements Blob {
      *             if pos is less than 1 or if pos is greater than the number of
      *             bytes in the <code>Blob</code> or if pos + length is greater
      *             than the number of bytes in the <code>Blob</code>
-     * 
+     *
      * @exception SQLFeatureNotSupportedException
      *                if the JDBC driver does not support this method
      * @since 1.6

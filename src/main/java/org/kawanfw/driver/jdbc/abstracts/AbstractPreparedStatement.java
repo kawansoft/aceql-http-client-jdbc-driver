@@ -1,20 +1,20 @@
 /*
  * This file is part of AceQL Client SDK.
- * AceQL Client SDK: Remote JDBC access over HTTP with AceQL HTTP.                                 
+ * AceQL Client SDK: Remote JDBC access over HTTP with AceQL HTTP.
  * Copyright (C) 2020,  KawanSoft SAS
- * (http://www.kawansoft.com). All rights reserved.                                
- *                                                                               
+ * (http://www.kawansoft.com). All rights reserved.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  */
 package org.kawanfw.driver.jdbc.abstracts;
 
@@ -41,7 +41,7 @@ import java.util.Calendar;
  * PreparedStatement Wrapper. <br>
  * Implements all the PreparedStatement methods. Usage is exactly the same as a
  * PreparedStatement.
- * 
+ *
  */
 
 public abstract class AbstractPreparedStatement extends AbstractStatement
@@ -56,12 +56,9 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
     /**
      * Constructor Needed for HTTP usage because there is no real JDBC
      * Connection
-     * 
-     * @param prepStatement
-     *            actual PreparedStatement in use to wrap
      */
 
-    public AbstractPreparedStatement(String sql) throws SQLException {
+    public AbstractPreparedStatement() throws SQLException {
 	isConnectionHttp = true;
     }
 
@@ -79,7 +76,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
 
     /**
      * Constructor
-     * 
+     *
      * @param preparedStatement
      *            actual PreparedStatement in use to wrap
      */
@@ -95,10 +92,10 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
 
     /**
      * Sets the designated parameter to SQL <code>NULL</code>.
-     * 
+     *
      * <P>
      * <B>Note:</B> You must specify the parameter's SQL type.
-     * 
+     *
      * @param parameterIndex
      *            the first parameter is 1, the second is 2, ...
      * @param sqlType
@@ -118,7 +115,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * Sets the designated parameter to the given Java <code>boolean</code>
      * value. The driver converts this to an SQL <code>BIT</code> value when it
      * sends it to the database.
-     * 
+     *
      * @param parameterIndex
      *            the first parameter is 1, the second is 2, ...
      * @param x
@@ -138,7 +135,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * Sets the designated parameter to the given Java <code>byte</code> value.
      * The driver converts this to an SQL <code>TINYINT</code> value when it
      * sends it to the database.
-     * 
+     *
      * @param parameterIndex
      *            the first parameter is 1, the second is 2, ...
      * @param x
@@ -158,7 +155,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * Sets the designated parameter to the given Java <code>short</code> value.
      * The driver converts this to an SQL <code>SMALLINT</code> value when it
      * sends it to the database.
-     * 
+     *
      * @param parameterIndex
      *            the first parameter is 1, the second is 2, ...
      * @param x
@@ -178,7 +175,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * Sets the designated parameter to the given Java <code>int</code> value.
      * The driver converts this to an SQL <code>INTEGER</code> value when it
      * sends it to the database.
-     * 
+     *
      * @param parameterIndex
      *            the first parameter is 1, the second is 2, ...
      * @param x
@@ -198,7 +195,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * Sets the designated parameter to the given Java <code>long</code> value.
      * The driver converts this to an SQL <code>BIGINT</code> value when it
      * sends it to the database.
-     * 
+     *
      * @param parameterIndex
      *            the first parameter is 1, the second is 2, ...
      * @param x
@@ -218,7 +215,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * Sets the designated parameter to the given Java <code>float</code> value.
      * The driver converts this to an SQL <code>FLOAT</code> value when it sends
      * it to the database.
-     * 
+     *
      * @param parameterIndex
      *            the first parameter is 1, the second is 2, ...
      * @param x
@@ -238,7 +235,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * Sets the designated parameter to the given Java <code>double</code>
      * value. The driver converts this to an SQL <code>DOUBLE</code> value when
      * it sends it to the database.
-     * 
+     *
      * @param parameterIndex
      *            the first parameter is 1, the second is 2, ...
      * @param x
@@ -258,7 +255,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * Sets the designated parameter to the given
      * <code>java.math.BigDecimal</code> value. The driver converts this to an
      * SQL <code>NUMERIC</code> value when it sends it to the database.
-     * 
+     *
      * @param parameterIndex
      *            the first parameter is 1, the second is 2, ...
      * @param x
@@ -281,7 +278,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * <code>LONGVARCHAR</code> value (depending on the argument's size relative
      * to the driver's limits on <code>VARCHAR</code> values) when it sends it
      * to the database.
-     * 
+     *
      * @param parameterIndex
      *            the first parameter is 1, the second is 2, ...
      * @param x
@@ -303,7 +300,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * <code>LONGVARBINARY</code> (depending on the argument's size relative to
      * the driver's limits on <code>VARBINARY</code> values) when it sends it to
      * the database.
-     * 
+     *
      * @param parameterIndex
      *            the first parameter is 1, the second is 2, ...
      * @param x
@@ -323,7 +320,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * Sets the designated parameter to the given <code>java.sql.Date</code>
      * value. The driver converts this to an SQL <code>DATE</code> value when it
      * sends it to the database.
-     * 
+     *
      * @param parameterIndex
      *            the first parameter is 1, the second is 2, ...
      * @param x
@@ -344,7 +341,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * Sets the designated parameter to the given <code>java.sql.Time</code>
      * value. The driver converts this to an SQL <code>TIME</code> value when it
      * sends it to the database.
-     * 
+     *
      * @param parameterIndex
      *            the first parameter is 1, the second is 2, ...
      * @param x
@@ -365,7 +362,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * Sets the designated parameter to the given
      * <code>java.sql.Timestamp</code> value. The driver converts this to an SQL
      * <code>TIMESTAMP</code> value when it sends it to the database.
-     * 
+     *
      * @param parameterIndex
      *            the first parameter is 1, the second is 2, ...
      * @param x
@@ -389,11 +386,11 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * via a <code>java.io.InputStream</code>. Data will be read from the stream
      * as needed until end-of-file is reached. The JDBC driver will do any
      * necessary conversion from ASCII to the database char format.
-     * 
+     *
      * <P>
      * <B>Note:</B> This stream object can either be a standard Java stream
      * object or your own subclass that implements the standard interface.
-     * 
+     *
      * @param parameterIndex
      *            the first parameter is 1, the second is 2, ...
      * @param x
@@ -404,7 +401,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      *                if a database access error occurs
      */
     @Override
-    public void setAsciiStream(int parameterIndex, java.io.InputStream x,
+    public void setAsciiStream(int parameterIndex, InputStream x,
 	    int length) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -416,17 +413,17 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * Sets the designated parameter to the given input stream, which will have
      * the specified number of bytes. A Unicode character has two bytes, with
      * the first byte being the high byte, and the second being the low byte.
-     * 
+     *
      * When a very large Unicode value is input to a <code>LONGVARCHAR</code>
      * parameter, it may be more practical to send it via a
      * <code>java.io.InputStream</code> object. The data will be read from the
      * stream as needed until end-of-file is reached. The JDBC driver will do
      * any necessary conversion from Unicode to the database char format.
-     * 
+     *
      * <P>
      * <B>Note:</B> This stream object can either be a standard Java stream
      * object or your own subclass that implements the standard interface.
-     * 
+     *
      * @param parameterIndex
      *            the first parameter is 1, the second is 2, ...
      * @param x
@@ -455,11 +452,11 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * a <code>LONGVARBINARY</code> parameter, it may be more practical to send
      * it via a <code>java.io.InputStream</code> object. The data will be read
      * from the stream as needed until end-of-file is reached.
-     * 
+     *
      * <P>
      * <B>Note:</B> This stream object can either be a standard Java stream
      * object or your own subclass that implements the standard interface.
-     * 
+     *
      * @param parameterIndex
      *            the first parameter is 1, the second is 2, ...
      * @param x
@@ -487,7 +484,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * value. However, in some cases it is useful to immediately release the
      * resources used by the current parameter values; this can be done by
      * calling the method <code>clearParameters</code>.
-     * 
+     *
      * @exception SQLException
      *                if a database access error occurs
      */
@@ -506,11 +503,11 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * Sets the value of the designated parameter with the given object. The
      * second argument must be an object type; for integral values, the
      * <code>java.lang</code> equivalent objects should be used.
-     * 
+     *
      * <p>
      * The given Java object will be converted to the given targetSqlType before
      * being sent to the database.
-     * 
+     *
      * If the object has a custom mapping (is of a class implementing the
      * interface <code>SQLData</code>), the JDBC driver should call the method
      * <code>SQLData.writeSQL</code> to write it to the SQL data stream. If, on
@@ -518,11 +515,11 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * <code>Blob</code>, <code>Clob</code>, <code>Struct</code>, or
      * <code>Array</code>, the driver should pass it to the database as a value
      * of the corresponding SQL type.
-     * 
+     *
      * <p>
      * Note that this method may be used to pass database-specific abstract data
      * types.
-     * 
+     *
      * @param parameterIndex
      *            the first parameter is 1, the second is 2, ...
      * @param x
@@ -552,7 +549,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * Sets the value of the designated parameter with the given object. This
      * method is like the method <code>setObject</code> above, except that it
      * assumes a scale of zero.
-     * 
+     *
      * @param parameterIndex
      *            the first parameter is 1, the second is 2, ...
      * @param x
@@ -578,17 +575,17 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * second parameter must be of type <code>Object</code>; therefore, the
      * <code>java.lang</code> equivalent objects should be used for built-in
      * types.
-     * 
+     *
      * <p>
      * The JDBC specification specifies a standard mapping from Java
      * <code>Object</code> types to SQL types. The given argument will be
      * converted to the corresponding SQL type before being sent to the
      * database.
-     * 
+     *
      * <p>
      * Note that this method may be used to pass datatabase- specific abstract
      * data types, by using a driver-specific Java type.
-     * 
+     *
      * If the object is of a class implementing the interface
      * <code>SQLData</code>, the JDBC driver should call the method
      * <code>SQLData.writeSQL</code> to write it to the SQL data stream. If, on
@@ -600,7 +597,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * This method throws an exception if there is an ambiguity, for example, if
      * the object is of a class implementing more than one of the interfaces
      * named above.
-     * 
+     *
      * @param parameterIndex
      *            the first parameter is 1, the second is 2, ...
      * @param x
@@ -629,7 +626,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * <code>getResultSet</code> or <code>getUpdateCount</code> to retrieve the
      * result; you must call <code>getMoreResults</code> to move to any
      * subsequent result(s).
-     * 
+     *
      * @return <code>true</code> if the first result is a <code>ResultSet</code>
      *         object; <code>false</code> if the first result is an update count
      *         or there is no result
@@ -653,7 +650,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
     /**
      * Adds a set of parameters to this <code>PreparedStatement</code> object's
      * batch of commands.
-     * 
+     *
      * @exception SQLException
      *                if a database access error occurs
      * @see Statement#addBatch
@@ -675,11 +672,11 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * will be read from the stream as needed until end-of-file is reached. The
      * JDBC driver will do any necessary conversion from UNICODE to the database
      * char format.
-     * 
+     *
      * <P>
      * <B>Note:</B> This stream object can either be a standard Java stream
      * object or your own subclass that implements the standard interface.
-     * 
+     *
      * @param parameterIndex
      *            the first parameter is 1, the second is 2, ...
      * @param reader
@@ -692,7 +689,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * @since 1.2
      */
     @Override
-    public void setCharacterStream(int parameterIndex, java.io.Reader reader,
+    public void setCharacterStream(int parameterIndex, Reader reader,
 	    int length) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -705,7 +702,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * Sets the designated parameter to the given
      * <code>REF(&lt;structured-type&gt;)</code> value. The driver converts this
      * to an SQL <code>REF</code> value when it sends it to the database.
-     * 
+     *
      * @param iParam
      *            the first parameter is 1, the second is 2, ...
      * @param x
@@ -726,7 +723,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * Sets the designated parameter to the given <code>Blob</code> object. The
      * driver converts this to an SQL <code>BLOB</code> value when it sends it
      * to the database.
-     * 
+     *
      * @param iParam
      *            the first parameter is 1, the second is 2, ...
      * @param x
@@ -748,7 +745,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * Sets the designated parameter to the given <code>Clob</code> object. The
      * driver converts this to an SQL <code>CLOB</code> value when it sends it
      * to the database.
-     * 
+     *
      * @param iParam
      *            the first parameter is 1, the second is 2, ...
      * @param x
@@ -770,7 +767,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * Sets the designated parameter to the given <code>Array</code> object. The
      * driver converts this to an SQL <code>ARRAY</code> value when it sends it
      * to the database.
-     * 
+     *
      * @param iParam
      *            the first parameter is 1, the second is 2, ...
      * @param x
@@ -804,7 +801,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * <P>
      * <B>NOTE:</B> Using this method may be expensive for some drivers due to
      * the lack of underlying DBMS support.
-     * 
+     *
      * @return the description of a <code>ResultSet</code> object's columns or
      *         <code>null</code> if the driver cannot return a
      *         <code>ResultSetMetaDataHttp</code> object
@@ -829,7 +826,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * into account a custom timezone. If no <code>Calendar</code> object is
      * specified, the driver uses the default timezone, which is that of the
      * virtual machine running the application.
-     * 
+     *
      * @param parameterIndex
      *            the first parameter is 1, the second is 2, ...
      * @param x
@@ -859,7 +856,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * into account a custom timezone. If no <code>Calendar</code> object is
      * specified, the driver uses the default timezone, which is that of the
      * virtual machine running the application.
-     * 
+     *
      * @param parameterIndex
      *            the first parameter is 1, the second is 2, ...
      * @param x
@@ -890,7 +887,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * If no <code>Calendar</code> object is specified, the driver uses the
      * default timezone, which is that of the virtual machine running the
      * application.
-     * 
+     *
      * @param parameterIndex
      *            the first parameter is 1, the second is 2, ...
      * @param x
@@ -916,7 +913,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * the method <code>setNull</code> should be used for user-defined types and
      * REF type parameters. Examples of user-defined types include: STRUCT,
      * DISTINCT, JAVA_OBJECT, and named array types.
-     * 
+     *
      * <P>
      * <B>Note:</B> To be portable, applications must give the SQL type code and
      * the fully-qualified SQL type name when specifying a NULL user-defined or
@@ -924,12 +921,12 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * name of the parameter itself. For a REF parameter, the name is the type
      * name of the referenced type. If a JDBC driver does not need the type code
      * or type name information, it may ignore it.
-     * 
+     *
      * Although it is intended for user-defined and Ref parameters, this method
      * may be used to set a null parameter of any JDBC type. If the parameter
      * does not have a user-defined or REF type, the given typeName is ignored.
-     * 
-     * 
+     *
+     *
      * @param paramIndex
      *            the first parameter is 1, the second is 2, ...
      * @param sqlType
@@ -955,7 +952,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      * Sets the designated parameter to the given <code>java.net.URL</code>
      * value. The driver converts this to an SQL <code>DATALINK</code> value
      * when it sends it to the database.
-     * 
+     *
      * @param parameterIndex
      *            the first parameter is 1, the second is 2, ...
      * @param x
@@ -975,7 +972,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
     /**
      * Retrieves the number, types and properties of this
      * <code>PreparedStatement</code> object's parameters.
-     * 
+     *
      * @return a <code>ParameterMetaData</code> object that contains information
      *         about the number, types and properties of this
      *         <code>PreparedStatement</code> object's parameters

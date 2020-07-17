@@ -1,20 +1,20 @@
 /*
  * This file is part of AceQL Client SDK.
- * AceQL Client SDK: Remote JDBC access over HTTP with AceQL HTTP.                                 
+ * AceQL Client SDK: Remote JDBC access over HTTP with AceQL HTTP.
  * Copyright (C) 2020,  KawanSoft SAS
- * (http://www.kawansoft.com). All rights reserved.                                
- *                                                                               
+ * (http://www.kawansoft.com). All rights reserved.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  */
 package com.aceql.client.jdbc;
 
@@ -37,25 +37,26 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Map;
+import java.util.Objects;
 
 import com.aceql.client.jdbc.util.AceQLResultSetUtil;
 import com.aceql.client.jdbc.util.JavaSqlConversion;
 import com.aceql.client.jdbc.util.json.SqlParameter;
 
 /**
- * 
+ *
  * @author Nicolas de Pomereu
  *
  */
-//HACK Version 3.0.1: test on null is done ignoring case: 
+//HACK Version 3.0.1: test on null is done ignoring case:
 //     value.equalsIgnoreCase("NULL")
 public class AceQLCallableStatement extends AceQLPreparedStatement implements CallableStatement {
 
     private static final String FEATURE_NOT_SUPPORTED_IN_THIS_VERSION = "Method is not yet implemented: ";
-    
+
     /** Says if the last accessed value was null */
     private boolean wasNull = false;
-    
+
     /**
      * @param aceQLConnection
      * @param sql
@@ -65,7 +66,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 	super(aceQLConnection, sql);
 	super.isStoredProcedure = true;
     }
-    
+
     /* (non-Javadoc)
      * @see org.kawanfw.driver.jdbc.abstracts.AbstractPreparedStatement#execute()
      */
@@ -74,9 +75,9 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 	super.executeUpdate(); // We wrap & use executeUpdate be cause it knows isStoredProcedure = true;
 	return false; // It's not a query
     }
-    
-    
-    
+
+
+
     /*
      * (non-Javadoc)
      * @see com.aceql.client.jdbc.AceQLPreparedStatement#executeQuery()
@@ -89,7 +90,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#registerOutParameter(int, int)
      */
     @Override
@@ -97,10 +98,10 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 	builder.setOutParameter(parameterIndex, JavaSqlConversion.fromJavaToSql(sqlType));
     }
 
-    
+
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#registerOutParameter(int, int, int)
      */
     @Override
@@ -112,7 +113,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#wasNull()
      */
     @Override
@@ -122,7 +123,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getString(int)
      */
     @Override
@@ -131,18 +132,18 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 	if (super.isClosed()) {
 	    throw new SQLException("This CallableStatement is closed.");
 	}
-	
+
 	Map<Integer, SqlParameter> statementParameters =  super.builder.getCallableOutParameters();
-	
+
 	if (statementParameters.containsKey(parameterIndex)) {
 	    SqlParameter sqlParameter = statementParameters.get(parameterIndex);
-	    
+
 	    if (sqlParameter == null) {
-		throw new NullPointerException("SqlParameter is null! for index " + parameterIndex);
+		Objects.requireNonNull(sqlParameter, "sqlParameter is null for index " + parameterIndex);
 	    }
-	    
+
 	    String value = sqlParameter.getParameterValue();
-	    
+
 	    if (value.equalsIgnoreCase("NULL")) {
 		wasNull = true;
 		return null;
@@ -152,18 +153,18 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 	else {
 	    throw new SQLException("parameter does not exists for index: " + parameterIndex );
 	}
-	   
+
     }
 
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getBoolean(int)
      */
     @Override
     public boolean getBoolean(int parameterIndex) throws SQLException {
-	
+
 	String value = getString(parameterIndex);
 	if (value == null || value.equalsIgnoreCase("NULL")) {
 	    return false;
@@ -173,7 +174,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getByte(int)
      */
     @Override
@@ -185,7 +186,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getShort(int)
      */
     @Override
@@ -199,7 +200,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getInt(int)
      */
     @Override
@@ -213,7 +214,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getLong(int)
      */
     @Override
@@ -228,12 +229,12 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getFloat(int)
      */
     @Override
     public float getFloat(int parameterIndex) throws SQLException {
-	
+
 	String value = getString(parameterIndex);
 	if (value == null || value.equalsIgnoreCase("NULL")) {
 	    return 0;
@@ -243,7 +244,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getDouble(int)
      */
     @Override
@@ -257,7 +258,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getBigDecimal(int, int)
      */
     @Override
@@ -269,7 +270,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getBytes(int)
      */
     @Override
@@ -281,7 +282,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getDate(int)
      */
     @Override
@@ -295,7 +296,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getTime(int)
      */
     @Override
@@ -307,7 +308,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getTimestamp(int)
      */
     @Override
@@ -321,7 +322,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getObject(int)
      */
     @Override
@@ -333,7 +334,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getBigDecimal(int)
      */
     @Override
@@ -347,7 +348,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getObject(int, java.util.Map)
      */
     @Override
@@ -359,7 +360,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getRef(int)
      */
     @Override
@@ -371,7 +372,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getBlob(int)
      */
     @Override
@@ -383,7 +384,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getClob(int)
      */
     @Override
@@ -395,7 +396,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getArray(int)
      */
     @Override
@@ -407,7 +408,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getDate(int, java.util.Calendar)
      */
     @Override
@@ -421,7 +422,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getTime(int, java.util.Calendar)
      */
     @Override
@@ -433,7 +434,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getTimestamp(int, java.util.Calendar)
      */
     @Override
@@ -445,7 +446,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#registerOutParameter(int, int,
      * java.lang.String)
      */
@@ -458,7 +459,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#registerOutParameter(java.lang.String, int)
      */
     @Override
@@ -470,7 +471,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#registerOutParameter(java.lang.String, int,
      * int)
      */
@@ -483,7 +484,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#registerOutParameter(java.lang.String, int,
      * java.lang.String)
      */
@@ -496,7 +497,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getURL(int)
      */
     @Override
@@ -508,7 +509,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#setURL(java.lang.String, java.net.URL)
      */
     @Override
@@ -520,7 +521,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#setNull(java.lang.String, int)
      */
     @Override
@@ -532,7 +533,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#setBoolean(java.lang.String, boolean)
      */
     @Override
@@ -544,7 +545,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#setByte(java.lang.String, byte)
      */
     @Override
@@ -556,7 +557,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#setShort(java.lang.String, short)
      */
     @Override
@@ -568,7 +569,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#setInt(java.lang.String, int)
      */
     @Override
@@ -580,7 +581,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#setLong(java.lang.String, long)
      */
     @Override
@@ -592,7 +593,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#setFloat(java.lang.String, float)
      */
     @Override
@@ -604,7 +605,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#setDouble(java.lang.String, double)
      */
     @Override
@@ -616,7 +617,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#setBigDecimal(java.lang.String,
      * java.math.BigDecimal)
      */
@@ -629,7 +630,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#setString(java.lang.String, java.lang.String)
      */
     @Override
@@ -641,7 +642,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#setBytes(java.lang.String, byte[])
      */
     @Override
@@ -653,7 +654,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#setDate(java.lang.String, java.sql.Date)
      */
     @Override
@@ -665,7 +666,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#setTime(java.lang.String, java.sql.Time)
      */
     @Override
@@ -677,7 +678,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#setTimestamp(java.lang.String,
      * java.sql.Timestamp)
      */
@@ -690,7 +691,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#setAsciiStream(java.lang.String,
      * java.io.InputStream, int)
      */
@@ -703,7 +704,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#setBinaryStream(java.lang.String,
      * java.io.InputStream, int)
      */
@@ -716,7 +717,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#setObject(java.lang.String, java.lang.Object,
      * int, int)
      */
@@ -729,7 +730,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#setObject(java.lang.String, java.lang.Object,
      * int)
      */
@@ -742,7 +743,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#setObject(java.lang.String, java.lang.Object)
      */
     @Override
@@ -754,7 +755,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#setCharacterStream(java.lang.String,
      * java.io.Reader, int)
      */
@@ -767,7 +768,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#setDate(java.lang.String, java.sql.Date,
      * java.util.Calendar)
      */
@@ -780,7 +781,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#setTime(java.lang.String, java.sql.Time,
      * java.util.Calendar)
      */
@@ -793,7 +794,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#setTimestamp(java.lang.String,
      * java.sql.Timestamp, java.util.Calendar)
      */
@@ -806,7 +807,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#setNull(java.lang.String, int,
      * java.lang.String)
      */
@@ -819,7 +820,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getString(java.lang.String)
      */
     @Override
@@ -831,7 +832,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getBoolean(java.lang.String)
      */
     @Override
@@ -843,7 +844,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getByte(java.lang.String)
      */
     @Override
@@ -855,7 +856,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getShort(java.lang.String)
      */
     @Override
@@ -867,7 +868,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getInt(java.lang.String)
      */
     @Override
@@ -879,7 +880,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getLong(java.lang.String)
      */
     @Override
@@ -891,7 +892,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getFloat(java.lang.String)
      */
     @Override
@@ -903,7 +904,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getDouble(java.lang.String)
      */
     @Override
@@ -915,7 +916,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getBytes(java.lang.String)
      */
     @Override
@@ -927,7 +928,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getDate(java.lang.String)
      */
     @Override
@@ -939,7 +940,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getTime(java.lang.String)
      */
     @Override
@@ -951,7 +952,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getTimestamp(java.lang.String)
      */
     @Override
@@ -963,7 +964,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getObject(java.lang.String)
      */
     @Override
@@ -975,7 +976,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getBigDecimal(java.lang.String)
      */
     @Override
@@ -987,7 +988,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getObject(java.lang.String, java.util.Map)
      */
     @Override
@@ -999,7 +1000,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getRef(java.lang.String)
      */
     @Override
@@ -1011,7 +1012,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getBlob(java.lang.String)
      */
     @Override
@@ -1023,7 +1024,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getClob(java.lang.String)
      */
     @Override
@@ -1035,7 +1036,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getArray(java.lang.String)
      */
     @Override
@@ -1047,7 +1048,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getDate(java.lang.String, java.util.Calendar)
      */
     @Override
@@ -1059,7 +1060,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getTime(java.lang.String, java.util.Calendar)
      */
     @Override
@@ -1071,7 +1072,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getTimestamp(java.lang.String,
      * java.util.Calendar)
      */
@@ -1084,7 +1085,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getURL(java.lang.String)
      */
     @Override
@@ -1096,7 +1097,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getRowId(int)
      */
     @Override
@@ -1108,7 +1109,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getRowId(java.lang.String)
      */
     @Override
@@ -1120,7 +1121,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#setRowId(java.lang.String, java.sql.RowId)
      */
     @Override
@@ -1132,7 +1133,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#setNString(java.lang.String,
      * java.lang.String)
      */
@@ -1145,7 +1146,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#setNCharacterStream(java.lang.String,
      * java.io.Reader, long)
      */
@@ -1158,7 +1159,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#setNClob(java.lang.String, java.sql.NClob)
      */
     @Override
@@ -1170,7 +1171,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#setClob(java.lang.String, java.io.Reader,
      * long)
      */
@@ -1183,7 +1184,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#setBlob(java.lang.String,
      * java.io.InputStream, long)
      */
@@ -1196,7 +1197,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#setNClob(java.lang.String, java.io.Reader,
      * long)
      */
@@ -1209,7 +1210,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getNClob(int)
      */
     @Override
@@ -1221,7 +1222,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getNClob(java.lang.String)
      */
     @Override
@@ -1233,7 +1234,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#setSQLXML(java.lang.String, java.sql.SQLXML)
      */
     @Override
@@ -1245,7 +1246,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getSQLXML(int)
      */
     @Override
@@ -1257,7 +1258,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getSQLXML(java.lang.String)
      */
     @Override
@@ -1269,7 +1270,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getNString(int)
      */
     @Override
@@ -1281,7 +1282,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getNString(java.lang.String)
      */
     @Override
@@ -1293,7 +1294,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getNCharacterStream(int)
      */
     @Override
@@ -1305,7 +1306,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getNCharacterStream(java.lang.String)
      */
     @Override
@@ -1317,7 +1318,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getCharacterStream(int)
      */
     @Override
@@ -1329,7 +1330,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getCharacterStream(java.lang.String)
      */
     @Override
@@ -1341,7 +1342,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#setBlob(java.lang.String, java.sql.Blob)
      */
     @Override
@@ -1353,7 +1354,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#setClob(java.lang.String, java.sql.Clob)
      */
     @Override
@@ -1365,7 +1366,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#setAsciiStream(java.lang.String,
      * java.io.InputStream, long)
      */
@@ -1378,7 +1379,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#setBinaryStream(java.lang.String,
      * java.io.InputStream, long)
      */
@@ -1391,7 +1392,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#setCharacterStream(java.lang.String,
      * java.io.Reader, long)
      */
@@ -1404,7 +1405,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#setAsciiStream(java.lang.String,
      * java.io.InputStream)
      */
@@ -1417,7 +1418,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#setBinaryStream(java.lang.String,
      * java.io.InputStream)
      */
@@ -1430,7 +1431,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#setCharacterStream(java.lang.String,
      * java.io.Reader)
      */
@@ -1441,7 +1442,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#setNCharacterStream(java.lang.String,
      * java.io.Reader)
      */
@@ -1454,7 +1455,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#setClob(java.lang.String, java.io.Reader)
      */
     @Override
@@ -1464,7 +1465,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#setBlob(java.lang.String,
      * java.io.InputStream)
      */
@@ -1477,7 +1478,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#setNClob(java.lang.String, java.io.Reader)
      */
     @Override
@@ -1489,7 +1490,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getObject(int, java.lang.Class)
      */
     @Override
@@ -1501,7 +1502,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.sql.CallableStatement#getObject(java.lang.String, java.lang.Class)
      */
     @Override

@@ -241,7 +241,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 		Objects.requireNonNull(username, "username can not be null!");
 	    }
 	    if (password == null) {
-		Objects.requireNonNull(username, "password can not be null!");
+		Objects.requireNonNull(password, "password can not be null!");
 	    }
 
 	    aceQLHttpApi = new AceQLHttpApi(serverUrl, database, username, password, null, proxy,
@@ -300,7 +300,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 		Objects.requireNonNull(username, "username can not be null!");
 	    }
 	    if (sessionId == null) {
-		Objects.requireNonNull(username, "sessionId can not be null!");
+		Objects.requireNonNull(sessionId, "sessionId can not be null!");
 	    }
 
 	    aceQLHttpApi = new AceQLHttpApi(serverUrl, database, username, null, sessionId, proxy,

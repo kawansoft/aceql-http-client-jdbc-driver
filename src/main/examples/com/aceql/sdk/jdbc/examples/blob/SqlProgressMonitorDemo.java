@@ -1,20 +1,20 @@
 /*
  * This file is part of AceQL Client SDK.
- * AceQL Client SDK: Remote JDBC access over HTTP with AceQL HTTP.                                 
+ * AceQL Client SDK: Remote JDBC access over HTTP with AceQL HTTP.
  * Copyright (C) 2020,  KawanSoft SAS
- * (http://www.kawansoft.com). All rights reserved.                                
- *                                                                               
+ * (http://www.kawansoft.com). All rights reserved.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  */
 package com.aceql.sdk.jdbc.examples.blob;
 
@@ -45,7 +45,7 @@ import javax.swing.SwingWorker;
 import com.aceql.client.jdbc.AceQLConnection;
 
 /**
- * 
+ *
  * This class is a demo for inserting a Blob using a
  * <code>ProgressMonitor</code>.&nbsp;
  * <p>
@@ -58,7 +58,7 @@ import com.aceql.client.jdbc.AceQLConnection;
  * To run it, just modify the settings between the two lines in doInsert(): <br>
  * // BEGIN MODIFY WITH YOUR VALUES <br>
  * // END MODIFY WITH YOUR VALUES
- * 
+ *
  * @since 1.0
  */
 
@@ -96,7 +96,7 @@ PropertyChangeListener {
 
 		if (isCancelled()) {
 		    // If end user cancels the task, say it to mutable & shareable
-		    // cancelled. 
+		    // cancelled.
 		    // cancelled will be read by RemoteConnection to
 		    // interrupt blob upload
 		    cancelled.set(true);
@@ -166,7 +166,7 @@ PropertyChangeListener {
      */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-	if ("progress" == evt.getPropertyName()) {
+	if ("progress".contentEquals(evt.getPropertyName())) {
 	    int progress = (Integer) evt.getNewValue();
 	    progressMonitor.setProgress(progress);
 	    String message = String.format("Completed %d%%.\n", progress);
@@ -198,7 +198,7 @@ PropertyChangeListener {
 	    String database = "sampledb";
 	    String username = "username";
 	    char [] password = { 'p', 'a', 's', 's', 'w', 'o', 'r', 'd'};
-	    File imageFile = 
+	    File imageFile =
 		    new File(userHome + File.separator + "image_1.jpg");
 	    // END MODIFY WITH YOUR VALUES
 

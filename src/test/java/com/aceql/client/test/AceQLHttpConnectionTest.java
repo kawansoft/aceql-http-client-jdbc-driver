@@ -43,8 +43,8 @@ public class AceQLHttpConnectionTest {
     public static final String IN_DIRECTORY = SystemUtils.USER_HOME + File.separator + "aceql_tests" + File.separator + "IN";
     public static final String OUT_DIRECTORY = SystemUtils.USER_HOME + File.separator + "aceql_tests" + File.separator + "OUT";
 
-    final String serverUrlWindows = "http://localhost:9090/aceql";
-    final String serverUrlLinux = "http://www.aceql.com:8081/aceql";
+    public final String serverUrlWindows = "http://localhost:9090/aceql";
+    public final String serverUrlLinux = "http://www.aceql.com:8081/aceql";
 
     public final String serverUrl = serverUrlWindows;
     public final String username = "user1";

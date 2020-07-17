@@ -1,20 +1,20 @@
 /*
  * This file is part of AceQL Client SDK.
- * AceQL Client SDK: Remote JDBC access over HTTP with AceQL HTTP.                                 
+ * AceQL Client SDK: Remote JDBC access over HTTP with AceQL HTTP.
  * Copyright (C) 2020,  KawanSoft SAS
- * (http://www.kawansoft.com). All rights reserved.                                
- *                                                                               
+ * (http://www.kawansoft.com). All rights reserved.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  */
 package com.aceql.client.jdbc.util;
 
@@ -25,22 +25,17 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * Class to convert a SQL type as string into the numerical java.sql.types and
  * reverse
- * 
+ *
  * @author Nicolas de Pomereu
  *
  */
 public class JavaSqlConversion {
 
-    /**
-     * 
-     */
-    public JavaSqlConversion() {
-    }
 
     /**
      * Decode the String param type passed by user on client side into a Types
      * corresponding value.
-     * 
+     *
      * @param sqlParamType
      * @return
      */
@@ -57,7 +52,7 @@ public class JavaSqlConversion {
 	    javaType = Types.BIT;
 	} else if (sqlParamType.equals(AceQLTypes.NUMERIC)) {
 	    javaType = Types.NUMERIC;
-	} 
+	}
 	// HACK Version 3.0.1: add AceQLTypes.DECIMAL
 	else if (sqlParamType.equals(AceQLTypes.DECIMAL)) {
 	    javaType = Types.DECIMAL;

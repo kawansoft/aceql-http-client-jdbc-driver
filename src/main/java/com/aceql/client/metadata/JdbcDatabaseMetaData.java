@@ -171,7 +171,7 @@ public class JdbcDatabaseMetaData {
 
     }
 
-    public java.lang.String getURL() throws SQLException {
+    public String getURL() throws SQLException {
 	return getURL;
     }
 
@@ -187,7 +187,7 @@ public class JdbcDatabaseMetaData {
 	return allTablesAreSelectable;
     }
 
-    public java.lang.String getUserName() throws SQLException {
+    public String getUserName() throws SQLException {
 	return getUserName;
     }
 
@@ -207,19 +207,19 @@ public class JdbcDatabaseMetaData {
 	return nullsAreSortedAtEnd;
     }
 
-    public java.lang.String getDatabaseProductName() throws SQLException {
+    public String getDatabaseProductName() throws SQLException {
 	return getDatabaseProductName;
     }
 
-    public java.lang.String getDatabaseProductVersion() throws SQLException {
+    public String getDatabaseProductVersion() throws SQLException {
 	return getDatabaseProductVersion;
     }
 
-    public java.lang.String getDriverName() throws SQLException {
+    public String getDriverName() throws SQLException {
 	return getDriverName;
     }
 
-    public java.lang.String getDriverVersion() throws SQLException {
+    public String getDriverVersion() throws SQLException {
 	return getDriverVersion;
     }
 
@@ -271,35 +271,35 @@ public class JdbcDatabaseMetaData {
 	return storesMixedCaseQuotedIdentifiers;
     }
 
-    public java.lang.String getIdentifierQuoteString() throws SQLException {
+    public String getIdentifierQuoteString() throws SQLException {
 	return getIdentifierQuoteString;
     }
 
-    public java.lang.String getSQLKeywords() throws SQLException {
+    public String getSQLKeywords() throws SQLException {
 	return getSQLKeywords;
     }
 
-    public java.lang.String getNumericFunctions() throws SQLException {
+    public String getNumericFunctions() throws SQLException {
 	return getNumericFunctions;
     }
 
-    public java.lang.String getStringFunctions() throws SQLException {
+    public String getStringFunctions() throws SQLException {
 	return getStringFunctions;
     }
 
-    public java.lang.String getSystemFunctions() throws SQLException {
+    public String getSystemFunctions() throws SQLException {
 	return getSystemFunctions;
     }
 
-    public java.lang.String getTimeDateFunctions() throws SQLException {
+    public String getTimeDateFunctions() throws SQLException {
 	return getTimeDateFunctions;
     }
 
-    public java.lang.String getSearchStringEscape() throws SQLException {
+    public String getSearchStringEscape() throws SQLException {
 	return getSearchStringEscape;
     }
 
-    public java.lang.String getExtraNameCharacters() throws SQLException {
+    public String getExtraNameCharacters() throws SQLException {
 	return getExtraNameCharacters;
     }
 
@@ -407,15 +407,15 @@ public class JdbcDatabaseMetaData {
 	return supportsLimitedOuterJoins;
     }
 
-    public java.lang.String getSchemaTerm() throws SQLException {
+    public String getSchemaTerm() throws SQLException {
 	return getSchemaTerm;
     }
 
-    public java.lang.String getProcedureTerm() throws SQLException {
+    public String getProcedureTerm() throws SQLException {
 	return getProcedureTerm;
     }
 
-    public java.lang.String getCatalogTerm() throws SQLException {
+    public String getCatalogTerm() throws SQLException {
 	return getCatalogTerm;
     }
 
@@ -423,7 +423,7 @@ public class JdbcDatabaseMetaData {
 	return isCatalogAtStart;
     }
 
-    public java.lang.String getCatalogSeparator() throws SQLException {
+    public String getCatalogSeparator() throws SQLException {
 	return getCatalogSeparator;
     }
 

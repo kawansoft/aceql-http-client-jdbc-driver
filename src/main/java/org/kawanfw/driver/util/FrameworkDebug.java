@@ -1,20 +1,20 @@
 /*
  * This file is part of AceQL Client SDK.
- * AceQL Client SDK: Remote JDBC access over HTTP with AceQL HTTP.                                 
+ * AceQL Client SDK: Remote JDBC access over HTTP with AceQL HTTP.
  * Copyright (C) 2020,  KawanSoft SAS
- * (http://www.kawansoft.com). All rights reserved.                                
- *                                                                               
+ * (http://www.kawansoft.com). All rights reserved.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  */
 package org.kawanfw.driver.util;
 
@@ -30,10 +30,10 @@ import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author Nicolas de Pomereu
- * 
+ *
  *         Allow to debug files contained in
  *         user.home/.kanwansoft/kanwansoft-debug.ini.
- * 
+ *
  */
 public class FrameworkDebug {
     /** The file that contain the classes to debug in user.home */
@@ -51,7 +51,7 @@ public class FrameworkDebug {
 
     /**
      * Says if a class must be in debug mode
-     * 
+     *
      * @param clazz
      *            the class to analyze if debug must be on
      * @return true if the class must be on debug mode, else false
@@ -62,17 +62,14 @@ public class FrameworkDebug {
 	String className = clazz.getName();
 	String rawClassName = StringUtils.substringAfterLast(className, ".");
 
-	if (CLASSES_TO_DEBUG.contains(className)
-		|| CLASSES_TO_DEBUG.contains(rawClassName)) {
-	    return true;
-	} else {
-	    return false;
-	}
+	return CLASSES_TO_DEBUG.contains(className)
+		|| CLASSES_TO_DEBUG.contains(rawClassName);
+
     }
 
     /**
      * Load the classes to debug from the file
-     * 
+     *
      * @throws IOException
      */
     private static void load() {
@@ -92,9 +89,9 @@ public class FrameworkDebug {
 	    return;
 	}
 
-	
+
 	try(LineNumberReader lineNumberReader = new LineNumberReader(new FileReader(file));) {
-	    
+
 	    String line = null;
 	    while ((line = lineNumberReader.readLine()) != null) {
 		line = line.trim();

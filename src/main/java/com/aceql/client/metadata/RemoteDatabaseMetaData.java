@@ -82,7 +82,7 @@ public class RemoteDatabaseMetaData {
 	}
 
 	if (format == null) {
-	    Objects.requireNonNull(file, "format can not be null!");
+	    Objects.requireNonNull(format, "format can not be null!");
 	}
 
 	if (!format.equals("html") && !format.equals("text")) {

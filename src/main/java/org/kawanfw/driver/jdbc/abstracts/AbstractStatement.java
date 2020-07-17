@@ -1,20 +1,20 @@
 /*
  * This file is part of AceQL Client SDK.
- * AceQL Client SDK: Remote JDBC access over HTTP with AceQL HTTP.                                 
+ * AceQL Client SDK: Remote JDBC access over HTTP with AceQL HTTP.
  * Copyright (C) 2020,  KawanSoft SAS
- * (http://www.kawansoft.com). All rights reserved.                                
- *                                                                               
+ * (http://www.kawansoft.com). All rights reserved.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  */
 package org.kawanfw.driver.jdbc.abstracts;
 
@@ -29,7 +29,7 @@ import java.sql.Statement;
  * Statement Wrapper. <br>
  * Implements all the Statement methods. Usage is exactly the same as a
  * Statement.
- * 
+ *
  */
 
 public class AbstractStatement implements Statement {
@@ -41,6 +41,63 @@ public class AbstractStatement implements Statement {
     private boolean isConnectionHttp = false;
 
     /**
+     * The constant indicating that the current <code>ResultSet</code> object
+     * should be closed when calling <code>getMoreResults</code>.
+     *
+     * @since 1.4
+     */
+    public int CLOSE_CURRENT_RESULT = 1;
+
+    /**
+     * The constant indicating that the current <code>ResultSet</code> object
+     * should not be closed when calling <code>getMoreResults</code>.
+     *
+     * @since 1.4
+     */
+    public int KEEP_CURRENT_RESULT = 2;
+
+    /**
+     * The constant indicating that all <code>ResultSet</code> objects that have
+     * previously been kept open should be closed when calling
+     * <code>getMoreResults</code>.
+     *
+     * @since 1.4
+     */
+    public int CLOSE_ALL_RESULTS = 3;
+
+    /**
+     * The constant indicating that a batch statement executed successfully but
+     * that no count of the number of rows it affected is available.
+     *
+     * @since 1.4
+     */
+    public int SUCCESS_NO_INFO = -2;
+
+    /**
+     * The constant indicating that an error occured while executing a batch
+     * statement.
+     *
+     * @since 1.4
+     */
+    public int EXECUTE_FAILED = -3;
+
+    /**
+     * The constant indicating that generated keys should be made available for
+     * retrieval.
+     *
+     * @since 1.4
+     */
+    public int RETURN_GENERATED_KEYS = 1;
+
+    /**
+     * The constant indicating that generated keys should not be made available
+     * for retrieval.
+     *
+     * @since 1.4
+     */
+    public int NO_GENERATED_KEYS = 2;
+
+    /**
      * Set to true if the user has closed the connection by a explicit call to
      * close()
      */
@@ -48,7 +105,7 @@ public class AbstractStatement implements Statement {
 
     /**
      * Void Constructor
-     * 
+     *
      * Needed for HTTP usage because there is no real JDBC Connection
      */
     public AbstractStatement() {
@@ -57,7 +114,7 @@ public class AbstractStatement implements Statement {
 
     /**
      * Constructor
-     * 
+     *
      * @param statement
      *            actual statement in use to wrap
      */
@@ -86,7 +143,7 @@ public class AbstractStatement implements Statement {
     /**
      * Executes the given SQL statement, which returns a single
      * <code>ResultSet</code> object.
-     * 
+     *
      * @param sql
      *            an SQL statement to be sent to the database, typically a
      *            static SQL <code>SELECT</code> statement
@@ -109,7 +166,7 @@ public class AbstractStatement implements Statement {
      * Executes the given SQL statement, which may be an <code>INSERT</code>,
      * <code>UPDATE</code>, or <code>DELETE</code> statement or an SQL statement
      * that returns nothing, such as an SQL DDL statement.
-     * 
+     *
      * @param sql
      *            an SQL <code>INSERT</code>, <code>UPDATE</code> or
      *            <code>DELETE</code> statement or an SQL statement that returns
@@ -142,7 +199,7 @@ public class AbstractStatement implements Statement {
      * <B>Note:</B> A <code>Statement</code> object is automatically closed when
      * it is garbage collected. When a <code>Statement</code> object is closed,
      * its current <code>ResultSet</code> object, if one exists, is also closed.
-     * 
+     *
      * @exception SQLException
      *                if a database access error occurs
      */
@@ -159,7 +216,7 @@ public class AbstractStatement implements Statement {
      * <code>BINARY</code>, <code>VARBINARY</code>, <code>LONGVARBINARY</code>,
      * <code>CHAR</code>, <code>VARCHAR</code>, and <code>LONGVARCHAR</code>
      * columns. If the limit is exceeded, the excess data is silently discarded.
-     * 
+     *
      * @return the current column size limit for columns storing character and
      *         binary values; zero means there is no limit
      * @exception SQLException
@@ -182,7 +239,7 @@ public class AbstractStatement implements Statement {
      * <code>VARCHAR</code>, and <code>LONGVARCHAR</code> fields. If the limit
      * is exceeded, the excess data is silently discarded. For maximum
      * portability, use values greater than 256.
-     * 
+     *
      * @param max
      *            the new column size limit in bytes; zero means there is no
      *            limit
@@ -203,7 +260,7 @@ public class AbstractStatement implements Statement {
      * Retrieves the maximum number of rows that a <code>ResultSet</code> object
      * produced by this <code>Statement</code> object can contain. If this limit
      * is exceeded, the excess rows are silently dropped.
-     * 
+     *
      * @return the current maximum number of rows for a <code>ResultSet</code>
      *         object produced by this <code>Statement</code> object; zero means
      *         there is no limit
@@ -223,7 +280,7 @@ public class AbstractStatement implements Statement {
      * Sets the limit for the maximum number of rows that any
      * <code>ResultSet</code> object can contain to the given number. If the
      * limit is exceeded, the excess rows are silently dropped.
-     * 
+     *
      * @param max
      *            the new max rows limit; zero means there is no limit
      * @exception SQLException
@@ -243,11 +300,11 @@ public class AbstractStatement implements Statement {
      * Sets escape processing on or off. If escape scanning is on (the default),
      * the driver will do escape substitution before sending the SQL statement
      * to the database.
-     * 
+     *
      * Note: Since prepared statements have usually been parsed prior to making
      * this call, disabling escape processing for
      * <code>PreparedStatements</code> objects will have no effect.
-     * 
+     *
      * @param enable
      *            <code>true</code> to enable escape processing;
      *            <code>false</code> to disable it
@@ -266,7 +323,7 @@ public class AbstractStatement implements Statement {
      * Retrieves the number of seconds the driver will wait for a
      * <code>Statement</code> object to execute. If the limit is exceeded, a
      * <code>SQLException</code> is thrown.
-     * 
+     *
      * @return the current query timeout limit in seconds; zero means there is
      *         no limit
      * @exception SQLException
@@ -285,7 +342,7 @@ public class AbstractStatement implements Statement {
      * Sets the number of seconds the driver will wait for a
      * <code>Statement</code> object to execute to the given number of seconds.
      * If the limit is exceeded, an <code>SQLException</code> is thrown.
-     * 
+     *
      * @param seconds
      *            the new query timeout limit in seconds; zero means there is no
      *            limit
@@ -306,7 +363,7 @@ public class AbstractStatement implements Statement {
      * Cancels this <code>Statement</code> object if both the DBMS and driver
      * support aborting an SQL statement. This method can be used by one thread
      * to cancel a statement that is being executed by another thread.
-     * 
+     *
      * @exception SQLException
      *                if a database access error occurs
      */
@@ -322,19 +379,19 @@ public class AbstractStatement implements Statement {
      * Retrieves the first warning reported by calls on this
      * <code>Statement</code> object. Subsequent <code>Statement</code> object
      * warnings will be chained to this <code>SQLWarning</code> object.
-     * 
+     *
      * <p>
      * The warning chain is automatically cleared each time a statement is
      * (re)executed. This method may not be called on a closed
      * <code>Statement</code> object; doing so will cause an
      * <code>SQLException</code> to be thrown.
-     * 
+     *
      * <P>
      * <B>Note:</B> If you are processing a <code>ResultSet</code> object, any
      * warnings associated with reads on that <code>ResultSet</code> object will
      * be chained on it rather than on the <code>Statement</code> object that
      * produced it.
-     * 
+     *
      * @return the first <code>SQLWarning</code> object or <code>null</code> if
      *         there are no warnings
      * @exception SQLException
@@ -354,7 +411,7 @@ public class AbstractStatement implements Statement {
      * After a call to this method, the method <code>getWarnings</code> will
      * return <code>null</code> until a new warning is reported for this
      * <code>Statement</code> object.
-     * 
+     *
      * @exception SQLException
      *                if a database access error occurs
      */
@@ -377,13 +434,13 @@ public class AbstractStatement implements Statement {
      * <code>SELECT</code> statement should have the form
      * <code>SELECT FOR UPDATE</code>. If <code>FOR UPDATE</code> is not
      * present, positioned updates may fail.
-     * 
+     *
      * <P>
      * <B>Note:</B> By definition, the execution of positioned updates and
      * deletes must be done by a different <code>Statement</code> object than
      * the one that generated the <code>ResultSet</code> object being used for
      * positioning. Also, cursor names must be unique within a connection.
-     * 
+     *
      * @param name
      *            the new cursor name, which must be unique within a connection
      * @exception SQLException
@@ -410,7 +467,7 @@ public class AbstractStatement implements Statement {
      * <code>getResultSet</code> or <code>getUpdateCount</code> to retrieve the
      * result, and <code>getMoreResults</code> to move to any subsequent
      * result(s).
-     * 
+     *
      * @param sql
      *            any SQL statement
      * @return <code>true</code> if the first result is a <code>ResultSet</code>
@@ -433,7 +490,7 @@ public class AbstractStatement implements Statement {
     /**
      * Retrieves the current result as a <code>ResultSet</code> object. This
      * method should be called only once per result.
-     * 
+     *
      * @return the current result as a <code>ResultSet</code> object or
      *         <code>null</code> if the result is an update count or there are
      *         no more results
@@ -453,7 +510,7 @@ public class AbstractStatement implements Statement {
      * Retrieves the current result as an update count; if the result is a
      * <code>ResultSet</code> object or there are no more results, -1 is
      * returned. This method should be called only once per result.
-     * 
+     *
      * @return the current result as an update count; -1 if the current result
      *         is a <code>ResultSet</code> object or there are no more results
      * @exception SQLException
@@ -473,14 +530,14 @@ public class AbstractStatement implements Statement {
      * <code>true</code> if it is a <code>ResultSet</code> object, and
      * implicitly closes any current <code>ResultSet</code> object(s) obtained
      * with the method <code>getResultSet</code>.
-     * 
+     *
      * <P>
      * There are no more results when the following is true:
-     * 
+     *
      * <PRE>
      *      <code>(!getMoreResults() && (getUpdateCount() == -1)</code>
      * </PRE>
-     * 
+     *
      * @return <code>true</code> if the next result is a <code>ResultSet</code>
      *         object; <code>false</code> if it is an update count or there are
      *         no more results
@@ -507,7 +564,7 @@ public class AbstractStatement implements Statement {
      * Note that this method sets the default fetch direction for result sets
      * generated by this <code>Statement</code> object. Each result set has its
      * own methods for getting and setting its own fetch direction.
-     * 
+     *
      * @param direction
      *            the initial direction for processing rows
      * @exception SQLException
@@ -532,7 +589,7 @@ public class AbstractStatement implements Statement {
      * object. If this <code>Statement</code> object has not set a fetch
      * direction by calling the method <code>setFetchDirection</code>, the
      * return value is implementation-specific.
-     * 
+     *
      * @return the default fetch direction for result sets generated from this
      *         <code>Statement</code> object
      * @exception SQLException
@@ -554,7 +611,7 @@ public class AbstractStatement implements Statement {
      * specified affects only result sets created using this statement. If the
      * value specified is zero, then the hint is ignored. The default value is
      * zero.
-     * 
+     *
      * @param rows
      *            the number of rows to fetch
      * @exception SQLException
@@ -578,7 +635,7 @@ public class AbstractStatement implements Statement {
      * <code>Statement</code> object. If this <code>Statement</code> object has
      * not set a fetch size by calling the method <code>setFetchSize</code>, the
      * return value is implementation-specific.
-     * 
+     *
      * @return the default fetch size for result sets generated from this
      *         <code>Statement</code> object
      * @exception SQLException
@@ -597,7 +654,7 @@ public class AbstractStatement implements Statement {
     /**
      * Retrieves the result set concurrency for <code>ResultSet</code> objects
      * generated by this <code>Statement</code> object.
-     * 
+     *
      * @return either <code>ResultSet.CONCUR_READ_ONLY</code> or
      *         <code>ResultSet.CONCUR_UPDATABLE</code>
      * @exception SQLException
@@ -615,7 +672,7 @@ public class AbstractStatement implements Statement {
     /**
      * Retrieves the result set type for <code>ResultSet</code> objects
      * generated by this <code>Statement</code> object.
-     * 
+     *
      * @return one of <code>ResultSet.TYPE_FORWARD_ONLY</code>,
      *         <code>ResultSet.TYPE_SCROLL_INSENSITIVE</code>, or
      *         <code>ResultSet.TYPE_SCROLL_SENSITIVE</code>
@@ -637,7 +694,7 @@ public class AbstractStatement implements Statement {
      * as a batch by calling the method <code>executeBatch</code>.
      * <P>
      * <B>NOTE:</B> This method is optional.
-     * 
+     *
      * @param sql
      *            typically this is a static SQL <code>INSERT</code> or
      *            <code>UPDATE</code> statement
@@ -660,7 +717,7 @@ public class AbstractStatement implements Statement {
      * commands.
      * <P>
      * <B>NOTE:</B> This method is optional.
-     * 
+     *
      * @exception SQLException
      *                if a database access error occurs or the driver does not
      *                support batch updates
@@ -712,7 +769,7 @@ public class AbstractStatement implements Statement {
      * Standard Edition, version 1.3 to accommodate the option of continuing to
      * proccess commands in a batch update after a
      * <code>BatchUpdateException</code> obejct has been thrown.
-     * 
+     *
      * @return an array of update counts containing one element for each command
      *         in the batch. The elements of the array are ordered according to
      *         the order in which commands were added to the batch.
@@ -736,7 +793,7 @@ public class AbstractStatement implements Statement {
     /**
      * Retrieves the <code>Connection</code> object that produced this
      * <code>Statement</code> object.
-     * 
+     *
      * @return the connection that produced this statement
      * @exception SQLException
      *                if a database access error occurs
@@ -751,76 +808,21 @@ public class AbstractStatement implements Statement {
     }
 
     // --------------------------JDBC 3.0-----------------------------
-    /**
-     * The constant indicating that the current <code>ResultSet</code> object
-     * should be closed when calling <code>getMoreResults</code>.
-     * 
-     * @since 1.4
-     */
-    public int CLOSE_CURRENT_RESULT = 1;
 
-    /**
-     * The constant indicating that the current <code>ResultSet</code> object
-     * should not be closed when calling <code>getMoreResults</code>.
-     * 
-     * @since 1.4
-     */
-    public int KEEP_CURRENT_RESULT = 2;
-
-    /**
-     * The constant indicating that all <code>ResultSet</code> objects that have
-     * previously been kept open should be closed when calling
-     * <code>getMoreResults</code>.
-     * 
-     * @since 1.4
-     */
-    public int CLOSE_ALL_RESULTS = 3;
-
-    /**
-     * The constant indicating that a batch statement executed successfully but
-     * that no count of the number of rows it affected is available.
-     * 
-     * @since 1.4
-     */
-    public int SUCCESS_NO_INFO = -2;
-
-    /**
-     * The constant indicating that an error occured while executing a batch
-     * statement.
-     * 
-     * @since 1.4
-     */
-    public int EXECUTE_FAILED = -3;
-
-    /**
-     * The constant indicating that generated keys should be made available for
-     * retrieval.
-     * 
-     * @since 1.4
-     */
-    public int RETURN_GENERATED_KEYS = 1;
-
-    /**
-     * The constant indicating that generated keys should not be made available
-     * for retrieval.
-     * 
-     * @since 1.4
-     */
-    public int NO_GENERATED_KEYS = 2;
 
     /**
      * Moves to this <code>Statement</code> object's next result, deals with any
      * current <code>ResultSet</code> object(s) according to the instructions
      * specified by the given flag, and returns <code>true</code> if the next
      * result is a <code>ResultSet</code> object.
-     * 
+     *
      * <P>
      * There are no more results when the following is true:
-     * 
+     *
      * <PRE>
      *      <code>(!getMoreResults() && (getUpdateCount() == -1)</code>
      * </PRE>
-     * 
+     *
      * @param current
      *            one of the following <code>Statement</code> constants
      *            indicating what should happen to current
@@ -849,7 +851,7 @@ public class AbstractStatement implements Statement {
      * <code>Statement</code> object. If this <code>Statement</code> object did
      * not generate any keys, an empty <code>ResultSet</code> object is
      * returned.
-     * 
+     *
      * @return a <code>ResultSet</code> object containing the auto-generated
      *         key(s) generated by the execution of this <code>Statement</code>
      *         object
@@ -869,7 +871,7 @@ public class AbstractStatement implements Statement {
      * Executes the given SQL statement and signals the driver with the given
      * flag about whether the auto-generated keys produced by this
      * <code>Statement</code> object should be made available for retrieval.
-     * 
+     *
      * @param sql
      *            must be an SQL <code>INSERT</code>, <code>UPDATE</code> or
      *            <code>DELETE</code> statement or an SQL statement that returns
@@ -902,7 +904,7 @@ public class AbstractStatement implements Statement {
      * auto-generated keys indicated in the given array should be made available
      * for retrieval. The driver will ignore the array if the SQL statement is
      * not an <code>INSERT</code> statement.
-     * 
+     *
      * @param sql
      *            an SQL <code>INSERT</code>, <code>UPDATE</code> or
      *            <code>DELETE</code> statement or an SQL statement that returns
@@ -932,7 +934,7 @@ public class AbstractStatement implements Statement {
      * auto-generated keys indicated in the given array should be made available
      * for retrieval. The driver will ignore the array if the SQL statement is
      * not an <code>INSERT</code> statement.
-     * 
+     *
      * @param sql
      *            an SQL <code>INSERT</code>, <code>UPDATE</code> or
      *            <code>DELETE</code> statement or an SQL statement that returns
@@ -945,7 +947,7 @@ public class AbstractStatement implements Statement {
      *         return nothing
      * @exception SQLException
      *                if a database access error occurs
-     * 
+     *
      * @since 1.4
      */
     @Override
@@ -973,7 +975,7 @@ public class AbstractStatement implements Statement {
      * <code>getResultSet</code> or <code>getUpdateCount</code> to retrieve the
      * result, and <code>getMoreResults</code> to move to any subsequent
      * result(s).
-     * 
+     *
      * @param sql
      *            any SQL statement
      * @param autoGeneratedKeys
@@ -991,7 +993,7 @@ public class AbstractStatement implements Statement {
      * @see #getUpdateCount
      * @see #getMoreResults
      * @see #getGeneratedKeys
-     * 
+     *
      * @since 1.4
      */
     @Override
@@ -1023,7 +1025,7 @@ public class AbstractStatement implements Statement {
      * <code>getResultSet</code> or <code>getUpdateCount</code> to retrieve the
      * result, and <code>getMoreResults</code> to move to any subsequent
      * result(s).
-     * 
+     *
      * @param sql
      *            any SQL statement
      * @param columnIndexes
@@ -1038,7 +1040,7 @@ public class AbstractStatement implements Statement {
      * @see #getResultSet
      * @see #getUpdateCount
      * @see #getMoreResults
-     * 
+     *
      * @since 1.4
      */
     @Override
@@ -1068,7 +1070,7 @@ public class AbstractStatement implements Statement {
      * <code>getResultSet</code> or <code>getUpdateCount</code> to retrieve the
      * result, and <code>getMoreResults</code> to move to any subsequent
      * result(s).
-     * 
+     *
      * @param sql
      *            any SQL statement
      * @param columnNames
@@ -1084,7 +1086,7 @@ public class AbstractStatement implements Statement {
      * @see #getUpdateCount
      * @see #getMoreResults
      * @see #getGeneratedKeys
-     * 
+     *
      * @since 1.4
      */
     @Override
@@ -1099,12 +1101,12 @@ public class AbstractStatement implements Statement {
     /**
      * Retrieves the result set holdability for <code>ResultSet</code> objects
      * generated by this <code>Statement</code> object.
-     * 
+     *
      * @return either <code>ResultSet.HOLD_CURSORS_OVER_COMMIT</code> or
      *         <code>ResultSet.CLOSE_CURSORS_AT_COMMIT</code>
      * @exception SQLException
      *                if a database access error occurs
-     * 
+     *
      * @since 1.4
      */
     @Override

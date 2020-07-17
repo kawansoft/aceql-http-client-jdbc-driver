@@ -1,20 +1,20 @@
 /*
  * This file is part of AceQL Client SDK.
- * AceQL Client SDK: Remote JDBC access over HTTP with AceQL HTTP.                                 
+ * AceQL Client SDK: Remote JDBC access over HTTP with AceQL HTTP.
  * Copyright (C) 2020,  KawanSoft SAS
- * (http://www.kawansoft.com). All rights reserved.                                
- *                                                                               
+ * (http://www.kawansoft.com). All rights reserved.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  */
 package com.aceql.sdk.jdbc.examples;
 
@@ -29,14 +29,14 @@ import java.sql.Timestamp;
 import com.aceql.client.jdbc.AceQLConnection;
 
 /**
- * 
+ *
  * This example:
  * <ul>
  * <li>Inserts a Customer and an Order on a remote database.</li>
  * <li>Displays the inserted raws on the console with two SELECT executed on the
  * remote database.</li>
  * </ul>
- * 
+ *
  * @author Nicolas de Pomereu
  */
 public class MyRemoteConnection {
@@ -47,7 +47,7 @@ public class MyRemoteConnection {
     /**
      * Remote Connection Quick Start client example. Creates a Connection to a
      * remote database.
-     * 
+     *
      * @return the Connection to the remote database
      * @throws SQLException
      *             if a database access error occurs
@@ -76,7 +76,7 @@ public class MyRemoteConnection {
 
     /**
      * Constructor
-     * 
+     *
      * @param connection
      *            the AwakeConnection to use for this session
      */
@@ -86,12 +86,12 @@ public class MyRemoteConnection {
 
     /**
      * Example of 2 INSERT in the same transaction.
-     * 
+     *
      * @param customerId
      *            the Customer Id
      * @param itemId
      *            the Item Id
-     * 
+     *
      * @throws SQLException
      */
     public void insertCustomerAndOrderLog(int customerId, int itemId)
@@ -133,7 +133,7 @@ public class MyRemoteConnection {
 	    prepStatement.setInt(i++, itemId);
 	    prepStatement.setString(i++, "Item Description");
 	    prepStatement.setBigDecimal(i++, new BigDecimal("99.99"));
-	    prepStatement.setDate(i++, new java.sql.Date(now));
+	    prepStatement.setDate(i++, new Date(now));
 	    prepStatement.setTimestamp(i++, new Timestamp(now));
 	    // No Blob in this example.
 	    prepStatement.setBinaryStream(i++, null);
@@ -155,11 +155,11 @@ public class MyRemoteConnection {
 
     /**
      * Example of 2 SELECT
-     * 
+     *
      * @param customerId
      *            the Customer Id
      * @parma itemId the Item Id
-     * 
+     *
      * @throws SQLException
      */
     public void selectCustomerAndOrderLog(int customerId, int itemId)
@@ -230,7 +230,7 @@ public class MyRemoteConnection {
 
     /**
      * Delete an existing customers
-     * 
+     *
      * @throws SQLException
      */
     public void deleteCustomer(int customerId) throws SQLException {
@@ -245,7 +245,7 @@ public class MyRemoteConnection {
 
     /**
      * Delete an existing orderlog
-     * 
+     *
      * @throws SQLException
      */
     public void deleteOrderlog(int customerId, int idemId) throws SQLException {
@@ -261,7 +261,7 @@ public class MyRemoteConnection {
 
     /**
      * Main
-     * 
+     *
      * @param args
      *            not used
      */

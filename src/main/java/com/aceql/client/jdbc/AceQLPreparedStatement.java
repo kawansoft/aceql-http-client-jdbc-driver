@@ -81,7 +81,7 @@ class AceQLPreparedStatement extends AbstractPreparedStatement implements Prepar
      *            placeholders
      */
     public AceQLPreparedStatement(AceQLConnection aceQLConnection, String sql) throws SQLException {
-	super(sql);
+	super();
 	this.aceQLConnection = aceQLConnection;
 	this.aceQLHttpApi = aceQLConnection.aceQLHttpApi;
 	this.sql = sql;

@@ -38,6 +38,7 @@ import java.net.URLEncoder;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -95,7 +96,6 @@ public class AceQLHttpApi {
     private AtomicBoolean cancelled;
     private AtomicInteger progress;
 
-
     /**
      * Sets the read timeout.
      *
@@ -136,13 +136,15 @@ public class AceQLHttpApi {
      *                               authenticated proxy. Null if no proxy or if
      *                               proxy
      * @throws AceQLException if any Exception occurs
-     * @deprecated Use {@link #AceQLHttpApi(String,String,String,char[],String,Proxy,PasswordAuthentication)} instead
+     * @deprecated Use
+     *             {@link #AceQLHttpApi(String,String,String,char[],String,Proxy,PasswordAuthentication)}
+     *             instead
      */
     @Deprecated
     public AceQLHttpApi(String serverUrl, String database, String username, char[] password, Proxy proxy,
-            PasswordAuthentication passwordAuthentication) throws AceQLException {
-        	this(serverUrl, database, username, password, null, proxy, passwordAuthentication);
-            }
+	    PasswordAuthentication passwordAuthentication) throws AceQLException {
+	this(serverUrl, database, username, password, null, proxy, passwordAuthentication);
+    }
 
     /**
      * Login on the AceQL server and connect to a database
@@ -152,7 +154,7 @@ public class AceQLHttpApi {
      * @param database               the server database to connect to.
      * @param username               the login
      * @param password               the password
-     * @param sessionId		     the session ID, if no password authentication
+     * @param sessionId              the session ID, if no password authentication
      * @param proxy                  the proxy to use. null if none.
      * @param passwordAuthentication the username and password holder to use for
      *                               authenticated proxy. Null if no proxy or if
@@ -164,17 +166,17 @@ public class AceQLHttpApi {
 
 	try {
 	    if (serverUrl == null) {
-		throw new NullPointerException("serverUrl is null!");
+		Objects.requireNonNull(serverUrl, "serverUrl can not be null!");
 	    }
 	    if (database == null) {
-		throw new NullPointerException("database is null!");
+		Objects.requireNonNull(database, "database can not be null!");
 	    }
 	    if (username == null) {
-		throw new NullPointerException("username is null!");
+		Objects.requireNonNull(username, "username can not be null!");
 	    }
 
 	    if (password == null && sessionId == null) {
-		throw new NullPointerException("password and sessionId are both null!");
+		throw new IllegalArgumentException("password and sessionId are both null!");
 	    }
 
 	    this.serverUrl = serverUrl;
@@ -198,13 +200,11 @@ public class AceQLHttpApi {
 	     * trace("result: " + result); END OLD implementation with GET
 	     */
 
-
 	    UserLoginStore userLoginStore = new UserLoginStore(serverUrl, username, database);
 
-            if (sessionId != null)
-            {
-                userLoginStore.setSessionId(sessionId);
-            }
+	    if (sessionId != null) {
+		userLoginStore.setSessionId(sessionId);
+	    }
 
 	    if (userLoginStore.isAlreadyLogged()) {
 		trace("Get a new connection with get_connection");
@@ -256,12 +256,10 @@ public class AceQLHttpApi {
 		userLoginStore.setSessionId(sessionId);
 	    }
 
+	} catch (AceQLException aceQlException) {
+	    throw aceQlException;
 	} catch (Exception e) {
-	    if (e instanceof AceQLException) {
-		throw (AceQLException) e;
-	    } else {
-		throw new AceQLException(e.getMessage(), 0, e, null, httpStatusCode);
-	    }
+	    throw new AceQLException(e.getMessage(), 0, e, null, httpStatusCode);
 	}
 
     }
@@ -283,7 +281,7 @@ public class AceQLHttpApi {
 	try {
 
 	    if (commandName == null) {
-		throw new NullPointerException("commandName is null!");
+		Objects.requireNonNull(commandName, "commandName cannot be null!");
 	    }
 
 	    String result = callWithGet(commandName, commandOption);
@@ -294,12 +292,10 @@ public class AceQLHttpApi {
 			resultAnalyzer.getStackTrace(), httpStatusCode);
 	    }
 
+	} catch (AceQLException aceQlException) {
+	    throw aceQlException;
 	} catch (Exception e) {
-	    if (e instanceof AceQLException) {
-		throw (AceQLException) e;
-	    } else {
-		throw new AceQLException(e.getMessage(), 0, e, null, httpStatusCode);
-	    }
+	    throw new AceQLException(e.getMessage(), 0, e, null, httpStatusCode);
 	}
     }
 
@@ -308,7 +304,7 @@ public class AceQLHttpApi {
 	try {
 
 	    if (commandName == null) {
-		throw new NullPointerException("commandName is null!");
+		Objects.requireNonNull(commandName, "commandName cannot be null!");
 	    }
 
 	    String result = callWithGet(commandName, commandOption);
@@ -321,13 +317,10 @@ public class AceQLHttpApi {
 
 	    return resultAnalyzer.getResult();
 
+	} catch (AceQLException aceQlException) {
+	    throw aceQlException;
 	} catch (Exception e) {
-
-	    if (e instanceof AceQLException) {
-		throw (AceQLException) e;
-	    } else {
-		throw new AceQLException(e.getMessage(), 0, e, null, httpStatusCode);
-	    }
+	    throw new AceQLException(e.getMessage(), 0, e, null, httpStatusCode);
 	}
     }
 
@@ -525,7 +518,8 @@ public class AceQLHttpApi {
     public AceQLHttpApi clone() {
 	AceQLHttpApi aceQLHttpApi;
 	try {
-	    aceQLHttpApi = new AceQLHttpApi(serverUrl, database, username, password, sessionId, proxy, passwordAuthentication);
+	    aceQLHttpApi = new AceQLHttpApi(serverUrl, database, username, password, sessionId, proxy,
+		    passwordAuthentication);
 	    aceQLHttpApi.setGzipResult(gzipResult);
 	} catch (SQLException e) {
 	    throw new IllegalStateException(e);
@@ -789,7 +783,7 @@ public class AceQLHttpApi {
 
 	try {
 	    if (sql == null) {
-		throw new NullPointerException("sql is null!");
+		Objects.requireNonNull(sql, "sql cannot be null!");
 	    }
 
 	    String action = "execute_update";
@@ -833,12 +827,10 @@ public class AceQLHttpApi {
 	    int rowCount = resultAnalyzer.getIntvalue("row_count");
 	    return rowCount;
 
+	} catch (AceQLException aceQlException) {
+	    throw aceQlException;
 	} catch (Exception e) {
-	    if (e instanceof AceQLException) {
-		throw (AceQLException) e;
-	    } else {
-		throw new AceQLException(e.getMessage(), 0, e, null, httpStatusCode);
-	    }
+	    throw new AceQLException(e.getMessage(), 0, e, null, httpStatusCode);
 	}
 
     }
@@ -919,7 +911,7 @@ public class AceQLHttpApi {
 
 	try {
 	    if (sql == null) {
-		throw new NullPointerException("sql is null!");
+		Objects.requireNonNull(sql, "sql cannot be null!");
 	    }
 
 	    String action = "execute_query";
@@ -972,20 +964,12 @@ public class AceQLHttpApi {
 
 	try {
 	    if (blobId == null) {
-		throw new NullPointerException("blobId is null!");
+		Objects.requireNonNull(blobId, "blobId cannot be null!");
 	    }
 
 	    if (inputStream == null) {
-		throw new NullPointerException("inputStream is null!");
+		Objects.requireNonNull(inputStream, "inputStream cannot be null!");
 	    }
-
-	    // if (file == null) {
-	    // throw new NullPointerException("file is null!");
-	    // }
-	    //
-	    // if (!file.exists()) {
-	    // throw new FileNotFoundException("file does not exist: " + file);
-	    // }
 
 	    URL theURL = new URL(url + "blob_upload");
 
@@ -1138,7 +1122,7 @@ public class AceQLHttpApi {
 	try {
 
 	    if (format == null) {
-		throw new NullPointerException("format is null!");
+		Objects.requireNonNull(format, "format cannot be null!");
 	    }
 
 	    String action = "metadata_query/db_schema_download";
@@ -1158,11 +1142,7 @@ public class AceQLHttpApi {
 	    return in;
 
 	} catch (Exception e) {
-	    if (e instanceof AceQLException) {
-		throw (AceQLException) e;
-	    } else {
-		throw new AceQLException(e.getMessage(), 0, e, null, httpStatusCode);
-	    }
+	    throw new AceQLException(e.getMessage(), 0, e, null, httpStatusCode);
 	}
 
     }
