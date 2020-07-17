@@ -18,6 +18,8 @@
  */
 package com.aceql.client.jdbc;
 
+import java.util.Objects;
+
 import com.aceql.client.jdbc.http.AceQLHttpApi;
 
 /**
@@ -33,12 +35,7 @@ public class AceQLConnectionWrapper {
     private AceQLConnection aceQLConnection = null;
 
     public AceQLConnectionWrapper(AceQLConnection aceQLConnection) {
-
-	if (aceQLConnection == null) {
-	    throw new NullPointerException("aceQLConnection is null!");
-	}
-
-	this.aceQLConnection = aceQLConnection;
+	this.aceQLConnection = Objects.requireNonNull(aceQLConnection, "aceQLConnection cannot ne null!");
     }
 
     /**

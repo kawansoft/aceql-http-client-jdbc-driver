@@ -19,6 +19,14 @@ The AceQL Java Client SDK is licensed under the Apache 2.0
 License.
 
 
+AceQL Java Client SDK - Version 4.2 - 17-Jul-2020
+-------------------------------------------------
+
+What's New:
+- NullPointerException throws are replaced by Objects.requireNonNull().
+  This is easier for API uers to debug NullPointerExceptions.
+
+
 AceQL Java Client SDK - Version 4.1 - 01-Jun-2020
 -------------------------------------------------
  

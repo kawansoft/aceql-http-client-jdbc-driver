@@ -5,7 +5,7 @@
 
 # AceQL HTTP 
 
-## Java Client SDK v4.1 - June 2020, 1
+## Java Client SDK v4.2 - July 2020, 17
 
 <img src="https://www.aceql.com/favicon.png" alt="AceQ HTTP Icon"/>
 

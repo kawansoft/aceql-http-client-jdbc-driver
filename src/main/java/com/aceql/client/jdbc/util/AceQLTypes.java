@@ -30,11 +30,6 @@ import java.util.Set;
  */
 public class AceQLTypes {
 
-    /** Static class */
-    protected AceQLTypes() {
-
-    }
-
     public static final String BIGINT = "BIGINT";
     public static final String BINARY = "BINARY";
     public static final String BIT = "BIT";
@@ -70,5 +65,10 @@ public class AceQLTypes {
     /** All the allowed types in a Set */
     public static final Set<String> SQL_TYPES_SET = new HashSet<String>(
 	    Arrays.asList(SQL_TYPES));
+
+    /** Static class */
+    protected AceQLTypes() {
+
+    }
 
 }

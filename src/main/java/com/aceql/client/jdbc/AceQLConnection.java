@@ -28,6 +28,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -231,26 +232,25 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 
 	try {
 	    if (serverUrl == null) {
-		throw new NullPointerException("serverUrl is null!");
+		Objects.requireNonNull(serverUrl, "serverUrl can not be null!");
 	    }
 	    if (database == null) {
-		throw new NullPointerException("database is null!");
+		Objects.requireNonNull(database, "database can not be null!");
 	    }
 	    if (username == null) {
-		throw new NullPointerException("username is null!");
+		Objects.requireNonNull(username, "username can not be null!");
 	    }
 	    if (password == null) {
-		throw new NullPointerException("password is null!");
+		Objects.requireNonNull(username, "password can not be null!");
 	    }
 
-	    aceQLHttpApi = new AceQLHttpApi(serverUrl, database, username, password, null, proxy, passwordAuthentication);
+	    aceQLHttpApi = new AceQLHttpApi(serverUrl, database, username, password, null, proxy,
+		    passwordAuthentication);
 
+	} catch (AceQLException aceQlException) {
+	    throw aceQlException;
 	} catch (Exception e) {
-	    if (e instanceof AceQLException) {
-		throw (AceQLException) e;
-	    } else {
-		throw new AceQLException(e.getMessage(), 0, e, null, HttpURLConnection.HTTP_OK);
-	    }
+	    throw new AceQLException(e.getMessage(), 0, e, null, HttpURLConnection.HTTP_OK);
 	}
 
     }
@@ -289,27 +289,27 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	    PasswordAuthentication passwordAuthentication) throws SQLException {
 
 	try {
+
 	    if (serverUrl == null) {
-		throw new NullPointerException("serverUrl is null!");
+		Objects.requireNonNull(serverUrl, "serverUrl can not be null!");
 	    }
 	    if (database == null) {
-		throw new NullPointerException("database is null!");
+		Objects.requireNonNull(database, "database can not be null!");
 	    }
 	    if (username == null) {
-		throw new NullPointerException("username is null!");
+		Objects.requireNonNull(username, "username can not be null!");
 	    }
 	    if (sessionId == null) {
-		throw new NullPointerException("sessionId is null!");
+		Objects.requireNonNull(username, "sessionId can not be null!");
 	    }
 
-	    aceQLHttpApi = new AceQLHttpApi(serverUrl, database, username, null, sessionId, proxy, passwordAuthentication);
+	    aceQLHttpApi = new AceQLHttpApi(serverUrl, database, username, null, sessionId, proxy,
+		    passwordAuthentication);
 
+	} catch (AceQLException aceQlException) {
+	    throw aceQlException;
 	} catch (Exception e) {
-	    if (e instanceof AceQLException) {
-		throw (AceQLException) e;
-	    } else {
-		throw new AceQLException(e.getMessage(), 0, e, null, HttpURLConnection.HTTP_OK);
-	    }
+	    throw new AceQLException(e.getMessage(), 0, e, null, HttpURLConnection.HTTP_OK);
 	}
 
     }
@@ -325,6 +325,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 
     /**
      * Returns a RemoteDatabaseMetaData instance in order to retrieve metadata info.
+     *
      * @return a RemoteDatabaseMetaData instance in order to retrieve metadata info.
      */
     public RemoteDatabaseMetaData getRemoteDatabaseMetaData() {
@@ -345,7 +346,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	} catch (AceQLException e) {
 	    // Because close() can not throw an Exception, we wrap the
 	    // AceQLException with a RuntimeException
-	    throw new RuntimeException(e.getMessage(), e);
+	    throw new IllegalStateException(e.getMessage(), e);
 	}
     }
 
@@ -355,7 +356,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	} catch (AceQLException e) {
 	    // Because close() can not throw an Exception, we wrap the
 	    // AceQLException with a RuntimeException
-	    throw new RuntimeException(e.getMessage(), e);
+	    throw new IllegalStateException(e.getMessage(), e);
 	}
     }
 
@@ -525,8 +526,6 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     public String getClientVersion() {
 	return aceQLHttpApi.getClientVersion();
     }
-
-
 
     /**
      * Returns the server product version

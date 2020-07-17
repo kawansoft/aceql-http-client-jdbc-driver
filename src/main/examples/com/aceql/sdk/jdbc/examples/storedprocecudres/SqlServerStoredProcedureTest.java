@@ -23,6 +23,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.Objects;
 
 /**
  * @author Nicolas de Pomereu
@@ -40,7 +41,7 @@ public class SqlServerStoredProcedureTest {
 	Connection connection = StoredProcedureUtil.getRemoteConnection();
 
 	if (connection == null) {
-	    throw new NullPointerException("connection is null!");
+	    Objects.requireNonNull(connection, "connection can not be null!");
 	}
 
 	testSqlServerSoredProcedure(connection);

@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
+import java.util.Objects;
 
 import org.apache.commons.io.IOUtils;
 
@@ -58,7 +59,7 @@ public class RemoteDatabaseMetaData {
      */
     public RemoteDatabaseMetaData(AceQLConnection aceQLConnection) {
 	if (aceQLConnection == null) {
-	    throw new NullPointerException("aceQLConnection is null!");
+	    Objects.requireNonNull(aceQLConnection, "aceQLConnection can not be null!");
 	}
 	AceQLConnectionWrapper aceQLConnectionWrapper = new AceQLConnectionWrapper(aceQLConnection);
 	this.aceQLHttpApi = aceQLConnectionWrapper.getAceQLHttpApi();
@@ -69,8 +70,7 @@ public class RemoteDatabaseMetaData {
      * format.
      *
      * @param file      the file to download the remote schema in
-     * @param format    the format to use: "html" or "text". Defaults to "text" if
-     *                  null.
+     * @param format    the format to use: "html" or "text".
      * @param tableName the table name filter, without dot separator. All tables are
      *                  downloaded if null.
      * @throws IOException    if any local I/O Exception occurs
@@ -78,11 +78,11 @@ public class RemoteDatabaseMetaData {
      */
     public void dbSchemaDownload(File file, String format, String tableName) throws IOException, AceQLException {
 	if (file == null) {
-	    throw new NullPointerException("file is null!");
+	    Objects.requireNonNull(file, "file can not be null!");
 	}
 
 	if (format == null) {
-	    format = "html";
+	    Objects.requireNonNull(file, "format can not be null!");
 	}
 
 	if (!format.equals("html") && !format.equals("text")) {
@@ -120,7 +120,7 @@ public class RemoteDatabaseMetaData {
      * @throws AceQLException       if any Exception occurs
      */
     public void dbSchemaDownload(File file) throws IOException, AceQLException {
-	dbSchemaDownload(file, null, null);
+	dbSchemaDownload(file, "html", null);
     }
 
     /**
@@ -172,7 +172,7 @@ public class RemoteDatabaseMetaData {
      */
     public Table getTable(String name) throws AceQLException {
 	if (name == null) {
-	    throw new NullPointerException("table name is null!");
+	    Objects.requireNonNull(name, "name can not be null!");
 	}
 	TableDto tableDto = aceQLHttpApi.getTable(name);
 	Table table = tableDto.getTable();

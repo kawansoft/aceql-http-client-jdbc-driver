@@ -46,14 +46,14 @@ public class AceQLHttpConnectionTest {
     final String serverUrlWindows = "http://localhost:9090/aceql";
     final String serverUrlLinux = "http://www.aceql.com:8081/aceql";
 
-    final String serverUrl = serverUrlWindows;
-    final String username = "user1";
-    final String password = "password1";
-    final String dbname = "sampledb";
+    public final String serverUrl = serverUrlWindows;
+    public final String username = "user1";
+    public final String password = "password1";
+    public final String dbname = "sampledb";
 
     private AceQLConnection connection = null;
 
-    Connection getConnection() throws SQLException {
+    public Connection getConnection() throws SQLException {
 
 	if (!new File(IN_DIRECTORY).exists()) {
 	    new File(IN_DIRECTORY).mkdirs();
