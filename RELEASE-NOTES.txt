@@ -1,6 +1,6 @@
 
                  AceQL Java Client SDK
-                      Version 4.1
+                      Version 4.2
                      Release Notes
 
 Introduction
