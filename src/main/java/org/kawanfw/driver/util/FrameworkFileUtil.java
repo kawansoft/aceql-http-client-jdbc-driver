@@ -1,20 +1,20 @@
 /*
  * This file is part of AceQL Client SDK.
- * AceQL Client SDK: Remote JDBC access over HTTP with AceQL HTTP.                                 
+ * AceQL Client SDK: Remote JDBC access over HTTP with AceQL HTTP.
  * Copyright (C) 2020,  KawanSoft SAS
- * (http://www.kawansoft.com). All rights reserved.                                
- *                                                                               
+ * (http://www.kawansoft.com). All rights reserved.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  */
 package org.kawanfw.driver.util;
 
@@ -33,15 +33,14 @@ import java.util.Vector;
 
 /**
  * Misc file utilities
- * 
+ *
  * @author Nicolas de Pomereu
- * 
+ *
  */
 public class FrameworkFileUtil {
 
     /** The DEBUG flag */
-    private static boolean DEBUG = FrameworkDebug
-	    .isSet(FrameworkFileUtil.class);
+    private static boolean DEBUG = FrameworkDebug.isSet(FrameworkFileUtil.class);
 
     public static String CR_LF = System.getProperty("line.separator");
 
@@ -57,7 +56,7 @@ public class FrameworkFileUtil {
 
     /**
      * Build a unique string
-     * 
+     *
      * @return a unique string
      */
     public static synchronized String getUniqueId() {
@@ -66,11 +65,11 @@ public class FrameworkFileUtil {
     }
 
     /**
-     * Returns System.getProperty("user.home") for all devices except for
-     * Android which returns java.io.tmpdir/kawansoft-user-home
-     * 
-     * @return System.getProperty("user.home") for all devices except for
-     *         Android which returns java.io.tmpdir/kawansoft-user-home
+     * Returns System.getProperty("user.home") for all devices except for Android
+     * which returns java.io.tmpdir/kawansoft-user-home
+     *
+     * @return System.getProperty("user.home") for all devices except for Android
+     *         which returns java.io.tmpdir/kawansoft-user-home
      */
     public static String getUserHome() {
 	String userHome = System.getProperty("user.home");
@@ -95,12 +94,12 @@ public class FrameworkFileUtil {
     }
 
     /**
-     * Returns System.getProperty("user.home") + File.separator + ".kawansoft
-     * for all devices except for Android which returns
+     * Returns System.getProperty("user.home") + File.separator + ".kawansoft for
+     * all devices except for Android which returns
      * java.io.tmpdir/kawansoft-user-home/.kawansoft
-     * 
-     * @return System.getProperty("user.home") + File.separator + ".kawansoft
-     *         for all devices except for Android which returns
+     *
+     * @return System.getProperty("user.home") + File.separator + ".kawansoft for
+     *         all devices except for Android which returns
      *         java.io.tmpdir/kawansoft-user-home/.kawansoft
      */
 
@@ -124,8 +123,7 @@ public class FrameworkFileUtil {
      */
     public static String getKawansoftTempDir() {
 
-	String tempDir = FrameworkFileUtil.getUserHomeDotKawansoftDir()
-		+ File.separator + "tmp";
+	String tempDir = FrameworkFileUtil.getUserHomeDotKawansoftDir() + File.separator + "tmp";
 
 	File tempDirFile = new File(tempDir);
 	tempDirFile.mkdirs();
@@ -135,43 +133,48 @@ public class FrameworkFileUtil {
 
     /**
      * Extract the first line of a presumed text file
-     * 
-     * @param file
-     *            the presumed text file to extract the first line from
+     *
+     * @param file the presumed text file to extract the first line from
      * @return the first line of the file
      * @throws IOException
      */
     public static String getFirstLineOfFile(File file) throws IOException {
 
 	if (file == null) {
-	    throw new IllegalArgumentException(
-		    Tag.PRODUCT_PRODUCT_FAIL + "receiveFile is null");
+	    throw new IllegalArgumentException(Tag.PRODUCT_PRODUCT_FAIL + "receiveFile is null");
 	}
 
 	if (!file.exists()) {
-	    throw new FileNotFoundException(Tag.PRODUCT_PRODUCT_FAIL
-		    + "receiveFile does not exists: " + file);
+	    throw new FileNotFoundException(Tag.PRODUCT_PRODUCT_FAIL + "receiveFile does not exists: " + file);
 	}
 
 	// Read content of first line.
 
-	try (BufferedReader bufferedReader = new BufferedReader(
-		new InputStreamReader(new FileInputStream(file)));) {
+	try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));) {
 
 	    String firstLine = bufferedReader.readLine();
 	    return firstLine;
-	} 
+	}
     }
 
     /**
      * Return true if the filename is a Linux possible Filename
-     * 
-     * @param filename
-     *            the filename to test
+     *
+     * @param filename the filename to test
      * @return true if the filename is a Linux Filename
      */
     public static boolean isPossibleLinuxFilename(String filename) {
-	if (filename.indexOf("\\") != -1 || // Windows
+	return !(containsInvalidChars(filename));
+    }
+
+    /**
+     * Says if file contains invalid Windows or Linux chars
+     *
+     * @param filename
+     * @return
+     */
+    private static boolean containsInvalidChars(String filename) {
+	return filename.indexOf("\\") != -1 || // Windows
 		filename.indexOf("/") != -1 || // Windows
 		filename.indexOf(":") != -1 || // Windows
 		filename.indexOf("*") != -1 || // Windows
@@ -181,12 +184,7 @@ public class FrameworkFileUtil {
 		filename.indexOf(">") != -1 || // Windows
 		filename.indexOf("|") != -1 || // Windows
 		filename.indexOf("@") != -1 || // Linux
-		filename.indexOf(" ") != -1) // Linux
-	{
-	    return false;
-	} else {
-	    return true;
-	}
+		filename.indexOf(" ") != -1;
     }
 
     /**
@@ -213,8 +211,8 @@ public class FrameworkFileUtil {
 		debug(new Date() + " " + file + " LOCKED! " + e.getMessage());
 	    }
 	} else {
-	    debug(new Date() + " " + file + " LOCKED! File exists(): "
-		    + file.exists() + " File canWrite: " + file.canWrite());
+	    debug(new Date() + " " + file + " LOCKED! File exists(): " + file.exists() + " File canWrite: "
+		    + file.canWrite());
 	}
 
 	return false;
@@ -245,8 +243,8 @@ public class FrameworkFileUtil {
 		debug(new Date() + " " + file + " LOCKED! " + e.getMessage());
 	    }
 	} else {
-	    debug(new Date() + " " + file + " LOCKED! File exists(): "
-		    + file.exists() + " File canWrite: " + file.canWrite());
+	    debug(new Date() + " " + file + " LOCKED! File exists(): " + file.exists() + " File canWrite: "
+		    + file.canWrite());
 	}
 
 	return false;
@@ -255,11 +253,9 @@ public class FrameworkFileUtil {
 
     /**
      * Recuse research of a files. Result is stored in m_fileList
-     * 
-     * @param fileList
-     *            the initial list
-     * @param recurse
-     *            if true, search inside directories
+     *
+     * @param fileList the initial list
+     * @param recurse  if true, search inside directories
      */
 
     // private static void searchFiles(File[] fileList, boolean recurse) {
@@ -280,12 +276,10 @@ public class FrameworkFileUtil {
 
     /**
      * Extract all files from a list of files, with recurse options
-     * 
-     * @param fileList
-     *            the initial list
-     * @param recurse
-     *            if true, search inside directories
-     * 
+     *
+     * @param fileList the initial list
+     * @param recurse  if true, search inside directories
+     *
      * @return the extracted all files
      */
     // public static List<File> listAllFiles(List<File> fileList, boolean
@@ -310,11 +304,10 @@ public class FrameworkFileUtil {
     // }
 
     /**
-     * 
+     *
      * Extract the files that are not directories from a file list
-     * 
-     * @param fileList
-     *            the initial list (firt level only)
+     *
+     * @param fileList the initial list (firt level only)
      * @return the file list
      */
     public static List<File> extractFilesOnly(List<File> fileList) {
@@ -339,11 +332,10 @@ public class FrameworkFileUtil {
     }
 
     /**
-     * 
+     *
      * Extract the directories only from a file list
-     * 
-     * @param fileList
-     *            the initial list (firt level only)
+     *
+     * @param fileList the initial list (firt level only)
      * @return the file list
      */
     public static List<File> extractDirectoriesOnly(List<File> fileList) {
@@ -362,9 +354,8 @@ public class FrameworkFileUtil {
     /**
      * Put the content of a file as HTML into a String <br>
      * No carriage returns will be included in output String
-     * 
-     * @param fileIn
-     *            The HTML text file
+     *
+     * @param fileIn The HTML text file
      * @return The content in text
      * @throws IOException
      */
@@ -373,7 +364,7 @@ public class FrameworkFileUtil {
 	    throw new IllegalArgumentException("File name can't be null!");
 	}
 
-	try (BufferedReader br = new BufferedReader(new FileReader(fileIn));){
+	try (BufferedReader br = new BufferedReader(new FileReader(fileIn));) {
 	    String text = "";
 
 	    String line = null;
@@ -383,7 +374,7 @@ public class FrameworkFileUtil {
 	    }
 
 	    return text;
-	} 
+	}
     }
 
     /**

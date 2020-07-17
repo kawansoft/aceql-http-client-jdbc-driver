@@ -1,20 +1,20 @@
 /*
  * This file is part of AceQL Client SDK.
- * AceQL Client SDK: Remote JDBC access over HTTP with AceQL HTTP.                                 
+ * AceQL Client SDK: Remote JDBC access over HTTP with AceQL HTTP.
  * Copyright (C) 2020,  KawanSoft SAS
- * (http://www.kawansoft.com). All rights reserved.                                
- *                                                                               
+ * (http://www.kawansoft.com). All rights reserved.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  */
 package com.aceql.client.jdbc.util.json;
 
@@ -28,7 +28,7 @@ import javax.json.stream.JsonParser;
 /**
  * Tool go generic parsing. See
  * https://docs.oracle.com/javaee/7/tutorial/jsonp003.htm
- * 
+ *
  * @author Nicolas de Pomereu
  *
  */
@@ -42,17 +42,17 @@ public class JsonStreamParserUtil {
     }
 
     /**
-     * 
+     *
      * AceQLResultSet
-     * 
+     *
      * Todo : 1) Extract "status". if "status" = "OK" ==> find "row_count" and
      * return it if "status" = "FAIL" ==> find "error_type" and "error_message"
      * and return them if "row_count" = 0 ==> No rows else 2) Navigate in rows
-     * 
-     * 
+     *
+     *
      * 2)Navigate in rows - Go to row_i ==> From START_ARRAY to END_ARRAY ==>
      * Retrieve all values and create a row of Result Set
-     * 
+     *
      * @param reader
      * @throws UnsupportedEncodingException
      * @throws FileNotFoundException
@@ -81,6 +81,8 @@ public class JsonStreamParserUtil {
 	    case VALUE_NUMBER:
 		System.out.println(event.toString() + " " + parser.getString());
 		break;
+	    default:
+		// Don't know
 	    }
 	}
     }

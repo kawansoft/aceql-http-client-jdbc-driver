@@ -1,20 +1,20 @@
 /*
  * This file is part of AceQL Client SDK.
- * AceQL Client SDK: Remote JDBC access over HTTP with AceQL HTTP.                                 
+ * AceQL Client SDK: Remote JDBC access over HTTP with AceQL HTTP.
  * Copyright (C) 2020,  KawanSoft SAS
- * (http://www.kawansoft.com). All rights reserved.                                
- *                                                                               
+ * (http://www.kawansoft.com). All rights reserved.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  */
 package com.aceql.client.jdbc;
 
@@ -55,7 +55,7 @@ class AceQLStatement extends AbstractStatement implements Statement {
 
     /**
      * Constructor
-     * 
+     *
      * @param aceQLConnection
      */
     public AceQLStatement(AceQLConnection aceQLConnection) {
@@ -65,9 +65,8 @@ class AceQLStatement extends AbstractStatement implements Statement {
 
     /*
      * (non-Javadoc)
-     * 
-     * @see
-     * org.kawanfw.driver.jdbc.abstracts.AbstractStatement#executeUpdate(java.
+     *
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#executeUpdate(java.
      * lang.String)
      */
     @Override
@@ -76,15 +75,13 @@ class AceQLStatement extends AbstractStatement implements Statement {
 	boolean isPreparedStatement = false;
 	boolean isStoredProcedure = false;
 	Map<String, String> statementParameters = null;
-	return aceQLHttpApi.executeUpdate(sql, isPreparedStatement,
-		isStoredProcedure, statementParameters, null);
+	return aceQLHttpApi.executeUpdate(sql, isPreparedStatement, isStoredProcedure, statementParameters, null);
     }
 
     /*
      * (non-Javadoc)
-     * 
-     * @see
-     * org.kawanfw.driver.jdbc.abstracts.AbstractStatement#executeQuery(java.
+     *
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#executeQuery(java.
      * lang.String)
      */
     @Override
@@ -101,44 +98,36 @@ class AceQLStatement extends AbstractStatement implements Statement {
 	    boolean isPreparedStatement = false;
 	    boolean isStoredProcedure = false;
 	    Map<String, String> statementParameters = null;
-	    
-	    try (InputStream in = aceQLHttpApi.executeQuery(sql, isPreparedStatement,
-			isStoredProcedure, statementParameters);
-		    OutputStream out = new BufferedOutputStream(new FileOutputStream(file));){
+
+	    try (InputStream in = aceQLHttpApi.executeQuery(sql, isPreparedStatement, isStoredProcedure,
+		    statementParameters); OutputStream out = new BufferedOutputStream(new FileOutputStream(file));) {
 
 		if (in != null) {
-		    InputStream inFinal = AceQLStatement.getFinalInputStream(in,
-			    aceQLHttpApi.isGzipResult());
+		    InputStream inFinal = AceQLStatement.getFinalInputStream(in, aceQLHttpApi.isGzipResult());
 		    IOUtils.copy(inFinal, out);
 		}
 	    }
 
-	    StreamResultAnalyzer streamResultAnalyzer = new StreamResultAnalyzer(
-		    file, aceQLHttpApi.getHttpStatusCode(),
+	    StreamResultAnalyzer streamResultAnalyzer = new StreamResultAnalyzer(file, aceQLHttpApi.getHttpStatusCode(),
 		    aceQLHttpApi.getHttpStatusMessage());
 	    if (!streamResultAnalyzer.isStatusOk()) {
-		throw new AceQLException(streamResultAnalyzer.getErrorMessage(),
-			streamResultAnalyzer.getErrorId(), null,
-			streamResultAnalyzer.getStackTrace(),
-			aceQLHttpApi.getHttpStatusCode());
+		throw new AceQLException(streamResultAnalyzer.getErrorMessage(), streamResultAnalyzer.getErrorId(),
+			null, streamResultAnalyzer.getStackTrace(), aceQLHttpApi.getHttpStatusCode());
 	    }
 
 	    int rowCount = streamResultAnalyzer.getRowCount();
 	    AceQLResultSet aceQLResultSet = new AceQLResultSet(file, this, rowCount);
 	    return aceQLResultSet;
 
+	} catch (AceQLException aceQlException) {
+	    throw aceQlException;
 	} catch (Exception e) {
-	    if (e instanceof AceQLException) {
-		throw (AceQLException) e;
-	    } else {
-		throw new AceQLException(e.getMessage(), 0, e, null,
-			aceQLHttpApi.getHttpStatusCode());
-	    }
+	    throw new AceQLException(e.getMessage(), 0, e, null, aceQLHttpApi.getHttpStatusCode());
 	}
+
     }
 
-    public static InputStream getFinalInputStream(InputStream in,
-	    boolean gzipResult) throws IOException {
+    public static InputStream getFinalInputStream(InputStream in, boolean gzipResult) throws IOException {
 
 	InputStream inFinal = null;
 	if (!gzipResult) {
@@ -151,7 +140,7 @@ class AceQLStatement extends AbstractStatement implements Statement {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#close()
      */
     @Override
@@ -163,7 +152,7 @@ class AceQLStatement extends AbstractStatement implements Statement {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#getConnection()
      */
     @Override
@@ -172,8 +161,7 @@ class AceQLStatement extends AbstractStatement implements Statement {
     }
 
     static File buildtResultSetFile() {
-	File file = new File(FrameworkFileUtil.getKawansoftTempDir()
-		+ File.separator + "pc-result-set-"
+	File file = new File(FrameworkFileUtil.getKawansoftTempDir() + File.separator + "pc-result-set-"
 		+ FrameworkFileUtil.getUniqueId() + ".txt");
 	return file;
     }

@@ -88,7 +88,13 @@ public class AceQLHttpConnectionTest {
 
 	    Statement statement = getConnection().createStatement();
 	    ResultSet rs = statement.executeQuery(sql);
-	    assert (!rs.next());
+
+	    boolean hasRows = false;
+	    if (rs.next()) {
+		hasRows = true;
+	    }
+
+	    assert (!hasRows);
 	} catch (final Exception e) {
 	    // fail(e.getMessage());
 	    assert (e instanceof AceQLException);

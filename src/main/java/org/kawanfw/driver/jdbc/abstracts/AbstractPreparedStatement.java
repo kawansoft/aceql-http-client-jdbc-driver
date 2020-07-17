@@ -438,7 +438,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
 
     @Deprecated
     @Override
-    public void setUnicodeStream(int parameterIndex, java.io.InputStream x,
+    public void setUnicodeStream(int parameterIndex, InputStream x,
 	    int length) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();
@@ -468,7 +468,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      *                if a database access error occurs
      */
     @Override
-    public void setBinaryStream(int parameterIndex, java.io.InputStream x,
+    public void setBinaryStream(int parameterIndex, InputStream x,
 	    int length) throws SQLException {
 	String methodName = new Object() {
 	}.getClass().getEnclosingMethod().getName();

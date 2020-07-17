@@ -57,7 +57,7 @@ public class PrepStatementParametersBuilder {
     public void setInParameter(int parameterIndex, String parameterType, String parameterValue) {
 
 	if (parameterIndex < 1) {
-	    throw new NullPointerException("Illegal parameter index. Must be > 0: " + parameterIndex);
+	    Objects.requireNonNull(parameterIndex, "Illegal parameter index. Must be > 0: " + parameterIndex);
 	}
 
 	if (parameterType == null) {
@@ -85,11 +85,11 @@ public class PrepStatementParametersBuilder {
     public void setOutParameter(int parameterIndex, String parameterType) {
 
 	if (parameterIndex < 1) {
-	    throw new NullPointerException("Illegal parameter index. Must be > 0: " + parameterIndex);
+	    Objects.requireNonNull(parameterIndex, "Illegal parameter index. Must be > 0: " + parameterIndex);
 	}
 
 	if (parameterType == null) {
-	    throw new NullPointerException("parameter type is null");
+	    Objects.requireNonNull(parameterType, "parameterType cannot be null!");
 	}
 
 	if (!AceQLTypes.SQL_TYPES_SET.contains(parameterType)) {

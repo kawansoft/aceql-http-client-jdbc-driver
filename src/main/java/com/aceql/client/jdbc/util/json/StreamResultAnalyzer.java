@@ -342,6 +342,8 @@ public class StreamResultAnalyzer {
 		    debug("Should not reach this:");
 		    debug(event.toString() + " " + parser.getString());
 		    break;
+		default:
+		    // Do nothing!
 		}
 	    }
 

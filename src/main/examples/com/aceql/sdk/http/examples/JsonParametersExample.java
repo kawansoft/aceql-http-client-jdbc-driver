@@ -29,7 +29,7 @@ import javax.json.stream.JsonGenerator;
  */
 public class JsonParametersExample {
 
-    public static String buildJsonForInsertOrderlog_2(String blobId, int customerId, int itemId) {
+    public static String buildJsonForInsertOrderlogNew(String blobId, int customerId, int itemId) {
         /*
          * CREATE TABLE orderlog ( customer_id integer not null, item_id
          * integer not null, description varchar(64) not null, item_cost

@@ -74,11 +74,9 @@ class AceQLPreparedStatement extends AbstractPreparedStatement implements Prepar
     /**
      * Constructor
      *
-     * @param aceQLConnection
-     *            the Connection to the the remote database
-     * @param sql
-     *            an SQL statement that may contain one or more '?' IN parameter
-     *            placeholders
+     * @param aceQLConnection the Connection to the the remote database
+     * @param sql             an SQL statement that may contain one or more '?' IN
+     *                        parameter placeholders
      */
     public AceQLPreparedStatement(AceQLConnection aceQLConnection, String sql) throws SQLException {
 	super();
@@ -193,7 +191,8 @@ class AceQLPreparedStatement extends AbstractPreparedStatement implements Prepar
 	    strValue = x.toString();
 	}
 
-	//builder.setInParameter(parameterIndex, AceQLTypes.DOUBLE_PRECISION, x.toString());
+	// builder.setInParameter(parameterIndex, AceQLTypes.DOUBLE_PRECISION,
+	// x.toString());
 	builder.setInParameter(parameterIndex, AceQLTypes.DOUBLE_PRECISION, strValue);
     }
 
@@ -222,7 +221,7 @@ class AceQLPreparedStatement extends AbstractPreparedStatement implements Prepar
 	    strValue = "" + x.getTime();
 	}
 
-	//builder.setInParameter(parameterIndex, AceQLTypes.DATE, "" + x.getTime());
+	// builder.setInParameter(parameterIndex, AceQLTypes.DATE, "" + x.getTime());
 	builder.setInParameter(parameterIndex, AceQLTypes.DATE, strValue);
     }
 
@@ -238,7 +237,7 @@ class AceQLPreparedStatement extends AbstractPreparedStatement implements Prepar
 	if (x != null) {
 	    strValue = "" + x.getTime();
 	}
-	//builder.setInParameter(parameterIndex, AceQLTypes.TIME, "" + x.getTime());
+	// builder.setInParameter(parameterIndex, AceQLTypes.TIME, "" + x.getTime());
 	builder.setInParameter(parameterIndex, AceQLTypes.TIME, strValue);
     }
 
@@ -254,7 +253,8 @@ class AceQLPreparedStatement extends AbstractPreparedStatement implements Prepar
 	if (x != null) {
 	    strValue = "" + x.getTime();
 	}
-	//builder.setInParameter(parameterIndex, AceQLTypes.TIMESTAMP, "" + x.getTime());
+	// builder.setInParameter(parameterIndex, AceQLTypes.TIMESTAMP, "" +
+	// x.getTime());
 	builder.setInParameter(parameterIndex, AceQLTypes.TIMESTAMP, strValue);
     }
 
@@ -284,7 +284,7 @@ class AceQLPreparedStatement extends AbstractPreparedStatement implements Prepar
 	if (x != null) {
 	    strValue = x.toString();
 	}
-	//builder.setInParameter(parameterIndex, AceQLTypes.URL, x.toString());
+	// builder.setInParameter(parameterIndex, AceQLTypes.URL, x.toString());
 	builder.setInParameter(parameterIndex, AceQLTypes.URL, strValue);
     }
 
@@ -416,23 +416,20 @@ class AceQLPreparedStatement extends AbstractPreparedStatement implements Prepar
 	    }
 
 	    /*
-	    if (DEBUG) {
-		String fileContent = FileUtils.readFileToString(file, Charset.forName("UTF-8"));
-		debug(fileContent);
-	    }
-	    */
+	     * if (DEBUG) { String fileContent = FileUtils.readFileToString(file,
+	     * Charset.forName("UTF-8")); debug(fileContent); }
+	     */
 
 	    int rowCount = streamResultAnalyzer.getRowCount();
 	    AceQLResultSet aceQLResultSet = new AceQLResultSet(file, this, rowCount);
 	    return aceQLResultSet;
 
+	} catch (AceQLException aceQlException) {
+	    throw aceQlException;
 	} catch (Exception e) {
-	    if (e instanceof AceQLException) {
-		throw (AceQLException) e;
-	    } else {
-		throw new AceQLException(e.getMessage(), 0, e, null, aceQLHttpApi.getHttpStatusCode());
-	    }
+	    throw new AceQLException(e.getMessage(), 0, e, null, aceQLHttpApi.getHttpStatusCode());
 	}
+
     }
 
     private void updateOutParameters(StreamResultAnalyzer streamResultAnalyzer,

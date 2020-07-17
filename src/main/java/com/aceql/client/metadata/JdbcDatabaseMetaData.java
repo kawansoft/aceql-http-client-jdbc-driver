@@ -164,13 +164,6 @@ public class JdbcDatabaseMetaData {
     private boolean autoCommitFailureClosesAllResultSets;
     private int getResultSetHoldability;
 
-    /**
-     * Constructor
-     */
-    public JdbcDatabaseMetaData() {
-
-    }
-
     public String getURL() throws SQLException {
 	return getURL;
     }

@@ -1,20 +1,20 @@
 /*
  * This file is part of AceQL Client SDK.
- * AceQL Client SDK: Remote JDBC access over HTTP with AceQL HTTP.                                 
+ * AceQL Client SDK: Remote JDBC access over HTTP with AceQL HTTP.
  * Copyright (C) 2020,  KawanSoft SAS
- * (http://www.kawansoft.com). All rights reserved.                                
- *                                                                               
+ * (http://www.kawansoft.com). All rights reserved.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  */
 package com.aceql.client.jdbc;
 
@@ -39,7 +39,7 @@ import com.aceql.client.jdbc.util.json.RowParser;
 /**
  * Class that allows to built a {@code ResultSet} from a JSON file or JSON
  * String returned by an /execute_query call.
- * 
+ *
  * @author Nicolas de Pomereu
  *
  */
@@ -69,7 +69,7 @@ class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
 
     /**
      * Constructor.
-     * 
+     *
      * @param jsonFile
      *            A file containing the result set returned by an /execute_query
      *            call
@@ -90,7 +90,7 @@ class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
 	    throw new SQLException(new FileNotFoundException(
 		    "jsonFile does not exist: " + jsonFile));
 	}
-	
+
 	this.jsonFile = jsonFile;
 	this.statement = statement;
 
@@ -222,7 +222,7 @@ class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getStatement()
      */
     @Override
@@ -285,7 +285,7 @@ class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
      * . Note that you must first call one of the getter methods on a column to
      * try to read its value and then call the method <code>wasNull</code> to
      * see if the value read was SQL <code>NULL</code>.
-     * 
+     *
      * @return <code>true</code> if the last column value read was SQL
      *         <code>NULL</code> and <code>false</code> otherwise
      * @exception SQLException
@@ -293,13 +293,12 @@ class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
      */
     @Override
     public boolean wasNull() throws SQLException {
-	;
 	return wasNull;
     }
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getBinaryStream(int)
      */
@@ -315,7 +314,7 @@ class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getBinaryStream(java.
      * lang.String)
@@ -529,7 +528,7 @@ class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
 
     /**
      * Says if trace is on
-     * 
+     *
      * @return true if trace is on
      */
     public boolean isTraceOn() {
@@ -538,7 +537,7 @@ class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
 
     /**
      * Sets the trace on/off
-     * 
+     *
      * @param traceOn
      *            if true, trace will be on
      */

@@ -24,6 +24,7 @@ import java.net.HttpURLConnection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.json.Json;
 import javax.json.JsonNumber;
@@ -65,14 +66,13 @@ public class ResultAnalyzer {
      * @param httpStatusMessage
      */
     public ResultAnalyzer(String jsonResult, int httpStatusCode, String httpStatusMessage) {
-
-	if (jsonResult != null) {
-	    jsonResult = jsonResult.trim();
-	}
-
 	this.jsonResult = jsonResult;
 	this.httpStatusCode = httpStatusCode;
 	this.httpStatusMessage = httpStatusMessage;
+
+	if (this.jsonResult  != null) {
+	    this.jsonResult  = this.jsonResult .trim();
+	}
     }
 
     /**
@@ -93,11 +93,8 @@ public class ResultAnalyzer {
 	    JsonObject object = (JsonObject) jsonst;
 	    JsonString status = (JsonString) object.get("status");
 
-	    if (status != null && status.getString().equals("OK")) {
-		return true;
-	    } else {
-		return false;
-	    }
+	    return status != null && status.getString().equals("OK");
+
 	} catch (Exception e) {
 	    this.parseException = e;
 	    invalidJsonStream = true;
@@ -124,7 +121,7 @@ public class ResultAnalyzer {
      */
     public String getValue(String name) {
 	if (name == null) {
-	    throw new NullPointerException("name is null!");
+	    Objects.requireNonNull(name, "name cannot be null!");
 	}
 
 	if (isInvalidJsonStream()) {
@@ -439,7 +436,10 @@ public class ResultAnalyzer {
 		// trace("Should not reach this:");
 		debug(event.toString() + " " + parser.getString());
 		break;
+	    default:
+		// Do nothing!
 	    }
+
 	}
 
 	// Should never happen, return is done before

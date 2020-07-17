@@ -1437,7 +1437,9 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
      */
     @Override
     public void setCharacterStream(String parameterName, Reader reader) throws SQLException {
-
+	String methodName = new Object() {
+	}.getClass().getEnclosingMethod().getName();
+	throw new SQLException(FEATURE_NOT_SUPPORTED_IN_THIS_VERSION + methodName);
     }
 
     /*
@@ -1460,7 +1462,9 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
      */
     @Override
     public void setClob(String parameterName, Reader reader) throws SQLException {
-
+	String methodName = new Object() {
+	}.getClass().getEnclosingMethod().getName();
+	throw new SQLException(FEATURE_NOT_SUPPORTED_IN_THIS_VERSION + methodName);
     }
 
     /*

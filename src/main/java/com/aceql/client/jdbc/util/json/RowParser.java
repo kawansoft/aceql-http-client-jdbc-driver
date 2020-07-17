@@ -1,20 +1,20 @@
 /*
  * This file is part of AceQL Client SDK.
- * AceQL Client SDK: Remote JDBC access over HTTP with AceQL HTTP.                                 
+ * AceQL Client SDK: Remote JDBC access over HTTP with AceQL HTTP.
  * Copyright (C) 2020,  KawanSoft SAS
- * (http://www.kawansoft.com). All rights reserved.                                
- *                                                                               
+ * (http://www.kawansoft.com). All rights reserved.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  */
 package com.aceql.client.jdbc.util.json;
 
@@ -48,7 +48,7 @@ public class RowParser {
 
     /**
      * Constructor.
-     * 
+     *
      * @param jsonFile
      * @throws SQLException
      */
@@ -59,17 +59,15 @@ public class RowParser {
 	}
 
 	if (!jsonFile.exists()) {
-	    throw new SQLException(new FileNotFoundException(
-		    "jsonFile does not exist: " + jsonFile));
+	    throw new SQLException(new FileNotFoundException("jsonFile does not exist: " + jsonFile));
 	}
 
 	this.jsonFile = jsonFile;
     }
 
-
     /**
      * Builds the valuesPerColName & valuesPerColIndex for the passed row num
-     * 
+     *
      * @param parser
      * @param rowNum
      * @throws SQLException
@@ -110,8 +108,7 @@ public class RowParser {
 		trace();
 		trace(event.toString() + " " + parser.getString() + " - ");
 
-		if (parser.getString().equals("row_" + rowNum)
-			&& !isInsideRowValuesArray) {
+		if (parser.getString().equals("row_" + rowNum) && !isInsideRowValuesArray) {
 
 		    if (parser.hasNext())
 			parser.next();
@@ -134,10 +131,8 @@ public class RowParser {
 			else
 			    return;
 
-			if (event != JsonParser.Event.KEY_NAME
-				&& event != JsonParser.Event.VALUE_STRING
-				&& event != JsonParser.Event.VALUE_NUMBER
-				&& event != JsonParser.Event.END_ARRAY) {
+			if (event != JsonParser.Event.KEY_NAME && event != JsonParser.Event.VALUE_STRING
+				&& event != JsonParser.Event.VALUE_NUMBER && event != JsonParser.Event.END_ARRAY) {
 			    continue;
 			}
 
@@ -182,6 +177,8 @@ public class RowParser {
 		trace("Should not reach this:");
 		trace(event.toString() + " " + parser.getString());
 		break;
+	    default:
+		// Do nothing!
 	    }
 	}
 
@@ -205,8 +202,7 @@ public class RowParser {
 
 	Reader fileReader = null;
 	try {
-	    fileReader = new InputStreamReader(new FileInputStream(jsonFile),
-		    "UTF-8");
+	    fileReader = new InputStreamReader(new FileInputStream(jsonFile), "UTF-8");
 	} catch (Exception e) {
 	    throw new SQLException(e);
 	}
@@ -220,7 +216,7 @@ public class RowParser {
 
     /**
      * Says if trace is on
-     * 
+     *
      * @return true if trace is on
      */
     public boolean isTraceOn() {
@@ -229,9 +225,8 @@ public class RowParser {
 
     /**
      * Sets the trace on/off
-     * 
-     * @param traceOn
-     *            if true, trace will be on
+     *
+     * @param traceOn if true, trace will be on
      */
     public void setTraceOn(boolean traceOn) {
 	this.traceOn = traceOn;
@@ -249,16 +244,15 @@ public class RowParser {
 	}
     }
 
-    public void close() {	
+    public void close() {
 	if (reader != null) {
 	    try {
 		reader.close();
-	    }
-	    catch (Exception ignore) {
+	    } catch (Exception ignore) {
 		// ignore
 	    }
 	}
-	
+
 	// Reinit parser:
 	parser = null;
     }

@@ -1059,7 +1059,7 @@ public class AceQLHttpApi {
 	try {
 
 	    if (blobId == null) {
-		throw new NullPointerException("blobId is null!");
+		Objects.requireNonNull(blobId, "blobId cannot be null!");
 	    }
 
 	    String action = "get_blob_length";
@@ -1130,8 +1130,7 @@ public class AceQLHttpApi {
 	    Map<String, String> parameters = new HashMap<String, String>();
 	    parameters.put("format", format);
 	    if (tableName != null) {
-		tableName = tableName.toLowerCase();
-		parameters.put("table_name", tableName);
+		parameters.put("table_name", tableName.toLowerCase());
 	    }
 
 	    InputStream in = null;
