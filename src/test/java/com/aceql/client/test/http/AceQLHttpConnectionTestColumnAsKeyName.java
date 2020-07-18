@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package com.aceql.client.test;
+package com.aceql.client.test.http;
 
 import static org.junit.Assert.fail;
 

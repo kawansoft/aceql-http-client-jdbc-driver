@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.aceql.sdk.jdbc.examples.storedprocecudres;
+package com.aceql.client.test.stored_procedures;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -25,11 +25,14 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.Objects;
 
+import com.aceql.client.test.connection.ConnectionBuilder;
+
 /**
+ *
  * @author Nicolas de Pomereu
  *
  */
-public class SqlServerStoredProcedureTest {
+public class MySqlStoredProcedureTest {
 
     /**
      * @param args
@@ -38,44 +41,36 @@ public class SqlServerStoredProcedureTest {
 
 	//AceQLConnection.setTraceOn(true);
 
-	Connection connection = StoredProcedureUtil.getRemoteConnection();
+	Connection connection = ConnectionBuilder.createDefaultLocal();
 
 	if (connection == null) {
 	    Objects.requireNonNull(connection, "connection can not be null!");
 	}
 
-	testSqlServerSoredProcedure(connection);
+	testStoredProcedures(connection);
 
     }
 
-    /**
-     * Tests a remote MS SQL Server procedure
-     *
-     * @param connection
-     * @throws SQLException
-     */
-    public static void testSqlServerSoredProcedure(Connection connection) throws SQLException {
-
-	CallableStatement callableStatement = connection.prepareCall("{call ProcedureName(?, ?, ?) }");
+    public static void testStoredProcedures(Connection connection) throws SQLException {
+	CallableStatement callableStatement = connection.prepareCall("{ call demoSp(?, ?, ?) }");
+	callableStatement.registerOutParameter(2, Types.INTEGER);
 	callableStatement.registerOutParameter(3, Types.INTEGER);
-	callableStatement.setInt(1, 0);
-	callableStatement.setInt(2, 2);
+	callableStatement.setString(1, "test");
+	callableStatement.setInt(2, 12);
 	ResultSet rs = callableStatement.executeQuery();
 
 	while (rs.next()) {
-	    System.out.println();
-	    System.out.println("rs.getString(1): " + rs.getString(1));
-	    System.out.println("rs.getString(2): " + rs.getString(2));
+	    System.out.println(rs.getString(1));
 	}
 
+	int out2 = callableStatement.getInt(2);
 	int out3 = callableStatement.getInt(3);
 
 	callableStatement.close();
 
 	System.out.println();
+	System.out.println("out2: " + out2);
 	System.out.println("out3: " + out3);
-
     }
-
 
 }

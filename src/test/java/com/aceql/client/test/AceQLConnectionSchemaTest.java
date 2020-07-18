@@ -35,6 +35,7 @@ import com.aceql.client.jdbc.AceQLException;
 import com.aceql.client.metadata.JdbcDatabaseMetaData;
 import com.aceql.client.metadata.RemoteDatabaseMetaData;
 import com.aceql.client.metadata.Table;
+import com.aceql.client.test.connection.ConnectionBuilder;
 
 /**
  * @author Nicolas de Pomereu
@@ -44,40 +45,17 @@ public class AceQLConnectionSchemaTest {
 
     private static boolean DEBUG = true;
 
-    public static final String IN_DIRECTORY = SystemUtils.USER_HOME + File.separator + "aceql_tests" + File.separator
-	    + "IN";
-    public static final String OUT_DIRECTORY = SystemUtils.USER_HOME + File.separator + "aceql_tests" + File.separator
-	    + "OUT";
-
     public static void main(String[] args) throws Exception {
-
-	boolean doContinue = true;
-	while (doContinue) {
-	    doIt();
-	    doContinue = false;
-	}
+	Connection connection = ConnectionBuilder.createDefaultLocal();
+	doIt(connection);
+	connection.close();
+	((AceQLConnection) connection).logout();
     }
 
-    @SuppressWarnings("unused")
-    private static void doIt() throws SQLException, AceQLException, FileNotFoundException, IOException {
-	new File(IN_DIRECTORY).mkdirs();
-	new File(OUT_DIRECTORY).mkdirs();
-
-	String serverUrlLocalhostEmbedded = "http://localhost:9090/aceql";
-	String serverUrlLocalhostEmbeddedSsl = "https://localhost:9443/aceql";
-	String serverUrlLocalhostTomcat = "http://localhost:8080/aceql-test/aceql";
-	String serverUrlLocalhostTomcatPro = "http://localhost:8080/aceql-test-pro/aceql";
-	String serverUrlUnix = "https://www.aceql.com:9443/aceql";
-	String serverUrlUnixNoSSL = "http://www.aceql.com:8081/aceql";
-
-	String serverUrl = serverUrlLocalhostEmbedded;
-	String database = "sampledb";
-	String username = "username";
-	char[] password = { 'p', 'a', 's', 's', 'w', 'o', 'r', 'd' };
-
+    public static void doIt(Connection connection) throws SQLException, AceQLException, FileNotFoundException, IOException {
 	// Get a real Connection instance that points to remote AceQL server
 	System.out.println(new Date() + " Begin...");
-	Connection connection = new AceQLConnection(serverUrl, database, username, password);
+
 	boolean autoCommit = connection.getAutoCommit();
 	System.out.println(new Date() + " autoCommit: " + autoCommit);
 
@@ -116,8 +94,6 @@ public class AceQLConnectionSchemaTest {
 	    System.out.println(new Date() + " Imported Keys: " + table.getImportedforeignKeys());
 	}
 
-	connection.close();
-	((AceQLConnection) connection).logout();
 	System.out.println(new Date() + " End.");
     }
 
@@ -130,32 +106,4 @@ public class AceQLConnectionSchemaTest {
 	    System.out.println(new Date() + " " + s);
 	}
     }
-
-    /*
-     * private static void loopInsertIntoOrderlog(AceQLConnection aceQLConnection)
-     * throws SQLException {
-     *
-     * String sql = "delete from orderlog";
-     *
-     * for (int i = 1; i < 11; i++) { int customerId = i; int itemId = i;
-     *
-     * PrepStatementParametersBuilder builder = new
-     * PrepStatementParametersBuilder(); int j = 1; builder.setParameter(j++,
-     * AceQLTypes.INTEGER, new Integer(customerId).toString());
-     * builder.setParameter(j++, AceQLTypes.INTEGER, new
-     * Integer(itemId).toString()); builder.setParameter(j++, AceQLTypes.VARCHAR,
-     * "description_" + itemId); builder.setParameter(j++, AceQLTypes.NUMERIC, new
-     * Integer(itemId * 1000).toString()); builder.setParameter(j++,
-     * AceQLTypes.DATE, new Long(System.currentTimeMillis()).toString());
-     * builder.setParameter(j++, AceQLTypes.TIMESTAMP, new
-     * Long(System.currentTimeMillis()).toString()); builder.setParameter(j++,
-     * AceQLTypes.VARBINARY, null); builder.setParameter(j++, AceQLTypes.NUMERIC,
-     * new Integer(1).toString()); builder.setParameter(j++, AceQLTypes.INTEGER, new
-     * Integer(itemId * 1000).toString());
-     *
-     * sql = "insert into orderlog values (?, ?, ?, ?, ?, ?, ?, ?, ?)"; }
-     *
-     * }
-     */
-
 }

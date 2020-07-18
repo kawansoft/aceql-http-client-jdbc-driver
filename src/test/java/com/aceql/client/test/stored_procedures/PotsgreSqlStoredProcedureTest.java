@@ -16,59 +16,47 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.aceql.sdk.jdbc.examples.storedprocecudres;
+package com.aceql.client.test.stored_procedures;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.Objects;
 
+import com.aceql.client.test.connection.ConnectionBuilder;
+
 /**
- *
  * @author Nicolas de Pomereu
  *
  */
-public class MySqlStoredProcedureTest {
+public class PotsgreSqlStoredProcedureTest {
 
     /**
      * @param args
      */
     public static void main(String[] args) throws Exception {
 
-	//AceQLConnection.setTraceOn(true);
-
-	Connection connection = StoredProcedureUtil.getRemoteConnection();
+	Connection connection = ConnectionBuilder.createDefaultLocal();
 
 	if (connection == null) {
 	    Objects.requireNonNull(connection, "connection can not be null!");
 	}
 
-	testMySqlStoredProcedure(connection);
+	testStoredProcedures(connection);
 
     }
 
-    public static void testMySqlStoredProcedure(Connection connection) throws SQLException {
-	CallableStatement callableStatement = connection.prepareCall("{ call demoSp(?, ?, ?) }");
-	callableStatement.registerOutParameter(2, Types.INTEGER);
-	callableStatement.registerOutParameter(3, Types.INTEGER);
-	callableStatement.setString(1, "test");
-	callableStatement.setInt(2, 12);
-	ResultSet rs = callableStatement.executeQuery();
-
-	while (rs.next()) {
-	    System.out.println(rs.getString(1));
-	}
-
-	int out2 = callableStatement.getInt(2);
-	int out3 = callableStatement.getInt(3);
-
-	callableStatement.close();
+    public static void testStoredProcedures(Connection conn) throws SQLException {
+	CallableStatement upperProc = conn.prepareCall("{ ? = call upper( ? ) }");
+	upperProc.registerOutParameter(1, Types.VARCHAR);
+	upperProc.setString(2, "lowercase to uppercase");
+	upperProc.executeUpdate();
+	String upperCased = upperProc.getString(1);
+	upperProc.close();
 
 	System.out.println();
-	System.out.println("out2: " + out2);
-	System.out.println("out3: " + out3);
+	System.out.println("upperCased: " + upperCased);
     }
 
 }

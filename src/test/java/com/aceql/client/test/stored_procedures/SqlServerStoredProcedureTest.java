@@ -16,46 +16,66 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.aceql.sdk.jdbc.examples.storedprocecudres;
+package com.aceql.client.test.stored_procedures;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.Objects;
+
+import com.aceql.client.test.connection.ConnectionBuilder;
 
 /**
  * @author Nicolas de Pomereu
  *
  */
-public class PotsgreSqlStoredProcedureTest {
+public class SqlServerStoredProcedureTest {
 
     /**
      * @param args
      */
     public static void main(String[] args) throws Exception {
 
-	Connection connection = StoredProcedureUtil.getRemoteConnection();
+	//AceQLConnection.setTraceOn(true);
+	Connection connection = ConnectionBuilder.createDefaultLocal();
 
 	if (connection == null) {
 	    Objects.requireNonNull(connection, "connection can not be null!");
 	}
 
-	testPostrgreSqlStoredProcedures(connection);
-
+	testStoredProcedures(connection);
     }
 
-    public static void testPostrgreSqlStoredProcedures(Connection conn) throws SQLException {
-	CallableStatement upperProc = conn.prepareCall("{ ? = call upper( ? ) }");
-	upperProc.registerOutParameter(1, Types.VARCHAR);
-	upperProc.setString(2, "lowercase to uppercase");
-	upperProc.executeUpdate();
-	String upperCased = upperProc.getString(1);
-	upperProc.close();
+    /**
+     * Tests a remote MS SQL Server procedure
+     *
+     * @param connection
+     * @throws SQLException
+     */
+    public static void testStoredProcedures(Connection connection) throws SQLException {
 
-	System.out.println("upperCased: " + upperCased);
+	CallableStatement callableStatement = connection.prepareCall("{call ProcedureName(?, ?, ?) }");
+	callableStatement.registerOutParameter(3, Types.INTEGER);
+	callableStatement.setInt(1, 0);
+	callableStatement.setInt(2, 2);
+	ResultSet rs = callableStatement.executeQuery();
+
+	while (rs.next()) {
+	    System.out.println();
+	    System.out.println("rs.getString(1): " + rs.getString(1));
+	    System.out.println("rs.getString(2): " + rs.getString(2));
+	}
+
+	int out3 = callableStatement.getInt(3);
+
+	callableStatement.close();
+
+	System.out.println();
+	System.out.println("out3: " + out3);
+
     }
-
 
 
 }

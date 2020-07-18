@@ -16,37 +16,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.aceql.client.test;
 
-import java.io.File;
-import java.nio.charset.Charset;
-import java.util.Map;
+import java.sql.Connection;
 
-import org.apache.commons.io.FileUtils;
-
-import com.aceql.client.jdbc.http.ResultAnalyzer;
-import com.aceql.client.test.connection.ConnectionParms;
+import com.aceql.client.jdbc.AceQLConnection;
+import com.aceql.client.test.connection.ConnectionBuilder;
+import com.aceql.client.test.stored_procedures.PotsgreSqlStoredProcedureTest;
 
 /**
+ * Test all SDK functions.
  * @author Nicolas de Pomereu
  *
  */
-public class ResultAnalyzerTest {
+public class TestAll {
 
     /**
      * @param args
      */
     public static void main(String[] args) throws Exception {
 
-	//AceQLConnection.setTraceOn(true);
+	// Get a real Connection instance that points to remote AceQL server
+	Connection connection = ConnectionBuilder.createDefaultLocal();
+	AceQLConnectionTest.doIt(connection);
+	// connection is closed inside
 
-	ResultAnalyzer resultAnalyzer = new ResultAnalyzer(FileUtils.readFileToString(new File(ConnectionParms.IN_DIRECTORY + File.separator + "json_out.txt"), Charset.defaultCharset()), 200, "OK");
-	Map<Integer, String> parametersOutPerIndex = resultAnalyzer.getParametersOutPerIndex();
+	connection = ConnectionBuilder.createDefaultLocal();
+	AceQLConnectionSchemaTest.doIt(connection);
+	connection.close();
+	((AceQLConnection) connection).logout();
 
-	System.out.println();
-	System.out.println("parametersOutPerIndex: ");
-	System.out.println(parametersOutPerIndex);
+	connection = ConnectionBuilder.createDefaultLocal();
+	PotsgreSqlStoredProcedureTest.testStoredProcedures(connection);
+	connection.close();
+	((AceQLConnection) connection).logout();
 
     }
-
 }

@@ -17,13 +17,14 @@
  * limitations under the License.
  */
 
-package com.aceql.client.test;
+package com.aceql.client.test.http;
 
 import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -32,41 +33,27 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.SystemUtils;
 import org.junit.Test;
 
 import com.aceql.client.jdbc.AceQLConnection;
 import com.aceql.client.jdbc.AceQLException;
+import com.aceql.client.test.connection.ConnectionBuilder;
+import com.aceql.client.test.connection.ConnectionParms;
 
 public class AceQLHttpConnectionTest {
 
-    public static final String IN_DIRECTORY = SystemUtils.USER_HOME + File.separator + "aceql_tests" + File.separator + "IN";
-    public static final String OUT_DIRECTORY = SystemUtils.USER_HOME + File.separator + "aceql_tests" + File.separator + "OUT";
-
-    public final String serverUrlWindows = "http://localhost:9090/aceql";
-    public final String serverUrlLinux = "http://www.aceql.com:8081/aceql";
-
-    public final String serverUrl = serverUrlWindows;
-    public final String username = "user1";
-    public final String password = "password1";
-    public final String dbname = "sampledb";
-
     private AceQLConnection connection = null;
 
-    public Connection getConnection() throws SQLException {
+    public Connection getConnection() throws SQLException, IOException {
 
-	if (!new File(IN_DIRECTORY).exists()) {
-	    new File(IN_DIRECTORY).mkdirs();
+	if (!new File(ConnectionParms.IN_DIRECTORY).exists()) {
+	    new File(ConnectionParms.IN_DIRECTORY).mkdirs();
 	}
-	if (!new File(OUT_DIRECTORY).exists()) {
-	    new File(OUT_DIRECTORY).mkdirs();
+	if (!new File(ConnectionParms.OUT_DIRECTORY).exists()) {
+	    new File(ConnectionParms.OUT_DIRECTORY).mkdirs();
 	}
 
-	if (connection == null) {
-	    connection = new AceQLConnection(serverUrl, dbname, username,
-		    password.toCharArray());
-	}
-	return connection;
+	return ConnectionBuilder.createDefaultLocal();
     }
 
     @Test
@@ -288,7 +275,7 @@ public class AceQLHttpConnectionTest {
 	    int customerId = 1;
 	    int itemId = 1;
 
-	    File file = new File(IN_DIRECTORY  + File.separator + "username_koala.jpg");
+	    File file = new File(ConnectionParms.IN_DIRECTORY  + File.separator + "username_koala.jpg");
 
 	    if (!file.exists()) {
 		throw new FileNotFoundException("file does not exist:" + file);
@@ -345,7 +332,7 @@ public class AceQLHttpConnectionTest {
 		System.out.println("date_shipped  : " + rs.getTimestamp(i++));
 		System.out.println("jpeg_image    : " + "<binary>");
 
-		file = new File(OUT_DIRECTORY + File.separator + "downloaded_new_blob.jpg");
+		file = new File(ConnectionParms.OUT_DIRECTORY + File.separator + "downloaded_new_blob.jpg");
 
 		try (InputStream in = rs.getBinaryStream(i++);){
 		    FileUtils.copyToFile(in, file);

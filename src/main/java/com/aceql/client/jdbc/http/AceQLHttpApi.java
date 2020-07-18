@@ -18,23 +18,14 @@
  */
 package com.aceql.client.jdbc.http;
 
-import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
-import java.net.Authenticator;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.PasswordAuthentication;
-import java.net.ProtocolException;
 import java.net.Proxy;
-import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.net.URLEncoder;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -52,7 +43,6 @@ import com.aceql.client.jdbc.util.json.SqlParameter;
 import com.aceql.client.metadata.dto.JdbcDatabaseMetaDataDto;
 import com.aceql.client.metadata.dto.TableDto;
 import com.aceql.client.metadata.dto.TableNamesDto;
-import com.aceql.client.metadata.util.GsonWsUtil;
 
 /**
  * @author Nicolas de Pomereu
@@ -76,11 +66,6 @@ public class AceQLHttpApi {
     private String sessionId;
     private String database;
 
-    /** Proxy to use with HttpUrlConnection */
-    private Proxy proxy = null;
-    /** For authenticated proxy */
-    private PasswordAuthentication passwordAuthentication = null;
-
     private static int connectTimeout = 0;
     private static int readTimeout = 0;
 
@@ -90,11 +75,12 @@ public class AceQLHttpApi {
     private boolean gzipResult = true;
 
     private String url = null;
-    private int httpStatusCode = HttpURLConnection.HTTP_OK;
-    private String httpStatusMessage;
 
     private AtomicBoolean cancelled;
     private AtomicInteger progress;
+
+    /* The HttpManager */
+    private HttpManager httpManager;
 
     /**
      * Sets the read timeout.
@@ -185,20 +171,7 @@ public class AceQLHttpApi {
 	    this.password = password;
 	    this.sessionId = sessionId;
 
-	    this.proxy = proxy;
-	    this.passwordAuthentication = passwordAuthentication;
-
-	    setProxyCredentials();
-
-	    /*
-	     * BEGIN OLD implementation with GET String url = serverUrl + "/database/" +
-	     * database + "/username/" + username + "/login" + "?password=" + new
-	     * String(password) + "&stateless=" + stateless;
-	     *
-	     * String result = callWithGet(url);
-	     *
-	     * trace("result: " + result); END OLD implementation with GET
-	     */
+	    httpManager = new HttpManager(proxy, passwordAuthentication, connectTimeout, readTimeout);
 
 	    UserLoginStore userLoginStore = new UserLoginStore(serverUrl, username, database);
 
@@ -211,15 +184,16 @@ public class AceQLHttpApi {
 		sessionId = userLoginStore.getSessionId();
 
 		String theUrl = serverUrl + "/session/" + sessionId + "/get_connection";
-		String result = callWithGet(theUrl);
+		String result = httpManager.callWithGet(theUrl);
 
 		trace("result: " + result);
 
-		ResultAnalyzer resultAnalyzer = new ResultAnalyzer(result, httpStatusCode, httpStatusMessage);
+		ResultAnalyzer resultAnalyzer = new ResultAnalyzer(result, httpManager.getHttpStatusCode(),
+			httpManager.getHttpStatusMessage());
 
 		if (!resultAnalyzer.isStatusOk()) {
 		    throw new AceQLException(resultAnalyzer.getErrorMessage(), resultAnalyzer.getErrorType(), null,
-			    resultAnalyzer.getStackTrace(), httpStatusCode);
+			    resultAnalyzer.getStackTrace(), httpManager.getHttpStatusCode());
 		}
 
 		String connectionId = resultAnalyzer.getValue("connection_id");
@@ -234,15 +208,16 @@ public class AceQLHttpApi {
 		parameters.put("password", new String(password));
 		parameters.put("client_version", VersionValues.VERSION);
 
-		String result = callWithPostReturnString(new URL(url), parameters);
+		String result = httpManager.callWithPostReturnString(new URL(url), parameters);
 
 		trace("result: " + result);
 
-		ResultAnalyzer resultAnalyzer = new ResultAnalyzer(result, httpStatusCode, httpStatusMessage);
+		ResultAnalyzer resultAnalyzer = new ResultAnalyzer(result, httpManager.getHttpStatusCode(),
+			httpManager.getHttpStatusMessage());
 
 		if (!resultAnalyzer.isStatusOk()) {
 		    throw new AceQLException(resultAnalyzer.getErrorMessage(), resultAnalyzer.getErrorType(), null,
-			    resultAnalyzer.getStackTrace(), httpStatusCode);
+			    resultAnalyzer.getStackTrace(), httpManager.getHttpStatusCode());
 		}
 
 		trace("Ok. Connected! ");
@@ -259,7 +234,7 @@ public class AceQLHttpApi {
 	} catch (AceQLException aceQlException) {
 	    throw aceQlException;
 	} catch (Exception e) {
-	    throw new AceQLException(e.getMessage(), 0, e, null, httpStatusCode);
+	    throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
 	}
 
     }
@@ -277,7 +252,6 @@ public class AceQLHttpApi {
     }
 
     private void callApiNoResult(String commandName, String commandOption) throws AceQLException {
-
 	try {
 
 	    if (commandName == null) {
@@ -286,16 +260,17 @@ public class AceQLHttpApi {
 
 	    String result = callWithGet(commandName, commandOption);
 
-	    ResultAnalyzer resultAnalyzer = new ResultAnalyzer(result, httpStatusCode, httpStatusMessage);
+	    ResultAnalyzer resultAnalyzer = new ResultAnalyzer(result, httpManager.getHttpStatusCode(),
+		    httpManager.getHttpStatusMessage());
 	    if (!resultAnalyzer.isStatusOk()) {
 		throw new AceQLException(resultAnalyzer.getErrorMessage(), resultAnalyzer.getErrorType(), null,
-			resultAnalyzer.getStackTrace(), httpStatusCode);
+			resultAnalyzer.getStackTrace(), httpManager.getHttpStatusCode());
 	    }
 
 	} catch (AceQLException aceQlException) {
 	    throw aceQlException;
 	} catch (Exception e) {
-	    throw new AceQLException(e.getMessage(), 0, e, null, httpStatusCode);
+	    throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
 	}
     }
 
@@ -309,10 +284,11 @@ public class AceQLHttpApi {
 
 	    String result = callWithGet(commandName, commandOption);
 
-	    ResultAnalyzer resultAnalyzer = new ResultAnalyzer(result, httpStatusCode, httpStatusMessage);
+	    ResultAnalyzer resultAnalyzer = new ResultAnalyzer(result, httpManager.getHttpStatusCode(),
+		    httpManager.getHttpStatusMessage());
 	    if (!resultAnalyzer.isStatusOk()) {
 		throw new AceQLException(resultAnalyzer.getErrorMessage(), resultAnalyzer.getErrorType(), null,
-			resultAnalyzer.getStackTrace(), httpStatusCode);
+			resultAnalyzer.getStackTrace(), httpManager.getHttpStatusCode());
 	    }
 
 	    return resultAnalyzer.getResult();
@@ -320,7 +296,7 @@ public class AceQLHttpApi {
 	} catch (AceQLException aceQlException) {
 	    throw aceQlException;
 	} catch (Exception e) {
-	    throw new AceQLException(e.getMessage(), 0, e, null, httpStatusCode);
+	    throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
 	}
     }
 
@@ -332,96 +308,7 @@ public class AceQLHttpApi {
 	    urlWithaction += "/" + actionParameter;
 	}
 
-	return callWithGet(urlWithaction);
-
-    }
-
-    // FUTUR USAGE: HTTP/2 with HttpClient
-
-    // private int httpVersion = 1;
-    // OkHttpClient client = new OkHttpClient();
-    //
-    // private InputStream callWithGetInputStreamHttp2(String url)
-    // throws MalformedURLException, IOException, ProtocolException {
-    //
-    // Request request = new Request.Builder().url(url).build();
-    //
-    // Response response = client.newCall(request).execute();
-    // return response.body().byteStream();
-    //
-    // }
-
-    private InputStream callWithGetReturnStream(String url)
-	    throws MalformedURLException, IOException, UnsupportedEncodingException {
-
-	/*
-	 * if (httpVersion == 1) { return callWithGetInputStreamHttp11(url); } else {
-	 * return callWithGetInputStreamHttp2(url); }
-	 */
-
-	return callWithGetInputStreamHttp11(url);
-
-    }
-
-    private InputStream callWithGetInputStreamHttp11(String url)
-	    throws MalformedURLException, IOException, ProtocolException {
-	URL theUrl = new URL(url);
-	HttpURLConnection conn = null;
-
-	if (this.proxy == null) {
-	    conn = (HttpURLConnection) theUrl.openConnection();
-	} else {
-	    conn = (HttpURLConnection) theUrl.openConnection(proxy);
-	}
-
-	conn.setRequestProperty("Accept-Charset", "UTF-8");
-	conn.setReadTimeout(readTimeout);
-	conn.setRequestMethod("GET");
-	conn.setDoOutput(true);
-
-	trace();
-	trace("Executing request " + url);
-
-	httpStatusCode = conn.getResponseCode();
-	httpStatusMessage = conn.getResponseMessage();
-
-	InputStream in = null;
-	// if (httpStatusCode == HttpURLConnection.HTTP_OK || httpStatusCode ==
-	// HttpURLConnection.HTTP_MOVED_TEMP) {
-	if (httpStatusCode == HttpURLConnection.HTTP_OK) {
-	    in = conn.getInputStream();
-	} else {
-	    in = conn.getErrorStream();
-	}
-
-	return in;
-    }
-
-    private String callWithGet(String url)
-	    throws MalformedURLException, IOException, ProtocolException, UnsupportedEncodingException {
-
-	String responseBody;
-
-	try (InputStream in = callWithGetReturnStream(url)) {
-	    if (in == null)
-		return null;
-
-	    ByteArrayOutputStream out = new ByteArrayOutputStream();
-
-	    IOUtils.copy(in, out);
-
-	    responseBody = out.toString("UTF-8");
-	    if (responseBody != null) {
-		responseBody = responseBody.trim();
-	    }
-
-	    trace("----------------------------------------");
-	    trace(responseBody);
-	    trace("----------------------------------------");
-
-	    return responseBody;
-	}
-
+	return httpManager.callWithGet(urlWithaction);
     }
 
     /*
@@ -434,82 +321,6 @@ public class AceQLHttpApi {
      * }
      */
 
-    private InputStream callWithPost(URL theUrl, Map<String, String> parameters)
-	    throws IOException, ProtocolException, SocketTimeoutException, UnsupportedEncodingException {
-	HttpURLConnection conn = null;
-
-	if (this.proxy == null) {
-	    conn = (HttpURLConnection) theUrl.openConnection();
-	} else {
-	    conn = (HttpURLConnection) theUrl.openConnection(proxy);
-	}
-
-	conn.setRequestProperty("Accept-Charset", "UTF-8");
-	conn.setReadTimeout(readTimeout);
-	conn.setRequestMethod("POST");
-	conn.setDoOutput(true);
-
-	TimeoutConnector timeoutConnector = new TimeoutConnector(conn, connectTimeout);
-
-	try (OutputStream connOut = timeoutConnector.getOutputStream();) {
-	    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(connOut, "UTF-8"));
-	    writer.write(AceQLHttpApi.getPostDataString(parameters));
-
-	    // writer.flush();
-	    writer.close();
-	}
-
-	trace();
-	trace("Executing request: " + theUrl.toString());
-
-	if (parameters.containsKey("sql")) {
-	    trace("sql..............: " + parameters.get("sql"));
-	}
-
-	trace("parameters.......: " + parameters);
-
-	// Analyze the error after request execution
-	httpStatusCode = conn.getResponseCode();
-	httpStatusMessage = conn.getResponseMessage();
-
-	InputStream in = null;
-	if (httpStatusCode == HttpURLConnection.HTTP_OK) {
-	    in = conn.getInputStream();
-	} else {
-	    in = conn.getErrorStream();
-	}
-
-	return in;
-    }
-
-    private void setProxyCredentials() {
-
-	if (proxy == null) {
-	    return;
-	}
-
-	// Sets the credential for authentication
-	if (passwordAuthentication != null) {
-	    final String proxyAuthUsername = passwordAuthentication.getUserName();
-	    final char[] proxyPassword = passwordAuthentication.getPassword();
-
-	    Authenticator authenticator = new Authenticator() {
-
-		@Override
-		public PasswordAuthentication getPasswordAuthentication() {
-		    return new PasswordAuthentication(proxyAuthUsername, proxyPassword);
-		}
-	    };
-
-	    if (DEBUG) {
-		System.out.println("passwordAuthentication: " + proxyAuthUsername + " " + new String(proxyPassword));
-	    }
-
-	    Authenticator.setDefault(authenticator);
-	}
-
-    }
-
     // ////////////////////////////////////////////////////
     // PUBLIC METHODS //
     // ///////////////////////////////////////////////////
@@ -518,8 +329,8 @@ public class AceQLHttpApi {
     public AceQLHttpApi clone() {
 	AceQLHttpApi aceQLHttpApi;
 	try {
-	    aceQLHttpApi = new AceQLHttpApi(serverUrl, database, username, password, sessionId, proxy,
-		    passwordAuthentication);
+	    aceQLHttpApi = new AceQLHttpApi(serverUrl, database, username, password, sessionId, httpManager.getProxy(),
+		    httpManager.getPasswordAuthentication());
 	    aceQLHttpApi.setGzipResult(gzipResult);
 	} catch (SQLException e) {
 	    throw new IllegalStateException(e);
@@ -812,12 +623,13 @@ public class AceQLHttpApi {
 
 	    URL theUrl = new URL(url + action);
 
-	    String result = callWithPostReturnString(theUrl, parametersMap);
+	    String result = httpManager.callWithPostReturnString(theUrl, parametersMap);
 
-	    ResultAnalyzer resultAnalyzer = new ResultAnalyzer(result, httpStatusCode, httpStatusMessage);
+	    ResultAnalyzer resultAnalyzer = new ResultAnalyzer(result, httpManager.getHttpStatusCode(),
+		    httpManager.getHttpStatusMessage());
 	    if (!resultAnalyzer.isStatusOk()) {
 		throw new AceQLException(resultAnalyzer.getErrorMessage(), resultAnalyzer.getErrorType(), null,
-			resultAnalyzer.getStackTrace(), httpStatusCode);
+			resultAnalyzer.getStackTrace(), httpManager.getHttpStatusCode());
 	    }
 
 	    if (isStoredProcedure) {
@@ -830,7 +642,7 @@ public class AceQLHttpApi {
 	} catch (AceQLException aceQlException) {
 	    throw aceQlException;
 	} catch (Exception e) {
-	    throw new AceQLException(e.getMessage(), 0, e, null, httpStatusCode);
+	    throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
 	}
 
     }
@@ -873,24 +685,6 @@ public class AceQLHttpApi {
 
     }
 
-    private String callWithPostReturnString(URL theUrl, Map<String, String> parametersMap)
-	    throws IOException, ProtocolException, SocketTimeoutException, UnsupportedEncodingException {
-
-	String result = null;
-
-	try (InputStream in = callWithPost(theUrl, parametersMap);) {
-
-	    if (in != null) {
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		IOUtils.copy(in, out);
-
-		result = out.toString("UTF-8");
-		trace("result: " + result);
-	    }
-	}
-	return result;
-    }
-
     /**
      * Calls /execute_query API
      *
@@ -899,7 +693,7 @@ public class AceQLHttpApi {
      *                            that returns nothing
      * @param isPreparedStatement if true, the server will generate a prepared
      *                            statement, else a simple statement
-     * @param isStoredProcedure   TODO
+     * @param isStoredProcedure   true if the call is a stored procedure
      * @param statementParameters the statement parameters in JSON format. Maybe
      *                            null for simple statement call.
      * @return the input stream containing either an error, or the result set in
@@ -918,14 +712,6 @@ public class AceQLHttpApi {
 
 	    Map<String, String> parametersMap = new HashMap<String, String>();
 	    parametersMap.put("sql", sql);
-
-	    // parametersMap.put("prepared_statement", new
-	    // Boolean(isPreparedStatement).toString());
-	    // parametersMap.put("gzip_result", new
-	    // Boolean(gzipResult).toString());
-	    // parametersMap.put("pretty_printing", new
-	    // Boolean(prettyPrinting).toString());
-
 	    parametersMap.put("prepared_statement", "" + isPreparedStatement);
 	    parametersMap.put("stored_procedure", "" + isStoredProcedure);
 	    parametersMap.put("gzip_result", "" + gzipResult);
@@ -940,21 +726,21 @@ public class AceQLHttpApi {
 	    trace("statement_parameters: " + statementParameters);
 
 	    URL theUrl = new URL(url + action);
-	    InputStream in = callWithPost(theUrl, parametersMap);
+	    InputStream in = httpManager.callWithPost(theUrl, parametersMap);
 	    return in;
 
 	} catch (Exception e) {
 	    if (e instanceof AceQLException) {
 		throw (AceQLException) e;
 	    } else {
-		throw new AceQLException(e.getMessage(), 0, e, null, httpStatusCode);
+		throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
 	    }
 	}
 
     }
 
     /**
-     * Calls /blob_upload API
+     * Calls /blob_upload API.
      *
      * @param blobId      the Blob/Clob Id
      * @param inputStream the local Blob/Clob local file input stream
@@ -976,10 +762,10 @@ public class AceQLHttpApi {
 	    trace("request : " + theURL);
 	    HttpURLConnection conn = null;
 
-	    if (proxy == null) {
+	    if (httpManager.getProxy() == null) {
 		conn = (HttpURLConnection) theURL.openConnection();
 	    } else {
-		conn = (HttpURLConnection) theURL.openConnection(proxy);
+		conn = (HttpURLConnection) theURL.openConnection(httpManager.getProxy());
 	    }
 
 	    conn.setRequestProperty("Accept-Charset", "UTF-8");
@@ -1007,8 +793,8 @@ public class AceQLHttpApi {
 	    conn = http.getConnection();
 
 	    // Analyze the error after request execution
-	    httpStatusCode = conn.getResponseCode();
-	    httpStatusMessage = conn.getResponseMessage();
+	    int httpStatusCode = conn.getResponseCode();
+	    String httpStatusMessage = conn.getResponseMessage();
 
 	    trace("blob_id          : " + blobId);
 	    trace("httpStatusCode   : " + httpStatusCode);
@@ -1042,7 +828,7 @@ public class AceQLHttpApi {
 	    if (e instanceof AceQLException) {
 		throw (AceQLException) e;
 	    } else {
-		throw new AceQLException(e.getMessage(), 0, e, null, httpStatusCode);
+		throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
 	    }
 	}
     }
@@ -1055,175 +841,8 @@ public class AceQLHttpApi {
      * @throws AceQLException if any Exception occurs
      */
     public long getBlobLength(String blobId) throws AceQLException {
-
-	try {
-
-	    if (blobId == null) {
-		Objects.requireNonNull(blobId, "blobId cannot be null!");
-	    }
-
-	    String action = "get_blob_length";
-
-	    Map<String, String> parameters = new HashMap<String, String>();
-	    parameters.put("blob_id", blobId);
-
-	    ByteArrayOutputStream out = new ByteArrayOutputStream();
-
-	    String result = null;
-
-	    // try (InputStream in = callWithPost(action, parameters);) {
-	    //
-	    // if (in != null) {
-	    // IOUtils.copy(in, out);
-	    // result = out.toString("UTF-8");
-	    // }
-	    // }
-
-	    InputStream in = null;
-	    try {
-		URL theUrl = new URL(url + action);
-		in = callWithPost(theUrl, parameters);
-		if (in != null) {
-		    IOUtils.copy(in, out);
-		    result = out.toString("UTF-8");
-		}
-	    } finally {
-		if (in != null) {
-		    try {
-			in.close();
-		    } catch (Exception ignore) {
-			// ignore
-		    }
-		}
-	    }
-
-	    ResultAnalyzer resultAnalyzer = new ResultAnalyzer(result, httpStatusCode, httpStatusMessage);
-
-	    if (!resultAnalyzer.isStatusOk()) {
-		throw new AceQLException(resultAnalyzer.getErrorMessage(), resultAnalyzer.getErrorType(), null,
-			resultAnalyzer.getStackTrace(), httpStatusCode);
-	    }
-
-	    String lengthStr = resultAnalyzer.getValue("length");
-	    long length = Long.parseLong(lengthStr);
-	    return length;
-
-	} catch (Exception e) {
-	    if (e instanceof AceQLException) {
-		throw (AceQLException) e;
-	    } else {
-		throw new AceQLException(e.getMessage(), 0, e, null, httpStatusCode);
-	    }
-	}
-
-    }
-
-    public InputStream dbSchemaDownload(String format, String tableName) throws AceQLException {
-	try {
-
-	    if (format == null) {
-		Objects.requireNonNull(format, "format cannot be null!");
-	    }
-
-	    String action = "metadata_query/db_schema_download";
-
-	    Map<String, String> parameters = new HashMap<String, String>();
-	    parameters.put("format", format);
-	    if (tableName != null) {
-		parameters.put("table_name", tableName.toLowerCase());
-	    }
-
-	    InputStream in = null;
-
-	    URL theUrl = new URL(url + action);
-
-	    in = callWithPost(theUrl, parameters);
-	    return in;
-
-	} catch (Exception e) {
-	    throw new AceQLException(e.getMessage(), 0, e, null, httpStatusCode);
-	}
-
-    }
-
-    public JdbcDatabaseMetaDataDto getDbMetadata() throws AceQLException {
-	try {
-	    String action = "metadata_query/get_db_metadata";
-	    String result = callWithGet(url + action);
-
-	    ResultAnalyzer resultAnalyzer = new ResultAnalyzer(result, httpStatusCode, httpStatusMessage);
-	    if (!resultAnalyzer.isStatusOk()) {
-		throw new AceQLException(resultAnalyzer.getErrorMessage(), resultAnalyzer.getErrorType(), null,
-			resultAnalyzer.getStackTrace(), httpStatusCode);
-	    }
-
-	    // If result is OK, it's a DTO
-	    JdbcDatabaseMetaDataDto jdbcDatabaseMetaDataDto = GsonWsUtil.fromJson(result,
-		    JdbcDatabaseMetaDataDto.class);
-	    return jdbcDatabaseMetaDataDto;
-	} catch (Exception e) {
-	    if (e instanceof AceQLException) {
-		throw (AceQLException) e;
-	    } else {
-		throw new AceQLException(e.getMessage(), 0, e, null, httpStatusCode);
-	    }
-	}
-    }
-
-    public TableNamesDto getTableNames(String tableType) throws AceQLException {
-	try {
-	    String action = "metadata_query/get_table_names";
-
-	    Map<String, String> parameters = new HashMap<String, String>();
-	    if (tableType != null) {
-		parameters.put("table_type", tableType);
-	    }
-
-	    String result = callWithPostReturnString(new URL(url + action), parameters);
-
-	    ResultAnalyzer resultAnalyzer = new ResultAnalyzer(result, httpStatusCode, httpStatusMessage);
-	    if (!resultAnalyzer.isStatusOk()) {
-		throw new AceQLException(resultAnalyzer.getErrorMessage(), resultAnalyzer.getErrorType(), null,
-			resultAnalyzer.getStackTrace(), httpStatusCode);
-	    }
-
-	    // If result is OK, it's a DTO
-	    TableNamesDto tableNamesDto = GsonWsUtil.fromJson(result, TableNamesDto.class);
-	    return tableNamesDto;
-	} catch (Exception e) {
-	    if (e instanceof AceQLException) {
-		throw (AceQLException) e;
-	    } else {
-		throw new AceQLException(e.getMessage(), 0, e, null, httpStatusCode);
-	    }
-	}
-    }
-
-    public TableDto getTable(String tableName) throws AceQLException {
-	try {
-	    String action = "metadata_query/get_table";
-
-	    Map<String, String> parameters = new HashMap<String, String>();
-	    parameters.put("table_name", tableName);
-
-	    String result = callWithPostReturnString(new URL(url + action), parameters);
-
-	    ResultAnalyzer resultAnalyzer = new ResultAnalyzer(result, httpStatusCode, httpStatusMessage);
-	    if (!resultAnalyzer.isStatusOk()) {
-		throw new AceQLException(resultAnalyzer.getErrorMessage(), resultAnalyzer.getErrorType(), null,
-			resultAnalyzer.getStackTrace(), httpStatusCode);
-	    }
-
-	    // If result is OK, it's a DTO
-	    TableDto tableDto = GsonWsUtil.fromJson(result, TableDto.class);
-	    return tableDto;
-	} catch (Exception e) {
-	    if (e instanceof AceQLException) {
-		throw (AceQLException) e;
-	    } else {
-		throw new AceQLException(e.getMessage(), 0, e, null, httpStatusCode);
-	    }
-	}
+	AceQLBlobApi aceQLBlobApi = new AceQLBlobApi(httpManager, url);
+	return aceQLBlobApi.getBlobLength(blobId);
     }
 
     /**
@@ -1235,79 +854,39 @@ public class AceQLHttpApi {
      * @throws AceQLException if any Exception occurs
      */
     public InputStream blobDownload(String blobId) throws AceQLException {
-
-	try {
-
-	    if (blobId == null) {
-		Objects.requireNonNull(blobId, "blobId cannot be null!");
-	    }
-
-	    String action = "blob_download";
-
-	    Map<String, String> parameters = new HashMap<String, String>();
-	    parameters.put("blob_id", blobId);
-
-	    InputStream in = null;
-
-	    URL theUrl = new URL(url + action);
-	    in = callWithPost(theUrl, parameters);
-
-	    // if (httpStatusCode != HttpURLConnection.HTTP_OK) {
-	    // throw new AceQLException("HTTP_FAILURE" + " " + httpStatusCode
-	    // + " " + httpStatusMessage, 0, httpStatusCode,
-	    // httpStatusMessage);
-	    // }
-
-	    return in;
-
-	} catch (Exception e) {
-	    if (e instanceof AceQLException) {
-		throw (AceQLException) e;
-	    } else {
-		throw new AceQLException(e.getMessage(), 0, e, null, httpStatusCode);
-	    }
-	}
+	AceQLBlobApi aceQLBlobApi = new AceQLBlobApi(httpManager, url);
+	return aceQLBlobApi.blobDownload(blobId);
     }
 
-    /**
-     * Formats & URL encode the the post data for POST.
-     *
-     * @param params the parameter names and values
-     * @return the formated and URL encoded string for the POST.
-     * @throws UnsupportedEncodingException
-     */
-    public static String getPostDataString(Map<String, String> requestParams) throws UnsupportedEncodingException {
-	StringBuilder result = new StringBuilder();
-	boolean first = true;
+    public InputStream dbSchemaDownload(String format, String tableName) throws AceQLException {
+	AceQLMetadataApi aceQLMetadataApi = new AceQLMetadataApi(httpManager, url);
+	return aceQLMetadataApi.dbSchemaDownload(format, tableName);
+    }
 
-	for (Map.Entry<String, String> entry : requestParams.entrySet()) {
+    public JdbcDatabaseMetaDataDto getDbMetadata() throws AceQLException {
+	AceQLMetadataApi aceQLMetadataApi = new AceQLMetadataApi(httpManager, url);
+	return aceQLMetadataApi.getDbMetadata();
+    }
 
-	    // trace(entry.getKey() + "/" + entry.getValue());
+    public TableNamesDto getTableNames(String tableType) throws AceQLException {
+	AceQLMetadataApi aceQLMetadataApi = new AceQLMetadataApi(httpManager, url);
+	return aceQLMetadataApi.getTableNames(tableType);
+    }
 
-	    if (first)
-		first = false;
-	    else
-		result.append("&");
-
-	    if (entry.getValue() != null) {
-		result.append(URLEncoder.encode(entry.getKey(), "UTF-8"));
-		result.append("=");
-		result.append(URLEncoder.encode(entry.getValue(), "UTF-8"));
-	    }
-	}
-
-	return result.toString();
+    public TableDto getTable(String tableName) throws AceQLException {
+	AceQLMetadataApi aceQLMetadataApi = new AceQLMetadataApi(httpManager, url);
+	return aceQLMetadataApi.getTable(tableName);
     }
 
     public int getHttpStatusCode() {
-	return httpStatusCode;
+	return httpManager.getHttpStatusCode();
     }
 
     /**
      * @return the httpStatusMessage
      */
     public String getHttpStatusMessage() {
-	return httpStatusMessage;
+	return httpManager.getHttpStatusMessage();
     }
 
 }

@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.aceql.sdk.http.examples;
+package com.aceql.client.test.connection.raw;
 
 import com.aceql.client.jdbc.util.AceQLTypes;
 import com.aceql.client.jdbc.util.json.PrepStatementParametersBuilder;
