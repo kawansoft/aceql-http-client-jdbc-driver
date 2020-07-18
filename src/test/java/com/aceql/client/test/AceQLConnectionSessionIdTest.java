@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.aceql.sdk.jdbc.examples;
+package com.aceql.client.test;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -33,7 +33,7 @@ import com.aceql.client.jdbc.AceQLException;
  * @author Nicolas de Pomereu
  *
  */
-public class AceQLConnectionSessionIdExample {
+public class AceQLConnectionSessionIdTest {
 
     private static boolean DEBUG = true;
 

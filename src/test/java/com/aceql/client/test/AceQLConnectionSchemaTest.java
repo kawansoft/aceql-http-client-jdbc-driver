@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.aceql.sdk.jdbc.examples;
+package com.aceql.client.test;
 
 import java.awt.Desktop;
 import java.io.File;
@@ -40,7 +40,7 @@ import com.aceql.client.metadata.Table;
  * @author Nicolas de Pomereu
  *
  */
-public class AceQLConnectionSchemaExample {
+public class AceQLConnectionSchemaTest {
 
     private static boolean DEBUG = true;
 

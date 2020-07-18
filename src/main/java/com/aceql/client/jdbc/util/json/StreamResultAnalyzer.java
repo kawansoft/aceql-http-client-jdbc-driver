@@ -140,7 +140,10 @@ public class StreamResultAnalyzer {
 		    debug("Should not reach this:");
 		    debug(event.toString() + " " + parser.getString());
 		    break;
+		default:
+		    // Doe nothing for now.
 		}
+
 	    }
 
 	    return isOk;

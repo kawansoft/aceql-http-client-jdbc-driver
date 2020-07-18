@@ -1239,7 +1239,7 @@ public class AceQLHttpApi {
 	try {
 
 	    if (blobId == null) {
-		throw new NullPointerException("blobId is null!");
+		Objects.requireNonNull(blobId, "blobId cannot be null!");
 	    }
 
 	    String action = "blob_download";

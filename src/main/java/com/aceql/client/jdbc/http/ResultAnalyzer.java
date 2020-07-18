@@ -167,7 +167,7 @@ public class ResultAnalyzer {
      */
     public int getIntvalue(String name) {
 	if (name == null) {
-	    throw new NullPointerException("name is null!");
+	    Objects.requireNonNull(name, "name cannot be null!");
 	}
 
 	if (isInvalidJsonStream()) {

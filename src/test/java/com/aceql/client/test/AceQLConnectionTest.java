@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.aceql.sdk.jdbc.examples;
+package com.aceql.client.test;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -40,7 +40,7 @@ import com.aceql.client.jdbc.AceQLException;
  * @author Nicolas de Pomereu
  *
  */
-public class AceQLConnectionExample {
+public class AceQLConnectionTest {
 
     private static boolean DEBUG = true;
 
