@@ -37,7 +37,7 @@ public class ConnectionBuilder {
 
     public static final  boolean useLocal = false;
     public static final boolean useLdapAuth = false;
-    public static final boolean useAuthenticatedProxy = true;
+    public static final boolean useAuthenticatedProxy = false;
 
     /**
      * Create a connection depending on this file configuration value.
