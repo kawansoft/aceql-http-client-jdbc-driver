@@ -46,7 +46,7 @@ public class AceQLConnectionSchemaTest {
     private static boolean DEBUG = true;
 
     public static void main(String[] args) throws Exception {
-	Connection connection = ConnectionBuilder.createDefaultLocal();
+	Connection connection = ConnectionBuilder.createOnConfig();
 	doIt(connection);
 	connection.close();
 	((AceQLConnection) connection).logout();

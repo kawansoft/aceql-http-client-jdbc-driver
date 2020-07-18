@@ -34,7 +34,7 @@ public class MyProxyInfo {
     private String proxyUsername;
     private String proxyPassword;
 
-    private Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("http://localhost", 8080));
+    private Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("localhost", 8080));
 
     public MyProxyInfo() throws IOException {
 	File myAuthFile = new File("i:\\neotunnel.txt");

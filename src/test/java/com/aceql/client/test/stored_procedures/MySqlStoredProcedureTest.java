@@ -41,7 +41,7 @@ public class MySqlStoredProcedureTest {
 
 	//AceQLConnection.setTraceOn(true);
 
-	Connection connection = ConnectionBuilder.createDefaultLocal();
+	Connection connection = ConnectionBuilder.createOnConfig();
 
 	if (connection == null) {
 	    Objects.requireNonNull(connection, "connection can not be null!");

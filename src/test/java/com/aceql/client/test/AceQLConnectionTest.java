@@ -57,7 +57,7 @@ public class AceQLConnectionTest {
     public static void doIt()
 	    throws SQLException, AceQLException, FileNotFoundException, IOException, NoSuchAlgorithmException {
 
-	connection = ConnectionBuilder.createDefaultLocal();
+	connection = ConnectionBuilder.createOnConfig();
 	new File(ConnectionParms.IN_DIRECTORY).mkdirs();
 	new File(ConnectionParms.OUT_DIRECTORY).mkdirs();
 
@@ -80,7 +80,7 @@ public class AceQLConnectionTest {
 
 	// Close and reopen
 	connection.close();
-	connection = ConnectionBuilder.createDefaultLocal();
+	connection = ConnectionBuilder.createOnConfig();
 	((AceQLConnection) connection).setGzipResult(true);
 
 	System.out.println("aceQLConnection.getTransactionIsolation() : " + connection.getTransactionIsolation());

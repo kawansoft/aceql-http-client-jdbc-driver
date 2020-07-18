@@ -54,7 +54,7 @@ public class AceQLConnectionTestLoad {
 	new File(ConnectionParms.OUT_DIRECTORY).mkdirs();
 
 	// Get a real Connection instance that points to remote AceQL server
-	Connection connection = ConnectionBuilder.createDefaultLocal();
+	Connection connection = ConnectionBuilder.createOnConfig();
 
 	((AceQLConnection) connection).setTraceOn(true);
 	((AceQLConnection) connection).setGzipResult(true);
@@ -70,7 +70,7 @@ public class AceQLConnectionTestLoad {
 
 	// Close and reopen
 	connection.close();
-	connection = ConnectionBuilder.createDefaultLocal();
+	connection = ConnectionBuilder.createOnConfig();
 	((AceQLConnection) connection).setGzipResult(true);
 
 	System.out.println("aceQLConnection.getTransactionIsolation() : " + connection.getTransactionIsolation());

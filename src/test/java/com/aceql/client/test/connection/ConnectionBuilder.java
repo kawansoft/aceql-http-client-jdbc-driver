@@ -35,6 +35,31 @@ import com.aceql.client.jdbc.AceQLConnection;
  */
 public class ConnectionBuilder {
 
+    public static final  boolean useLocal = false;
+    public static final boolean useLdapAuth = false;
+    public static final boolean useAuthenticatedProxy = true;
+
+    /**
+     * Create a connection depending on this file configuration value.
+     *
+     * @return
+     * @throws SQLException
+     * @throws IOException
+     */
+    public static Connection createOnConfig() throws SQLException, IOException {
+	// Local use
+	if (useLocal) {
+	    if (!useLdapAuth) {
+		return createDefaultLocal();
+	    } else {
+		return createDefaultLocalLdapAuth();
+	    }
+	}
+
+	// Remote use
+	return createDefaultRemote(useAuthenticatedProxy);
+    }
+
     public static Connection createDefaultLocal() throws SQLException, IOException {
 	String database = ConnectionParms.database;
 	String username = ConnectionParms.usernameLdap1;
@@ -44,16 +69,16 @@ public class ConnectionBuilder {
 
     public static Connection createDefaultLocalLdapAuth() throws SQLException, IOException {
 	String database = ConnectionParms.database;
-	String username = ConnectionParms.usernameLdap1;
+	String username = ConnectionParms.username;
 	char[] password = ConnectionParms.password;
 	return create(ConnectionParms.serverUrlLocalhostEmbedded, database, username, password, false);
     }
 
     public static Connection createDefaultRemote(boolean useAuthenticatedProxy) throws SQLException, IOException {
 	String database = ConnectionParms.database;
-	String username = ConnectionParms.usernameLdap1;
+	String username = ConnectionParms.username;
 	char[] password = ConnectionParms.password;
-	return create(ConnectionParms.serverUrlLocalhostEmbedded, database, username, password, useAuthenticatedProxy);
+	return create(ConnectionParms.serverUrlUnixNoSSL, database, username, password, useAuthenticatedProxy);
     }
 
     private static Connection create(String serverUrl, String database, String username, char[] password,
@@ -66,7 +91,8 @@ public class ConnectionBuilder {
 	} else {
 	    MyProxyInfo myProxyInfo = new MyProxyInfo();
 	    Proxy proxy = myProxyInfo.getProxy();
-	    PasswordAuthentication passwordAuthentication = new PasswordAuthentication(myProxyInfo.getProxyUsername(), myProxyInfo.getProxyPassword());
+	    PasswordAuthentication passwordAuthentication = new PasswordAuthentication(myProxyInfo.getProxyUsername(),
+		    myProxyInfo.getProxyPassword());
 	    connection = new AceQLConnection(serverUrl, database, username, password, proxy, passwordAuthentication);
 	}
 	return connection;

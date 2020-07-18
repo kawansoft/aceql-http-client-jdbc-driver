@@ -37,7 +37,7 @@ public class PotsgreSqlStoredProcedureTest {
      */
     public static void main(String[] args) throws Exception {
 
-	Connection connection = ConnectionBuilder.createDefaultLocal();
+	Connection connection = ConnectionBuilder.createOnConfig();
 
 	if (connection == null) {
 	    Objects.requireNonNull(connection, "connection can not be null!");

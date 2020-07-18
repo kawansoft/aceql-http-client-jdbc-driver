@@ -53,7 +53,7 @@ public class AceQLHttpConnectionTest {
 	    new File(ConnectionParms.OUT_DIRECTORY).mkdirs();
 	}
 
-	return ConnectionBuilder.createDefaultLocal();
+	return ConnectionBuilder.createOnConfig();
     }
 
     @Test

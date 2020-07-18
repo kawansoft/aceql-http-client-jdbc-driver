@@ -41,12 +41,12 @@ public class TestAll {
 	AceQLConnectionTest.doIt();
 	// connection is closed inside
 
-	Connection connection = ConnectionBuilder.createDefaultLocal();
+	Connection connection = ConnectionBuilder.createOnConfig();
 	AceQLConnectionSchemaTest.doIt(connection);
 	connection.close();
 	((AceQLConnection) connection).logout();
 
-	connection = ConnectionBuilder.createDefaultLocal();
+	connection = ConnectionBuilder.createOnConfig();
 	PotsgreSqlStoredProcedureTest.testStoredProcedures(connection);
 	connection.close();
 	((AceQLConnection) connection).logout();
