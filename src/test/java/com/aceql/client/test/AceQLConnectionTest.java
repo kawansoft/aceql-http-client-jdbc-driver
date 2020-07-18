@@ -39,37 +39,31 @@ import com.aceql.client.test.util.Sha1;
  */
 public class AceQLConnectionTest {
 
+    private static Connection connection;
+
     public static void main(String[] args) throws Exception {
-
-	// Get a real Connection instance that points to remote AceQL server
-	Connection connection = ConnectionBuilder.createDefaultLocal();
-	doIt(connection);
-
+	doIt();
     }
 
     /**
      * Test main SQL orders.
      *
-     * @param connection
      * @throws SQLException
      * @throws AceQLException
      * @throws FileNotFoundException
      * @throws IOException
      * @throws NoSuchAlgorithmException
      */
-    public static void doIt(Connection connection)
+    public static void doIt()
 	    throws SQLException, AceQLException, FileNotFoundException, IOException, NoSuchAlgorithmException {
+
+	connection = ConnectionBuilder.createDefaultLocal();
 	new File(ConnectionParms.IN_DIRECTORY).mkdirs();
 	new File(ConnectionParms.OUT_DIRECTORY).mkdirs();
 
 	boolean falseQuery = false;
-	boolean doInsert = true;
-	boolean doSelect = true;
-	boolean doSelectPrepStatement = true;
 	boolean doSelectOnRegions = false;
 	boolean doInsertOnRegions = false;
-	boolean doBlobUpload = true;
-	boolean doBlobDownload = true;
 
 	((AceQLConnection) connection).setTraceOn(true);
 	((AceQLConnection) connection).setGzipResult(true);
@@ -104,29 +98,43 @@ public class AceQLConnectionTest {
 
 	int records = 300;
 
-	if (doInsert) {
-	    sqlDeleteTest.deleteCustomerAll();
+	sqlDeleteTest.deleteCustomerAll();
 
-	    connection.setAutoCommit(false);
+	connection.setAutoCommit(false);
+	sqlInsertTest.loopInsertCustomer(records);
 
-	    sqlInsertTest.loopInsertCustomer(records);
-
-	    if (doInsertOnRegions) {
-		sqlInsertTest.insertInRegions(connection);
-	    }
-
-	    connection.commit();
+	if (doInsertOnRegions) {
+	    sqlInsertTest.insertInRegions(connection);
 	}
 
-	if (doSelect) {
-	    sqlSelectTest.selectOrderlogStatement();
-	    connection.setAutoCommit(true);
-	}
+	connection.commit();
 
-	if (doSelectPrepStatement) {
-	    sqlSelectTest.selectCustomerPreparedStatement();
-	}
+	sqlSelectTest.selectOrderlogStatement();
+	connection.setAutoCommit(true);
 
+	sqlSelectTest.selectCustomerPreparedStatement();
+
+	falseQuery(falseQuery, sqlSelectTest);
+
+	File fileUpload = new File(ConnectionParms.IN_DIRECTORY + File.separator + "username_koala.jpg");
+	File fileDownload = new File(ConnectionParms.OUT_DIRECTORY + File.separator + "username_koala.jpg");
+	int customerId = 1;
+	int itemId = 1;
+
+	blobUpload(sqlDeleteTest, sqlBlobTest, fileUpload, customerId, itemId);
+	blobDownload(sqlBlobTest, customerId, itemId, fileDownload);
+	checkBlobIntegrity(fileUpload, fileDownload);
+
+	if (doSelectOnRegions) {
+	    sqlSelectTest.selectOnRegions();
+	}
+    }
+
+    /**
+     * @param falseQuery
+     * @param sqlSelectTest
+     */
+    private static void falseQuery(boolean falseQuery, SqlSelectTest sqlSelectTest) {
 	if (falseQuery) {
 	    try {
 		sqlSelectTest.selectOnTableNotExists();
@@ -134,45 +142,61 @@ public class AceQLConnectionTest {
 		System.err.println(e);
 	    }
 	}
+    }
 
-	File fileUpload = new File(ConnectionParms.IN_DIRECTORY + File.separator + "username_koala.jpg");
-	int customerId = 1;
-	int itemId = 1;
+    /**
+     * @param fileUpload
+     * @param fileDownload
+     * @throws NoSuchAlgorithmException
+     * @throws IOException
+     */
+    private static void checkBlobIntegrity(File fileUpload, File fileDownload)
+	    throws NoSuchAlgorithmException, IOException {
+	// Compare the in file and the out file
+	String sha1In = Sha1.getSha1(fileUpload);
+	String sha1Out = Sha1.getSha1(fileDownload);
 
-	if (doBlobUpload) {
-	    connection.setAutoCommit(true);
-	    sqlDeleteTest.deleteOrderlogAll();
-
-	    connection.setAutoCommit(false); // Must be in Autocommit false with PostgreSQL
-	    sqlBlobTest.blobUpload(customerId, itemId, fileUpload);
-	    connection.commit();
+	if (sha1In.equals(sha1Out)) {
+	    System.out.println();
+	    System.out.println("Blob upload & downoad sucess! sha1In & sha1Out match! :" + sha1In);
+	} else {
+	    System.err.println("sha1In: " + sha1In);
+	    System.err.println("sha1Out: " + sha1Out);
+	    throw new IOException("fileUpload & fileUpload hash do not match!");
 	}
+    }
 
-	File fileDownload = new File(ConnectionParms.OUT_DIRECTORY + File.separator + "username_koala.jpg");
+    /**
+     * @param sqlBlobTest
+     * @param customerId
+     * @param itemId
+     * @param fileDownload
+     * @throws SQLException
+     * @throws IOException
+     */
+    private static void blobDownload(SqlBlobTest sqlBlobTest, int customerId, int itemId, File fileDownload)
+	    throws SQLException, IOException {
+	connection.setAutoCommit(false); // Must be in Autocommit false with PostgreSQL
+	sqlBlobTest.blobDownload(customerId, itemId, fileDownload);
+    }
 
-	if (doBlobDownload) {
-	    connection.setAutoCommit(false); // Must be in Autocommit false with PostgreSQL
-	    sqlBlobTest.blobDownload(customerId, itemId, fileDownload);
-	}
+    /**
+     * @param sqlDeleteTest
+     * @param sqlBlobTest
+     * @param fileUpload
+     * @param customerId
+     * @param itemId
+     * @throws SQLException
+     * @throws FileNotFoundException
+     */
+    private static void blobUpload(SqlDeleteTest sqlDeleteTest, SqlBlobTest sqlBlobTest, File fileUpload,
+	    int customerId, int itemId) throws SQLException, FileNotFoundException {
+	connection.setAutoCommit(true);
+	sqlDeleteTest.deleteOrderlogAll();
 
-	if (doBlobUpload && doBlobDownload) {
-	    // Compare the in file and the out file
-	    String sha1In = Sha1.getSha1(fileUpload);
-	    String sha1Out = Sha1.getSha1(fileDownload);
-
-	    if (sha1In.equals(sha1Out)) {
-		System.out.println();
-		System.out.println("Blob upload & downoad sucess! sha1In & sha1Out match! :" + sha1In);
-	    } else {
-		System.err.println("sha1In: " + sha1In);
-		System.err.println("sha1Out: " + sha1Out);
-		throw new IOException("fileUpload & fileUpload hash do not match!");
-	    }
-	}
-
-	if (doSelectOnRegions) {
-	    sqlSelectTest.selectOnRegions();
-	}
+	connection.setAutoCommit(false); // Must be in Autocommit false with PostgreSQL
+	sqlBlobTest.blobUpload(customerId, itemId, fileUpload);
+	connection.commit();
     }
 
 }

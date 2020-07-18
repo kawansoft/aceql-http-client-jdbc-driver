@@ -1,20 +1,20 @@
 /*
  * This file is part of AceQL Client SDK.
- * AceQL Client SDK: Remote JDBC access over HTTP with AceQL HTTP.                                 
+ * AceQL Client SDK: Remote JDBC access over HTTP with AceQL HTTP.
  * Copyright (C) 2020,  KawanSoft SAS
- * (http://www.kawansoft.com). All rights reserved.                                
- *                                                                               
+ * (http://www.kawansoft.com). All rights reserved.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  */
 package org.kawanfw.driver.jdbc.abstracts;
 
@@ -38,7 +38,7 @@ public abstract class AbstractClob implements Clob {
 
     /**
      * Constructor
-     * 
+     *
      * @param clob
      *            actual SQL/JDBC Clob in use to wrap.
      */
@@ -49,7 +49,7 @@ public abstract class AbstractClob implements Clob {
     /**
      * Retrieves the number of characters in the <code>CLOB</code> value
      * designated by this <code>Clob</code> object.
-     * 
+     *
      * @return length of the <code>CLOB</code> in characters
      * @exception SQLException
      *                if there is an error accessing the length of the
@@ -66,7 +66,7 @@ public abstract class AbstractClob implements Clob {
      * value designated by this <code>Clob</code> object. The substring begins
      * at position <code>pos</code> and has up to <code>length</code>
      * consecutive characters.
-     * 
+     *
      * @param pos
      *            the first character of the substring to be extracted. The
      *            first character is at position 1.
@@ -88,7 +88,7 @@ public abstract class AbstractClob implements Clob {
      * Retrieves the <code>CLOB</code> value designated by this
      * <code>Clob</code> object as a <code>java.io.Reader</code> object (or as a
      * stream of characters).
-     * 
+     *
      * @return a <code>java.io.Reader</code> object containing the
      *         <code>CLOB</code> data
      * @exception SQLException
@@ -104,7 +104,7 @@ public abstract class AbstractClob implements Clob {
     /**
      * Retrieves the <code>CLOB</code> value designated by this
      * <code>Clob</code> object as an ascii stream.
-     * 
+     *
      * @return a <code>java.io.InputStream</code> object containing the
      *         <code>CLOB</code> data
      * @exception SQLException
@@ -122,7 +122,7 @@ public abstract class AbstractClob implements Clob {
      * <code>searchstr</code> appears in the SQL <code>CLOB</code> value
      * represented by this <code>Clob</code> object. The search begins at
      * position <code>start</code>.
-     * 
+     *
      * @param searchstr
      *            the substring for which to search
      * @param start
@@ -143,7 +143,7 @@ public abstract class AbstractClob implements Clob {
      * Retrieves the character position at which the specified <code>Clob</code>
      * object <code>searchstr</code> appears in this <code>Clob</code> object.
      * The search begins at position <code>start</code>.
-     * 
+     *
      * @param searchstr
      *            the <code>Clob</code> object for which to search
      * @param start
@@ -166,7 +166,7 @@ public abstract class AbstractClob implements Clob {
      * Writes the given Java <code>String</code> to the <code>CLOB</code> value
      * that this <code>Clob</code> object designates at the position
      * <code>pos</code>.
-     * 
+     *
      * @param pos
      *            the position at which to start writing to the
      *            <code>CLOB</code> value that this <code>Clob</code> object
@@ -177,7 +177,7 @@ public abstract class AbstractClob implements Clob {
      * @return the number of characters written
      * @exception SQLException
      *                if there is an error accessing the <code>CLOB</code> value
-     * 
+     *
      * @since 1.4
      */
     @Override
@@ -189,7 +189,7 @@ public abstract class AbstractClob implements Clob {
      * Writes <code>len</code> characters of <code>str</code>, starting at
      * character <code>offset</code>, to the <code>CLOB</code> value that this
      * <code>Clob</code> represents.
-     * 
+     *
      * @param pos
      *            the position at which to start writing to this
      *            <code>CLOB</code> object
@@ -204,7 +204,7 @@ public abstract class AbstractClob implements Clob {
      * @return the number of characters written
      * @exception SQLException
      *                if there is an error accessing the <code>CLOB</code> value
-     * 
+     *
      * @since 1.4
      */
     @Override
@@ -217,7 +217,7 @@ public abstract class AbstractClob implements Clob {
      * Retrieves a stream to be used to write Ascii characters to the
      * <code>CLOB</code> value that this <code>Clob</code> object represents,
      * starting at position <code>pos</code>.
-     * 
+     *
      * @param pos
      *            the position at which to start writing to this
      *            <code>CLOB</code> object
@@ -225,7 +225,7 @@ public abstract class AbstractClob implements Clob {
      * @exception SQLException
      *                if there is an error accessing the <code>CLOB</code> value
      * @see #getAsciiStream
-     * 
+     *
      * @since 1.4
      */
     @Override
@@ -237,16 +237,16 @@ public abstract class AbstractClob implements Clob {
      * Retrieves a stream to be used to write a stream of Unicode characters to
      * the <code>CLOB</code> value that this <code>Clob</code> object
      * represents, at position <code>pos</code>.
-     * 
+     *
      * @param pos
      *            the position at which to start writing to the
      *            <code>CLOB</code> value
-     * 
+     *
      * @return a stream to which Unicode encoded characters can be written
      * @exception SQLException
      *                if there is an error accessing the <code>CLOB</code> value
      * @see #getCharacterStream
-     * 
+     *
      * @since 1.4
      */
     @Override
@@ -257,13 +257,13 @@ public abstract class AbstractClob implements Clob {
     /**
      * Truncates the <code>CLOB</code> value that this <code>Clob</code>
      * designates to have a length of <code>len</code> characters.
-     * 
+     *
      * @param len
      *            the length, in bytes, to which the <code>CLOB</code> value
      *            should be truncated
      * @exception SQLException
      *                if there is an error accessing the <code>CLOB</code> value
-     * 
+     *
      * @since 1.4
      */
     @Override
@@ -281,10 +281,10 @@ public abstract class AbstractClob implements Clob {
      * being thrown. If <code>free</code> is called multiple times, the
      * subsequent calls to <code>free</code> are treated as a no-op.
      * <p>
-     * 
+     *
      * @throws SQLException
      *             if an error occurs releasing the Clob's resources
-     * 
+     *
      * @exception SQLFeatureNotSupportedException
      *                if the JDBC driver does not support this method
      * @since 1.6
@@ -298,7 +298,7 @@ public abstract class AbstractClob implements Clob {
      * Returns a <code>Reader</code> object that contains a partial
      * <code>Clob</code> value, starting with the character specified by pos,
      * which is length characters in length.
-     * 
+     *
      * @param pos
      *            the offset to the first character of the partial value to be
      *            retrieved. The first character in the Clob is at position 1.
@@ -311,14 +311,14 @@ public abstract class AbstractClob implements Clob {
      *             characters in the <code>Clob</code> or if pos + length is
      *             greater than the number of characters in the
      *             <code>Clob</code>
-     * 
+     *
      * @exception SQLFeatureNotSupportedException
      *                if the JDBC driver does not support this method
      * @since 1.6
      */
     @Override
     public Reader getCharacterStream(long pos, long length)
-	    throws SQLException {
+	    throws SQLException, SQLFeatureNotSupportedException {
 	return this.clob.getCharacterStream(pos, length);
     }
 

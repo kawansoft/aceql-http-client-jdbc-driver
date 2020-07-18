@@ -24,6 +24,7 @@ import java.sql.Blob;
 import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
 
+
 /**
  * Blob Wrapper. <br>
  * Implements all the Connection methods. Usage is exactly the same as a Blob.
@@ -256,7 +257,7 @@ public abstract class AbstractBlob implements Blob {
      * @since 1.6
      */
     @Override
-    public void free() throws SQLException {
+    public void free() throws SQLException, SQLFeatureNotSupportedException  {
 	this.blob.free();
     }
 
@@ -284,7 +285,7 @@ public abstract class AbstractBlob implements Blob {
      */
     @Override
     public InputStream getBinaryStream(long pos, long length)
-	    throws SQLException {
+	    throws SQLException, SQLFeatureNotSupportedException {
 	return this.blob.getBinaryStream(pos, length);
     }
 }

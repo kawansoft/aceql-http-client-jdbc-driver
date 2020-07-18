@@ -38,11 +38,10 @@ public class TestAll {
     public static void main(String[] args) throws Exception {
 
 	// Get a real Connection instance that points to remote AceQL server
-	Connection connection = ConnectionBuilder.createDefaultLocal();
-	AceQLConnectionTest.doIt(connection);
+	AceQLConnectionTest.doIt();
 	// connection is closed inside
 
-	connection = ConnectionBuilder.createDefaultLocal();
+	Connection connection = ConnectionBuilder.createDefaultLocal();
 	AceQLConnectionSchemaTest.doIt(connection);
 	connection.close();
 	((AceQLConnection) connection).logout();

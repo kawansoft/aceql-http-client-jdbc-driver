@@ -49,7 +49,7 @@ public class ConnectionBuilder {
 	return create(ConnectionParms.serverUrlLocalhostEmbedded, database, username, password, false);
     }
 
-    public static Connection CreateDefaultRemote(boolean useAuthenticatedProxy) throws SQLException, IOException {
+    public static Connection createDefaultRemote(boolean useAuthenticatedProxy) throws SQLException, IOException {
 	String database = ConnectionParms.database;
 	String username = ConnectionParms.usernameLdap1;
 	char[] password = ConnectionParms.password;
