@@ -46,7 +46,7 @@ import java.util.concurrent.Executor;
 
 public class AbstractConnection implements Connection {
 
-    static final String FEATURE_NOT_SUPPORTED_IN_THIS_VERSION = "Method is not yet implemented: ";
+    public static final String FEATURE_NOT_SUPPORTED_IN_THIS_VERSION = "Method is not yet implemented: ";
 
     /**
      * A constant indicating that transactions are not supported.
