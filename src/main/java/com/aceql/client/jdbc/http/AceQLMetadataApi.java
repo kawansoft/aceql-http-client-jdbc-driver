@@ -29,12 +29,33 @@ public class AceQLMetadataApi {
 	this.url = url;
     }
 
+    public InputStream callDatabaseMetaDataMethod(String jsonDatabaseMetaDataMethodCallDTO) throws AceQLException {
+	try {
+
+	    Objects.requireNonNull(jsonDatabaseMetaDataMethodCallDTO, "jsonDatabaseMetaDataMethodCallDTO cannot be null!");
+
+	    String action = "metadata_query/jdbc/database_meta_data";
+
+	    Map<String, String> parameters = new HashMap<String, String>();
+	    parameters.put("database_meta_data_method_call_dto", jsonDatabaseMetaDataMethodCallDTO);
+
+	    InputStream in = null;
+
+	    URL theUrl = new URL(url + action);
+
+	    in = httpManager.callWithPost(theUrl, parameters);
+	    return in;
+
+	} catch (Exception e) {
+	    throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
+	}
+
+    }
+
     public InputStream dbSchemaDownload(String format, String tableName) throws AceQLException {
 	try {
 
-	    if (format == null) {
-		Objects.requireNonNull(format, "format cannot be null!");
-	    }
+	    Objects.requireNonNull(format, "format cannot be null!");
 
 	    String action = "metadata_query/db_schema_download";
 

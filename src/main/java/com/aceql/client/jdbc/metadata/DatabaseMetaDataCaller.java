@@ -18,11 +18,20 @@
  */
 package com.aceql.client.jdbc.metadata;
 
+import java.io.InputStream;
 import java.lang.reflect.Method;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Objects;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.aceql.client.jdbc.http.HttpManager;
+import com.aceql.client.jdbc.AceQLConnection;
+import com.aceql.client.jdbc.AceQLConnectionWrapper;
+import com.aceql.client.jdbc.AceQLException;
+import com.aceql.client.jdbc.http.AceQLHttpApi;
+import com.aceql.client.metadata.util.GsonWsUtil;
 
 /**
  * Utility class to call remote DatabaseMetaData methods.
@@ -32,31 +41,84 @@ import com.aceql.client.jdbc.http.HttpManager;
  */
 public class DatabaseMetaDataCaller {
 
-    private HttpManager httpManager;
+    private AceQLHttpApi aceQLHttpApi;
 
     /**
      * Constructor.
-     * @param httpManager
+     *
+     * @param aceQLConnection
      */
-    public DatabaseMetaDataCaller(HttpManager httpManager) {
-	this.httpManager = httpManager;
+    public DatabaseMetaDataCaller(AceQLConnection aceQLConnection) {
+	AceQLConnectionWrapper aceQLConnectionWrapper = new AceQLConnectionWrapper(aceQLConnection);
+	this.aceQLHttpApi = aceQLConnectionWrapper.getAceQLHttpApi();
     }
 
+    public Object callMetaDataMethod(String methodName, Object... params) throws SQLException {
+
+	try {
+
+	    Objects.requireNonNull(methodName, "methodName cannot be null!");
+
+	    String returnType = null;
+	    try {
+		returnType = getMethodReturnType(methodName);
+	    } catch (Exception e) {
+		throw new SQLException(e);
+	    }
+
+	    // Build the params types & values
+	    DatabaseMetaDataParamsBuilder databaseMetaDataParamsBuilder = new DatabaseMetaDataParamsBuilder(methodName,
+		    params);
+	    databaseMetaDataParamsBuilder.build();
+
+	    List<String> paramTypes = databaseMetaDataParamsBuilder.getParamTypes();
+	    List<String> paramValues = databaseMetaDataParamsBuilder.getParamValues();
+
+	    // Build the DTO
+	    DatabaseMetaDataMethodCallDTO databaseMetaDataMethodCallDTO = new DatabaseMetaDataMethodCallDTO(methodName,
+		    paramTypes, paramValues);
+	    // Transform to Json
+	    String jsonDatabaseMetaDataMethodCallDTO = GsonWsUtil.getJSonString(databaseMetaDataMethodCallDTO);
+	    // Build the Http Call and get the result as a file
+
+	    InputStream in = aceQLHttpApi.callDatabaseMetaDataMethod(jsonDatabaseMetaDataMethodCallDTO);
+
+	    // Get the result and return a Boolean or ResultSet (ResultSetHttp
+	    // in fact)
+	    if (returnType.endsWith("boolean")) {
+		String booleanStr = null; // TODO: implement call to server
+		return Boolean.parseBoolean(booleanStr);
+	    } else if (returnType.endsWith("ResultSet")) {
+		// Ok, build the result set from the file:
+		ResultSet rs = null; // TODO: implement call to server
+		return rs;
+	    } else {
+		throw new IllegalArgumentException(
+			"Unsupported return type for DatabaseMetaData." + methodName + ": " + returnType);
+	    }
+
+	} catch (Exception e) {
+	    if (e instanceof AceQLException) {
+		throw (AceQLException) e;
+	    } else {
+		throw new AceQLException(e.getMessage(), 0, e, null, aceQLHttpApi.getHttpStatusCode());
+	    }
+	}
+
+    }
 
 
     /**
      * Get the return type of a DatabaseMetaData method
      *
-     * @param methodName
-     *            the DatabaseMetaData method
+     * @param methodName the DatabaseMetaData method
      * @return the return type
      * @throws ClassNotFoundException
      * @throws SecurityException
      * @throws NoSuchMethodException
      */
-    private static String getMethodReturnType(String methodName)
-	    throws ClassNotFoundException, SecurityException,
-	    NoSuchMethodException {
+    public static String getMethodReturnType(String methodName)
+	    throws ClassNotFoundException, SecurityException, NoSuchMethodException {
 
 	Class<?> c = Class.forName("java.sql.DatabaseMetaData");
 	Method[] allMethods = c.getDeclaredMethods();
@@ -66,21 +128,17 @@ public class DatabaseMetaDataCaller {
 		String returnType = m.getReturnType().toString();
 
 		if (returnType.startsWith("class ")) {
-		    returnType = StringUtils.substringAfter(returnType,
-			    "class ");
+		    returnType = StringUtils.substringAfter(returnType, "class ");
 		}
 		if (returnType.startsWith("interface ")) {
-		    returnType = StringUtils.substringAfter(returnType,
-			    "interface ");
+		    returnType = StringUtils.substringAfter(returnType, "interface ");
 		}
 
 		return returnType;
 	    }
 	}
 
-	throw new NoSuchMethodException(
-		"DatabaseMetaData does not contain this method: " + methodName);
+	throw new NoSuchMethodException("DatabaseMetaData does not contain this method: " + methodName);
     }
-
 
 }

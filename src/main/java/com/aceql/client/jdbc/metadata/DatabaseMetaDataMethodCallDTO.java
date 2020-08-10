@@ -26,20 +26,26 @@ import java.util.Objects;
  * @author Nicolas de Pomereu
  *
  */
-public class DatabaseMetaDataFunctionCallDTO {
+public class DatabaseMetaDataMethodCallDTO {
 
-    private String functionName;
+    private String methodName;
     private List<String> paramTypes;
     private List<String> paramValues;
 
-    public DatabaseMetaDataFunctionCallDTO(String functionName, List<String> paramTypes, List<String> paramValues) {
-	this.functionName =  Objects.requireNonNull(functionName, "functionName cannot ne null!");
+    /**
+     * Constructor of the DTO.
+     * @param methodName
+     * @param paramTypes
+     * @param paramValues
+     */
+    public DatabaseMetaDataMethodCallDTO(String methodName, List<String> paramTypes, List<String> paramValues) {
+	this.methodName =  Objects.requireNonNull(methodName, "methodName cannot ne null!");
 	this.paramTypes = Objects.requireNonNull(paramTypes, "paramTypes cannot ne null!");
 	this.paramValues = Objects.requireNonNull(paramValues, "paramValues cannot ne null!");;
     }
 
-    public String getFunctionName() {
-        return functionName;
+    public String getMethodName() {
+        return methodName;
     }
 
     public List<String> getParamTypes() {
@@ -52,7 +58,7 @@ public class DatabaseMetaDataFunctionCallDTO {
 
     @Override
     public String toString() {
-	return "DatabaseMetaDataFunctionCallDTO [functionName=" + functionName + ", paramTypes=" + paramTypes
+	return "DatabaseMetaDataMethodCallDTO [methodName=" + methodName + ", paramTypes=" + paramTypes
 		+ ", paramValues=" + paramValues + "]";
     }
 

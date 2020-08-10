@@ -2,41 +2,42 @@ package com.aceql.client.jdbc.metadata;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Vector;
 
 import org.kawanfw.driver.util.FrameworkDebug;
 import org.kawanfw.driver.util.Tag;
 
-public class ParamsBuilder {
+public class DatabaseMetaDataParamsBuilder {
 
     /** Set to true to display/log debug info */
     private static boolean DEBUG = FrameworkDebug
-	    .isSet(ParamsBuilder.class);
+	    .isSet(DatabaseMetaDataParamsBuilder.class);
+
+    private String methodName;
+    private Object[] params;
 
     // Build the params types
-    private List<String> paramsTypes = new Vector<String>();
+    private List<String> paramTypes = new Vector<String>();
 
     // Build the params values
-    private List<String> paramsValues = new Vector<String>();
+    private List<String> paramValues = new Vector<String>();
+
 
     /**
      * Constructor.
      * @param methodName
      * @param params
      */
-    public ParamsBuilder(String methodName,
-	    Object... params) {
-
-	build(methodName, params);
+    public DatabaseMetaDataParamsBuilder(String methodName, Object[] params) {
+	this.methodName = Objects.requireNonNull(methodName, "methodName cannot be null!");
+	this.params =  Objects.requireNonNull(params, "params cannot be null!");
     }
-
 
     /**
      * Builds the two arrays of param types & values. Specials treatments are done for String and int arrays
-     * @param methodName
-     * @param params
      */
-    private void build(String methodName, Object[] params) {
+    public void build() {
 	for (int i = 0; i < params.length; i++) {
 	    detectNullForSpecialMethods(methodName, i,
 		    params);
@@ -58,7 +59,7 @@ public class ParamsBuilder {
 	    // NO! can alter class name if value is obsfucated
 	    // classType = StringUtils.substringAfterLast(classType, ".");
 
-	    paramsTypes.add(classType);
+	    paramTypes.add(classType);
 
 	    String value = null;
 
@@ -91,25 +92,24 @@ public class ParamsBuilder {
 	    debug("value    : " + value);
 
 	    // value = HtmlConverter.toHtml(value);
-	    paramsValues.add(value);
+	    paramValues.add(value);
 
 	}
     }
 
 
-    public List<String> getParamsTypes() {
-        return paramsTypes;
+    public List<String> getParamTypes() {
+        return paramTypes;
     }
 
-
-    public List<String> getParamsValues() {
-        return paramsValues;
+    public List<String> getParamValues() {
+        return paramValues;
     }
 
 
     /**
      * Detect null values for two special methods, and replace them by
-     * functionnal nulls
+     * Functional nulls
      *
      * @param methodName
      *            the method name : getTables or getUDTs

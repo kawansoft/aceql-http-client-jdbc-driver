@@ -863,6 +863,7 @@ public class AceQLHttpApi {
 	return aceQLMetadataApi.dbSchemaDownload(format, tableName);
     }
 
+
     public JdbcDatabaseMetaDataDto getDbMetadata() throws AceQLException {
 	AceQLMetadataApi aceQLMetadataApi = new AceQLMetadataApi(httpManager, url);
 	return aceQLMetadataApi.getDbMetadata();
@@ -876,6 +877,11 @@ public class AceQLHttpApi {
     public TableDto getTable(String tableName) throws AceQLException {
 	AceQLMetadataApi aceQLMetadataApi = new AceQLMetadataApi(httpManager, url);
 	return aceQLMetadataApi.getTable(tableName);
+    }
+
+    public InputStream callDatabaseMetaDataMethod(String jsonDatabaseMetaDataMethodCallDTO)  throws AceQLException {
+	AceQLMetadataApi aceQLMetadataApi = new AceQLMetadataApi(httpManager, url);
+	return aceQLMetadataApi.callDatabaseMetaDataMethod(jsonDatabaseMetaDataMethodCallDTO);
     }
 
     public int getHttpStatusCode() {

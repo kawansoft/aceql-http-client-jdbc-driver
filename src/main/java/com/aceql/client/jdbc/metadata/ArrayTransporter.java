@@ -25,26 +25,6 @@ public class ArrayTransporter {
 
     }
 
-    /**
-     * @param args
-     */
-    public static void main(String[] args) {
-	int [] intArray = { 1, 2, 3};
-	String join = arrayToString(intArray);
-	int [] intArray2 = stringToIntArray(join);
-
-	for (int i = 0; i < intArray2.length; i++) {
-	    System.out.println(intArray2[i]);
-	}
-
-	String [] stringArray = {"one", "two", "threee"};
-	join = arrayToString(stringArray);
-
-	String [] stringArray2 = stringToStringtArray(join);
-	System.out.println(Arrays.asList(stringArray2));
-    }
-
-
 
     public static String arrayToString(String[] stringArray) {
 	if (stringArray == null) {
@@ -91,5 +71,24 @@ public class ArrayTransporter {
 
 	return intArray2;
 
+    }
+
+    /**
+     * @param args
+     */
+    public static void main(String[] args) {
+	int [] intArray = { 1, 2, 3};
+	String join = arrayToString(intArray);
+	int [] intArray2 = stringToIntArray(join);
+
+	for (int i = 0; i < intArray2.length; i++) {
+	    System.out.println(intArray2[i]);
+	}
+
+	String [] stringArray = {"one", "two", "threee"};
+	join = arrayToString(stringArray);
+
+	String [] stringArray2 = stringToStringtArray(join);
+	System.out.println(Arrays.asList(stringArray2));
     }
 }
