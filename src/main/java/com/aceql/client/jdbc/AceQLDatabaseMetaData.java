@@ -19,8 +19,12 @@
 package com.aceql.client.jdbc;
 
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+import java.sql.RowIdLifetime;
 import java.sql.SQLException;
+import java.util.Date;
 
 import org.apache.commons.lang3.NotImplementedException;
 import org.kawanfw.driver.jdbc.abstracts.AbstractConnection;
@@ -110,15 +114,15 @@ public class AceQLDatabaseMetaData extends AbstractDatabaseMetaData implements
 
 
     @Override
-    public java.sql.ResultSet getClientInfoProperties()
-	    throws java.sql.SQLException {
-	java.sql.ResultSet result = (java.sql.ResultSet) callMetaDataMethod("getClientInfoProperties");
+    public ResultSet getClientInfoProperties()
+	    throws SQLException {
+	ResultSet result = (ResultSet) callMetaDataMethod("getClientInfoProperties");
 	return result;
     }
 
     @Override
     public boolean supportsConvert(int param0, int param1)
-	    throws java.sql.SQLException {
+	    throws SQLException {
 	boolean result = (Boolean) callMetaDataMethod("supportsConvert",
 		param0, param1);
 	return result;
@@ -126,7 +130,7 @@ public class AceQLDatabaseMetaData extends AbstractDatabaseMetaData implements
 
     @Override
     public boolean supportsTransactionIsolationLevel(int param0)
-	    throws java.sql.SQLException {
+	    throws SQLException {
 
 	boolean result = (Boolean) callMetaDataMethod(
 		"supportsTransactionIsolationLevel", param0);
@@ -134,141 +138,141 @@ public class AceQLDatabaseMetaData extends AbstractDatabaseMetaData implements
     }
 
     @Override
-    public java.sql.ResultSet getProcedures(java.lang.String param0,
-	    java.lang.String param1, java.lang.String param2)
-	    throws java.sql.SQLException {
-	java.sql.ResultSet result = (java.sql.ResultSet) callMetaDataMethod(
+    public ResultSet getProcedures(String param0,
+	    String param1, String param2)
+	    throws SQLException {
+	ResultSet result = (ResultSet) callMetaDataMethod(
 		"getProcedures", param0, param1, param2);
 	return result;
     }
 
     @Override
-    public java.sql.ResultSet getProcedureColumns(java.lang.String param0,
-	    java.lang.String param1, java.lang.String param2,
-	    java.lang.String param3) throws java.sql.SQLException {
-	java.sql.ResultSet result = (java.sql.ResultSet) callMetaDataMethod(
+    public ResultSet getProcedureColumns(String param0,
+	    String param1, String param2,
+	    String param3) throws SQLException {
+	ResultSet result = (ResultSet) callMetaDataMethod(
 		"getProcedureColumns", param0, param1, param2, param3);
 	return result;
     }
 
     @Override
-    public java.sql.ResultSet getSchemas() throws java.sql.SQLException {
-	java.sql.ResultSet result = (java.sql.ResultSet) callMetaDataMethod("getSchemas");
+    public ResultSet getSchemas() throws SQLException {
+	ResultSet result = (ResultSet) callMetaDataMethod("getSchemas");
 	return result;
     }
 
     @Override
-    public java.sql.ResultSet getSchemas(java.lang.String param0,
-	    java.lang.String param1) throws java.sql.SQLException {
-	java.sql.ResultSet result = (java.sql.ResultSet) callMetaDataMethod(
+    public ResultSet getSchemas(String param0,
+	    String param1) throws SQLException {
+	ResultSet result = (ResultSet) callMetaDataMethod(
 		"getSchemas", param0, param1);
 	return result;
     }
 
     @Override
-    public java.sql.ResultSet getCatalogs() throws java.sql.SQLException {
-	java.sql.ResultSet result = (java.sql.ResultSet) callMetaDataMethod("getCatalogs");
+    public ResultSet getCatalogs() throws SQLException {
+	ResultSet result = (ResultSet) callMetaDataMethod("getCatalogs");
 	return result;
     }
 
     @Override
-    public java.sql.ResultSet getTableTypes() throws java.sql.SQLException {
-	java.sql.ResultSet result = (java.sql.ResultSet) callMetaDataMethod("getTableTypes");
+    public ResultSet getTableTypes() throws SQLException {
+	ResultSet result = (ResultSet) callMetaDataMethod("getTableTypes");
 	return result;
     }
 
     @Override
-    public java.sql.ResultSet getColumnPrivileges(java.lang.String param0,
-	    java.lang.String param1, java.lang.String param2,
-	    java.lang.String param3) throws java.sql.SQLException {
-	java.sql.ResultSet result = (java.sql.ResultSet) callMetaDataMethod(
+    public ResultSet getColumnPrivileges(String param0,
+	    String param1, String param2,
+	    String param3) throws SQLException {
+	ResultSet result = (ResultSet) callMetaDataMethod(
 		"getColumnPrivileges", param0, param1, param2, param3);
 	return result;
     }
 
     @Override
-    public java.sql.ResultSet getTablePrivileges(java.lang.String param0,
-	    java.lang.String param1, java.lang.String param2)
-	    throws java.sql.SQLException {
-	java.sql.ResultSet result = (java.sql.ResultSet) callMetaDataMethod(
+    public ResultSet getTablePrivileges(String param0,
+	    String param1, String param2)
+	    throws SQLException {
+	ResultSet result = (ResultSet) callMetaDataMethod(
 		"getTablePrivileges", param0, param1, param2);
 	return result;
     }
 
     @Override
-    public java.sql.ResultSet getBestRowIdentifier(java.lang.String param0,
-	    java.lang.String param1, java.lang.String param2, int param3,
-	    boolean param4) throws java.sql.SQLException {
-	java.sql.ResultSet result = (java.sql.ResultSet) callMetaDataMethod(
+    public ResultSet getBestRowIdentifier(String param0,
+	    String param1, String param2, int param3,
+	    boolean param4) throws SQLException {
+	ResultSet result = (ResultSet) callMetaDataMethod(
 		"getBestRowIdentifier", param0, param1, param2, param3, param4);
 	return result;
     }
 
     @Override
-    public java.sql.ResultSet getVersionColumns(java.lang.String param0,
-	    java.lang.String param1, java.lang.String param2)
-	    throws java.sql.SQLException {
-	java.sql.ResultSet result = (java.sql.ResultSet) callMetaDataMethod(
+    public ResultSet getVersionColumns(String param0,
+	    String param1, String param2)
+	    throws SQLException {
+	ResultSet result = (ResultSet) callMetaDataMethod(
 		"getVersionColumns", param0, param1, param2);
 	return result;
     }
 
     @Override
-    public java.sql.ResultSet getPrimaryKeys(java.lang.String param0,
-	    java.lang.String param1, java.lang.String param2)
-	    throws java.sql.SQLException {
-	java.sql.ResultSet result = (java.sql.ResultSet) callMetaDataMethod(
+    public ResultSet getPrimaryKeys(String param0,
+	    String param1, String param2)
+	    throws SQLException {
+	ResultSet result = (ResultSet) callMetaDataMethod(
 		"getPrimaryKeys", param0, param1, param2);
 	return result;
     }
 
     @Override
-    public java.sql.ResultSet getImportedKeys(java.lang.String param0,
-	    java.lang.String param1, java.lang.String param2)
-	    throws java.sql.SQLException {
-	java.sql.ResultSet result = (java.sql.ResultSet) callMetaDataMethod(
+    public ResultSet getImportedKeys(String param0,
+	    String param1, String param2)
+	    throws SQLException {
+	ResultSet result = (ResultSet) callMetaDataMethod(
 		"getImportedKeys", param0, param1, param2);
 	return result;
     }
 
     @Override
-    public java.sql.ResultSet getExportedKeys(java.lang.String param0,
-	    java.lang.String param1, java.lang.String param2)
-	    throws java.sql.SQLException {
-	java.sql.ResultSet result = (java.sql.ResultSet) callMetaDataMethod(
+    public ResultSet getExportedKeys(String param0,
+	    String param1, String param2)
+	    throws SQLException {
+	ResultSet result = (ResultSet) callMetaDataMethod(
 		"getExportedKeys", param0, param1, param2);
 	return result;
     }
 
     @Override
-    public java.sql.ResultSet getCrossReference(java.lang.String param0,
-	    java.lang.String param1, java.lang.String param2,
-	    java.lang.String param3, java.lang.String param4,
-	    java.lang.String param5) throws java.sql.SQLException {
-	java.sql.ResultSet result = (java.sql.ResultSet) callMetaDataMethod(
+    public ResultSet getCrossReference(String param0,
+	    String param1, String param2,
+	    String param3, String param4,
+	    String param5) throws SQLException {
+	ResultSet result = (ResultSet) callMetaDataMethod(
 		"getCrossReference", param0, param1, param2, param3, param4,
 		param5);
 	return result;
     }
 
     @Override
-    public java.sql.ResultSet getTypeInfo() throws java.sql.SQLException {
-	java.sql.ResultSet result = (java.sql.ResultSet) callMetaDataMethod("getTypeInfo");
+    public ResultSet getTypeInfo() throws SQLException {
+	ResultSet result = (ResultSet) callMetaDataMethod("getTypeInfo");
 	return result;
     }
 
     @Override
-    public java.sql.ResultSet getIndexInfo(java.lang.String param0,
-	    java.lang.String param1, java.lang.String param2, boolean param3,
-	    boolean param4) throws java.sql.SQLException {
-	java.sql.ResultSet result = (java.sql.ResultSet) callMetaDataMethod(
+    public ResultSet getIndexInfo(String param0,
+	    String param1, String param2, boolean param3,
+	    boolean param4) throws SQLException {
+	ResultSet result = (ResultSet) callMetaDataMethod(
 		"getIndexInfo", param0, param1, param2, param3, param4);
 	return result;
     }
 
     @Override
     public boolean supportsResultSetType(int param0)
-	    throws java.sql.SQLException {
+	    throws SQLException {
 	boolean result = (Boolean) callMetaDataMethod(
 		"supportsResultSetType", param0);
 	return result;
@@ -276,7 +280,7 @@ public class AceQLDatabaseMetaData extends AbstractDatabaseMetaData implements
 
     @Override
     public boolean supportsResultSetConcurrency(int param0, int param1)
-	    throws java.sql.SQLException {
+	    throws SQLException {
 	boolean result = (Boolean) callMetaDataMethod(
 		"supportsResultSetConcurrency", param0, param1);
 	return result;
@@ -284,7 +288,7 @@ public class AceQLDatabaseMetaData extends AbstractDatabaseMetaData implements
 
     @Override
     public boolean ownUpdatesAreVisible(int param0)
-	    throws java.sql.SQLException {
+	    throws SQLException {
 	boolean result = (Boolean) callMetaDataMethod("ownUpdatesAreVisible",
 		param0);
 	return result;
@@ -292,7 +296,7 @@ public class AceQLDatabaseMetaData extends AbstractDatabaseMetaData implements
 
     @Override
     public boolean ownDeletesAreVisible(int param0)
-	    throws java.sql.SQLException {
+	    throws SQLException {
 	boolean result = (Boolean) callMetaDataMethod("ownDeletesAreVisible",
 		param0);
 	return result;
@@ -300,7 +304,7 @@ public class AceQLDatabaseMetaData extends AbstractDatabaseMetaData implements
 
     @Override
     public boolean ownInsertsAreVisible(int param0)
-	    throws java.sql.SQLException {
+	    throws SQLException {
 	boolean result = (Boolean) callMetaDataMethod("ownInsertsAreVisible",
 		param0);
 	return result;
@@ -308,7 +312,7 @@ public class AceQLDatabaseMetaData extends AbstractDatabaseMetaData implements
 
     @Override
     public boolean othersUpdatesAreVisible(int param0)
-	    throws java.sql.SQLException {
+	    throws SQLException {
 	boolean result = (Boolean) callMetaDataMethod(
 		"othersUpdatesAreVisible", param0);
 	return result;
@@ -316,7 +320,7 @@ public class AceQLDatabaseMetaData extends AbstractDatabaseMetaData implements
 
     @Override
     public boolean othersDeletesAreVisible(int param0)
-	    throws java.sql.SQLException {
+	    throws SQLException {
 	boolean result = (Boolean) callMetaDataMethod(
 		"othersDeletesAreVisible", param0);
 	return result;
@@ -324,114 +328,114 @@ public class AceQLDatabaseMetaData extends AbstractDatabaseMetaData implements
 
     @Override
     public boolean othersInsertsAreVisible(int param0)
-	    throws java.sql.SQLException {
+	    throws SQLException {
 	boolean result = (Boolean) callMetaDataMethod(
 		"othersInsertsAreVisible", param0);
 	return result;
     }
 
     @Override
-    public boolean updatesAreDetected(int param0) throws java.sql.SQLException {
+    public boolean updatesAreDetected(int param0) throws SQLException {
 	boolean result = (Boolean) callMetaDataMethod("updatesAreDetected",
 		param0);
 	return result;
     }
 
     @Override
-    public boolean deletesAreDetected(int param0) throws java.sql.SQLException {
+    public boolean deletesAreDetected(int param0) throws SQLException {
 	boolean result = (Boolean) callMetaDataMethod("deletesAreDetected",
 		param0);
 	return result;
     }
 
     @Override
-    public boolean insertsAreDetected(int param0) throws java.sql.SQLException {
+    public boolean insertsAreDetected(int param0) throws SQLException {
 	boolean result = (Boolean) callMetaDataMethod("insertsAreDetected",
 		param0);
 	return result;
     }
 
     @Override
-    public java.sql.ResultSet getUDTs(java.lang.String param0,
-	    java.lang.String param1, java.lang.String param2, int[] param3)
-	    throws java.sql.SQLException {
-	java.sql.ResultSet result = (java.sql.ResultSet) callMetaDataMethod(
+    public ResultSet getUDTs(String param0,
+	    String param1, String param2, int[] param3)
+	    throws SQLException {
+	ResultSet result = (ResultSet) callMetaDataMethod(
 		"getUDTs", param0, param1, param2, param3);
 	return result;
     }
 
     @Override
-    public java.sql.ResultSet getSuperTypes(java.lang.String param0,
-	    java.lang.String param1, java.lang.String param2)
-	    throws java.sql.SQLException {
-	java.sql.ResultSet result = (java.sql.ResultSet) callMetaDataMethod(
+    public ResultSet getSuperTypes(String param0,
+	    String param1, String param2)
+	    throws SQLException {
+	ResultSet result = (ResultSet) callMetaDataMethod(
 		"getSuperTypes", param0, param1, param2);
 	return result;
     }
 
     @Override
-    public java.sql.ResultSet getSuperTables(java.lang.String param0,
-	    java.lang.String param1, java.lang.String param2)
-	    throws java.sql.SQLException {
-	java.sql.ResultSet result = (java.sql.ResultSet) callMetaDataMethod(
+    public ResultSet getSuperTables(String param0,
+	    String param1, String param2)
+	    throws SQLException {
+	ResultSet result = (ResultSet) callMetaDataMethod(
 		"getSuperTables", param0, param1, param2);
 	return result;
     }
 
     @Override
     public boolean supportsResultSetHoldability(int param0)
-	    throws java.sql.SQLException {
+	    throws SQLException {
 	boolean result = (Boolean) callMetaDataMethod(
 		"supportsResultSetHoldability", param0);
 	return result;
     }
 
     @Override
-    public java.sql.ResultSet getFunctions(java.lang.String param0,
-	    java.lang.String param1, java.lang.String param2)
-	    throws java.sql.SQLException {
-	java.sql.ResultSet result = (java.sql.ResultSet) callMetaDataMethod(
+    public ResultSet getFunctions(String param0,
+	    String param1, String param2)
+	    throws SQLException {
+	ResultSet result = (ResultSet) callMetaDataMethod(
 		"getFunctions", param0, param1, param2);
 	return result;
     }
 
     @Override
-    public java.sql.ResultSet getFunctionColumns(java.lang.String param0,
-	    java.lang.String param1, java.lang.String param2,
-	    java.lang.String param3) throws java.sql.SQLException {
-	java.sql.ResultSet result = (java.sql.ResultSet) callMetaDataMethod(
+    public ResultSet getFunctionColumns(String param0,
+	    String param1, String param2,
+	    String param3) throws SQLException {
+	ResultSet result = (ResultSet) callMetaDataMethod(
 		"getFunctionColumns", param0, param1, param2, param3);
 	return result;
     }
 
     @Override
-    public java.sql.ResultSet getAttributes(java.lang.String param0,
-	    java.lang.String param1, java.lang.String param2,
-	    java.lang.String param3) throws java.sql.SQLException {
-	java.sql.ResultSet result = (java.sql.ResultSet) callMetaDataMethod(
+    public ResultSet getAttributes(String param0,
+	    String param1, String param2,
+	    String param3) throws SQLException {
+	ResultSet result = (ResultSet) callMetaDataMethod(
 		"getAttributes", param0, param1, param2, param3);
 	return result;
     }
 
     @Override
-    public java.sql.Connection getConnection() throws java.sql.SQLException {
+    public Connection getConnection() throws SQLException {
 	return this.aceQLConnection;
     }
 
     @Override
-    public java.sql.ResultSet getColumns(java.lang.String param0,
-	    java.lang.String param1, java.lang.String param2,
-	    java.lang.String param3) throws java.sql.SQLException {
-	java.sql.ResultSet result = (java.sql.ResultSet) callMetaDataMethod(
+    public ResultSet getColumns(String param0,
+	    String param1, String param2,
+	    String param3) throws SQLException {
+	ResultSet result = (ResultSet) callMetaDataMethod(
 		"getColumns", param0, param1, param2, param3);
 	return result;
     }
 
     @Override
-    public java.sql.ResultSet getTables(java.lang.String param0,
-	    java.lang.String param1, java.lang.String param2, String[] param3)
-	    throws java.sql.SQLException {
-	java.sql.ResultSet result = (java.sql.ResultSet) callMetaDataMethod(
+    public ResultSet getTables(String param0,
+	    String param1, String param2, String[] param3)
+	    throws SQLException {
+	ResultSet result = (ResultSet) callMetaDataMethod(
 		"getTables", param0, param1, param2, param3);
 	return result;
     }
@@ -469,54 +473,54 @@ public class AceQLDatabaseMetaData extends AbstractDatabaseMetaData implements
     }
 
     @Override
-    public boolean allProceduresAreCallable() throws java.sql.SQLException {
+    public boolean allProceduresAreCallable() throws SQLException {
 	return jdbcDatabaseMetaData.allProceduresAreCallable();
     }
 
     @Override
-    public boolean allTablesAreSelectable() throws java.sql.SQLException {
+    public boolean allTablesAreSelectable() throws SQLException {
 	return jdbcDatabaseMetaData.allTablesAreSelectable();
     }
 
     @Override
-    public boolean nullsAreSortedHigh() throws java.sql.SQLException {
+    public boolean nullsAreSortedHigh() throws SQLException {
 	return jdbcDatabaseMetaData.nullsAreSortedHigh();
     }
 
     @Override
-    public boolean nullsAreSortedLow() throws java.sql.SQLException {
+    public boolean nullsAreSortedLow() throws SQLException {
 	return jdbcDatabaseMetaData.nullsAreSortedLow();
     }
 
     @Override
-    public boolean nullsAreSortedAtStart() throws java.sql.SQLException {
+    public boolean nullsAreSortedAtStart() throws SQLException {
 	return jdbcDatabaseMetaData.nullsAreSortedAtStart();
     }
 
     @Override
-    public boolean nullsAreSortedAtEnd() throws java.sql.SQLException {
+    public boolean nullsAreSortedAtEnd() throws SQLException {
 	return jdbcDatabaseMetaData.nullsAreSortedAtEnd();
     }
 
     @Override
-    public java.lang.String getDatabaseProductName()
-	    throws java.sql.SQLException {
+    public String getDatabaseProductName()
+	    throws SQLException {
 	return jdbcDatabaseMetaData.getDatabaseProductName();
     }
 
     @Override
-    public java.lang.String getDatabaseProductVersion()
-	    throws java.sql.SQLException {
+    public String getDatabaseProductVersion()
+	    throws SQLException {
 	return jdbcDatabaseMetaData.getDatabaseProductVersion();
     }
 
     @Override
-    public java.lang.String getDriverName() throws java.sql.SQLException {
+    public String getDriverName() throws SQLException {
 	return jdbcDatabaseMetaData.getDriverName();
     }
 
     @Override
-    public java.lang.String getDriverVersion() throws java.sql.SQLException {
+    public String getDriverVersion() throws SQLException {
 	return jdbcDatabaseMetaData.getDriverVersion();
     }
 
@@ -531,641 +535,641 @@ public class AceQLDatabaseMetaData extends AbstractDatabaseMetaData implements
     }
 
     @Override
-    public boolean usesLocalFiles() throws java.sql.SQLException {
+    public boolean usesLocalFiles() throws SQLException {
 	return jdbcDatabaseMetaData.usesLocalFiles();
     }
 
     @Override
-    public boolean usesLocalFilePerTable() throws java.sql.SQLException {
+    public boolean usesLocalFilePerTable() throws SQLException {
 	return jdbcDatabaseMetaData.usesLocalFilePerTable();
     }
 
     @Override
-    public boolean supportsMixedCaseIdentifiers() throws java.sql.SQLException {
+    public boolean supportsMixedCaseIdentifiers() throws SQLException {
 	return jdbcDatabaseMetaData.supportsMixedCaseIdentifiers();
     }
 
     @Override
-    public boolean storesUpperCaseIdentifiers() throws java.sql.SQLException {
+    public boolean storesUpperCaseIdentifiers() throws SQLException {
 	return jdbcDatabaseMetaData.storesUpperCaseIdentifiers();
     }
 
     @Override
-    public boolean storesLowerCaseIdentifiers() throws java.sql.SQLException {
+    public boolean storesLowerCaseIdentifiers() throws SQLException {
 	return jdbcDatabaseMetaData.storesLowerCaseIdentifiers();
     }
 
     @Override
-    public boolean storesMixedCaseIdentifiers() throws java.sql.SQLException {
+    public boolean storesMixedCaseIdentifiers() throws SQLException {
 	return jdbcDatabaseMetaData.storesMixedCaseIdentifiers();
     }
 
     @Override
     public boolean supportsMixedCaseQuotedIdentifiers()
-	    throws java.sql.SQLException {
+	    throws SQLException {
 	return jdbcDatabaseMetaData.supportsMixedCaseQuotedIdentifiers();
     }
 
     @Override
     public boolean storesUpperCaseQuotedIdentifiers()
-	    throws java.sql.SQLException {
+	    throws SQLException {
 	return jdbcDatabaseMetaData.storesUpperCaseQuotedIdentifiers();
     }
 
     @Override
     public boolean storesLowerCaseQuotedIdentifiers()
-	    throws java.sql.SQLException {
+	    throws SQLException {
 	return jdbcDatabaseMetaData.storesLowerCaseQuotedIdentifiers();
     }
 
     @Override
     public boolean storesMixedCaseQuotedIdentifiers()
-	    throws java.sql.SQLException {
+	    throws SQLException {
 	return jdbcDatabaseMetaData.storesMixedCaseQuotedIdentifiers();
     }
 
     @Override
-    public java.lang.String getIdentifierQuoteString()
-	    throws java.sql.SQLException {
+    public String getIdentifierQuoteString()
+	    throws SQLException {
 	return jdbcDatabaseMetaData.getIdentifierQuoteString();
     }
 
     @Override
-    public java.lang.String getSQLKeywords() throws java.sql.SQLException {
+    public String getSQLKeywords() throws SQLException {
 	return jdbcDatabaseMetaData.getSQLKeywords();
     }
 
     @Override
-    public java.lang.String getNumericFunctions() throws java.sql.SQLException {
+    public String getNumericFunctions() throws SQLException {
 	return jdbcDatabaseMetaData.getNumericFunctions();
     }
 
     @Override
-    public java.lang.String getStringFunctions() throws java.sql.SQLException {
+    public String getStringFunctions() throws SQLException {
 	return jdbcDatabaseMetaData.getStringFunctions();
     }
 
     @Override
-    public java.lang.String getSystemFunctions() throws java.sql.SQLException {
+    public String getSystemFunctions() throws SQLException {
 	return jdbcDatabaseMetaData.getSystemFunctions();
     }
 
     @Override
-    public java.lang.String getTimeDateFunctions() throws java.sql.SQLException {
+    public String getTimeDateFunctions() throws SQLException {
 	return jdbcDatabaseMetaData.getTimeDateFunctions();
     }
 
     @Override
-    public java.lang.String getSearchStringEscape()
-	    throws java.sql.SQLException {
+    public String getSearchStringEscape()
+	    throws SQLException {
 	return jdbcDatabaseMetaData.getSearchStringEscape();
     }
 
     @Override
-    public java.lang.String getExtraNameCharacters()
-	    throws java.sql.SQLException {
+    public String getExtraNameCharacters()
+	    throws SQLException {
 	return jdbcDatabaseMetaData.getExtraNameCharacters();
     }
 
     @Override
     public boolean supportsAlterTableWithAddColumn()
-	    throws java.sql.SQLException {
+	    throws SQLException {
 	return jdbcDatabaseMetaData.supportsAlterTableWithAddColumn();
     }
 
     @Override
     public boolean supportsAlterTableWithDropColumn()
-	    throws java.sql.SQLException {
+	    throws SQLException {
 	return jdbcDatabaseMetaData.supportsAlterTableWithDropColumn();
     }
 
     @Override
-    public boolean supportsColumnAliasing() throws java.sql.SQLException {
+    public boolean supportsColumnAliasing() throws SQLException {
 	return jdbcDatabaseMetaData.supportsColumnAliasing();
     }
 
     @Override
-    public boolean nullPlusNonNullIsNull() throws java.sql.SQLException {
+    public boolean nullPlusNonNullIsNull() throws SQLException {
 	return jdbcDatabaseMetaData.nullPlusNonNullIsNull();
     }
 
     @Override
-    public boolean supportsConvert() throws java.sql.SQLException {
+    public boolean supportsConvert() throws SQLException {
 	return jdbcDatabaseMetaData.supportsConvert();
     }
 
     @Override
-    public boolean supportsTableCorrelationNames() throws java.sql.SQLException {
+    public boolean supportsTableCorrelationNames() throws SQLException {
 	return jdbcDatabaseMetaData.supportsTableCorrelationNames();
     }
 
     @Override
     public boolean supportsDifferentTableCorrelationNames()
-	    throws java.sql.SQLException {
+	    throws SQLException {
 	return jdbcDatabaseMetaData.supportsDifferentTableCorrelationNames();
     }
 
     @Override
-    public boolean supportsExpressionsInOrderBy() throws java.sql.SQLException {
+    public boolean supportsExpressionsInOrderBy() throws SQLException {
 	return jdbcDatabaseMetaData.supportsExpressionsInOrderBy();
     }
 
     @Override
-    public boolean supportsOrderByUnrelated() throws java.sql.SQLException {
+    public boolean supportsOrderByUnrelated() throws SQLException {
 	return jdbcDatabaseMetaData.supportsOrderByUnrelated();
     }
 
     @Override
-    public boolean supportsGroupBy() throws java.sql.SQLException {
+    public boolean supportsGroupBy() throws SQLException {
 	return jdbcDatabaseMetaData.supportsGroupBy();
     }
 
     @Override
-    public boolean supportsGroupByUnrelated() throws java.sql.SQLException {
+    public boolean supportsGroupByUnrelated() throws SQLException {
 	return jdbcDatabaseMetaData.supportsGroupByUnrelated();
     }
 
     @Override
-    public boolean supportsGroupByBeyondSelect() throws java.sql.SQLException {
+    public boolean supportsGroupByBeyondSelect() throws SQLException {
 	return jdbcDatabaseMetaData.supportsGroupByBeyondSelect();
     }
 
     @Override
-    public boolean supportsLikeEscapeClause() throws java.sql.SQLException {
+    public boolean supportsLikeEscapeClause() throws SQLException {
 	return jdbcDatabaseMetaData.supportsLikeEscapeClause();
     }
 
     @Override
-    public boolean supportsMultipleResultSets() throws java.sql.SQLException {
+    public boolean supportsMultipleResultSets() throws SQLException {
 	return jdbcDatabaseMetaData.supportsMultipleResultSets();
     }
 
     @Override
-    public boolean supportsMultipleTransactions() throws java.sql.SQLException {
+    public boolean supportsMultipleTransactions() throws SQLException {
 	return jdbcDatabaseMetaData.supportsMultipleTransactions();
     }
 
     @Override
-    public boolean supportsNonNullableColumns() throws java.sql.SQLException {
+    public boolean supportsNonNullableColumns() throws SQLException {
 	return jdbcDatabaseMetaData.supportsNonNullableColumns();
     }
 
     @Override
-    public boolean supportsMinimumSQLGrammar() throws java.sql.SQLException {
+    public boolean supportsMinimumSQLGrammar() throws SQLException {
 	return jdbcDatabaseMetaData.supportsMinimumSQLGrammar();
     }
 
     @Override
-    public boolean supportsCoreSQLGrammar() throws java.sql.SQLException {
+    public boolean supportsCoreSQLGrammar() throws SQLException {
 	return jdbcDatabaseMetaData.supportsCoreSQLGrammar();
     }
 
     @Override
-    public boolean supportsExtendedSQLGrammar() throws java.sql.SQLException {
+    public boolean supportsExtendedSQLGrammar() throws SQLException {
 	return jdbcDatabaseMetaData.supportsExtendedSQLGrammar();
     }
 
     @Override
-    public boolean supportsANSI92EntryLevelSQL() throws java.sql.SQLException {
+    public boolean supportsANSI92EntryLevelSQL() throws SQLException {
 	return jdbcDatabaseMetaData.supportsANSI92EntryLevelSQL();
     }
 
     @Override
-    public boolean supportsANSI92IntermediateSQL() throws java.sql.SQLException {
+    public boolean supportsANSI92IntermediateSQL() throws SQLException {
 	return jdbcDatabaseMetaData.supportsANSI92IntermediateSQL();
     }
 
     @Override
-    public boolean supportsANSI92FullSQL() throws java.sql.SQLException {
+    public boolean supportsANSI92FullSQL() throws SQLException {
 	return jdbcDatabaseMetaData.supportsANSI92FullSQL();
     }
 
     @Override
     public boolean supportsIntegrityEnhancementFacility()
-	    throws java.sql.SQLException {
+	    throws SQLException {
 	return jdbcDatabaseMetaData.supportsIntegrityEnhancementFacility();
     }
 
     @Override
-    public boolean supportsOuterJoins() throws java.sql.SQLException {
+    public boolean supportsOuterJoins() throws SQLException {
 	return jdbcDatabaseMetaData.supportsOuterJoins();
     }
 
     @Override
-    public boolean supportsFullOuterJoins() throws java.sql.SQLException {
+    public boolean supportsFullOuterJoins() throws SQLException {
 	return jdbcDatabaseMetaData.supportsFullOuterJoins();
     }
 
     @Override
-    public boolean supportsLimitedOuterJoins() throws java.sql.SQLException {
+    public boolean supportsLimitedOuterJoins() throws SQLException {
 	return jdbcDatabaseMetaData.supportsLimitedOuterJoins();
     }
 
     @Override
-    public java.lang.String getSchemaTerm() throws java.sql.SQLException {
+    public String getSchemaTerm() throws SQLException {
 	return jdbcDatabaseMetaData.getSchemaTerm();
     }
 
     @Override
-    public java.lang.String getProcedureTerm() throws java.sql.SQLException {
+    public String getProcedureTerm() throws SQLException {
 	return jdbcDatabaseMetaData.getProcedureTerm();
     }
 
     @Override
-    public java.lang.String getCatalogTerm() throws java.sql.SQLException {
+    public String getCatalogTerm() throws SQLException {
 	return jdbcDatabaseMetaData.getCatalogTerm();
     }
 
     @Override
-    public boolean isCatalogAtStart() throws java.sql.SQLException {
+    public boolean isCatalogAtStart() throws SQLException {
 	return jdbcDatabaseMetaData.isCatalogAtStart();
     }
 
     @Override
-    public java.lang.String getCatalogSeparator() throws java.sql.SQLException {
+    public String getCatalogSeparator() throws SQLException {
 	return jdbcDatabaseMetaData.getCatalogSeparator();
     }
 
     @Override
     public boolean supportsSchemasInDataManipulation()
-	    throws java.sql.SQLException {
+	    throws SQLException {
 	return jdbcDatabaseMetaData.supportsSchemasInDataManipulation();
     }
 
     @Override
     public boolean supportsSchemasInProcedureCalls()
-	    throws java.sql.SQLException {
+	    throws SQLException {
 	return jdbcDatabaseMetaData.supportsSchemasInProcedureCalls();
     }
 
     @Override
     public boolean supportsSchemasInTableDefinitions()
-	    throws java.sql.SQLException {
+	    throws SQLException {
 	return jdbcDatabaseMetaData.supportsSchemasInTableDefinitions();
     }
 
     @Override
     public boolean supportsSchemasInIndexDefinitions()
-	    throws java.sql.SQLException {
+	    throws SQLException {
 	return jdbcDatabaseMetaData.supportsSchemasInIndexDefinitions();
     }
 
     @Override
     public boolean supportsSchemasInPrivilegeDefinitions()
-	    throws java.sql.SQLException {
+	    throws SQLException {
 	return jdbcDatabaseMetaData.supportsSchemasInPrivilegeDefinitions();
     }
 
     @Override
     public boolean supportsCatalogsInDataManipulation()
-	    throws java.sql.SQLException {
+	    throws SQLException {
 	return jdbcDatabaseMetaData.supportsCatalogsInDataManipulation();
     }
 
     @Override
     public boolean supportsCatalogsInProcedureCalls()
-	    throws java.sql.SQLException {
+	    throws SQLException {
 	return jdbcDatabaseMetaData.supportsCatalogsInProcedureCalls();
     }
 
     @Override
     public boolean supportsCatalogsInTableDefinitions()
-	    throws java.sql.SQLException {
+	    throws SQLException {
 	return jdbcDatabaseMetaData.supportsCatalogsInTableDefinitions();
     }
 
     @Override
     public boolean supportsCatalogsInIndexDefinitions()
-	    throws java.sql.SQLException {
+	    throws SQLException {
 	return jdbcDatabaseMetaData.supportsCatalogsInIndexDefinitions();
     }
 
     @Override
     public boolean supportsCatalogsInPrivilegeDefinitions()
-	    throws java.sql.SQLException {
+	    throws SQLException {
 	return jdbcDatabaseMetaData.supportsCatalogsInPrivilegeDefinitions();
     }
 
     @Override
-    public boolean supportsPositionedDelete() throws java.sql.SQLException {
+    public boolean supportsPositionedDelete() throws SQLException {
 	return jdbcDatabaseMetaData.supportsPositionedDelete();
     }
 
     @Override
-    public boolean supportsPositionedUpdate() throws java.sql.SQLException {
+    public boolean supportsPositionedUpdate() throws SQLException {
 	return jdbcDatabaseMetaData.supportsPositionedUpdate();
     }
 
     @Override
-    public boolean supportsSelectForUpdate() throws java.sql.SQLException {
+    public boolean supportsSelectForUpdate() throws SQLException {
 	return jdbcDatabaseMetaData.supportsSelectForUpdate();
     }
 
     @Override
-    public boolean supportsStoredProcedures() throws java.sql.SQLException {
+    public boolean supportsStoredProcedures() throws SQLException {
 	return jdbcDatabaseMetaData.supportsStoredProcedures();
     }
 
     @Override
     public boolean supportsSubqueriesInComparisons()
-	    throws java.sql.SQLException {
+	    throws SQLException {
 	return jdbcDatabaseMetaData.supportsSubqueriesInComparisons();
     }
 
     @Override
-    public boolean supportsSubqueriesInExists() throws java.sql.SQLException {
+    public boolean supportsSubqueriesInExists() throws SQLException {
 	return jdbcDatabaseMetaData.supportsSubqueriesInExists();
     }
 
     @Override
-    public boolean supportsSubqueriesInIns() throws java.sql.SQLException {
+    public boolean supportsSubqueriesInIns() throws SQLException {
 	return jdbcDatabaseMetaData.supportsSubqueriesInIns();
     }
 
     @Override
     public boolean supportsSubqueriesInQuantifieds()
-	    throws java.sql.SQLException {
+	    throws SQLException {
 	return jdbcDatabaseMetaData.supportsSubqueriesInQuantifieds();
     }
 
     @Override
-    public boolean supportsCorrelatedSubqueries() throws java.sql.SQLException {
+    public boolean supportsCorrelatedSubqueries() throws SQLException {
 	return jdbcDatabaseMetaData.supportsCorrelatedSubqueries();
     }
 
     @Override
-    public boolean supportsUnion() throws java.sql.SQLException {
+    public boolean supportsUnion() throws SQLException {
 	return jdbcDatabaseMetaData.supportsUnion();
     }
 
     @Override
-    public boolean supportsUnionAll() throws java.sql.SQLException {
+    public boolean supportsUnionAll() throws SQLException {
 	return jdbcDatabaseMetaData.supportsUnionAll();
     }
 
     @Override
     public boolean supportsOpenCursorsAcrossCommit()
-	    throws java.sql.SQLException {
+	    throws SQLException {
 	return jdbcDatabaseMetaData.supportsOpenCursorsAcrossCommit();
     }
 
     @Override
     public boolean supportsOpenCursorsAcrossRollback()
-	    throws java.sql.SQLException {
+	    throws SQLException {
 	return jdbcDatabaseMetaData.supportsOpenCursorsAcrossRollback();
     }
 
     @Override
     public boolean supportsOpenStatementsAcrossCommit()
-	    throws java.sql.SQLException {
+	    throws SQLException {
 	return jdbcDatabaseMetaData.supportsOpenStatementsAcrossCommit();
     }
 
     @Override
     public boolean supportsOpenStatementsAcrossRollback()
-	    throws java.sql.SQLException {
+	    throws SQLException {
 	return jdbcDatabaseMetaData.supportsOpenStatementsAcrossRollback();
     }
 
     @Override
-    public int getMaxBinaryLiteralLength() throws java.sql.SQLException {
+    public int getMaxBinaryLiteralLength() throws SQLException {
 	return jdbcDatabaseMetaData.getMaxBinaryLiteralLength();
     }
 
     @Override
-    public int getMaxCharLiteralLength() throws java.sql.SQLException {
+    public int getMaxCharLiteralLength() throws SQLException {
 	return jdbcDatabaseMetaData.getMaxCharLiteralLength();
     }
 
     @Override
-    public int getMaxColumnNameLength() throws java.sql.SQLException {
+    public int getMaxColumnNameLength() throws SQLException {
 	return jdbcDatabaseMetaData.getMaxColumnNameLength();
     }
 
     @Override
-    public int getMaxColumnsInGroupBy() throws java.sql.SQLException {
+    public int getMaxColumnsInGroupBy() throws SQLException {
 	return jdbcDatabaseMetaData.getMaxColumnsInGroupBy();
     }
 
     @Override
-    public int getMaxColumnsInIndex() throws java.sql.SQLException {
+    public int getMaxColumnsInIndex() throws SQLException {
 	return jdbcDatabaseMetaData.getMaxColumnsInIndex();
     }
 
     @Override
-    public int getMaxColumnsInOrderBy() throws java.sql.SQLException {
+    public int getMaxColumnsInOrderBy() throws SQLException {
 	return jdbcDatabaseMetaData.getMaxColumnsInOrderBy();
     }
 
     @Override
-    public int getMaxColumnsInSelect() throws java.sql.SQLException {
+    public int getMaxColumnsInSelect() throws SQLException {
 	return jdbcDatabaseMetaData.getMaxColumnsInSelect();
     }
 
     @Override
-    public int getMaxColumnsInTable() throws java.sql.SQLException {
+    public int getMaxColumnsInTable() throws SQLException {
 	return jdbcDatabaseMetaData.getMaxColumnsInTable();
     }
 
     @Override
-    public int getMaxConnections() throws java.sql.SQLException {
+    public int getMaxConnections() throws SQLException {
 	return jdbcDatabaseMetaData.getMaxConnections();
     }
 
     @Override
-    public int getMaxCursorNameLength() throws java.sql.SQLException {
+    public int getMaxCursorNameLength() throws SQLException {
 	return jdbcDatabaseMetaData.getMaxCursorNameLength();
     }
 
     @Override
-    public int getMaxIndexLength() throws java.sql.SQLException {
+    public int getMaxIndexLength() throws SQLException {
 	return jdbcDatabaseMetaData.getMaxIndexLength();
     }
 
     @Override
-    public int getMaxSchemaNameLength() throws java.sql.SQLException {
+    public int getMaxSchemaNameLength() throws SQLException {
 	return jdbcDatabaseMetaData.getMaxSchemaNameLength();
     }
 
     @Override
-    public int getMaxProcedureNameLength() throws java.sql.SQLException {
+    public int getMaxProcedureNameLength() throws SQLException {
 	return jdbcDatabaseMetaData.getMaxProcedureNameLength();
     }
 
     @Override
-    public int getMaxCatalogNameLength() throws java.sql.SQLException {
+    public int getMaxCatalogNameLength() throws SQLException {
 	return jdbcDatabaseMetaData.getMaxCatalogNameLength();
     }
 
     @Override
-    public int getMaxRowSize() throws java.sql.SQLException {
+    public int getMaxRowSize() throws SQLException {
 	return jdbcDatabaseMetaData.getMaxRowSize();
     }
 
     @Override
-    public boolean doesMaxRowSizeIncludeBlobs() throws java.sql.SQLException {
+    public boolean doesMaxRowSizeIncludeBlobs() throws SQLException {
 	return jdbcDatabaseMetaData.doesMaxRowSizeIncludeBlobs();
     }
 
     @Override
-    public int getMaxStatementLength() throws java.sql.SQLException {
+    public int getMaxStatementLength() throws SQLException {
 	return jdbcDatabaseMetaData.getMaxStatementLength();
     }
 
     @Override
-    public int getMaxStatements() throws java.sql.SQLException {
+    public int getMaxStatements() throws SQLException {
 	return jdbcDatabaseMetaData.getMaxStatements();
     }
 
     @Override
-    public int getMaxTableNameLength() throws java.sql.SQLException {
+    public int getMaxTableNameLength() throws SQLException {
 	return jdbcDatabaseMetaData.getMaxTableNameLength();
     }
 
     @Override
-    public int getMaxTablesInSelect() throws java.sql.SQLException {
+    public int getMaxTablesInSelect() throws SQLException {
 	return jdbcDatabaseMetaData.getMaxTablesInSelect();
     }
 
     @Override
-    public int getMaxUserNameLength() throws java.sql.SQLException {
+    public int getMaxUserNameLength() throws SQLException {
 	return jdbcDatabaseMetaData.getMaxUserNameLength();
     }
 
     @Override
-    public int getDefaultTransactionIsolation() throws java.sql.SQLException {
+    public int getDefaultTransactionIsolation() throws SQLException {
 	return jdbcDatabaseMetaData.getDefaultTransactionIsolation();
     }
 
     @Override
-    public boolean supportsTransactions() throws java.sql.SQLException {
+    public boolean supportsTransactions() throws SQLException {
 	return jdbcDatabaseMetaData.supportsTransactions();
     }
 
     @Override
     public boolean supportsDataDefinitionAndDataManipulationTransactions()
-	    throws java.sql.SQLException {
+	    throws SQLException {
 	return jdbcDatabaseMetaData
 		.supportsDataDefinitionAndDataManipulationTransactions();
     }
 
     @Override
     public boolean supportsDataManipulationTransactionsOnly()
-	    throws java.sql.SQLException {
+	    throws SQLException {
 	return jdbcDatabaseMetaData
 		.supportsDataManipulationTransactionsOnly();
     }
 
     @Override
     public boolean dataDefinitionCausesTransactionCommit()
-	    throws java.sql.SQLException {
+	    throws SQLException {
 	return jdbcDatabaseMetaData.dataDefinitionCausesTransactionCommit();
     }
 
     @Override
     public boolean dataDefinitionIgnoredInTransactions()
-	    throws java.sql.SQLException {
+	    throws SQLException {
 	return jdbcDatabaseMetaData.dataDefinitionIgnoredInTransactions();
     }
 
     @Override
-    public boolean supportsBatchUpdates() throws java.sql.SQLException {
+    public boolean supportsBatchUpdates() throws SQLException {
 	return jdbcDatabaseMetaData.supportsBatchUpdates();
     }
 
     @Override
-    public boolean supportsSavepoints() throws java.sql.SQLException {
+    public boolean supportsSavepoints() throws SQLException {
 	return jdbcDatabaseMetaData.supportsSavepoints();
     }
 
     @Override
-    public boolean supportsNamedParameters() throws java.sql.SQLException {
+    public boolean supportsNamedParameters() throws SQLException {
 	return jdbcDatabaseMetaData.supportsNamedParameters();
     }
 
     @Override
-    public boolean supportsMultipleOpenResults() throws java.sql.SQLException {
+    public boolean supportsMultipleOpenResults() throws SQLException {
 	return jdbcDatabaseMetaData.supportsMultipleOpenResults();
     }
 
     @Override
-    public boolean supportsGetGeneratedKeys() throws java.sql.SQLException {
+    public boolean supportsGetGeneratedKeys() throws SQLException {
 	return jdbcDatabaseMetaData.supportsGetGeneratedKeys();
     }
 
     @Override
-    public int getDatabaseMajorVersion() throws java.sql.SQLException {
+    public int getDatabaseMajorVersion() throws SQLException {
 	return jdbcDatabaseMetaData.getDatabaseMajorVersion();
     }
 
     @Override
-    public int getDatabaseMinorVersion() throws java.sql.SQLException {
+    public int getDatabaseMinorVersion() throws SQLException {
 	return jdbcDatabaseMetaData.getDatabaseMinorVersion();
     }
 
     @Override
-    public int getJDBCMajorVersion() throws java.sql.SQLException {
+    public int getJDBCMajorVersion() throws SQLException {
 	return jdbcDatabaseMetaData.getJDBCMajorVersion();
     }
 
     @Override
-    public int getJDBCMinorVersion() throws java.sql.SQLException {
+    public int getJDBCMinorVersion() throws SQLException {
 	return jdbcDatabaseMetaData.getJDBCMinorVersion();
     }
 
     @Override
-    public int getSQLStateType() throws java.sql.SQLException {
+    public int getSQLStateType() throws SQLException {
 	return jdbcDatabaseMetaData.getSQLStateType();
     }
 
     @Override
-    public boolean locatorsUpdateCopy() throws java.sql.SQLException {
+    public boolean locatorsUpdateCopy() throws SQLException {
 	return jdbcDatabaseMetaData.locatorsUpdateCopy();
     }
 
     @Override
-    public boolean supportsStatementPooling() throws java.sql.SQLException {
+    public boolean supportsStatementPooling() throws SQLException {
 	return jdbcDatabaseMetaData.supportsStatementPooling();
     }
 
     @Override
-    public java.sql.RowIdLifetime getRowIdLifetime()
-	    throws java.sql.SQLException {
+    public RowIdLifetime getRowIdLifetime()
+	    throws SQLException {
 	throw new NotImplementedException(AbstractConnection.FEATURE_NOT_SUPPORTED_IN_THIS_VERSION
 		    + "getRowIdLifetime.");
     }
 
     @Override
     public boolean supportsStoredFunctionsUsingCallSyntax()
-	    throws java.sql.SQLException {
+	    throws SQLException {
 	return jdbcDatabaseMetaData.supportsStoredFunctionsUsingCallSyntax();
     }
 
     @Override
     public boolean autoCommitFailureClosesAllResultSets()
-	    throws java.sql.SQLException {
+	    throws SQLException {
 	return jdbcDatabaseMetaData.autoCommitFailureClosesAllResultSets();
     }
 
     @Override
-    public java.lang.String getURL() throws java.sql.SQLException {
+    public String getURL() throws SQLException {
 	return jdbcDatabaseMetaData.getURL();
     }
 
     @Override
-    public boolean isReadOnly() throws java.sql.SQLException {
+    public boolean isReadOnly() throws SQLException {
 	return jdbcDatabaseMetaData.isReadOnly();
     }
 
     @Override
-    public java.lang.String getUserName() throws java.sql.SQLException {
+    public String getUserName() throws SQLException {
 	return jdbcDatabaseMetaData.getUserName();
     }
 
     @SuppressWarnings("unused")
     private void debug(String s) {
 	if (DEBUG) {
-	    System.out.println(new java.util.Date() + " " + s);
+	    System.out.println(new Date() + " " + s);
 	}
     }
 }

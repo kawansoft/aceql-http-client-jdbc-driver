@@ -69,7 +69,7 @@ public class DatabaseMetaDataParamsBuilder {
 			+ (i + 1)
 			+ ". Param is *supposed* to be String and value forced to \"NULL\".");
 
-		params[i] = new String("NULL");
+		params[i] = "NULL"; // better than new String("NULL");
 	    }
 
 	    String classType = params[i].getClass().getName();
@@ -142,7 +142,7 @@ public class DatabaseMetaDataParamsBuilder {
 	if (methodName.equals("getTables") || methodName.equals("getUDTs")) {
 	    // The 3 first parameters are String
 	    if (i < 3 && params[i] == null) {
-		params[i] = new String("NULL");
+		params[i] = "NULL"; // better than new String("NULL");
 	    }
 
 	    // The 4th is String[] for types

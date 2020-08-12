@@ -41,7 +41,7 @@ public class DatabaseMetaDataMethodCallDTO {
     public DatabaseMetaDataMethodCallDTO(String methodName, List<String> paramTypes, List<String> paramValues) {
 	this.methodName =  Objects.requireNonNull(methodName, "methodName cannot ne null!");
 	this.paramTypes = Objects.requireNonNull(paramTypes, "paramTypes cannot ne null!");
-	this.paramValues = Objects.requireNonNull(paramValues, "paramValues cannot ne null!");;
+	this.paramValues = Objects.requireNonNull(paramValues, "paramValues cannot ne null!");
     }
 
     public String getMethodName() {
