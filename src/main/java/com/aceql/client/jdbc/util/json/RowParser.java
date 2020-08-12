@@ -110,10 +110,12 @@ public class RowParser {
 
 		if (parser.getString().equals("row_" + rowNum) && !isInsideRowValuesArray) {
 
-		    if (parser.hasNext())
+		    if (parser.hasNext())  {
 			parser.next();
-		    else
+		    }
+		    else {
 			return;
+		    }
 
 		    if (indexsPerColName == null) {
 			indexsPerColName = new HashMap<String, Integer>();
@@ -122,52 +124,10 @@ public class RowParser {
 		    valuesPerColIndex = new HashMap<Integer, String>();
 
 		    int colIndex = 0;
-		    String colName = null;
 
-		    while (parser.hasNext()) {
-
-			if (parser.hasNext())
-			    event = parser.next();
-			else
-			    return;
-
-			if (event != JsonParser.Event.KEY_NAME && event != JsonParser.Event.VALUE_STRING
-				&& event != JsonParser.Event.VALUE_NUMBER && event != JsonParser.Event.END_ARRAY) {
-			    continue;
-			}
-
-			// We are done at end of row
-			if (event == JsonParser.Event.END_ARRAY) {
-			    return;
-			}
-
-			if (event == JsonParser.Event.KEY_NAME) {
-			    colName = parser.getString();
-
-			    if (parser.hasNext())
-				parser.next();
-			    else
-				return;
-
-			    String colValue = parser.getString();
-
-			    if (colValue != null) {
-				colValue = colValue.trim();
-			    }
-
-			    colIndex++;
-
-			    valuesPerColIndex.put(colIndex, colValue);
-
-			    // Build the map of (column name, column index) on
-			    // first row only
-			    if (rowNum == 1) {
-				indexsPerColName.put(colName, colIndex);
-			    }
-
-			    trace(colValue);
-			}
-
+		    boolean doContinue = treatWhile(rowNum, event, colIndex);
+		    if (! doContinue) {
+			return;
 		    }
 		}
 
@@ -182,6 +142,64 @@ public class RowParser {
 	    }
 	}
 
+    }
+
+    /**
+     * @param rowNum
+     * @param event
+     * @param colIndex
+     */
+    private boolean treatWhile(int rowNum, JsonParser.Event event, int colIndex) {
+	String colName;
+	while (parser.hasNext()) {
+
+	    if (parser.hasNext()) {
+		event = parser.next();
+	    } else {
+		return false;
+	    }
+
+	    if (event != JsonParser.Event.KEY_NAME && event != JsonParser.Event.VALUE_STRING
+		    && event != JsonParser.Event.VALUE_NUMBER && event != JsonParser.Event.END_ARRAY) {
+		continue;
+	    }
+
+	    // We are done at end of row
+	    if (event == JsonParser.Event.END_ARRAY) {
+		return false;
+	    }
+
+	    if (event == JsonParser.Event.KEY_NAME) {
+		colName = parser.getString();
+
+		if (parser.hasNext()) {
+		    parser.next();
+		} else {
+		    return false;
+		}
+
+		String colValue = parser.getString();
+
+		if (colValue != null) {
+		    colValue = colValue.trim();
+		}
+
+		colIndex++;
+
+		valuesPerColIndex.put(colIndex, colValue);
+
+		// Build the map of (column name, column index) on
+		// first row only
+		if (rowNum == 1) {
+		    indexsPerColName.put(colName, colIndex);
+		}
+
+		trace(colValue);
+	    }
+
+	}
+
+	return true;
     }
 
     /**
