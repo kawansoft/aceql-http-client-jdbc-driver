@@ -43,7 +43,7 @@ import com.aceql.client.jdbc.util.json.RowParser;
  * @author Nicolas de Pomereu
  *
  */
-class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
+public class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
 
     public boolean DEBUG = false;
 
@@ -97,6 +97,39 @@ class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
 	AceQLConnection aceQLConnection = (AceQLConnection) this.getStatement()
 		.getConnection();
 	this.aceQLHttpApi = aceQLConnection.aceQLHttpApi;
+
+	this.rowParser = new RowParser(jsonFile);
+
+	long begin = System.currentTimeMillis();
+	debug(new java.util.Date() + " Begin getRowCount");
+
+	this.rowCount = rowCount;
+
+	long end = System.currentTimeMillis();
+	debug(new java.util.Date() + " End getRowCount: " + rowCount);
+	debug("Elapsed = " + (end - begin));
+    }
+
+    /**
+     * Constructor. To be used when calling a remote DatabaseMetaData method that returns a ResultSet.
+     * @param jsonFile
+     * @param aceQLHttpApi
+     * @param rowCount
+     * @throws SQLException
+     */
+    public AceQLResultSet(File jsonFile, AceQLHttpApi aceQLHttpApi, int rowCount) throws SQLException {
+	if (jsonFile == null) {
+	    throw new SQLException("jsonFile is null!");
+	}
+
+	if (!jsonFile.exists()) {
+	    throw new SQLException(new FileNotFoundException(
+		    "jsonFile does not exist: " + jsonFile));
+	}
+
+	this.jsonFile = jsonFile;
+	this.statement = null;
+	this.aceQLHttpApi = aceQLHttpApi;
 
 	this.rowParser = new RowParser(jsonFile);
 

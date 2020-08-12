@@ -18,19 +18,31 @@
  */
 package com.aceql.client.jdbc.metadata;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.Method;
-import java.sql.ResultSet;
+import java.nio.charset.Charset;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.kawanfw.driver.util.FrameworkFileUtil;
 
 import com.aceql.client.jdbc.AceQLConnection;
 import com.aceql.client.jdbc.AceQLConnectionWrapper;
 import com.aceql.client.jdbc.AceQLException;
+import com.aceql.client.jdbc.AceQLResultSet;
 import com.aceql.client.jdbc.http.AceQLHttpApi;
+import com.aceql.client.jdbc.util.AceQLStatementUtil;
+import com.aceql.client.jdbc.util.json.StreamResultAnalyzer;
 import com.aceql.client.metadata.util.GsonWsUtil;
 
 /**
@@ -79,19 +91,31 @@ public class DatabaseMetaDataCaller {
 		    paramTypes, paramValues);
 	    // Transform to Json
 	    String jsonDatabaseMetaDataMethodCallDTO = GsonWsUtil.getJSonString(databaseMetaDataMethodCallDTO);
-	    // Build the Http Call and get the result as a file
 
-	    InputStream in = aceQLHttpApi.callDatabaseMetaDataMethod(jsonDatabaseMetaDataMethodCallDTO);
+	    // Build the Http Call and get the result as a file
+	    File file = callServerdAndBuildResultFile(jsonDatabaseMetaDataMethodCallDTO);
+
+	    int httpStatusCode = aceQLHttpApi.getHttpStatusCode();
+
+	    StreamResultAnalyzer streamResultAnalyzer = new StreamResultAnalyzer(file, httpStatusCode,
+		    aceQLHttpApi.getHttpStatusMessage());
+	    if (!streamResultAnalyzer.isStatusOk()) {
+		throw new AceQLException(streamResultAnalyzer.getErrorMessage(), streamResultAnalyzer.getErrorId(),
+			null, streamResultAnalyzer.getStackTrace(), httpStatusCode);
+	    }
+
 
 	    // Get the result and return a Boolean or ResultSet (ResultSetHttp
 	    // in fact)
 	    if (returnType.endsWith("boolean")) {
-		String booleanStr = null; // TODO: implement call to server
-		return Boolean.parseBoolean(booleanStr);
+		String jsonString = FileUtils.readFileToString(file, Charset.defaultCharset());
+		BooleanResponseDTO booleanResponseDTO = GsonWsUtil.fromJson(jsonString, BooleanResponseDTO.class);
+		return booleanResponseDTO.getResponse();
 	    } else if (returnType.endsWith("ResultSet")) {
 		// Ok, build the result set from the file:
-		ResultSet rs = null; // TODO: implement call to server
-		return rs;
+		int rowCount = streamResultAnalyzer.getRowCount();
+		AceQLResultSet aceQLResultSet = new AceQLResultSet(file, this.aceQLHttpApi, rowCount);
+		return aceQLResultSet;
 	    } else {
 		throw new IllegalArgumentException(
 			"Unsupported return type for DatabaseMetaData." + methodName + ": " + returnType);
@@ -107,6 +131,39 @@ public class DatabaseMetaDataCaller {
 
     }
 
+
+    /**
+     * Call the server and build a file from the result stream
+     * @param jsonDatabaseMetaDataMethodCallDTO
+     * @return the create file
+     * @throws IOException
+     * @throws AceQLException
+     * @throws FileNotFoundException
+     */
+    private File callServerdAndBuildResultFile(String jsonDatabaseMetaDataMethodCallDTO)
+	    throws IOException, AceQLException, FileNotFoundException {
+
+	File file = createResultFile();
+
+	try (InputStream in = aceQLHttpApi.callDatabaseMetaDataMethod(jsonDatabaseMetaDataMethodCallDTO);
+		OutputStream out = new BufferedOutputStream(new FileOutputStream(file));) {
+	    if (in != null) {
+		// Do not use resource try {} ==> We don't want to create an
+		// empty file
+
+		InputStream inFinal = AceQLStatementUtil.getFinalInputStream(in, aceQLHttpApi.isGzipResult());
+		IOUtils.copy(inFinal, out);
+	    }
+	}
+
+	return file;
+    }
+
+    private static File createResultFile() {
+	File file = new File(FrameworkFileUtil.getKawansoftTempDir() + File.separator + "pc-metadata-result-"
+		+ FrameworkFileUtil.getUniqueId() + ".txt");
+	return file;
+    }
 
     /**
      * Get the return type of a DatabaseMetaData method
