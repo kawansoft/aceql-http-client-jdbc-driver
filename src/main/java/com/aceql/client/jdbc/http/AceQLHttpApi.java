@@ -572,6 +572,25 @@ public class AceQLHttpApi {
     }
 
     /**
+     *  Calls /get_catalog API
+     * @return
+     */
+    public String getCatalog() throws AceQLException {
+	String result = callApiWithResult("get_catalog", null);
+	return result;
+    }
+
+    /**
+     *  Calls /get_schema API
+     * @return
+     */
+    public String getSchema() throws AceQLException {
+	String result = callApiWithResult("get_schema", null);
+	return result;
+    }
+
+
+    /**
      * Calls /execute_update API
      *
      * @param sql                   an SQL <code>INSERT</code>, <code>UPDATE</code>
@@ -894,5 +913,7 @@ public class AceQLHttpApi {
     public String getHttpStatusMessage() {
 	return httpManager.getHttpStatusMessage();
     }
+
+
 
 }

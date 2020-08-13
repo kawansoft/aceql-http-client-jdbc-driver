@@ -466,6 +466,25 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	return AceQLConnectionUtil.getTransactionIsolation(result);
     }
 
+
+    /*
+     * (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#getCatalog()
+     */
+    @Override
+    public String getCatalog() throws SQLException {
+	return aceQLHttpApi.getCatalog();
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#getSchema()
+     */
+    @Override
+    public String getSchema() throws SQLException {
+	return aceQLHttpApi.getSchema();
+    }
+
     /*
      * (non-Javadoc)
      *

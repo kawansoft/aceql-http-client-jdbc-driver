@@ -96,6 +96,10 @@ public class AceQLConnectionTest {
 	SqlSelectTest sqlSelectTest = new SqlSelectTest(connection, System.out);
 	SqlBlobTest sqlBlobTest = new SqlBlobTest(connection, System.out);
 
+
+	String catalog = connection.getCatalog();
+	System.out.println("catalog: " + catalog);
+
 	falseQuery(falseQuery, sqlSelectTest);
 
 	int records = 300;
