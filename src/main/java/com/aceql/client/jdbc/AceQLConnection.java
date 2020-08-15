@@ -37,7 +37,9 @@ import org.kawanfw.driver.jdbc.abstracts.AbstractConnection;
 
 import com.aceql.client.jdbc.http.AceQLHttpApi;
 import com.aceql.client.jdbc.util.AceQLConnectionUtil;
+import com.aceql.client.metadata.JdbcDatabaseMetaData;
 import com.aceql.client.metadata.RemoteDatabaseMetaData;
+import com.aceql.client.metadata.dto.JdbcDatabaseMetaDataDto;
 
 /**
  * Provides a <code>Connection</code> implementation that enable to use a
@@ -331,8 +333,10 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      */
     @Override
     public DatabaseMetaData getMetaData() throws SQLException {
-	RemoteDatabaseMetaData remoteDatabaseMetaData = new RemoteDatabaseMetaData(this);
-	AceQLDatabaseMetaData aceQLDatabaseMetaData = new AceQLDatabaseMetaData(this, remoteDatabaseMetaData.getJdbcDatabaseMetaData());
+	JdbcDatabaseMetaDataDto jdbcDatabaseMetaDataDto = aceQLHttpApi.getDbMetadata();
+	JdbcDatabaseMetaData jdbcDatabaseMetaData =  jdbcDatabaseMetaDataDto.getJdbcDatabaseMetaData();
+
+	AceQLDatabaseMetaData aceQLDatabaseMetaData = new AceQLDatabaseMetaData(this, jdbcDatabaseMetaData);
 	return aceQLDatabaseMetaData;
     }
 

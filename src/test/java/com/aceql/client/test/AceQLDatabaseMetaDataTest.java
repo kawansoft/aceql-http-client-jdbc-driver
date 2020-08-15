@@ -117,8 +117,19 @@ public class AceQLDatabaseMetaDataTest {
 	    System.out.println();
 	}
 
-	rs.close();
+	System.out.println();
+	System.out.println("databaseMetaData.getColumns():");
+	String [] types = {"TABLE", "VIEW"};
+	rs =  databaseMetaData.getTables(catalog, schema, "customer", types);
+	while (rs.next()) {
+	    String tableName = rs.getString(3);
+	    String tableType = rs.getString(4);
+	    System.out.println("TABLE_NAME: " + tableName);
+	    System.out.println("TABLE_TYPE: " + tableType);
+	    System.out.println();
+	}
 
+	rs.close();
 
 	System.out.println(new Date() + " End");
     }
