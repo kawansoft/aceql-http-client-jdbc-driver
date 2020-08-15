@@ -35,7 +35,7 @@ import com.aceql.client.jdbc.AceQLConnection;
  */
 public class ConnectionBuilder {
 
-    public static final  boolean useLocal = false;
+    public static final  boolean useLocal = true;
     public static final boolean useLdapAuth = false;
     public static final boolean useAuthenticatedProxy = false;
 

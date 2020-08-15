@@ -25,6 +25,7 @@ import java.net.Proxy;
 import java.net.URLConnection;
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -323,8 +324,20 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	this.aceQLHttpApi = aceQLHttpApi;
     }
 
+
+    /*
+     * (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#getMetaData()
+     */
+    @Override
+    public DatabaseMetaData getMetaData() throws SQLException {
+	RemoteDatabaseMetaData remoteDatabaseMetaData = new RemoteDatabaseMetaData(this);
+	AceQLDatabaseMetaData aceQLDatabaseMetaData = new AceQLDatabaseMetaData(this, remoteDatabaseMetaData.getJdbcDatabaseMetaData());
+	return aceQLDatabaseMetaData;
+    }
+
     /**
-     * Returns a RemoteDatabaseMetaData instance in order to retrieve metadata info.
+     * Returns a RemoteDatabaseMetaData instance in order to retrieve metadata info for all client SDKs.
      *
      * @return a RemoteDatabaseMetaData instance in order to retrieve metadata info.
      */

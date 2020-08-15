@@ -34,7 +34,6 @@ import org.kawanfw.driver.util.Tag;
 
 import com.aceql.client.jdbc.metadata.DatabaseMetaDataCaller;
 import com.aceql.client.metadata.JdbcDatabaseMetaData;
-import com.aceql.client.metadata.RemoteDatabaseMetaData;
 
 /**
  * DatabaseMetaData Wrapper. <br>
@@ -45,7 +44,7 @@ import com.aceql.client.metadata.RemoteDatabaseMetaData;
 public class AceQLDatabaseMetaData extends AbstractDatabaseMetaData implements
 	DatabaseMetaData {
 
-    private static final String FEATURE_NOT_SUPPORTED_IN_THIS_VERSION = Tag.PRODUCT+ "Method is not yet implemented: ";
+    private static final String FEATURE_NOT_SUPPORTED_IN_THIS_VERSION = Tag.PRODUCT+ " Method is not yet implemented: ";
 
     /** Debug flag */
     private static boolean DEBUG = FrameworkDebug
@@ -64,8 +63,9 @@ public class AceQLDatabaseMetaData extends AbstractDatabaseMetaData implements
      *
      * @param aceQLConnection
      *            The Http Connection
+     * @param jdbcDatabaseMetaData the main boolean values
      */
-    public AceQLDatabaseMetaData(AceQLConnection aceQLConnection) throws SQLException {
+    public AceQLDatabaseMetaData(AceQLConnection aceQLConnection, JdbcDatabaseMetaData jdbcDatabaseMetaData) throws SQLException {
 	if (aceQLConnection == null) {
 	    String message = Tag.PRODUCT_PRODUCT_FAIL
 		    + "AceQLConnection can not be null!";
@@ -79,9 +79,8 @@ public class AceQLDatabaseMetaData extends AbstractDatabaseMetaData implements
 	}
 
 	isAceQLConnection = true;
-
-	RemoteDatabaseMetaData remoteDatabaseMetaData = new RemoteDatabaseMetaData(aceQLConnection);
-	this.jdbcDatabaseMetaData = remoteDatabaseMetaData.getJdbcDatabaseMetaData();
+	this.aceQLConnection = aceQLConnection;
+	this.jdbcDatabaseMetaData = jdbcDatabaseMetaData;
     }
 
     /**

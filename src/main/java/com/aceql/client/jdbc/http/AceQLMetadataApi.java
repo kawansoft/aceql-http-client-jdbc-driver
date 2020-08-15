@@ -34,10 +34,10 @@ public class AceQLMetadataApi {
 
 	    Objects.requireNonNull(jsonDatabaseMetaDataMethodCallDTO, "jsonDatabaseMetaDataMethodCallDTO cannot be null!");
 
-	    String action = "metadata_query/jdbc/database_meta_data";
+	    String action = "jdbc/database_meta_data";
 
 	    Map<String, String> parameters = new HashMap<String, String>();
-	    parameters.put("database_meta_data_method_call_dto", jsonDatabaseMetaDataMethodCallDTO);
+	    parameters.put("json_database_meta_data_method_call_dto", jsonDatabaseMetaDataMethodCallDTO);
 
 	    InputStream in = null;
 

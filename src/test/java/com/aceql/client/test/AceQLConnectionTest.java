@@ -96,9 +96,8 @@ public class AceQLConnectionTest {
 	SqlSelectTest sqlSelectTest = new SqlSelectTest(connection, System.out);
 	SqlBlobTest sqlBlobTest = new SqlBlobTest(connection, System.out);
 
-
-	String catalog = connection.getCatalog();
-	System.out.println("catalog: " + catalog);
+	System.out.println("catalog: " + connection.getCatalog());
+	System.out.println("schema : " + connection.getSchema());
 
 	falseQuery(falseQuery, sqlSelectTest);
 
