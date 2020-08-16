@@ -37,8 +37,8 @@ import org.kawanfw.driver.jdbc.abstracts.AbstractConnection;
 
 import com.aceql.client.jdbc.http.AceQLHttpApi;
 import com.aceql.client.jdbc.util.AceQLConnectionUtil;
-import com.aceql.client.metadata.JdbcDatabaseMetaData;
 import com.aceql.client.metadata.RemoteDatabaseMetaData;
+import com.aceql.client.metadata.dto.JdbcDatabaseMetaData;
 import com.aceql.client.metadata.dto.JdbcDatabaseMetaDataDto;
 
 /**

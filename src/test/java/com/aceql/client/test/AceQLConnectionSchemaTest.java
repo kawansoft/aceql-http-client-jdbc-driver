@@ -32,7 +32,6 @@ import org.apache.commons.lang3.SystemUtils;
 
 import com.aceql.client.jdbc.AceQLConnection;
 import com.aceql.client.jdbc.AceQLException;
-import com.aceql.client.metadata.JdbcDatabaseMetaData;
 import com.aceql.client.metadata.RemoteDatabaseMetaData;
 import com.aceql.client.metadata.Table;
 import com.aceql.client.test.connection.ConnectionBuilder;
@@ -72,9 +71,6 @@ public class AceQLConnectionSchemaTest {
 	    String content = FileUtils.readFileToString(file, "UTF-8");
 	    System.out.println(content);
 	}
-
-	JdbcDatabaseMetaData jdbcDatabaseMetaData = remoteDatabaseMetaData.getJdbcDatabaseMetaData();
-	System.out.println(new Date() + " jdbcDatabaseMetaData: " + jdbcDatabaseMetaData);
 
 	System.out.println();
 	List<String> tableNames = remoteDatabaseMetaData.getTableNames();

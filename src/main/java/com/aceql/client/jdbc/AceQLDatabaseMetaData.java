@@ -33,7 +33,7 @@ import org.kawanfw.driver.util.FrameworkDebug;
 import org.kawanfw.driver.util.Tag;
 
 import com.aceql.client.jdbc.metadata.DatabaseMetaDataCaller;
-import com.aceql.client.metadata.JdbcDatabaseMetaData;
+import com.aceql.client.metadata.dto.JdbcDatabaseMetaData;
 
 /**
  * DatabaseMetaData Wrapper. <br>
