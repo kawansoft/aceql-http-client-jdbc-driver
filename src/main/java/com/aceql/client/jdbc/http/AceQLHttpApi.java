@@ -76,11 +76,14 @@ public class AceQLHttpApi {
 
     private String url = null;
 
+    private boolean fillResultSetMetaData;
+
     private AtomicBoolean cancelled;
     private AtomicInteger progress;
 
     /* The HttpManager */
     private HttpManager httpManager;
+
 
     /**
      * Sets the read timeout.
@@ -412,13 +415,32 @@ public class AceQLHttpApi {
     }
 
     /**
-     * Define if result sets are compressed before download. Defaults to true.
+     * Defines if result sets are compressed before download. Defaults to true.
      *
      * @param gzipResult if true, sets are compressed before download
      */
     public void setGzipResult(boolean gzipResult) {
 	this.gzipResult = gzipResult;
     }
+
+
+   /**
+    * Returns {@code true} if the server will fill the {@code ResultSetMetaData} along with the {@code ResultSet} when a SELECT is done.
+    * @return {@code true} if the server will fill the {@code ResultSetMetaData} along with the {@code ResultSet} when a SELECT is done.
+    */
+    public boolean isFillResultSetMetaData() {
+        return fillResultSetMetaData;
+    }
+
+    /**
+     * Says if the server will fill the {@code ResultSetMetaData} along with the {@code ResultSet} when a SELECT is done.
+     * Defaults to {@code false}.
+     * @param fillResultSetMetaData if true, server side will return along
+     */
+    public void setFillResultSetMetaData(boolean fillResultSetMetaData) {
+	this.fillResultSetMetaData = fillResultSetMetaData;
+    }
+
 
     /**
      * Calls /get_version API
@@ -734,6 +756,7 @@ public class AceQLHttpApi {
 	    parametersMap.put("prepared_statement", "" + isPreparedStatement);
 	    parametersMap.put("stored_procedure", "" + isStoredProcedure);
 	    parametersMap.put("gzip_result", "" + gzipResult);
+	    parametersMap.put("fill_result_set_meta_data", "" + fillResultSetMetaData);
 	    parametersMap.put("pretty_printing", "" + prettyPrinting);
 
 	    // Add the statement parameters map
@@ -913,6 +936,8 @@ public class AceQLHttpApi {
     public String getHttpStatusMessage() {
 	return httpManager.getHttpStatusMessage();
     }
+
+
 
 
 

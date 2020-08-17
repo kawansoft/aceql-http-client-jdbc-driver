@@ -67,7 +67,7 @@ public class AceQLDatabaseMetaDataTest {
 	connection = ConnectionBuilder.createOnConfig();
 
 	((AceQLConnection) connection).setTraceOn(true);
-	((AceQLConnection) connection).setGzipResult(false);
+	((AceQLConnection) connection).setFillResultSetMetaData(true); // Required to read ResultSeMetaData
 
 	System.out.println(new Date() + " Begin");
 
@@ -153,7 +153,11 @@ public class AceQLDatabaseMetaDataTest {
 	}
 
 	ResultSetMetaData resultSetMetaData = rs.getMetaData();
-	if (resultSetMetaData != null) {
+	if (resultSetMetaData == null) {
+	    System.out.println("resultSetMetaData is null!");
+	}
+	else {
+
 	    int count = resultSetMetaData.getColumnCount();
 	    System.out.println("resultSetMetaData.getColumnCount(): " + count);
 

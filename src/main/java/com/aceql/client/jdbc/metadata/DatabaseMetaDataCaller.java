@@ -41,7 +41,6 @@ import com.aceql.client.jdbc.AceQLConnectionWrapper;
 import com.aceql.client.jdbc.AceQLException;
 import com.aceql.client.jdbc.AceQLResultSet;
 import com.aceql.client.jdbc.http.AceQLHttpApi;
-import com.aceql.client.jdbc.util.AceQLStatementUtil;
 import com.aceql.client.jdbc.util.json.StreamResultAnalyzer;
 import com.aceql.client.metadata.util.GsonWsUtil;
 
@@ -151,8 +150,8 @@ public class DatabaseMetaDataCaller {
 		// Do not use resource try {} ==> We don't want to create an
 		// empty file
 
-		InputStream inFinal = AceQLStatementUtil.getFinalInputStream(in, aceQLHttpApi.isGzipResult());
-		IOUtils.copy(inFinal, out);
+		// No compression usage
+		IOUtils.copy(in, out);
 	    }
 	}
 

@@ -114,6 +114,7 @@ import com.aceql.client.metadata.dto.JdbcDatabaseMetaDataDto;
  * </blockquote> The following dedicated <code>AceQLConnection</code> methods
  * are specific to the software and may be accessed with a cast:
  * <ul>
+ * <li>{@link #setFillResultSetMetaData(boolean)}</li>
  * <li>{@link #setCancelled(AtomicBoolean)}</li>
  * <li>{@link #setGzipResult(boolean)}</li>
  * <li>{@link #setProgress(AtomicInteger)}</li>
@@ -593,8 +594,34 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     }
 
     /**
+     * Returns {@code true} if the server will fill the {@code ResultSetMetaData} along with the {@code ResultSet} when a SELECT is done.
+     * @return {@code true} if the server will fill the {@code ResultSetMetaData} along with the {@code ResultSet} when a SELECT is done.
+     */
+     public boolean isFillResultSetMetaData() {
+         return aceQLHttpApi.isFillResultSetMetaData();
+     }
+
+    /**
+     * Says if the server will fill the {@code ResultSetMetaData} along with the {@code ResultSet} when a SELECT is done.
+     * Defaults to {@code false}.
+     * @param fillResultSetMetaData if true, server side will return along
+     */
+    public void setFillResultSetMetaData(boolean fillResultSetMetaData) {
+	aceQLHttpApi.setFillResultSetMetaData(fillResultSetMetaData);
+    }
+
+    /**
+     * Says the query result is returned compressed with the GZIP file format.
+     *
+     * @return {@code true} if the query result is returned compressed with the GZIP file format, else {@code false}
+     */
+    public boolean isGzipResult() {
+	return aceQLHttpApi.isGzipResult();
+    }
+
+    /**
      * Define if SQL result sets are returned compressed with the GZIP file format
-     * before download. Defaults to true.
+     * before download. Defaults to {@code true}.
      *
      * @param gzipResult if true, sets are compressed before download
      */
