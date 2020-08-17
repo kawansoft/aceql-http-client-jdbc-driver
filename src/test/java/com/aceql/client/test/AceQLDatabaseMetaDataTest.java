@@ -23,7 +23,9 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.Date;
 
@@ -43,8 +45,7 @@ public class AceQLDatabaseMetaDataTest {
     public static void main(String[] args) throws Exception {
 	try {
 	    doIt();
-	}
-	finally {
+	} finally {
 	    if (connection != null) {
 		connection.close();
 	    }
@@ -78,7 +79,8 @@ public class AceQLDatabaseMetaDataTest {
 	System.out.println();
 
 	DatabaseMetaData databaseMetaData = connection.getMetaData();
-	System.out.println("databaseMetaData.allProceduresAreCallable(): " + databaseMetaData.allProceduresAreCallable());
+	System.out
+		.println("databaseMetaData.allProceduresAreCallable(): " + databaseMetaData.allProceduresAreCallable());
 
 	System.out.println();
 	System.out.println("databaseMetaData.getClientInfoProperties():");
@@ -90,7 +92,6 @@ public class AceQLDatabaseMetaDataTest {
 	    System.out.println("MAX_LEN: " + maxLen);
 	    System.out.println();
 	}
-
 
 	System.out.println("databaseMetaData.getTableTypes():");
 	rs = databaseMetaData.getTableTypes();
@@ -105,7 +106,7 @@ public class AceQLDatabaseMetaDataTest {
 
 	System.out.println();
 	System.out.println("databaseMetaData.getColumns():");
-	rs =  databaseMetaData.getColumns(schema, catalog, null, "customer_id");
+	rs = databaseMetaData.getColumns(schema, catalog, null, "customer_id");
 
 	while (rs.next()) {
 	    String tableName = rs.getString(3);
@@ -119,9 +120,9 @@ public class AceQLDatabaseMetaDataTest {
 
 	System.out.println();
 	System.out.println("databaseMetaData.getTables():");
-	String [] types = {"TABLE", "VIEW"};
+	String[] types = { "TABLE", "VIEW" };
 	String tableNamePattern = null; // List all tables
-	rs =  databaseMetaData.getTables(catalog, schema, tableNamePattern, types);
+	rs = databaseMetaData.getTables(catalog, schema, tableNamePattern, types);
 	while (rs.next()) {
 	    String tableName = rs.getString(3);
 	    String tableType = rs.getString(4);
@@ -132,8 +133,39 @@ public class AceQLDatabaseMetaDataTest {
 
 	rs.close();
 
+	testResultSetMetaData();
 	System.out.println(new Date() + " End");
+
     }
 
+    private static void testResultSetMetaData() throws SQLException {
+	String sql = "select * from customer where customer_id >= ? order by customer_id";
+	PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+	preparedStatement.setInt(1, 1);
+	ResultSet rs = preparedStatement.executeQuery();
+
+	if (rs.next()) { // Ask only one row
+	    System.out.println();
+	    System.out.println("customer_id   : " + rs.getInt("customer_id"));
+	    System.out.println("customer_title: " + rs.getString("customer_title"));
+	    System.out.println("fname         : " + rs.getString("fname"));
+	}
+
+	ResultSetMetaData resultSetMetaData = rs.getMetaData();
+	if (resultSetMetaData != null) {
+	    int count = resultSetMetaData.getColumnCount();
+	    System.out.println("resultSetMetaData.getColumnCount(): " + count);
+
+	    for (int i = 1; i < count + 1; i++) {
+		System.out.println();
+		System.out.println("resultSetMetaData.getColumnName(i)    : " + resultSetMetaData.getColumnName(i));
+		System.out.println("resultSetMetaData.getColumnLabel(i)   : " + resultSetMetaData.getColumnLabel(i));
+		System.out.println("resultSetMetaData.getColumnType(i)    : " + resultSetMetaData.getColumnType(i));
+		System.out.println("resultSetMetaData.getColumnTypeName(i): " + resultSetMetaData.getColumnTypeName(i));
+	    }
+	}
+
+    }
 
 }

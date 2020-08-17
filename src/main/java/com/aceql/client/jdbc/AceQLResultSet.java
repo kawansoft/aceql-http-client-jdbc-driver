@@ -25,6 +25,7 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
@@ -33,8 +34,11 @@ import java.util.Map;
 import org.kawanfw.driver.jdbc.abstracts.AbstractResultSet;
 
 import com.aceql.client.jdbc.http.AceQLHttpApi;
+import com.aceql.client.jdbc.metadata.ResultSetMetaDataHolder;
 import com.aceql.client.jdbc.util.AceQLResultSetUtil;
+import com.aceql.client.jdbc.util.json.ResultSetMetaDataParser;
 import com.aceql.client.jdbc.util.json.RowParser;
+import com.aceql.client.metadata.util.GsonWsUtil;
 
 /**
  * Class that allows to built a {@code ResultSet} from a JSON file or JSON
@@ -67,6 +71,8 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
     /** Says if the last accessed value was null */
     private boolean wasNull = false;
 
+    private AceQLResultSetMetaData aceQLResultSetMetaData;
+
     /**
      * Constructor.
      *
@@ -98,6 +104,8 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 		.getConnection();
 	this.aceQLHttpApi = aceQLConnection.aceQLHttpApi;
 
+	buildResultSetMetaData(jsonFile);
+
 	this.rowParser = new RowParser(jsonFile);
 
 	long begin = System.currentTimeMillis();
@@ -109,6 +117,8 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	debug(new java.util.Date() + " End getRowCount: " + rowCount);
 	debug("Elapsed = " + (end - begin));
     }
+
+
 
     /**
      * Constructor. To be used when calling a remote DatabaseMetaData method that returns a ResultSet.
@@ -131,6 +141,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	this.statement = null;
 	this.aceQLHttpApi = aceQLHttpApi;
 
+	buildResultSetMetaData(jsonFile);
 	this.rowParser = new RowParser(jsonFile);
 
 	long begin = System.currentTimeMillis();
@@ -141,6 +152,32 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	long end = System.currentTimeMillis();
 	debug(new java.util.Date() + " End getRowCount: " + rowCount);
 	debug("Elapsed = " + (end - begin));
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getMetaData()
+     */
+    @Override
+    public ResultSetMetaData getMetaData() throws SQLException {
+	return this.aceQLResultSetMetaData;
+    }
+
+    /**
+     * Builds the ResultSetMetaData instance from the ResultSet file passed at constructor.
+     * @param jsonFile
+     * @throws SQLException
+     */
+    private void buildResultSetMetaData(File jsonFile) throws SQLException {
+	ResultSetMetaDataParser resultSetMetaDataParser = new ResultSetMetaDataParser(jsonFile);
+	String jsonString = resultSetMetaDataParser.getJsonString();
+	if (jsonString != null) {
+	    ResultSetMetaDataHolder resultSetMetaDataHolder = GsonWsUtil.fromJson(jsonString, ResultSetMetaDataHolder.class);
+	    this.aceQLResultSetMetaData = new AceQLResultSetMetaData(resultSetMetaDataHolder);
+	}
+	else {
+	    this.aceQLResultSetMetaData = null;
+	}
     }
 
     /**
