@@ -594,8 +594,8 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     }
 
     /**
-     * Returns {@code true} if the server will fill the {@code ResultSetMetaData} along with the {@code ResultSet} when a SELECT is done.
-     * @return {@code true} if the server will fill the {@code ResultSetMetaData} along with the {@code ResultSet} when a SELECT is done.
+     * Says if the server will fill the {@code ResultSetMetaData} along with the {@code ResultSet} when a {@code SELECT} is done.
+     * @return {@code true} if the server will fill the {@code ResultSetMetaData} along with the {@code ResultSet} when a SELECT is done, else {@code false}.
      */
      public boolean isFillResultSetMetaData() {
          return aceQLHttpApi.isFillResultSetMetaData();
