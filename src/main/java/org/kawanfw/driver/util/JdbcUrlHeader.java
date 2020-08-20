@@ -19,7 +19,6 @@
 
 package org.kawanfw.driver.util;
 import org.apache.commons.lang3.StringUtils;
-import org.kawanfw.sql.version.Version;
 
 /**
  * @author Nicolas de Pomereu
@@ -30,8 +29,7 @@ import org.kawanfw.sql.version.Version;
 public class JdbcUrlHeader {
 
     /** The header of AceQL JDBC URL */
-    public static final String JDBC_URL_HEADER = "jdbc:"
-	    + Version.PRODUCT.NAME.toLowerCase() + ":";
+    public static final String JDBC_URL_HEADER = "jdbc:aceql:";
 
     /**
      * protected constructor

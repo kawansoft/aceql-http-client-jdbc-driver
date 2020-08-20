@@ -82,12 +82,6 @@ public class AceQLDriver implements java.sql.Driver {
     /** The debug flag */
     private static boolean DEBUG = FrameworkDebug.isSet(AceQLDriver.class);
 
-    /**
-     * Constructor.
-     */
-    public AceQLDriver() {
-    }
-
     static {
 	try {
 	    DriverManager.registerDriver(new AceQLDriver());
@@ -125,7 +119,7 @@ public class AceQLDriver implements java.sql.Driver {
      *                if a database access error occurs
      */
     @Override
-    public Connection connect(String url, Properties info) throws SQLException {
+    public Connection connect(final String url, Properties info) throws SQLException {
 
 	if (url == null) {
 	    throw new SQLException("url not set. Please provide an url.");
@@ -138,17 +132,10 @@ public class AceQLDriver implements java.sql.Driver {
 	Properties info2 = new Properties();
 	RemoteDriverUtil.copyProperties(info, info2);
 
+	String aceqlUrl = url;
 	// Properties may be passed in url
 	if (url.contains("?")) {
-	    String query = StringUtils.substringAfter(url, "?");
-	    Map<String, String> mapProps = RemoteDriverUtil.getQueryMap(query);
-
-	    Set<String> set = mapProps.keySet();
-	    for (String propName : set) {
-		info2.setProperty(propName, mapProps.get(propName));
-	    }
-
-	    url = StringUtils.substringBefore(url, "?");
+	    aceqlUrl = buildPropertiesFromUrlParams(url, info2);
 	}
 
 	String username = info2.getProperty("user");
@@ -180,9 +167,80 @@ public class AceQLDriver implements java.sql.Driver {
 		.getProperty("fillResultSetMetaData");
 
 	int port = -1;
+	Proxy proxy = buildProxy(proxyType, proxyHostname, proxyPort, port);
+
+	debug("aceqlUrl: " + aceqlUrl);
+	debug("Proxy   : " + proxy);
+
+	AceQLConnection connection = buildConnection(url, username, password, database, proxyUsername, proxyPassword, proxy);
+
+	boolean dofillResultSetMetaData = Boolean
+		    .parseBoolean(fillResultSetMetaData);
+	connection.setFillResultSetMetaData(dofillResultSetMetaData);
+
+	return connection;
+
+    }
+
+
+    /**
+     * @param url
+     * @param username
+     * @param password
+     * @param database
+     * @param proxyUsername
+     * @param proxyPassword
+     * @param proxy
+     * @return
+     * @throws SQLException
+     */
+    private AceQLConnection buildConnection(final String url, String username, String password, String database,
+	    String proxyUsername, String proxyPassword, Proxy proxy) throws SQLException {
+	PasswordAuthentication passwordAuthentication = null;
+
+	if (proxy != null && proxyUsername != null) {
+	    passwordAuthentication = new PasswordAuthentication(proxyUsername,
+		    proxyPassword.toCharArray());
+	}
+
+	AceQLConnection connection = new AceQLConnection(url, username, database,
+		password.toCharArray(), proxy, passwordAuthentication);
+	return connection;
+    }
+
+
+    /**
+     * @param url
+     * @param info2
+     * @return
+     */
+    private String buildPropertiesFromUrlParams(final String url, Properties info2) {
+	String aceqlUrl;
+	String query = StringUtils.substringAfter(url, "?");
+	Map<String, String> mapProps = RemoteDriverUtil.getQueryMap(query);
+
+	Set<String> set = mapProps.keySet();
+	for (String propName : set) {
+	info2.setProperty(propName, mapProps.get(propName));
+	}
+
+	aceqlUrl = StringUtils.substringBefore(url, "?");
+	return aceqlUrl;
+    }
+
+
+    /**
+     * @param proxyType
+     * @param proxyHostname
+     * @param proxyPort
+     * @param port
+     * @return
+     * @throws SQLException
+     */
+    private Proxy buildProxy(String proxyType, String proxyHostname, String proxyPort, int port)
+	    throws SQLException {
 
 	Proxy proxy = null;
-
 	if (proxyHostname != null) {
 	    try {
 		port = Integer.parseInt(proxyPort);
@@ -199,51 +257,8 @@ public class AceQLDriver implements java.sql.Driver {
 	    proxy = new Proxy(Type.valueOf(proxyType), new InetSocketAddress(
 		    proxyHostname, port));
 	}
-
-	// If we have passed the "proxy" property, build back the
-	// instance from the property value
-	// 1) Treat the case the user did a property.put(proxy) instead of
-	// property.setProperty(proxy.toString())
-
-	if (proxy == null) {
-	    Object objProxy = info2.get("proxy");
-	    if (objProxy != null && objProxy instanceof Proxy) {
-		proxy = (Proxy)objProxy;
-	    }
-	    // 2) Treat the case the user as correctly used
-	    // property.setProperty(httpProxy.toString())
-	    else {
-		String proxyStr = info2.getProperty("proxy");
-		debug("proxyStr:" + proxyStr);
-		if (proxyStr != null) {
-		    proxy = RemoteDriverUtil.buildProxy(proxyStr);
-		}
-	    }
-	}
-
-	debug("url                   : " + url);
-	debug("Proxy                 : " + proxy);
-
-	boolean dofillResultSetMetaData = false;
-
-	if (fillResultSetMetaData != null) {
-	    dofillResultSetMetaData = Boolean
-		    .parseBoolean(fillResultSetMetaData);
-	    debug("fillResultSetMetaData: " + dofillResultSetMetaData);
-	}
-
-	PasswordAuthentication passwordAuthentication = null;
-
-	if (proxy != null && proxyUsername != null) {
-	    passwordAuthentication = new PasswordAuthentication(proxyUsername,
-		    proxyPassword.toCharArray());
-	}
-
-	Connection connection = new AceQLConnection(url, username, database,
-		password.toCharArray(), proxy, passwordAuthentication);
-	return connection;
+	return proxy;
     }
-
 
 
     /**
@@ -276,18 +291,13 @@ public class AceQLDriver implements java.sql.Driver {
 	    throw new IllegalArgumentException("url is null!");
 	}
 
-	String urlHeader = JdbcUrlHeader.JDBC_URL_HEADER;
-	if (url.startsWith(urlHeader)) {
-
-	    url = JdbcUrlHeader.getUrlHttpOnly(url);
-	    return isHttpProtocolUrl(url);
+	if (url.startsWith(JdbcUrlHeader.JDBC_URL_HEADER)) {
+	    String urlHttpOnly = JdbcUrlHeader.getUrlHttpOnly(url);
+	    return isHttpProtocolUrl(urlHttpOnly);
 	}
-
-	// We still accept for now old raw format that starts directly with
-	// "http://"
-	System.err.println("WARNING: url should be in: \"" + urlHeader
-		+ "http://hostname:port/ServerSqlManager\" format.");
-	return isHttpProtocolUrl(url);
+	else {
+	    return false;
+	}
 
     }
 
@@ -307,12 +317,7 @@ public class AceQLDriver implements java.sql.Driver {
 	}
 
 	String protocol = theUrl.getProtocol();
-
-	if (protocol.equals("http") || protocol.equals("https")) {
-	    return true;
-	} else {
-	    return false;
-	}
+	return protocol.equals("http") || protocol.equals("https");
     }
 
     /**
