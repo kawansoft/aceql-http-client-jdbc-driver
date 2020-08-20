@@ -334,6 +334,11 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      */
     @Override
     public DatabaseMetaData getMetaData() throws SQLException {
+
+	if (! AceQLConnectionUtil.isJdbcMetaDataSupported(this)) {
+	    throw new SQLException("AceQL Server version mut be > " + AceQLConnectionUtil.META_DATA_CALLS_MIN_SERVER_VERSION + " in order to call Connection.getMetaData().");
+	}
+
 	JdbcDatabaseMetaDataDto jdbcDatabaseMetaDataDto = aceQLHttpApi.getDbMetadata();
 	JdbcDatabaseMetaData jdbcDatabaseMetaData =  jdbcDatabaseMetaDataDto.getJdbcDatabaseMetaData();
 
@@ -573,6 +578,16 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      */
     public String getServerVersion() throws AceQLException {
 	return aceQLHttpApi.getServerVersion();
+    }
+
+
+    /**
+     * Returns the server product version number. Allows comparisons.
+     * @return the server product version number.
+     * @throws AceQLException
+     */
+    public double getServerVersionNumber() throws AceQLException {
+	return aceQLHttpApi.getServerVersionNumber();
     }
 
     /**

@@ -35,6 +35,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.kawanfw.sql.version.VersionValues;
 
 import com.aceql.client.jdbc.AceQLException;
@@ -112,28 +113,6 @@ public class AceQLHttpApi {
 	AceQLHttpApi.connectTimeout = connectTimeout;
     }
 
-    /**
-     * Login on the AceQL server and connect to a database
-     *
-     * @param serverUrl              the url of the AceQL server. Example:
-     *                               http://localhost:9090/aceql
-     * @param database               the server database to connect to.
-     * @param username               the login
-     * @param password               the password
-     * @param proxy                  the proxy to use. null if none.
-     * @param passwordAuthentication the username and password holder to use for
-     *                               authenticated proxy. Null if no proxy or if
-     *                               proxy
-     * @throws AceQLException if any Exception occurs
-     * @deprecated Use
-     *             {@link #AceQLHttpApi(String,String,String,char[],String,Proxy,PasswordAuthentication)}
-     *             instead
-     */
-    @Deprecated
-    public AceQLHttpApi(String serverUrl, String database, String username, char[] password, Proxy proxy,
-	    PasswordAuthentication passwordAuthentication) throws AceQLException {
-	this(serverUrl, database, username, password, null, proxy, passwordAuthentication);
-    }
 
     /**
      * Login on the AceQL server and connect to a database
@@ -450,6 +429,18 @@ public class AceQLHttpApi {
     public String getServerVersion() throws AceQLException {
 	String result = callApiWithResult("get_version", null);
 	return result;
+    }
+
+    /**
+     * Returns the server version as a number.
+     * @return the server version as a number.
+     * @throws AceQLException
+     */
+    public double getServerVersionNumber() throws AceQLException {
+	String serverVersion = getServerVersion();
+	String rawVersion = StringUtils.substringBetween(serverVersion, "v", "-").trim();
+	Double version = Double.parseDouble(rawVersion);
+	return version;
     }
 
     /**

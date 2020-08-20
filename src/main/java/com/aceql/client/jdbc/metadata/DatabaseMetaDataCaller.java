@@ -52,6 +52,7 @@ import com.aceql.client.metadata.util.GsonWsUtil;
  */
 public class DatabaseMetaDataCaller {
 
+    private AceQLConnection aceQLConnection;
     private AceQLHttpApi aceQLHttpApi;
 
     /**
@@ -61,6 +62,7 @@ public class DatabaseMetaDataCaller {
      */
     public DatabaseMetaDataCaller(AceQLConnection aceQLConnection) {
 	AceQLConnectionWrapper aceQLConnectionWrapper = new AceQLConnectionWrapper(aceQLConnection);
+	this.aceQLConnection = aceQLConnection;
 	this.aceQLHttpApi = aceQLConnectionWrapper.getAceQLHttpApi();
     }
 
@@ -113,7 +115,7 @@ public class DatabaseMetaDataCaller {
 	    } else if (returnType.endsWith("ResultSet")) {
 		// Ok, build the result set from the file:
 		int rowCount = streamResultAnalyzer.getRowCount();
-		AceQLResultSet aceQLResultSet = new AceQLResultSet(file, this.aceQLHttpApi, rowCount);
+		AceQLResultSet aceQLResultSet = new AceQLResultSet(file, this.aceQLConnection, rowCount);
 		return aceQLResultSet;
 	    } else {
 		throw new IllegalArgumentException(

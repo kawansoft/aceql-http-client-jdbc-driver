@@ -35,6 +35,7 @@ import org.kawanfw.driver.jdbc.abstracts.AbstractResultSet;
 
 import com.aceql.client.jdbc.http.AceQLHttpApi;
 import com.aceql.client.jdbc.metadata.ResultSetMetaDataHolder;
+import com.aceql.client.jdbc.util.AceQLConnectionUtil;
 import com.aceql.client.jdbc.util.AceQLResultSetUtil;
 import com.aceql.client.jdbc.util.json.ResultSetMetaDataParser;
 import com.aceql.client.jdbc.util.json.RowParser;
@@ -52,7 +53,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
     public boolean DEBUG = false;
 
     /** A File containing the result set returned by an /execute_query call */
-    public File jsonFile = null;
+    public File jsonFile;
 
     private int rowCount = 0;
     private int currentRowNum = 0;
@@ -60,18 +61,21 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
     // public Map<String, String> valuesPerColName;
     public Map<Integer, String> valuesPerColIndex;
 
-    private boolean isClosed = false;
+    private boolean isClosed;
 
-    private Statement statement = null;
+    private Statement statement;
 
     private RowParser rowParser;
 
-    private AceQLHttpApi aceQLHttpApi = null;
+    private AceQLConnection aceQLConnection;
+    private AceQLHttpApi aceQLHttpApi ;
 
     /** Says if the last accessed value was null */
     private boolean wasNull = false;
 
     private AceQLResultSetMetaData aceQLResultSetMetaData;
+
+
 
     /**
      * Constructor.
@@ -123,11 +127,11 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
     /**
      * Constructor. To be used when calling a remote DatabaseMetaData method that returns a ResultSet.
      * @param jsonFile
-     * @param aceQLHttpApi
+     * @param aceQLConnection
      * @param rowCount
      * @throws SQLException
      */
-    public AceQLResultSet(File jsonFile, AceQLHttpApi aceQLHttpApi, int rowCount) throws SQLException {
+    public AceQLResultSet(File jsonFile, AceQLConnection aceQLConnection, int rowCount) throws SQLException {
 	if (jsonFile == null) {
 	    throw new SQLException("jsonFile is null!");
 	}
@@ -139,7 +143,9 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 
 	this.jsonFile = jsonFile;
 	this.statement = null;
-	this.aceQLHttpApi = aceQLHttpApi;
+	this.aceQLConnection = aceQLConnection;
+	AceQLConnectionWrapper aceQLConnectionWrapper = new AceQLConnectionWrapper(aceQLConnection);
+	this.aceQLHttpApi = aceQLConnectionWrapper.getAceQLHttpApi();
 
 	buildResultSetMetaData(jsonFile);
 	this.rowParser = new RowParser(jsonFile);
@@ -160,6 +166,11 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
      */
     @Override
     public ResultSetMetaData getMetaData() throws SQLException {
+
+	if (! AceQLConnectionUtil.isJdbcMetaDataSupported(aceQLConnection)) {
+	    throw new SQLException("AceQL Server version mut be > " + AceQLConnectionUtil.META_DATA_CALLS_MIN_SERVER_VERSION + " in order to call ResultSetMetaData.getMetaData().");
+	}
+
 	return this.aceQLResultSetMetaData;
     }
 

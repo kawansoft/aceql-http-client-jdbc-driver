@@ -66,12 +66,14 @@ public class AceQLDatabaseMetaDataTest {
 
 	connection = ConnectionBuilder.createOnConfig();
 
-	((AceQLConnection) connection).setTraceOn(true);
+	((AceQLConnection) connection).setTraceOn(false);
 	((AceQLConnection) connection).setFillResultSetMetaData(true); // Required to read ResultSeMetaData
 
 	System.out.println(new Date() + " Begin");
 
-	System.out.println("aceQLConnection.getServerVersion(): " + ((AceQLConnection) connection).getServerVersion());
+	System.out.println("aceQLConnection.getServerVersion()      : " + ((AceQLConnection) connection).getServerVersion());
+	System.out.println("aceQLConnection.getServerVersionNumber(): " + ((AceQLConnection) connection).getServerVersionNumber());
+	System.out.println();
 	System.out.println("aceQLConnection.getClientVersion(): " + ((AceQLConnection) connection).getClientVersion());
 	System.out.println();
 	System.out.println("connection.getCatalog(): " + connection.getCatalog());
@@ -101,8 +103,22 @@ public class AceQLDatabaseMetaDataTest {
 	    System.out.println("tableType: " + tableType);
 	}
 
+
 	String schema = null;
 	String catalog = null;
+
+	System.out.println();
+	System.out.println("databaseMetaData.getTables():");
+	String[] types = { "TABLE", "VIEW" };
+	String tableNamePattern = null; // List all tables
+	rs = databaseMetaData.getTables(catalog, schema, tableNamePattern, types);
+	while (rs.next()) {
+	    String tableName = rs.getString(3);
+	    String tableType = rs.getString(4);
+	    System.out.println("TABLE_NAME: " + tableName);
+	    System.out.println("TABLE_TYPE: " + tableType);
+	    System.out.println();
+	}
 
 	System.out.println();
 	System.out.println("databaseMetaData.getColumns():");
@@ -115,19 +131,6 @@ public class AceQLDatabaseMetaDataTest {
 	    System.out.println("TABLE_NAME : " + tableName);
 	    System.out.println("COLUMN_NAME: " + colName);
 	    System.out.println("DATA_TYPE  : " + dataType);
-	    System.out.println();
-	}
-
-	System.out.println();
-	System.out.println("databaseMetaData.getTables():");
-	String[] types = { "TABLE", "VIEW" };
-	String tableNamePattern = null; // List all tables
-	rs = databaseMetaData.getTables(catalog, schema, tableNamePattern, types);
-	while (rs.next()) {
-	    String tableName = rs.getString(3);
-	    String tableType = rs.getString(4);
-	    System.out.println("TABLE_NAME: " + tableName);
-	    System.out.println("TABLE_TYPE: " + tableType);
 	    System.out.println();
 	}
 
