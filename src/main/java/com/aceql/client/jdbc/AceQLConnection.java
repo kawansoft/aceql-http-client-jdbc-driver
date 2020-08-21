@@ -111,7 +111,6 @@ import com.aceql.client.metadata.RemoteDatabaseMetaData;
  * </blockquote> The following dedicated <code>AceQLConnection</code> methods
  * are specific to the software and may be accessed with a cast:
  * <ul>
- * <li>{@link #setFillResultSetMetaData(boolean)}</li>
  * <li>{@link #setCancelled(AtomicBoolean)}</li>
  * <li>{@link #setGzipResult(boolean)}</li>
  * <li>{@link #setProgress(AtomicInteger)}</li>
@@ -158,7 +157,7 @@ import com.aceql.client.metadata.RemoteDatabaseMetaData;
  * </pre>
  *
  * </blockquote> See the source code of
- * <a href= "http://www.aceql.com/rest/soft/5.0/src/SqlProgressMonitorDemo.java"
+ * <a href= "http://www.aceql.com/rest/soft/5.1/src/SqlProgressMonitorDemo.java"
  * >SqlProgressMonitorDemo.java</a> that demonstrates the use of atomic
  * variables when inserting a Blob.
  *
@@ -563,7 +562,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     /**
      * Returns the server product version number. Allows comparisons.
      * @return the server product version number.
-     * @throws AceQLException
+     * @throws AceQLException if any Exception occurs
      */
     public double getServerVersionNumber() throws AceQLException {
 	return aceQLHttpApi.getServerVersionNumber();
