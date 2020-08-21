@@ -80,10 +80,12 @@ public class SimpleClassCaller {
 
 	if (methodParameterTypesArray != null && ! methodParameterTypes.isEmpty()) {
 	    Method main = clazz.getDeclaredMethod(methodName, methodParameterTypesArray);
+	    main.setAccessible(true);
 	    Object resultObj = main.invoke(theObject, methodParameterValuesArray);
 	    return resultObj;
 	} else {
 	    Method main = clazz.getDeclaredMethod(methodName);
+	    main.setAccessible(true);
 	    Object resultObj = main.invoke(theObject);
 	    return resultObj;
 	}
