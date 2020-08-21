@@ -18,6 +18,7 @@ they would for a local database.
 The AceQL Java Client SDK is licensed under the Apache 2.0
 License.
 
+
 AceQL Java Client SDK - Version 4.3 - 21-Aug-2020
 -------------------------------------------------
 
@@ -27,6 +28,7 @@ What's New:
 Bugs fixed:
 - The pom.xml included erroneously a reference to a previous version of 
   the SDK. his has been fixed.
+
 
 AceQL Java Client SDK - Version 4.2 - 18-Jul-2020
 -------------------------------------------------
