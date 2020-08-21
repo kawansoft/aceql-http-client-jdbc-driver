@@ -1,6 +1,6 @@
 
                  AceQL Java Client SDK
-                      Version 4.3
+                      Version 5.0
                      Release Notes
 
 Introduction
@@ -18,6 +18,20 @@ they would for a local database.
 The AceQL Java Client SDK is licensed under the Apache 2.0
 License.
 
+
+AceQL Java Client SDK - Version 5.0 - 21-Aug-2020
+-------------------------------------------------
+
+What's New:
+- Connection.getSchema() has been added.
+- Statement.execute() & PreparedStatement.execute() have been added.
+- Connection.getMetaData() and ResultSet.getMetaData() are 
+  implemented for access via the AceQL JDBC Driver.
+
+Bugs fixed:
+- The pom.xml included erroneously a reference to a previous version of 
+  the SDK. his has been fixed.
+  
 
 AceQL Java Client SDK - Version 4.3 - 21-Aug-2020
 -------------------------------------------------
