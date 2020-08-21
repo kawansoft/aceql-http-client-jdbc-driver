@@ -29,12 +29,15 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.kawanfw.driver.jdbc.abstracts.AbstractResultSet;
 
 import com.aceql.client.jdbc.http.AceQLHttpApi;
 import com.aceql.client.jdbc.util.AceQLResultSetUtil;
+import com.aceql.client.jdbc.util.SimpleClassCaller;
 import com.aceql.client.jdbc.util.json.RowParser;
 
 /**
@@ -64,7 +67,6 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
     private RowParser rowParser;
 
     // Futur usage
-    @SuppressWarnings("unused")
     private AceQLConnection aceQLConnection;
     private AceQLHttpApi aceQLHttpApi ;
 
@@ -75,8 +77,6 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
     // Futur usage
     @SuppressWarnings("unused")
     private ResultSetMetaData resultSetMetaData;
-
-
 
     /**
      * Constructor.
@@ -342,6 +342,31 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
     @Override
     public boolean wasNull() throws SQLException {
 	return wasNull;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getMetaData()
+     */
+    @Override
+    public ResultSetMetaData getMetaData() throws SQLException {
+	List<Class<?>> params = new ArrayList<>();
+	List<Object> values = new ArrayList<>();
+
+	params.add(File.class);
+	params.add(AceQLConnection.class);
+	values.add(this.jsonFile);
+	values.add(this.aceQLConnection);
+
+	try {
+	    SimpleClassCaller simpleClassCaller = new SimpleClassCaller("com.aceql.driver.reflection.ResultSetMetaDataGetter");
+	    Object obj = simpleClassCaller.callMehod("getMetaData", params, values);
+	    return (ResultSetMetaData) obj;
+	} catch (ClassNotFoundException e) {
+	    throw new IllegalArgumentException("getMetaData() call requires AceQL JDBC Driver version 5 or higher.");
+	} catch (Exception e) {
+	    throw new SQLException(e);
+	}
     }
 
     /*
