@@ -115,8 +115,13 @@ import com.aceql.client.metadata.RemoteDatabaseMetaData;
  * </blockquote> The following dedicated <code>AceQLConnection</code> methods
  * are specific to the software and may be accessed with a cast:
  * <ul>
+ * <li>{@link #getCancelled()}</li>
  * <li>{@link #setCancelled(AtomicBoolean)}</li>
+ * <li>{@link #getFillResultSetMetaData()}</li>
+ * <li>{@link #setFillResultSetMetaData(boolean)}</li>
+ * <li>{@link #getGzipResult()}</li>
  * <li>{@link #setGzipResult(boolean)}</li>
+ * <li>{@link #getProgress()}</li>
  * <li>{@link #setProgress(AtomicInteger)}</li>
  * </ul>
  * <p>
