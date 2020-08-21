@@ -18,6 +18,8 @@
  */
 package com.aceql.client.metadata.dto;
 
+import com.aceql.client.metadata.JdbcDatabaseMetaData;
+
 public class JdbcDatabaseMetaDataDto {
 
     private String status = "OK";

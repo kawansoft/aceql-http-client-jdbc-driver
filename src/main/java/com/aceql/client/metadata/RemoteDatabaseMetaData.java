@@ -33,6 +33,7 @@ import com.aceql.client.jdbc.AceQLConnection;
 import com.aceql.client.jdbc.AceQLConnectionWrapper;
 import com.aceql.client.jdbc.AceQLException;
 import com.aceql.client.jdbc.http.AceQLHttpApi;
+import com.aceql.client.metadata.dto.JdbcDatabaseMetaDataDto;
 import com.aceql.client.metadata.dto.TableDto;
 import com.aceql.client.metadata.dto.TableNamesDto;
 
@@ -120,6 +121,19 @@ public class RemoteDatabaseMetaData {
      */
     public void dbSchemaDownload(File file) throws IOException, AceQLException {
 	dbSchemaDownload(file, "html", null);
+    }
+
+    /**
+     * Returns the basic meta data values of the remote database, as sent by the the
+     * remote JDBC Driver of the remote database.
+     *
+     * @return the basic meta data values sent by the the remote JDBC Driver of the
+     *         remote database.
+     * @throws AceQLException if any Exception occurs
+     */
+    public JdbcDatabaseMetaData getJdbcDatabaseMetaData() throws AceQLException {
+	JdbcDatabaseMetaDataDto jdbcDatabaseMetaDataDto = aceQLHttpApi.getDbMetadata();
+	return jdbcDatabaseMetaDataDto.getJdbcDatabaseMetaData();
     }
 
     /**

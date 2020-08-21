@@ -25,7 +25,6 @@ import java.net.Proxy;
 import java.net.URLConnection;
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -38,8 +37,6 @@ import org.kawanfw.driver.jdbc.abstracts.AbstractConnection;
 import com.aceql.client.jdbc.http.AceQLHttpApi;
 import com.aceql.client.jdbc.util.AceQLConnectionUtil;
 import com.aceql.client.metadata.RemoteDatabaseMetaData;
-import com.aceql.client.metadata.dto.JdbcDatabaseMetaData;
-import com.aceql.client.metadata.dto.JdbcDatabaseMetaDataDto;
 
 /**
  * Provides a <code>Connection</code> implementation that enable to use a
@@ -328,24 +325,6 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     }
 
 
-    /*
-     * (non-Javadoc)
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#getMetaData()
-     */
-    @Override
-    public DatabaseMetaData getMetaData() throws SQLException {
-
-	if (! AceQLConnectionUtil.isJdbcMetaDataSupported(this)) {
-	    throw new SQLException("AceQL Server version mut be > " + AceQLConnectionUtil.META_DATA_CALLS_MIN_SERVER_VERSION + " in order to call Connection.getMetaData().");
-	}
-
-	JdbcDatabaseMetaDataDto jdbcDatabaseMetaDataDto = aceQLHttpApi.getDbMetadata();
-	JdbcDatabaseMetaData jdbcDatabaseMetaData =  jdbcDatabaseMetaDataDto.getJdbcDatabaseMetaData();
-
-	AceQLDatabaseMetaData aceQLDatabaseMetaData = new AceQLDatabaseMetaData(this, jdbcDatabaseMetaData);
-	return aceQLDatabaseMetaData;
-    }
-
     /**
      * Returns a RemoteDatabaseMetaData instance in order to retrieve metadata info for all client SDKs.
      *
@@ -608,22 +587,22 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	aceQLHttpApi.setTraceOn(traceOn);
     }
 
-    /**
-     * Says if the server will fill the {@code ResultSetMetaData} along with the {@code ResultSet} when a {@code SELECT} is done.
-     * @return {@code true} if the server will fill the {@code ResultSetMetaData} along with the {@code ResultSet} when a SELECT is done, else {@code false}.
-     */
-     public boolean isFillResultSetMetaData() {
-         return aceQLHttpApi.isFillResultSetMetaData();
-     }
+//    /**
+//     * Says if the server will fill the {@code ResultSetMetaData} along with the {@code ResultSet} when a {@code SELECT} is done.
+//     * @return {@code true} if the server will fill the {@code ResultSetMetaData} along with the {@code ResultSet} when a SELECT is done, else {@code false}.
+//     */
+//     public boolean isFillResultSetMetaData() {
+//         return aceQLHttpApi.isFillResultSetMetaData();
+//     }
 
-    /**
-     * Says if the server will fill the {@code ResultSetMetaData} along with the {@code ResultSet} when a SELECT is done.
-     * Defaults to {@code false}.
-     * @param fillResultSetMetaData if true, server side will return along
-     */
-    public void setFillResultSetMetaData(boolean fillResultSetMetaData) {
-	aceQLHttpApi.setFillResultSetMetaData(fillResultSetMetaData);
-    }
+//    /**
+//     * Says if the server will fill the {@code ResultSetMetaData} along with the {@code ResultSet} when a SELECT is done.
+//     * Defaults to {@code false}.
+//     * @param fillResultSetMetaData if true, server side will return along
+//     */
+//    public void setFillResultSetMetaData(boolean fillResultSetMetaData) {
+//	aceQLHttpApi.setFillResultSetMetaData(fillResultSetMetaData);
+//    }
 
     /**
      * Says the query result is returned compressed with the GZIP file format.

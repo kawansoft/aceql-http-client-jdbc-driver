@@ -34,12 +34,8 @@ import java.util.Map;
 import org.kawanfw.driver.jdbc.abstracts.AbstractResultSet;
 
 import com.aceql.client.jdbc.http.AceQLHttpApi;
-import com.aceql.client.jdbc.metadata.ResultSetMetaDataHolder;
-import com.aceql.client.jdbc.util.AceQLConnectionUtil;
 import com.aceql.client.jdbc.util.AceQLResultSetUtil;
-import com.aceql.client.jdbc.util.json.ResultSetMetaDataParser;
 import com.aceql.client.jdbc.util.json.RowParser;
-import com.aceql.client.metadata.util.GsonWsUtil;
 
 /**
  * Class that allows to built a {@code ResultSet} from a JSON file or JSON
@@ -67,13 +63,18 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 
     private RowParser rowParser;
 
+    // Futur usage
+    @SuppressWarnings("unused")
     private AceQLConnection aceQLConnection;
     private AceQLHttpApi aceQLHttpApi ;
 
     /** Says if the last accessed value was null */
     private boolean wasNull = false;
 
-    private AceQLResultSetMetaData aceQLResultSetMetaData;
+
+    // Futur usage
+    @SuppressWarnings("unused")
+    private ResultSetMetaData resultSetMetaData;
 
 
 
@@ -160,19 +161,6 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	debug("Elapsed = " + (end - begin));
     }
 
-    /*
-     * (non-Javadoc)
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getMetaData()
-     */
-    @Override
-    public ResultSetMetaData getMetaData() throws SQLException {
-
-	if (! AceQLConnectionUtil.isJdbcMetaDataSupported(aceQLConnection)) {
-	    throw new SQLException("AceQL Server version mut be > " + AceQLConnectionUtil.META_DATA_CALLS_MIN_SERVER_VERSION + " in order to call ResultSetMetaData.getMetaData().");
-	}
-
-	return this.aceQLResultSetMetaData;
-    }
 
     /**
      * Builds the ResultSetMetaData instance from the ResultSet file passed at constructor.
@@ -180,15 +168,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
      * @throws SQLException
      */
     private void buildResultSetMetaData(File jsonFile) throws SQLException {
-	ResultSetMetaDataParser resultSetMetaDataParser = new ResultSetMetaDataParser(jsonFile);
-	String jsonString = resultSetMetaDataParser.getJsonString();
-	if (jsonString != null) {
-	    ResultSetMetaDataHolder resultSetMetaDataHolder = GsonWsUtil.fromJson(jsonString, ResultSetMetaDataHolder.class);
-	    this.aceQLResultSetMetaData = new AceQLResultSetMetaData(resultSetMetaDataHolder);
-	}
-	else {
-	    this.aceQLResultSetMetaData = null;
-	}
+
     }
 
     /**

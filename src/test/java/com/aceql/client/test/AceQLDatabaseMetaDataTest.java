@@ -67,7 +67,6 @@ public class AceQLDatabaseMetaDataTest {
 	connection = ConnectionBuilder.createOnConfig();
 
 	((AceQLConnection) connection).setTraceOn(false);
-	((AceQLConnection) connection).setFillResultSetMetaData(true); // Required to read ResultSeMetaData
 
 	System.out.println(new Date() + " Begin");
 
@@ -77,6 +76,13 @@ public class AceQLDatabaseMetaDataTest {
 	System.out.println("aceQLConnection.getClientVersion(): " + ((AceQLConnection) connection).getClientVersion());
 	System.out.println();
 	System.out.println("connection.getCatalog(): " + connection.getCatalog());
+
+	boolean testAllMetaData = false;
+	if (! testAllMetaData) {
+	    return;
+	}
+
+	// Futur usage
 	System.out.println("connection.getSchema() : " + connection.getSchema());
 	System.out.println();
 
