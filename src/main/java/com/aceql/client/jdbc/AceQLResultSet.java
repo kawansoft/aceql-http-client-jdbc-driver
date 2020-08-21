@@ -109,8 +109,6 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 		.getConnection();
 	this.aceQLHttpApi = aceQLConnection.aceQLHttpApi;
 
-	buildResultSetMetaData(jsonFile);
-
 	this.rowParser = new RowParser(jsonFile);
 
 	long begin = System.currentTimeMillis();
@@ -148,7 +146,6 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	AceQLConnectionWrapper aceQLConnectionWrapper = new AceQLConnectionWrapper(aceQLConnection);
 	this.aceQLHttpApi = aceQLConnectionWrapper.getAceQLHttpApi();
 
-	buildResultSetMetaData(jsonFile);
 	this.rowParser = new RowParser(jsonFile);
 
 	long begin = System.currentTimeMillis();
@@ -159,16 +156,6 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	long end = System.currentTimeMillis();
 	debug(new java.util.Date() + " End getRowCount: " + rowCount);
 	debug("Elapsed = " + (end - begin));
-    }
-
-
-    /**
-     * Builds the ResultSetMetaData instance from the ResultSet file passed at constructor.
-     * @param jsonFile
-     * @throws SQLException
-     */
-    private void buildResultSetMetaData(File jsonFile) throws SQLException {
-
     }
 
     /**

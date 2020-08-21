@@ -77,14 +77,14 @@ public class AceQLDatabaseMetaDataTest {
 	System.out.println();
 	System.out.println("connection.getCatalog(): " + connection.getCatalog());
 
-	boolean testAllMetaData = false;
-	if (! testAllMetaData) {
-	    return;
-	}
-
 	// Futur usage
 	System.out.println("connection.getSchema() : " + connection.getSchema());
 	System.out.println();
+
+	boolean testAllMetaData = true;
+	if (! testAllMetaData) {
+	    return;
+	}
 
 	DatabaseMetaData databaseMetaData = connection.getMetaData();
 	System.out
