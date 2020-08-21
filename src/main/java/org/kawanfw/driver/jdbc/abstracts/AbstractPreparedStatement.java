@@ -786,7 +786,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
     }
 
     /**
-     * Retrieves a <code>ResultSetMetaDataHttp</code> object that contains
+     * Retrieves a <code>AceQLResultSetMetaData</code> object that contains
      * information about the columns of the <code>ResultSet</code> object that
      * will be returned when this <code>PreparedStatement</code> object is
      * executed.
@@ -804,7 +804,7 @@ public abstract class AbstractPreparedStatement extends AbstractStatement
      *
      * @return the description of a <code>ResultSet</code> object's columns or
      *         <code>null</code> if the driver cannot return a
-     *         <code>ResultSetMetaDataHttp</code> object
+     *         <code>AceQLResultSetMetaData</code> object
      * @exception SQLException
      *                if a database access error occurs
      * @since 1.2

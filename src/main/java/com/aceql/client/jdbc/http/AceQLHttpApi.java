@@ -35,6 +35,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.kawanfw.sql.version.VersionValues;
 
 import com.aceql.client.jdbc.AceQLException;
@@ -76,11 +77,14 @@ public class AceQLHttpApi {
 
     private String url = null;
 
+    private boolean fillResultSetMetaData;
+
     private AtomicBoolean cancelled;
     private AtomicInteger progress;
 
     /* The HttpManager */
     private HttpManager httpManager;
+
 
     /**
      * Sets the read timeout.
@@ -109,28 +113,6 @@ public class AceQLHttpApi {
 	AceQLHttpApi.connectTimeout = connectTimeout;
     }
 
-    /**
-     * Login on the AceQL server and connect to a database
-     *
-     * @param serverUrl              the url of the AceQL server. Example:
-     *                               http://localhost:9090/aceql
-     * @param database               the server database to connect to.
-     * @param username               the login
-     * @param password               the password
-     * @param proxy                  the proxy to use. null if none.
-     * @param passwordAuthentication the username and password holder to use for
-     *                               authenticated proxy. Null if no proxy or if
-     *                               proxy
-     * @throws AceQLException if any Exception occurs
-     * @deprecated Use
-     *             {@link #AceQLHttpApi(String,String,String,char[],String,Proxy,PasswordAuthentication)}
-     *             instead
-     */
-    @Deprecated
-    public AceQLHttpApi(String serverUrl, String database, String username, char[] password, Proxy proxy,
-	    PasswordAuthentication passwordAuthentication) throws AceQLException {
-	this(serverUrl, database, username, password, null, proxy, passwordAuthentication);
-    }
 
     /**
      * Login on the AceQL server and connect to a database
@@ -412,13 +394,32 @@ public class AceQLHttpApi {
     }
 
     /**
-     * Define if result sets are compressed before download. Defaults to true.
+     * Defines if result sets are compressed before download. Defaults to true.
      *
      * @param gzipResult if true, sets are compressed before download
      */
     public void setGzipResult(boolean gzipResult) {
 	this.gzipResult = gzipResult;
     }
+
+
+   /**
+    * Returns {@code true} if the server will fill the {@code ResultSetMetaData} along with the {@code ResultSet} when a SELECT is done.
+    * @return {@code true} if the server will fill the {@code ResultSetMetaData} along with the {@code ResultSet} when a SELECT is done.
+    */
+    public boolean isFillResultSetMetaData() {
+        return fillResultSetMetaData;
+    }
+
+    /**
+     * Says if the server will fill the {@code ResultSetMetaData} along with the {@code ResultSet} when a SELECT is done.
+     * Defaults to {@code false}.
+     * @param fillResultSetMetaData if true, server side will return along
+     */
+    public void setFillResultSetMetaData(boolean fillResultSetMetaData) {
+	this.fillResultSetMetaData = fillResultSetMetaData;
+    }
+
 
     /**
      * Calls /get_version API
@@ -428,6 +429,18 @@ public class AceQLHttpApi {
     public String getServerVersion() throws AceQLException {
 	String result = callApiWithResult("get_version", null);
 	return result;
+    }
+
+    /**
+     * Returns the server version as a number.
+     * @return the server version as a number.
+     * @throws AceQLException
+     */
+    public double getServerVersionNumber() throws AceQLException {
+	String serverVersion = getServerVersion();
+	String rawVersion = StringUtils.substringBetween(serverVersion, "v", "-").trim();
+	Double version = Double.parseDouble(rawVersion);
+	return version;
     }
 
     /**
@@ -570,6 +583,25 @@ public class AceQLHttpApi {
 	String result = callApiWithResult("get_transaction_isolation_level", null);
 	return result;
     }
+
+    /**
+     *  Calls /get_catalog API
+     * @return
+     */
+    public String getCatalog() throws AceQLException {
+	String result = callApiWithResult("get_catalog", null);
+	return result;
+    }
+
+    /**
+     *  Calls /get_schema API
+     * @return
+     */
+    public String getSchema() throws AceQLException {
+	String result = callApiWithResult("get_schema", null);
+	return result;
+    }
+
 
     /**
      * Calls /execute_update API
@@ -715,6 +747,7 @@ public class AceQLHttpApi {
 	    parametersMap.put("prepared_statement", "" + isPreparedStatement);
 	    parametersMap.put("stored_procedure", "" + isStoredProcedure);
 	    parametersMap.put("gzip_result", "" + gzipResult);
+	    parametersMap.put("fill_result_set_meta_data", "" + fillResultSetMetaData);
 	    parametersMap.put("pretty_printing", "" + prettyPrinting);
 
 	    // Add the statement parameters map
@@ -863,6 +896,7 @@ public class AceQLHttpApi {
 	return aceQLMetadataApi.dbSchemaDownload(format, tableName);
     }
 
+
     public JdbcDatabaseMetaDataDto getDbMetadata() throws AceQLException {
 	AceQLMetadataApi aceQLMetadataApi = new AceQLMetadataApi(httpManager, url);
 	return aceQLMetadataApi.getDbMetadata();
@@ -878,6 +912,11 @@ public class AceQLHttpApi {
 	return aceQLMetadataApi.getTable(tableName);
     }
 
+    public InputStream callDatabaseMetaDataMethod(String jsonDatabaseMetaDataMethodCallDTO)  throws AceQLException {
+	AceQLMetadataApi aceQLMetadataApi = new AceQLMetadataApi(httpManager, url);
+	return aceQLMetadataApi.callDatabaseMetaDataMethod(jsonDatabaseMetaDataMethodCallDTO);
+    }
+
     public int getHttpStatusCode() {
 	return httpManager.getHttpStatusCode();
     }
@@ -888,5 +927,9 @@ public class AceQLHttpApi {
     public String getHttpStatusMessage() {
 	return httpManager.getHttpStatusMessage();
     }
+
+
+
+
 
 }

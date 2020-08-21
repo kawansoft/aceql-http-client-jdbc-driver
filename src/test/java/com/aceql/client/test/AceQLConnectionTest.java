@@ -61,7 +61,7 @@ public class AceQLConnectionTest {
 	new File(ConnectionParms.IN_DIRECTORY).mkdirs();
 	new File(ConnectionParms.OUT_DIRECTORY).mkdirs();
 
-	boolean falseQuery = false;
+	boolean falseQuery = true;
 	boolean doSelectOnRegions = false;
 	boolean doInsertOnRegions = false;
 
@@ -96,6 +96,10 @@ public class AceQLConnectionTest {
 	SqlSelectTest sqlSelectTest = new SqlSelectTest(connection, System.out);
 	SqlBlobTest sqlBlobTest = new SqlBlobTest(connection, System.out);
 
+	System.out.println("catalog: " + connection.getCatalog());
+
+	falseQuery(falseQuery, sqlSelectTest);
+
 	int records = 300;
 
 	sqlDeleteTest.deleteCustomerAll();
@@ -113,8 +117,6 @@ public class AceQLConnectionTest {
 	connection.setAutoCommit(true);
 
 	sqlSelectTest.selectCustomerPreparedStatement();
-
-	falseQuery(falseQuery, sqlSelectTest);
 
 	File fileUpload = new File(ConnectionParms.IN_DIRECTORY + File.separator + "username_koala.jpg");
 	File fileDownload = new File(ConnectionParms.OUT_DIRECTORY + File.separator + "username_koala.jpg");
@@ -138,6 +140,8 @@ public class AceQLConnectionTest {
 	if (falseQuery) {
 	    try {
 		sqlSelectTest.selectOnTableNotExists();
+	    } catch (AceQLException aceQLException) {
+		System.err.println(aceQLException);
 	    } catch (Exception e) {
 		System.err.println(e);
 	    }

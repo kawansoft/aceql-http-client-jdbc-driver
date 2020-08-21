@@ -5,7 +5,7 @@
 
 # AceQL HTTP 
 
-## Java Client SDK v4.2 - July 2020, 18
+## Java Client SDK v4.3 - August 2020, 21
 
 <img src="https://www.aceql.com/favicon.png" alt="AceQ HTTP Icon"/>
 
@@ -92,7 +92,7 @@ Note that we will soon release a real JDBC Driver. Please contact us at [contact
 <dependency>
     <groupId>com.aceql</groupId>
     <artifactId>aceql-http-client-sdk</artifactId>
-    <version>4.2</version>
+    <version>4.3</version>
 </dependency>
 ```
 ### Single Jar 

@@ -172,38 +172,76 @@ public class StreamResultAnalyzer {
     private void parseErrorKeywords(JsonParser parser, JsonParser.Event event) {
 	while (parser.hasNext()) {
 
-	    if (parser.hasNext())
+	    if (parser.hasNext()) {
 		event = parser.next();
-	    else
+	    }
+	    else {
 		return;
+	    }
 
 	    if (event != JsonParser.Event.KEY_NAME && event != JsonParser.Event.VALUE_STRING
 		    && event != JsonParser.Event.VALUE_NUMBER) {
 		continue;
 	    }
 
-	    if (parser.getString().equals("error_type")) {
-		if (parser.hasNext())
-		    parser.next();
-		else
-		    return;
-		this.errorType = parser.getString();
+	    if (! treatErrorType(parser)) {
+		return;
 	    }
-	    if (parser.getString().equals("error_message")) {
-		if (parser.hasNext())
-		    parser.next();
-		else
-		    return;
-		this.errorMessage = parser.getString();
+	    if (! treatErrorMessage(parser)) {
+		return;
 	    }
-	    if (parser.getString().equals("stack_trace")) {
-		if (parser.hasNext())
-		    parser.next();
-		else
-		    return;
-		this.stackTrace = parser.getString();
+	    if (! treatStackTrace(parser)) {
+		return;
 	    }
+
 	}
+    }
+
+    /**
+     * @param parser
+     */
+    private boolean treatStackTrace(JsonParser parser) {
+	if (parser.getString().equals("stack_trace")) {
+	    if (parser.hasNext()) {
+		parser.next();
+	    } else {
+		return false;
+	    }
+	    this.stackTrace = parser.getString();
+	}
+	return true;
+    }
+
+    /**
+     * @param parser
+     */
+    private boolean treatErrorMessage(JsonParser parser) {
+	if (parser.getString().equals("error_message")) {
+	    if (parser.hasNext()) {
+		parser.next();
+	    }
+	    else {
+		return false;
+	    }
+	    this.errorMessage = parser.getString();
+	}
+	return true;
+    }
+
+    /**
+     * @param parser
+     */
+    private boolean treatErrorType(JsonParser parser) {
+	if (parser.getString().equals("error_type")) {
+	    if (parser.hasNext()) {
+		parser.next();
+	    }
+	    else {
+		return false;
+	    }
+	    this.errorType = parser.getString();
+	}
+	return true;
     }
 
     public String getErrorMessage() {

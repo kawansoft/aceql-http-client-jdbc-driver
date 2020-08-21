@@ -1,25 +1,28 @@
 /*
  * This file is part of AceQL Client SDK.
- * AceQL Client SDK: Remote JDBC access over HTTP with AceQL HTTP.                                 
+ * AceQL Client SDK: Remote JDBC access over HTTP with AceQL HTTP.
  * Copyright (C) 2020,  KawanSoft SAS
- * (http://www.kawansoft.com). All rights reserved.                                
- *                                                                               
+ * (http://www.kawansoft.com). All rights reserved.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  */
 package com.aceql.client.jdbc.util;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+
+import com.aceql.client.jdbc.AceQLConnection;
+import com.aceql.client.jdbc.AceQLException;
 
 public class AceQLConnectionUtil {
 
@@ -28,6 +31,10 @@ public class AceQLConnectionUtil {
     private static final String TRANSACTION_REPEATABLE_READ_TEXT = "repeatable_read";
     private static final String TRANSACTION_READ_COMMITTED_TEXT = "read_committed";
     private static final String TRANSACTION_READ_UNCOMMITTED_TEXT = "read_uncommitted";
+
+    // Minimum version for Connection.getMetaData() and ResultSet.getMetaData()
+    public static final double META_DATA_CALLS_MIN_SERVER_VERSION = 6.0;
+    private static double SERVER_VERSION_NUMBER = 0;
 
     protected AceQLConnectionUtil() {
 
@@ -97,6 +104,21 @@ public class AceQLConnectionUtil {
 	    throw new IllegalArgumentException(
 		    "Unsupported Holdability: " + holdability);
 	}
+    }
+
+
+    /**
+     * Says it the server version supports JDBC MetaData calls. True if >= 6.0
+     * @param connection
+     * @return true if server version  >= 6.0
+     * @throws AceQLException
+     */
+    public static boolean isJdbcMetaDataSupported(Connection connection) throws AceQLException {
+	AceQLConnection aceqlConnection = (AceQLConnection)connection;
+	if (SERVER_VERSION_NUMBER == 0) {
+	    SERVER_VERSION_NUMBER = aceqlConnection.getServerVersionNumber();
+	}
+	return SERVER_VERSION_NUMBER >= META_DATA_CALLS_MIN_SERVER_VERSION;
     }
 
 }

@@ -42,6 +42,7 @@ import org.kawanfw.driver.jdbc.abstracts.AbstractPreparedStatement;
 import org.kawanfw.driver.util.FrameworkFileUtil;
 
 import com.aceql.client.jdbc.http.AceQLHttpApi;
+import com.aceql.client.jdbc.util.AceQLStatementUtil;
 import com.aceql.client.jdbc.util.AceQLTypes;
 import com.aceql.client.jdbc.util.json.PrepStatementParametersBuilder;
 import com.aceql.client.jdbc.util.json.SqlParameter;
@@ -395,7 +396,7 @@ class AceQLPreparedStatement extends AbstractPreparedStatement implements Prepar
 		    // Do not use resource try {} ==> We don't want to create an
 		    // empty file
 
-		    InputStream inFinal = AceQLStatement.getFinalInputStream(in, aceQLHttpApi.isGzipResult());
+		    InputStream inFinal = AceQLStatementUtil.getFinalInputStream(in, aceQLHttpApi.isGzipResult());
 		    IOUtils.copy(inFinal, out);
 		}
 	    }

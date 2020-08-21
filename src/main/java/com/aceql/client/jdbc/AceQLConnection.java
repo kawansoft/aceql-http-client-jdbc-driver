@@ -157,7 +157,7 @@ import com.aceql.client.metadata.RemoteDatabaseMetaData;
  * </pre>
  *
  * </blockquote> See the source code of
- * <a href= "http://www.aceql.com/rest/soft/5.0/src/SqlProgressMonitorDemo.java"
+ * <a href= "http://www.aceql.com/rest/soft/5.1/src/SqlProgressMonitorDemo.java"
  * >SqlProgressMonitorDemo.java</a> that demonstrates the use of atomic
  * variables when inserting a Blob.
  *
@@ -323,8 +323,9 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	this.aceQLHttpApi = aceQLHttpApi;
     }
 
+
     /**
-     * Returns a RemoteDatabaseMetaData instance in order to retrieve metadata info.
+     * Returns a RemoteDatabaseMetaData instance in order to retrieve metadata info for all client SDKs.
      *
      * @return a RemoteDatabaseMetaData instance in order to retrieve metadata info.
      */
@@ -466,6 +467,25 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	return AceQLConnectionUtil.getTransactionIsolation(result);
     }
 
+
+    /*
+     * (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#getCatalog()
+     */
+    @Override
+    public String getCatalog() throws SQLException {
+	return aceQLHttpApi.getCatalog();
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#getSchema()
+     */
+    @Override
+    public String getSchema() throws SQLException {
+	return aceQLHttpApi.getSchema();
+    }
+
     /*
      * (non-Javadoc)
      *
@@ -538,6 +558,16 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	return aceQLHttpApi.getServerVersion();
     }
 
+
+    /**
+     * Returns the server product version number. Allows comparisons.
+     * @return the server product version number.
+     * @throws AceQLException if any Exception occurs
+     */
+    public double getServerVersionNumber() throws AceQLException {
+	return aceQLHttpApi.getServerVersionNumber();
+    }
+
     /**
      * Says if trace is on
      *
@@ -556,9 +586,35 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	aceQLHttpApi.setTraceOn(traceOn);
     }
 
+//    /**
+//     * Says if the server will fill the {@code ResultSetMetaData} along with the {@code ResultSet} when a {@code SELECT} is done.
+//     * @return {@code true} if the server will fill the {@code ResultSetMetaData} along with the {@code ResultSet} when a SELECT is done, else {@code false}.
+//     */
+//     public boolean isFillResultSetMetaData() {
+//         return aceQLHttpApi.isFillResultSetMetaData();
+//     }
+
+//    /**
+//     * Says if the server will fill the {@code ResultSetMetaData} along with the {@code ResultSet} when a SELECT is done.
+//     * Defaults to {@code false}.
+//     * @param fillResultSetMetaData if true, server side will return along
+//     */
+//    public void setFillResultSetMetaData(boolean fillResultSetMetaData) {
+//	aceQLHttpApi.setFillResultSetMetaData(fillResultSetMetaData);
+//    }
+
+    /**
+     * Says the query result is returned compressed with the GZIP file format.
+     *
+     * @return {@code true} if the query result is returned compressed with the GZIP file format, else {@code false}
+     */
+    public boolean isGzipResult() {
+	return aceQLHttpApi.isGzipResult();
+    }
+
     /**
      * Define if SQL result sets are returned compressed with the GZIP file format
-     * before download. Defaults to true.
+     * before download. Defaults to {@code true}.
      *
      * @param gzipResult if true, sets are compressed before download
      */

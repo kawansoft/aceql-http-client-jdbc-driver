@@ -38,7 +38,7 @@ import com.aceql.client.metadata.dto.TableDto;
 import com.aceql.client.metadata.dto.TableNamesDto;
 
 /**
- * Allows to retrieve metadata info of the remote SQL database:
+ * Allows to easily retrieve metadata info of the remote SQL database:
  * <ul>
  * <li>Schema description in HTML or Text format.</li>
  * <li>Databases object wrappers: Tables, Columns, Indexes, etc.</li>

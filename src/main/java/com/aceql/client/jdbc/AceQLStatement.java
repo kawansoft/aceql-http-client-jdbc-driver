@@ -21,7 +21,6 @@ package com.aceql.client.jdbc;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.sql.Connection;
@@ -31,13 +30,13 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.zip.GZIPInputStream;
 
 import org.apache.commons.io.IOUtils;
 import org.kawanfw.driver.jdbc.abstracts.AbstractStatement;
 import org.kawanfw.driver.util.FrameworkFileUtil;
 
 import com.aceql.client.jdbc.http.AceQLHttpApi;
+import com.aceql.client.jdbc.util.AceQLStatementUtil;
 import com.aceql.client.jdbc.util.json.StreamResultAnalyzer;
 
 /**
@@ -103,7 +102,7 @@ class AceQLStatement extends AbstractStatement implements Statement {
 		    statementParameters); OutputStream out = new BufferedOutputStream(new FileOutputStream(file));) {
 
 		if (in != null) {
-		    InputStream inFinal = AceQLStatement.getFinalInputStream(in, aceQLHttpApi.isGzipResult());
+		    InputStream inFinal = AceQLStatementUtil.getFinalInputStream(in, aceQLHttpApi.isGzipResult());
 		    IOUtils.copy(inFinal, out);
 		}
 	    }
@@ -125,17 +124,6 @@ class AceQLStatement extends AbstractStatement implements Statement {
 	    throw new AceQLException(e.getMessage(), 0, e, null, aceQLHttpApi.getHttpStatusCode());
 	}
 
-    }
-
-    public static InputStream getFinalInputStream(InputStream in, boolean gzipResult) throws IOException {
-
-	InputStream inFinal = null;
-	if (!gzipResult) {
-	    inFinal = in;
-	} else {
-	    inFinal = new GZIPInputStream(in);
-	}
-	return inFinal;
     }
 
     /*

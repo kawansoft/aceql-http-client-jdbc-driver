@@ -25,6 +25,7 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
@@ -43,12 +44,12 @@ import com.aceql.client.jdbc.util.json.RowParser;
  * @author Nicolas de Pomereu
  *
  */
-class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
+public class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
 
     public boolean DEBUG = false;
 
     /** A File containing the result set returned by an /execute_query call */
-    public File jsonFile = null;
+    public File jsonFile;
 
     private int rowCount = 0;
     private int currentRowNum = 0;
@@ -56,16 +57,26 @@ class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
     // public Map<String, String> valuesPerColName;
     public Map<Integer, String> valuesPerColIndex;
 
-    private boolean isClosed = false;
+    private boolean isClosed;
 
-    private Statement statement = null;
+    private Statement statement;
 
     private RowParser rowParser;
 
-    private AceQLHttpApi aceQLHttpApi = null;
+    // Futur usage
+    @SuppressWarnings("unused")
+    private AceQLConnection aceQLConnection;
+    private AceQLHttpApi aceQLHttpApi ;
 
     /** Says if the last accessed value was null */
     private boolean wasNull = false;
+
+
+    // Futur usage
+    @SuppressWarnings("unused")
+    private ResultSetMetaData resultSetMetaData;
+
+
 
     /**
      * Constructor.
@@ -98,6 +109,8 @@ class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
 		.getConnection();
 	this.aceQLHttpApi = aceQLConnection.aceQLHttpApi;
 
+	buildResultSetMetaData(jsonFile);
+
 	this.rowParser = new RowParser(jsonFile);
 
 	long begin = System.currentTimeMillis();
@@ -108,6 +121,54 @@ class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
 	long end = System.currentTimeMillis();
 	debug(new java.util.Date() + " End getRowCount: " + rowCount);
 	debug("Elapsed = " + (end - begin));
+    }
+
+
+
+    /**
+     * Constructor. To be used when calling a remote DatabaseMetaData method that returns a ResultSet.
+     * @param jsonFile
+     * @param aceQLConnection
+     * @param rowCount
+     * @throws SQLException
+     */
+    public AceQLResultSet(File jsonFile, AceQLConnection aceQLConnection, int rowCount) throws SQLException {
+	if (jsonFile == null) {
+	    throw new SQLException("jsonFile is null!");
+	}
+
+	if (!jsonFile.exists()) {
+	    throw new SQLException(new FileNotFoundException(
+		    "jsonFile does not exist: " + jsonFile));
+	}
+
+	this.jsonFile = jsonFile;
+	this.statement = null;
+	this.aceQLConnection = aceQLConnection;
+	AceQLConnectionWrapper aceQLConnectionWrapper = new AceQLConnectionWrapper(aceQLConnection);
+	this.aceQLHttpApi = aceQLConnectionWrapper.getAceQLHttpApi();
+
+	buildResultSetMetaData(jsonFile);
+	this.rowParser = new RowParser(jsonFile);
+
+	long begin = System.currentTimeMillis();
+	debug(new java.util.Date() + " Begin getRowCount");
+
+	this.rowCount = rowCount;
+
+	long end = System.currentTimeMillis();
+	debug(new java.util.Date() + " End getRowCount: " + rowCount);
+	debug("Elapsed = " + (end - begin));
+    }
+
+
+    /**
+     * Builds the ResultSetMetaData instance from the ResultSet file passed at constructor.
+     * @param jsonFile
+     * @throws SQLException
+     */
+    private void buildResultSetMetaData(File jsonFile) throws SQLException {
+
     }
 
     /**
