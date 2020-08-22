@@ -1,6 +1,8 @@
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/1768a87595f74c9391933a85b90dc20c)](https://www.codacy.com/gh/kawansoft/aceql-http-client-sdk?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=kawansoft/aceql-http-client-sdk&amp;utm_campaign=Badge_Grade) ![GitHub top language](https://img.shields.io/github/languages/top/kawansoft/aceql-http-client-sdk) ![GitHub issues](https://img.shields.io/github/issues/kawansoft/aceql-http-client-sdk) 
+![GitHub top language](https://img.shields.io/github/languages/top/kawansoft/aceql-http-client-sdk) ![GitHub issues](https://img.shields.io/github/issues/kawansoft/aceql-http-client-sdk) 
 ![GitHub](https://img.shields.io/github/license/kawansoft/aceql-http-client-sdk) ![Maven Central](https://img.shields.io/maven-central/v/com.aceql/aceql-http-client-sdk)
-![GitHub last commit (branch)](https://img.shields.io/github/last-commit/kawansoft/aceql-http-client-sdk/master) ![GitHub contributors](https://img.shields.io/github/contributors/kawansoft/aceql-http-client-sdk)
+![GitHub last commit (branch)](https://img.shields.io/github/last-commit/kawansoft/aceql-http-client-sdk/master)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/1768a87595f74c9391933a85b90dc20c)](https://www.codacy.com/gh/kawansoft/aceql-http-client-sdk?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=kawansoft/aceql-http-client-sdk&amp;utm_campaign=Badge_Grade)
+![GitHub contributors](https://img.shields.io/github/contributors/kawansoft/aceql-http-client-sdk)
 
 
 # AceQL HTTP 
