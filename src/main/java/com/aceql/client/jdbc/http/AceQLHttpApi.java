@@ -604,6 +604,61 @@ public class AceQLHttpApi {
 
 
     /**
+     * Calls /execute API
+     *
+     * @param sql                 an SQL <code>INSERT</code>, <code>UPDATE</code> or
+     *                            <code>DELETE</code> statement or an SQL statement
+     *                            that returns nothing
+     * @param isPreparedStatement if true, the server will generate a prepared
+     *                            statement, else a simple statement
+     * @param statementParameters the statement parameters in JSON format. Maybe
+     *                            null for simple statement call.
+     * @return the input stream containing either an error, or the result set in
+     *         JSON format. See user documentation.
+     * @throws AceQLException if any Exception occurs
+     */
+    public InputStream execute(String sql, boolean isPreparedStatement, Map<String, String> statementParameters) throws AceQLException {
+
+	try {
+	    if (sql == null) {
+		Objects.requireNonNull(sql, "sql cannot be null!");
+	    }
+
+	    String action = "execute";
+
+	    Map<String, String> parametersMap = new HashMap<String, String>();
+	    parametersMap.put("sql", sql);
+	    parametersMap.put("prepared_statement", "" + isPreparedStatement);
+	    parametersMap.put("stored_procedure", "" + false);
+	    parametersMap.put("gzip_result", "" + false); // Always false
+	    parametersMap.put("fill_result_set_meta_data", "" + fillResultSetMetaData);
+	    parametersMap.put("pretty_printing", "" + prettyPrinting);
+
+	    // Add the statement parameters map
+	    if (statementParameters != null) {
+		parametersMap.putAll(statementParameters);
+	    }
+
+	    trace("sql: " + sql);
+	    trace("statement_parameters: " + statementParameters);
+
+	    URL theUrl = new URL(url + action);
+	    InputStream in = httpManager.callWithPost(theUrl, parametersMap);
+	    return in;
+
+	} catch (Exception e) {
+	    if (e instanceof AceQLException) {
+		throw (AceQLException) e;
+	    } else {
+		throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
+	    }
+	}
+
+    }
+
+
+
+    /**
      * Calls /execute_update API
      *
      * @param sql                   an SQL <code>INSERT</code>, <code>UPDATE</code>
@@ -680,44 +735,6 @@ public class AceQLHttpApi {
     }
 
     /**
-     * Update the Map of callable OUT parameters using the result string in
-     * ResultAnalyzer
-     *
-     * @param resultAnalyzer        the JSON container sent by the server afte the
-     *                              update
-     * @param callableOutParameters the OUT parameters to update after the execute.
-     * @throws AceQLException if server does not return awaited OUT parameters
-     */
-    private static synchronized void updateOutParameters(ResultAnalyzer resultAnalyzer,
-	    Map<Integer, SqlParameter> callableOutParameters) throws AceQLException {
-
-	// Immediate return in case no out parameters set by user
-	if (callableOutParameters == null || callableOutParameters.isEmpty()) {
-	    return;
-	}
-
-	Map<Integer, String> parametersOutPerIndexAfterExecute = resultAnalyzer.getParametersOutPerIndex();
-
-	// Immediate return in case no parameters. This can not happen if
-	// callableOutParameters is not empty
-	if (parametersOutPerIndexAfterExecute == null || parametersOutPerIndexAfterExecute.isEmpty()) {
-	    throw new AceQLException("No stored procedure out parameters returned by AceQL Server", 4, null, null,
-		    HttpURLConnection.HTTP_OK);
-	}
-
-	for (Integer key : callableOutParameters.keySet()) {
-	    if (parametersOutPerIndexAfterExecute.containsKey(key)) {
-		SqlParameter sqlParameter = callableOutParameters.get(key);
-		SqlParameter sqlParameterNew = new SqlParameter(key, sqlParameter.getParameterType(),
-			parametersOutPerIndexAfterExecute.get(key));
-		// Put back new value
-		callableOutParameters.put(key, sqlParameterNew);
-	    }
-	}
-
-    }
-
-    /**
      * Calls /execute_query API
      *
      * @param sql                 an SQL <code>INSERT</code>, <code>UPDATE</code> or
@@ -771,6 +788,46 @@ public class AceQLHttpApi {
 	}
 
     }
+
+    /**
+     * Update the Map of callable OUT parameters using the result string in
+     * ResultAnalyzer
+     *
+     * @param resultAnalyzer        the JSON container sent by the server afte the
+     *                              update
+     * @param callableOutParameters the OUT parameters to update after the execute.
+     * @throws AceQLException if server does not return awaited OUT parameters
+     */
+    private static synchronized void updateOutParameters(ResultAnalyzer resultAnalyzer,
+	    Map<Integer, SqlParameter> callableOutParameters) throws AceQLException {
+
+	// Immediate return in case no out parameters set by user
+	if (callableOutParameters == null || callableOutParameters.isEmpty()) {
+	    return;
+	}
+
+	Map<Integer, String> parametersOutPerIndexAfterExecute = resultAnalyzer.getParametersOutPerIndex();
+
+	// Immediate return in case no parameters. This can not happen if
+	// callableOutParameters is not empty
+	if (parametersOutPerIndexAfterExecute == null || parametersOutPerIndexAfterExecute.isEmpty()) {
+	    throw new AceQLException("No stored procedure out parameters returned by AceQL Server", 4, null, null,
+		    HttpURLConnection.HTTP_OK);
+	}
+
+	for (Integer key : callableOutParameters.keySet()) {
+	    if (parametersOutPerIndexAfterExecute.containsKey(key)) {
+		SqlParameter sqlParameter = callableOutParameters.get(key);
+		SqlParameter sqlParameterNew = new SqlParameter(key, sqlParameter.getParameterType(),
+			parametersOutPerIndexAfterExecute.get(key));
+		// Put back new value
+		callableOutParameters.put(key, sqlParameterNew);
+	    }
+	}
+
+    }
+
+
 
     /**
      * Calls /blob_upload API.

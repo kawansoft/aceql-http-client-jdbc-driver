@@ -408,7 +408,6 @@ public class StreamResultAnalyzer {
 		}
 	    }
 	}
-
     }
 
     /**
@@ -419,6 +418,87 @@ public class StreamResultAnalyzer {
 	if (DEBUG) {
 	    System.out.println(new Date() + " " + s);
 	}
+    }
+
+    /**
+     * Says if the content is a ResultSet, aka ith as the "query_rows" key name
+     * @return
+     */
+    public boolean isResultSet() {
+	// If file does not exist ==> http failure
+	if (!jsonFile.exists()) {
+
+	    this.errorType = "0";
+	    errorMessage = "Unknown error.";
+	    if (httpStatusCode != HttpURLConnection.HTTP_OK) {
+		errorMessage = "HTTP FAILURE " + httpStatusCode + " (" + httpStatusMessage + ")";
+	    }
+	    return false;
+	}
+
+	debug("");
+	Reader reader = null;
+
+	try {
+	    try {
+		reader = new InputStreamReader(new FileInputStream(jsonFile), "UTF-8");
+	    } catch (Exception e) {
+		throw new SQLException(e);
+	    }
+
+	    JsonParser parser = Json.createParser(reader);
+
+	    while (parser.hasNext()) {
+		JsonParser.Event event = parser.next();
+		switch (event) {
+		case START_ARRAY:
+		case END_ARRAY:
+		case START_OBJECT:
+		case END_OBJECT:
+		case VALUE_FALSE:
+		case VALUE_NULL:
+		case VALUE_TRUE:
+		    // System.out.println("---" + event.toString());
+		    break;
+		case KEY_NAME:
+
+		    debug(event.toString() + " " + parser.getString() + " - ");
+		    if (parser.getString().equals("query_rows")) {
+			return true;
+		    }
+
+		    break;
+		case VALUE_STRING:
+		case VALUE_NUMBER:
+		    debug("Should not reach this:");
+		    debug(event.toString() + " " + parser.getString());
+		    break;
+		default:
+		    // Do nothing!
+		}
+	    }
+
+	    return false;
+	} catch (Exception e) {
+	    this.parseException = e;
+
+	    this.errorType = "0";
+	    errorMessage = "Unknown error";
+	    if (httpStatusCode != HttpURLConnection.HTTP_OK) {
+		errorMessage = "HTTP FAILURE " + httpStatusCode + " (" + httpStatusMessage + ")";
+	    }
+
+	    return false;
+	} finally {
+	    if (reader != null) {
+		try {
+		    reader.close();
+		} catch (Exception ignore) {
+		    // ignore
+		}
+	    }
+	}
+
     }
 
 }

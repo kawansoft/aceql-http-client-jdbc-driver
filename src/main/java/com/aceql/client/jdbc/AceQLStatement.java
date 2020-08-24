@@ -52,6 +52,10 @@ class AceQLStatement extends AbstractStatement implements Statement {
 
     private List<File> localResultSetFiles = new ArrayList<File>();
 
+    // For execute() command
+    private AceQLResultSet aceQLResultSet;
+    private int updateCount = -1;
+
     /**
      * Constructor
      *
@@ -61,6 +65,81 @@ class AceQLStatement extends AbstractStatement implements Statement {
 	this.aceQLConnection = aceQLConnection;
 	this.aceQLHttpApi = aceQLConnection.aceQLHttpApi;
     }
+
+
+    /*
+     * (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#execute(java.lang.String)
+     */
+    @Override
+    public boolean execute(String sql) throws SQLException {
+
+	aceQLResultSet = null;
+	updateCount = -1;
+
+	try {
+
+	    File file = buildtResultSetFile();
+	    this.localResultSetFiles.add(file);
+
+	    aceQLHttpApi.trace("file: " + file);
+
+	    boolean isPreparedStatement = false;
+	    Map<String, String> statementParameters = null;
+
+	    try (InputStream in = aceQLHttpApi.execute(sql, isPreparedStatement, statementParameters); OutputStream out = new BufferedOutputStream(new FileOutputStream(file));) {
+
+		if (in != null) {
+		    IOUtils.copy(in, out);
+		}
+	    }
+
+	    StreamResultAnalyzer streamResultAnalyzer = new StreamResultAnalyzer(file, aceQLHttpApi.getHttpStatusCode(),
+		    aceQLHttpApi.getHttpStatusMessage());
+	    if (!streamResultAnalyzer.isStatusOk()) {
+		throw new AceQLException(streamResultAnalyzer.getErrorMessage(), streamResultAnalyzer.getErrorId(),
+			null, streamResultAnalyzer.getStackTrace(), aceQLHttpApi.getHttpStatusCode());
+	    }
+
+	    boolean isResultSet = streamResultAnalyzer.isResultSet();
+	    int rowCount = streamResultAnalyzer.getRowCount();
+
+	    if (isResultSet)
+	    {
+		aceQLResultSet = new AceQLResultSet(file, this, rowCount);
+		return true;
+	    }
+	    else {
+		this.updateCount = rowCount;
+		return false;
+	    }
+
+	} catch (AceQLException aceQlException) {
+	    throw aceQlException;
+	} catch (Exception e) {
+	    throw new AceQLException(e.getMessage(), 0, e, null, aceQLHttpApi.getHttpStatusCode());
+	}
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#getResultSet()
+     */
+    @Override
+    public ResultSet getResultSet() throws SQLException {
+	return this.aceQLResultSet;
+    }
+
+
+    /*
+     * (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#getUpdateCount()
+     */
+    @Override
+    public int getUpdateCount() throws SQLException {
+	return this.updateCount;
+    }
+
 
     /*
      * (non-Javadoc)
