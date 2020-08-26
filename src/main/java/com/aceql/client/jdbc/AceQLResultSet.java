@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.kawanfw.driver.jdbc.abstracts.AbstractResultSet;
+import org.kawanfw.driver.util.Tag;
 
 import com.aceql.client.jdbc.http.AceQLHttpApi;
 import com.aceql.client.jdbc.util.AceQLResultSetUtil;
@@ -350,6 +351,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
      */
     @Override
     public ResultSetMetaData getMetaData() throws SQLException {
+
 	List<Class<?>> params = new ArrayList<>();
 	List<Object> values = new ArrayList<>();
 
@@ -360,11 +362,21 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 
 	try {
 	    SimpleClassCaller simpleClassCaller = new SimpleClassCaller("com.aceql.driver.reflection.ResultSetMetaDataGetter");
+
+		if (!this.aceQLConnection.isFillResultSetMetaData()) {
+		    throw new SQLException(Tag.PRODUCT +  ". " + "Cannot call Result.getMetata() because AceQLConnection.isFillResultSetMetaData() is false."
+		    	+ " Call AceQLConnection.setFillResultSetMetaData(true) prior to execute() or executeQyery call.");
+		}
+
 	    Object obj = simpleClassCaller.callMehod("getMetaData", params, values);
 	    return (ResultSetMetaData) obj;
 	} catch (ClassNotFoundException e) {
-	    throw new IllegalArgumentException("getMetaData() call requires AceQL JDBC Driver version 5 or higher.");
-	} catch (Exception e) {
+	    throw new IllegalArgumentException(Tag.PRODUCT +  ". " + "getMetaData() call requires AceQL JDBC Driver version 5 or higher.");
+	}
+	catch (SQLException e) {
+	    throw e;
+	}
+	catch (Exception e) {
 	    throw new SQLException(e);
 	}
     }

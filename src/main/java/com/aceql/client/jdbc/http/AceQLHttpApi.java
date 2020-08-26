@@ -985,8 +985,8 @@ public class AceQLHttpApi {
 	return httpManager.getHttpStatusMessage();
     }
 
-
-
-
+    public boolean isPrettyPrinting() {
+        return prettyPrinting;
+    }
 
 }

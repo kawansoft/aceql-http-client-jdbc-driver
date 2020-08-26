@@ -461,6 +461,9 @@ class AceQLPreparedStatement extends AbstractPreparedStatement implements Prepar
 	    boolean isPreparedStatement = true;
 	    Map<String, String> statementParameters = builder.getHttpFormattedStatementParameters();
 
+	    // To be passed to the AceQLResult
+	    //LastSelectStore lastSelectStore = new LastSelectStore(sql, isPreparedStatement, isStoredProcedure, aceQLHttpApi.isGzipResult(), aceQLHttpApi.isPrettyPrinting());
+
 	    try (InputStream in = aceQLHttpApi.executeQuery(sql, isPreparedStatement, isStoredProcedure,
 		    statementParameters); OutputStream out = new BufferedOutputStream(new FileOutputStream(file));) {
 
