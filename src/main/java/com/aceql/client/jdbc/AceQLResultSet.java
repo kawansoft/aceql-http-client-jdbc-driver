@@ -37,6 +37,7 @@ import org.kawanfw.driver.jdbc.abstracts.AbstractResultSet;
 import org.kawanfw.driver.util.Tag;
 
 import com.aceql.client.jdbc.http.AceQLHttpApi;
+import com.aceql.client.jdbc.util.AceQLConnectionUtil;
 import com.aceql.client.jdbc.util.AceQLResultSetUtil;
 import com.aceql.client.jdbc.util.SimpleClassCaller;
 import com.aceql.client.jdbc.util.json.RowParser;
@@ -106,7 +107,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	this.jsonFile = jsonFile;
 	this.statement = statement;
 
-	AceQLConnection aceQLConnection = (AceQLConnection) this.getStatement()
+	aceQLConnection = (AceQLConnection) this.getStatement()
 		.getConnection();
 	this.aceQLHttpApi = aceQLConnection.aceQLHttpApi;
 
@@ -356,25 +357,26 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	List<Object> values = new ArrayList<>();
 
 	params.add(File.class);
-	params.add(AceQLConnection.class);
 	values.add(this.jsonFile);
-	values.add(this.aceQLConnection);
+
+	if (! AceQLConnectionUtil.isJdbcMetaDataSupported(this.aceQLConnection)) {
+	    throw new SQLException(
+		    "AceQL Server version must be >= " + AceQLConnectionUtil.META_DATA_CALLS_MIN_SERVER_VERSION
+			    + " in order to call ResultSetMetaData.getMetaData().");
+	}
+
+	if (!this.aceQLConnection.isFillResultSetMetaData()) {
+	    throw new SQLException(Tag.PRODUCT +  ". " + "Cannot call Result.getMetata() because AceQLConnection.isFillResultSetMetaData() is false."
+	    	+ " Call AceQLConnection.setFillResultSetMetaData(true) prior to execute() or executeQuery() calls.");
+	}
 
 	try {
 	    SimpleClassCaller simpleClassCaller = new SimpleClassCaller("com.aceql.driver.reflection.ResultSetMetaDataGetter");
-
-		if (!this.aceQLConnection.isFillResultSetMetaData()) {
-		    throw new SQLException(Tag.PRODUCT +  ". " + "Cannot call Result.getMetata() because AceQLConnection.isFillResultSetMetaData() is false."
-		    	+ " Call AceQLConnection.setFillResultSetMetaData(true) prior to execute() or executeQyery call.");
-		}
 
 	    Object obj = simpleClassCaller.callMehod("getMetaData", params, values);
 	    return (ResultSetMetaData) obj;
 	} catch (ClassNotFoundException e) {
 	    throw new IllegalArgumentException(Tag.PRODUCT +  ". " + "getMetaData() call requires AceQL JDBC Driver version 5 or higher.");
-	}
-	catch (SQLException e) {
-	    throw e;
 	}
 	catch (Exception e) {
 	    throw new SQLException(e);

@@ -552,6 +552,33 @@ class AceQLPreparedStatement extends AbstractPreparedStatement implements Prepar
 
     /*
      * (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#getMaxRows()
+     */
+    @Override
+    public int getMaxRows() throws SQLException {
+	return 0;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#setMaxRows(int)
+     */
+    @Override
+    public void setMaxRows(int max) throws SQLException {
+	// Does nothing for now
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#getMoreResults()
+     */
+    @Override
+    public boolean getMoreResults() throws SQLException {
+	return false;
+    }
+
+    /*
+     * (non-Javadoc)
      *
      * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#close()
      */

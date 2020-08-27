@@ -98,6 +98,7 @@ public class AceQLConnectionTest {
 
 	System.out.println("catalog: " + connection.getCatalog());
 
+	connection.setAutoCommit(true);
 	falseQuery(falseQuery, sqlSelectTest);
 
 	int records = 300;

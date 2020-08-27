@@ -28,6 +28,7 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.SQLWarning;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -553,6 +554,13 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     public CallableStatement prepareCall(String sql) throws SQLException {
 	AceQLCallableStatement aceQLCallableStatement = new AceQLCallableStatement(this, sql);
 	return aceQLCallableStatement;
+    }
+
+
+
+    @Override
+    public SQLWarning getWarnings() throws SQLException {
+	return null;
     }
 
     /*
