@@ -634,7 +634,7 @@ public class AceQLHttpApi {
 	    parametersMap.put("gzip_result", "" + false); // Always false
 	    parametersMap.put("fill_result_set_meta_data", "" + fillResultSetMetaData);
 	    parametersMap.put("pretty_printing", "" + prettyPrinting);
-	    parametersMap.put("maxRows", "" + maxRows);
+	    parametersMap.put("max_rows", "" + maxRows);
 
 	    // Add the statement parameters map
 	    if (statementParameters != null) {
@@ -770,7 +770,7 @@ public class AceQLHttpApi {
 	    parametersMap.put("gzip_result", "" + gzipResult);
 	    parametersMap.put("fill_result_set_meta_data", "" + fillResultSetMetaData);
 	    parametersMap.put("pretty_printing", "" + prettyPrinting);
-	    parametersMap.put("maxRows", "" + maxRows);
+	    parametersMap.put("max_rows", "" + maxRows);
 
 	    // Add the statement parameters map
 	    if (statementParameters != null) {
