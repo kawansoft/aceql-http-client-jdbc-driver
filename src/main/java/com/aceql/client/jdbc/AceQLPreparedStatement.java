@@ -548,11 +548,11 @@ class AceQLPreparedStatement extends AceQLStatement implements PreparedStatement
 	}
     }
 
-    /************* Unimplemented Methods *************************
+    /**************************************************************
      *
+     *			 Unimplemented Methods
      *
-     *
-     ************* Unimplemented Methods *************************/
+     **************************************************************
 
     /* (non-Javadoc)
      * @see java.sql.PreparedStatement#setByte(int, byte)
