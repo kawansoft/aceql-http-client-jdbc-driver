@@ -613,11 +613,12 @@ public class AceQLHttpApi {
      *                            statement, else a simple statement
      * @param statementParameters the statement parameters in JSON format. Maybe
      *                            null for simple statement call.
+     * @param maxRows as set by Statement.setMaxRows(int)
      * @return the input stream containing either an error, or the result set in
      *         JSON format. See user documentation.
      * @throws AceQLException if any Exception occurs
      */
-    public InputStream execute(String sql, boolean isPreparedStatement, Map<String, String> statementParameters) throws AceQLException {
+    public InputStream execute(String sql, boolean isPreparedStatement, Map<String, String> statementParameters, int maxRows) throws AceQLException {
 
 	try {
 	    if (sql == null) {
@@ -633,6 +634,7 @@ public class AceQLHttpApi {
 	    parametersMap.put("gzip_result", "" + false); // Always false
 	    parametersMap.put("fill_result_set_meta_data", "" + fillResultSetMetaData);
 	    parametersMap.put("pretty_printing", "" + prettyPrinting);
+	    parametersMap.put("maxRows", "" + maxRows);
 
 	    // Add the statement parameters map
 	    if (statementParameters != null) {
@@ -734,6 +736,7 @@ public class AceQLHttpApi {
 
     }
 
+
     /**
      * Calls /execute_query API
      *
@@ -745,12 +748,13 @@ public class AceQLHttpApi {
      * @param isStoredProcedure   true if the call is a stored procedure
      * @param statementParameters the statement parameters in JSON format. Maybe
      *                            null for simple statement call.
+     * @param maxRows as set by Statement.setMaxRows(int)
      * @return the input stream containing either an error, or the result set in
      *         JSON format. See user documentation.
      * @throws AceQLException if any Exception occurs
      */
     public InputStream executeQuery(String sql, boolean isPreparedStatement, boolean isStoredProcedure,
-	    Map<String, String> statementParameters) throws AceQLException {
+	    Map<String, String> statementParameters, int maxRows) throws AceQLException {
 
 	try {
 	    if (sql == null) {
@@ -766,6 +770,7 @@ public class AceQLHttpApi {
 	    parametersMap.put("gzip_result", "" + gzipResult);
 	    parametersMap.put("fill_result_set_meta_data", "" + fillResultSetMetaData);
 	    parametersMap.put("pretty_printing", "" + prettyPrinting);
+	    parametersMap.put("maxRows", "" + maxRows);
 
 	    // Add the statement parameters map
 	    if (statementParameters != null) {

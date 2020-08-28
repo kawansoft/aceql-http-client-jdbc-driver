@@ -45,16 +45,20 @@ import com.aceql.client.jdbc.util.json.StreamResultAnalyzer;
  */
 class AceQLStatement extends AbstractStatement implements Statement {
 
+    // Can be private, not used in daughter AceQLPreparedStatement
     private AceQLConnection aceQLConnection = null;
 
     /** The Http instance that does all Http stuff */
-    private AceQLHttpApi aceQLHttpApi = null;
+    protected AceQLHttpApi aceQLHttpApi = null;
 
-    private List<File> localResultSetFiles = new ArrayList<File>();
+    protected List<File> localResultSetFiles = new ArrayList<File>();
 
     // For execute() command
-    private AceQLResultSet aceQLResultSet;
-    private int updateCount = -1;
+    protected AceQLResultSet aceQLResultSet;
+    protected int updateCount = -1;
+
+    /** Maximum rows to get, very important to limit trafic */
+    protected int maxRows = 0;
 
     /**
      * Constructor
@@ -87,7 +91,7 @@ class AceQLStatement extends AbstractStatement implements Statement {
 	    boolean isPreparedStatement = false;
 	    Map<String, String> statementParameters = null;
 
-	    try (InputStream in = aceQLHttpApi.execute(sql, isPreparedStatement, statementParameters); OutputStream out = new BufferedOutputStream(new FileOutputStream(file));) {
+	    try (InputStream in = aceQLHttpApi.execute(sql, isPreparedStatement, statementParameters, maxRows); OutputStream out = new BufferedOutputStream(new FileOutputStream(file));) {
 
 		if (in != null) {
 		    IOUtils.copy(in, out);
@@ -178,7 +182,7 @@ class AceQLStatement extends AbstractStatement implements Statement {
 	    Map<String, String> statementParameters = null;
 
 	    try (InputStream in = aceQLHttpApi.executeQuery(sql, isPreparedStatement, isStoredProcedure,
-		    statementParameters); OutputStream out = new BufferedOutputStream(new FileOutputStream(file));) {
+		    statementParameters, maxRows); OutputStream out = new BufferedOutputStream(new FileOutputStream(file));) {
 
 		if (in != null) {
 		    InputStream inFinal = AceQLStatementUtil.getFinalInputStream(in, aceQLHttpApi.isGzipResult());
@@ -240,7 +244,7 @@ class AceQLStatement extends AbstractStatement implements Statement {
      */
     @Override
     public int getMaxRows() throws SQLException {
-	return 0;
+	return this.maxRows ;
     }
 
     /*
@@ -249,7 +253,7 @@ class AceQLStatement extends AbstractStatement implements Statement {
      */
     @Override
     public void setMaxRows(int max) throws SQLException {
-	// Does nothing for now
+	this.maxRows = max;
     }
 
     /*
