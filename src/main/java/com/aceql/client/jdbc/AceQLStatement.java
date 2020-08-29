@@ -26,6 +26,7 @@ import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLWarning;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -265,6 +266,14 @@ class AceQLStatement extends AbstractStatement implements Statement {
 	return false;
     }
 
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#getWarnings()
+     */
+    @Override
+    public SQLWarning getWarnings() throws SQLException {
+	return null;
+    }
 
 
 }

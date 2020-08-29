@@ -27,6 +27,7 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.SQLWarning;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -621,6 +622,16 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	}
 	return AceQLResultSetUtil.getDoubleValue(value);
     }
+
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getWarnings()
+     */
+    @Override
+    public SQLWarning getWarnings() throws SQLException {
+	return null;
+    }
+
 
     /**
      * @return
