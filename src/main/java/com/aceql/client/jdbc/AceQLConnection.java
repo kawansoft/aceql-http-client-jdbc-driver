@@ -557,7 +557,10 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     }
 
 
-
+    /*
+     * (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#getWarnings()
+     */
     @Override
     public SQLWarning getWarnings() throws SQLException {
 	return null;

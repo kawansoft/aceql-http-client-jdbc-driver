@@ -425,6 +425,35 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	return value;
     }
 
+
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getObject(int)
+     */
+    @Override
+    public Object getObject(int columnIndex) throws SQLException {
+	String value = getStringValue(columnIndex);
+	if (value == null || value.equals("NULL")) {
+	    return null;
+	}
+	return value;
+    }
+
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getObject(java.lang.String)
+     */
+    @Override
+    public Object getObject(String columnName) throws SQLException {
+	String value = getStringValue(columnName);
+	if (value == null || value.equals("NULL")) {
+	    return null;
+	}
+	return value;
+    }
+
+
+
     @Override
     public int getInt(String columnLabel) throws SQLException {
 	String value = getStringValue(columnLabel);
