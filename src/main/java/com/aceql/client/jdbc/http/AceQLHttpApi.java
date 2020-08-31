@@ -41,6 +41,7 @@ import org.kawanfw.sql.version.VersionValues;
 import com.aceql.client.jdbc.AceQLException;
 import com.aceql.client.jdbc.util.UserLoginStore;
 import com.aceql.client.jdbc.util.json.SqlParameter;
+import com.aceql.client.metadata.ResultSetMetaDataPolicy;
 import com.aceql.client.metadata.dto.JdbcDatabaseMetaDataDto;
 import com.aceql.client.metadata.dto.TableDto;
 import com.aceql.client.metadata.dto.TableNamesDto;
@@ -77,7 +78,10 @@ public class AceQLHttpApi {
 
     private String url = null;
 
+    /** If true, ResultSetMetaData will be downloaded along with ResultSet in Json result */
     private boolean fillResultSetMetaData;
+
+    private ResultSetMetaDataPolicy resultSetMetaDataPolicy = ResultSetMetaDataPolicy.auto;
 
     private AtomicBoolean cancelled;
     private AtomicInteger progress;
@@ -219,6 +223,51 @@ public class AceQLHttpApi {
 	    throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
 	}
 
+    }
+
+
+    /**
+     * Returns {@code true} if the server will fill the {@code ResultSetMetaData} along with the {@code ResultSet} when a SELECT is done.
+     * @return {@code true} if the server will fill the {@code ResultSetMetaData} along with the {@code ResultSet} when a SELECT is done.
+     */
+     public boolean isFillResultSetMetaData() {
+         return fillResultSetMetaData;
+     }
+
+
+    /**
+     * Sets fillResultSetMetaData. if {@code true}, the server will fill the {@code ResultSetMetaData} along with the {@code ResultSet} when a SELECT is done.
+     * @param fillResultSetMetaData the fillResultSetMetaData to set
+     */
+    public void setFillResultSetMetaData(boolean fillResultSetMetaData) {
+        this.fillResultSetMetaData = fillResultSetMetaData;
+    }
+
+    /**
+     * Sets the {@code ResultSetMetaDataPolicy} to use.
+     * @param resultSetMetaDataPolicy the  {@code ResultSetMetaDataPolicy} to use
+     */
+    public void setResultSetMetaDataPolicy(ResultSetMetaDataPolicy resultSetMetaDataPolicy) {
+	this.resultSetMetaDataPolicy = resultSetMetaDataPolicy;
+
+	/* Action on fillResultSetMetaData value */
+	if (resultSetMetaDataPolicy.equals(ResultSetMetaDataPolicy.auto)) {
+	    // Do nothing
+	}
+	else if (resultSetMetaDataPolicy.equals(ResultSetMetaDataPolicy.on)) {
+	    this.fillResultSetMetaData = true;
+	}
+	else if (resultSetMetaDataPolicy.equals(ResultSetMetaDataPolicy.off)) {
+	    this.fillResultSetMetaData = false;
+	}
+    }
+
+    /**
+     * Returns the {@code ResultSetMetaDataPolicy} in use.
+     * @return the {@code ResultSetMetaDataPolicy} in use.
+     */
+    public ResultSetMetaDataPolicy getResultSetMetaDataPolicy() {
+        return resultSetMetaDataPolicy;
     }
 
     public void trace() {
@@ -400,24 +449,6 @@ public class AceQLHttpApi {
      */
     public void setGzipResult(boolean gzipResult) {
 	this.gzipResult = gzipResult;
-    }
-
-
-   /**
-    * Returns {@code true} if the server will fill the {@code ResultSetMetaData} along with the {@code ResultSet} when a SELECT is done.
-    * @return {@code true} if the server will fill the {@code ResultSetMetaData} along with the {@code ResultSet} when a SELECT is done.
-    */
-    public boolean isFillResultSetMetaData() {
-        return fillResultSetMetaData;
-    }
-
-    /**
-     * Says if the server will fill the {@code ResultSetMetaData} along with the {@code ResultSet} when a SELECT is done.
-     * Defaults to {@code false}.
-     * @param fillResultSetMetaData if true, server side will return along
-     */
-    public void setFillResultSetMetaData(boolean fillResultSetMetaData) {
-	this.fillResultSetMetaData = fillResultSetMetaData;
     }
 
 
@@ -993,5 +1024,6 @@ public class AceQLHttpApi {
     public boolean isPrettyPrinting() {
         return prettyPrinting;
     }
+
 
 }

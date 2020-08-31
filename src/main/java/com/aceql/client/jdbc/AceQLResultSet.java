@@ -366,9 +366,9 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 			    + " in order to call ResultSetMetaData.getMetaData().");
 	}
 
-	if (!this.aceQLConnection.isFillResultSetMetaData()) {
-	    throw new SQLException(Tag.PRODUCT +  ". " + "Cannot call Result.getMetata() because AceQLConnection.isFillResultSetMetaData() is false."
-	    	+ " Call AceQLConnection.setFillResultSetMetaData(true) prior to execute() or executeQuery() calls.");
+	if (!this.aceQLHttpApi.isFillResultSetMetaData()) {
+	    throw new SQLException(Tag.PRODUCT +  ". " + "Cannot get Result.getMetata(). Call AceQLConnection.setResultSetMetaDataPolicy(ResultSetMetaDataPolicy.on)} in order to activate"
+	    	+ " access to Result.getMetata().");
 	}
 
 	try {

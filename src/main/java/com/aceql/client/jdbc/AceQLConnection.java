@@ -42,6 +42,7 @@ import com.aceql.client.jdbc.http.AceQLHttpApi;
 import com.aceql.client.jdbc.util.AceQLConnectionUtil;
 import com.aceql.client.jdbc.util.SimpleClassCaller;
 import com.aceql.client.metadata.RemoteDatabaseMetaData;
+import com.aceql.client.metadata.ResultSetMetaDataPolicy;
 
 /**
  * Provides a <code>Connection</code> implementation that enable to use a
@@ -263,6 +264,24 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	    throw new AceQLException(e.getMessage(), 0, e, null, HttpURLConnection.HTTP_OK);
 	}
 
+	setResultSetMetaDataPolicy(ResultSetMetaDataPolicy.auto);
+
+    }
+
+    /**
+     * Returns the {@link ResultSetMetaDataPolicy} in use.
+     * @return the {@code ResultSetMetaDataPolicy} in use.
+     */
+    public ResultSetMetaDataPolicy getResultSetMetaDataPolicy() {
+        return this.aceQLHttpApi.getResultSetMetaDataPolicy();
+    }
+
+    /**
+     * Sets the {@link ResultSetMetaDataPolicy} to use.
+     * @param resultSetMetaDataPolicy the  {@code ResultSetMetaDataPolicy} to use
+     */
+    public void setResultSetMetaDataPolicy(ResultSetMetaDataPolicy resultSetMetaDataPolicy) {
+	this.aceQLHttpApi.setResultSetMetaDataPolicy(resultSetMetaDataPolicy);
     }
 
     /**
@@ -346,6 +365,11 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	params.add(AceQLConnection.class);
 	values.add(this);
 
+	// If ResultSetMetaDataPolicy.auto has been set, fill now ResultSetMetaData at each SELECT call.
+	if (this.getResultSetMetaDataPolicy().equals(ResultSetMetaDataPolicy.auto)) {
+	    this.aceQLHttpApi.setFillResultSetMetaData(true);
+	}
+
 	try {
 	    SimpleClassCaller simpleClassCaller = new SimpleClassCaller("com.aceql.driver.reflection.DatabaseMetaDataGetter");
 	    Object obj = simpleClassCaller.callMehod("getMetaData", params, values);
@@ -355,7 +379,6 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	} catch (Exception e) {
 	    throw new SQLException(e);
 	}
-
     }
 
     /**
@@ -628,23 +651,6 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      */
     public void setTraceOn(boolean traceOn) {
 	aceQLHttpApi.setTraceOn(traceOn);
-    }
-
-    /**
-     * Says if the server will fill the {@code ResultSetMetaData} along with the {@code ResultSet} when a {@code SELECT} is done.
-     * @return {@code true} if the server will fill the {@code ResultSetMetaData} along with the {@code ResultSet} when a SELECT is done, else {@code false}.
-     */
-     public boolean isFillResultSetMetaData() {
-         return aceQLHttpApi.isFillResultSetMetaData();
-     }
-
-    /**
-     * Says if the server will fill the {@code ResultSetMetaData} along with the {@code ResultSet} when a SELECT is done.
-     * Defaults to {@code false}.
-     * @param fillResultSetMetaData if true, server side will return along
-     */
-    public void setFillResultSetMetaData(boolean fillResultSetMetaData) {
-	aceQLHttpApi.setFillResultSetMetaData(fillResultSetMetaData);
     }
 
     /**
