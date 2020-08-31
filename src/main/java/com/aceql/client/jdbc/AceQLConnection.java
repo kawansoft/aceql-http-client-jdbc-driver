@@ -201,10 +201,13 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     /**
      * Sets the read timeout.
      *
-     * @param readTimeout an <code>int</code> that specifies the read timeout value,
-     *                    in milliseconds, to be used when an http connection is
-     *                    established to the remote server. See
-     *                    {@link URLConnection#setReadTimeout(int)}
+     * @param readTimeout Sets the read timeout to a specified timeout, in
+     *                    milliseconds. A non-zero value specifies the timeout when
+     *                    reading from Input stream when a connection is established
+     *                    to a resource. If the timeout expires before there is data
+     *                    available for read, a java.net.SocketTimeoutException is
+     *                    raised. A timeout of zero is interpreted as an infinite
+     *                    timeout. See {@link URLConnection#setReadTimeout(int)}
      */
     public static void setReadTimeout(int readTimeout) {
 	AceQLHttpApi.setReadTimeout(readTimeout);
@@ -270,15 +273,17 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 
     /**
      * Returns the {@link ResultSetMetaDataPolicy} in use.
+     *
      * @return the {@code ResultSetMetaDataPolicy} in use.
      */
     public ResultSetMetaDataPolicy getResultSetMetaDataPolicy() {
-        return this.aceQLHttpApi.getResultSetMetaDataPolicy();
+	return this.aceQLHttpApi.getResultSetMetaDataPolicy();
     }
 
     /**
      * Sets the {@link ResultSetMetaDataPolicy} to use.
-     * @param resultSetMetaDataPolicy the  {@code ResultSetMetaDataPolicy} to use
+     *
+     * @param resultSetMetaDataPolicy the {@code ResultSetMetaDataPolicy} to use
      */
     public void setResultSetMetaDataPolicy(ResultSetMetaDataPolicy resultSetMetaDataPolicy) {
 	this.aceQLHttpApi.setResultSetMetaDataPolicy(resultSetMetaDataPolicy);
@@ -352,9 +357,9 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	this.aceQLHttpApi = aceQLHttpApi;
     }
 
-
     /*
      * (non-Javadoc)
+     *
      * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#getMetaData()
      */
     @Override
@@ -365,13 +370,15 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	params.add(AceQLConnection.class);
 	values.add(this);
 
-	// If ResultSetMetaDataPolicy.auto has been set, fill now ResultSetMetaData at each SELECT call.
+	// If ResultSetMetaDataPolicy.auto has been set, fill now ResultSetMetaData at
+	// each SELECT call.
 	if (this.getResultSetMetaDataPolicy().equals(ResultSetMetaDataPolicy.auto)) {
 	    this.aceQLHttpApi.setFillResultSetMetaData(true);
 	}
 
 	try {
-	    SimpleClassCaller simpleClassCaller = new SimpleClassCaller("com.aceql.driver.reflection.DatabaseMetaDataGetter");
+	    SimpleClassCaller simpleClassCaller = new SimpleClassCaller(
+		    "com.aceql.driver.reflection.DatabaseMetaDataGetter");
 	    Object obj = simpleClassCaller.callMehod("getMetaData", params, values);
 	    return (DatabaseMetaData) obj;
 	} catch (ClassNotFoundException e) {
@@ -382,7 +389,8 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     }
 
     /**
-     * Returns a RemoteDatabaseMetaData instance in order to retrieve metadata info for all client SDKs.
+     * Returns a RemoteDatabaseMetaData instance in order to retrieve metadata info
+     * for all client SDKs.
      *
      * @return a RemoteDatabaseMetaData instance in order to retrieve metadata info.
      */
@@ -524,9 +532,9 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	return AceQLConnectionUtil.getTransactionIsolation(result);
     }
 
-
     /*
      * (non-Javadoc)
+     *
      * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#getCatalog()
      */
     @Override
@@ -536,6 +544,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 
     /*
      * (non-Javadoc)
+     *
      * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#getSchema()
      */
     @Override
@@ -579,9 +588,9 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	return aceQLCallableStatement;
     }
 
-
     /*
      * (non-Javadoc)
+     *
      * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#getWarnings()
      */
     @Override
@@ -625,9 +634,9 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	return aceQLHttpApi.getServerVersion();
     }
 
-
     /**
      * Returns the server product version number. Allows comparisons.
+     *
      * @return the server product version number.
      * @throws AceQLException if any Exception occurs
      */
@@ -656,7 +665,8 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     /**
      * Says the query result is returned compressed with the GZIP file format.
      *
-     * @return {@code true} if the query result is returned compressed with the GZIP file format, else {@code false}
+     * @return {@code true} if the query result is returned compressed with the GZIP
+     *         file format, else {@code false}
      */
     public boolean isGzipResult() {
 	return aceQLHttpApi.isGzipResult();
