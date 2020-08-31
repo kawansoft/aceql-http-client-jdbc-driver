@@ -8,8 +8,8 @@ import com.aceql.client.jdbc.AceQLConnection;
 /**
  * Defines the policy for {@code ResultSetMetaData} access:
  * <ul>
- * <li>auto: {@code ResulSetMetaData} will be accessible if at least on
- * {@code Connection.getMetaData()} has been called during the session.
+ * <li>auto: {@code ResulSetMetaData} will be accessible if at least one
+ * {@code Connection.getMetaData()} has been called before during the session.
  * {@code ResultSetMetaData} is then downloaded along with
  * {@code ResultSet}.</li>
  * <li>on: ResulSetMetaData will be always accessible, because downloaded along
