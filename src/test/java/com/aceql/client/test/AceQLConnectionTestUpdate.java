@@ -68,6 +68,8 @@ public class AceQLConnectionTestUpdate {
 	System.out.println("aceQLConnection.getHoldability(): " + connection.getHoldability());
 	System.out.println("aceQLConnection.getTransactionIsolation() : " + connection.getTransactionIsolation());
 
+	System.out.println();
+
 	SqlUpdateTest sqlUpdateTest = new SqlUpdateTest(connection, System.out);
 	sqlUpdateTest.updateCustomerAllStatement();
 	bigSelect(connection, 0);

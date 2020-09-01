@@ -40,16 +40,9 @@ public class SqlUpdateTest {
      * @throws SQLException
      */
     public void updateCustomerAllStatement() throws SQLException {
-	String sql = "update customer set customer_title = 'Mme1'";
+	String sql = "update customer set customer_title = 'Sir'";
 	Statement statement = connection.createStatement();
 	statement.executeUpdate(sql);
-	out.println("Executed: " + sql);
-    }
-
-    public void updateCustomerAllExecuteRaw() throws SQLException {
-	String sql = "update customer set customer_title = 'Mme3'";
-	Statement statement = connection.createStatement();
-	statement.execute(sql);
 	out.println("Executed: " + sql);
     }
 
@@ -60,8 +53,17 @@ public class SqlUpdateTest {
     public void updateCustomerAllPreparedStatement() throws SQLException {
 	String sql = "update customer set customer_title = ?";
 	PreparedStatement preparedStatement = connection.prepareStatement(sql);
-	preparedStatement.setString(1, "Mme2");
+	preparedStatement.setString(1, "Ms");
 	preparedStatement.executeUpdate();
 	out.println("Executed: " + sql);
     }
+
+    public void updateCustomerAllExecuteRaw() throws SQLException {
+	String sql = "update customer set customer_title = 'Miss'";
+	Statement statement = connection.createStatement();
+	statement.execute(sql);
+	out.println("Executed: " + sql);
+    }
+
+
 }
