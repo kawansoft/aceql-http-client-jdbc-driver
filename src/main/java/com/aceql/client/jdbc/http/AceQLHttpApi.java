@@ -79,9 +79,9 @@ public class AceQLHttpApi {
     private String url = null;
 
     /** If true, ResultSetMetaData will be downloaded along with ResultSet in Json result */
-    private boolean fillResultSetMetaData;
+    private boolean fillResultSetMetaData = true;
 
-    private ResultSetMetaDataPolicy resultSetMetaDataPolicy = ResultSetMetaDataPolicy.auto;
+    private ResultSetMetaDataPolicy resultSetMetaDataPolicy = ResultSetMetaDataPolicy.off;
 
     private AtomicBoolean cancelled;
     private AtomicInteger progress;
@@ -250,11 +250,7 @@ public class AceQLHttpApi {
     public void setResultSetMetaDataPolicy(ResultSetMetaDataPolicy resultSetMetaDataPolicy) {
 	this.resultSetMetaDataPolicy = resultSetMetaDataPolicy;
 
-	/* Action on fillResultSetMetaData value */
-	if (resultSetMetaDataPolicy.equals(ResultSetMetaDataPolicy.auto)) {
-	    // Do nothing
-	}
-	else if (resultSetMetaDataPolicy.equals(ResultSetMetaDataPolicy.on)) {
+	if (resultSetMetaDataPolicy.equals(ResultSetMetaDataPolicy.on)) {
 	    this.fillResultSetMetaData = true;
 	}
 	else if (resultSetMetaDataPolicy.equals(ResultSetMetaDataPolicy.off)) {

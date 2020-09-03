@@ -81,6 +81,8 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
     @SuppressWarnings("unused")
     private ResultSetMetaData resultSetMetaData;
 
+    private int fetchSize = 99999999;
+
     /**
      * Constructor.
      *
@@ -351,6 +353,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
      * (non-Javadoc)
      * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getMetaData()
      */
+
     @Override
     public ResultSetMetaData getMetaData() throws SQLException {
 
@@ -383,6 +386,23 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	    throw new SQLException(e);
 	}
     }
+
+
+//    @Override
+//    public ResultSetMetaData getMetaData() throws SQLException {
+//	ResultSetMetaDataParser resultSetMetaDataParser = new ResultSetMetaDataParser(jsonFile);
+//	String jsonString = resultSetMetaDataParser.getJsonString();
+//
+//	ResultSetMetaData resultSetMetaData = null;
+//
+//	if (jsonString != null) {
+//	    ResultSetMetaDataHolder resultSetMetaDataHolder = GsonWsUtil.fromJson(jsonString,
+//		    ResultSetMetaDataHolder.class);
+//	    resultSetMetaData = new AceQLResultSetMetaData(resultSetMetaDataHolder);
+//	}
+//
+//	return resultSetMetaData;
+//    }
 
     /*
      * (non-Javadoc)
@@ -633,6 +653,34 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
     }
 
 
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getFetchSize()
+     */
+    @Override
+    public int getFetchSize() throws SQLException {
+	return this.fetchSize;
+    }
+
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#setFetchSize(int)
+     */
+    @Override
+    public void setFetchSize(int rows) throws SQLException {
+	this.fetchSize = rows;
+    }
+
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#clearWarnings()
+     */
+    @Override
+    public void clearWarnings() throws SQLException {
+	// TODO Auto-generated method stub
+	super.clearWarnings();
+    }
+
     /**
      * @return
      * @throws SQLException
@@ -661,6 +709,8 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
     public boolean isTraceOn() {
 	return rowParser.isTraceOn();
     }
+
+
 
     /**
      * Sets the trace on/off

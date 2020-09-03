@@ -61,6 +61,8 @@ class AceQLStatement extends AbstractStatement implements Statement {
     /** Maximum rows to get, very important to limit trafic */
     protected int maxRows = 0;
 
+    private int fetchSise = 99999999;
+
     /**
      * Constructor
      *
@@ -273,6 +275,51 @@ class AceQLStatement extends AbstractStatement implements Statement {
     @Override
     public SQLWarning getWarnings() throws SQLException {
 	return null;
+    }
+
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#getFetchSize()
+     */
+    @Override
+    public int getFetchSize() throws SQLException {
+	return this.fetchSise;
+    }
+
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#setFetchSize(int)
+     */
+    @Override
+    public void setFetchSize(int rows) throws SQLException {
+	this.fetchSise = rows;
+    }
+
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#cancel()
+     */
+    @Override
+    public void cancel() throws SQLException {
+
+    }
+
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#clearWarnings()
+     */
+    @Override
+    public void clearWarnings() throws SQLException {
+
+    }
+
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#clearBatch()
+     */
+    @Override
+    public void clearBatch() throws SQLException {
+
     }
 
 

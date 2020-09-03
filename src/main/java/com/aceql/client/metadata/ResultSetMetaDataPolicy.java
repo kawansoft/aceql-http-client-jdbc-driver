@@ -8,10 +8,6 @@ import com.aceql.client.jdbc.AceQLConnection;
 /**
  * Defines the policy for {@code ResultSetMetaData} access:
  * <ul>
- * <li>auto: {@code ResulSetMetaData} will be accessible if at least one
- * {@code Connection.getMetaData()} has been called before during the session.
- * {@code ResultSetMetaData} is then downloaded along with
- * {@code ResultSet}.</li>
  * <li>on: ResulSetMetaData will be always accessible, because downloaded along
  * with ResultSet for each SELECT.</li>
  * <li>off: {@code ResulSetMetaData} will not be accessible because not
@@ -24,21 +20,14 @@ import com.aceql.client.jdbc.AceQLConnection;
  * with
  * {@link AceQLConnection#setResultSetMetaDataPolicy(ResultSetMetaDataPolicy)}
  * <br>
- * Default value for a new AceQLConnection and/or Driver loading is
- * {@code ResultSetMetaDataPolicy.auto}.
+ * Default value for a new AceQLConnection is off. If the AceQL Driver is used, the default value
+ * {@code ResultSetMetaDataPolicy.on}.
  *
  * @since 5.0
  * @author Nicolas de Pomereu
  *
  */
 public enum ResultSetMetaDataPolicy {
-
-    /**
-     * {@code ResulSetMetaData} will be accessible if at least on {@code
-     * Connection.getMetaData()} has been called before during the session. {@code
-     * ResultSetMetaData} is then always downloaded along with {@code ResultSet}.
-     */
-    auto,
 
     /**
      * {@code ResulSetMetaData} will be always accessible, because downloaded along

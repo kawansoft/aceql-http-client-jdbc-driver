@@ -27,12 +27,16 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
+import java.sql.SQLClientInfoException;
 import java.sql.SQLException;
 import java.sql.SQLWarning;
+import java.sql.Savepoint;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Properties;
+import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -119,8 +123,8 @@ import com.aceql.client.metadata.ResultSetMetaDataPolicy;
  * <ul>
  * <li>{@link #getCancelled()}</li>
  * <li>{@link #setCancelled(AtomicBoolean)}</li>
- * <li>{@link #getFillResultSetMetaData()}</li>
- * <li>{@link #setFillResultSetMetaData(boolean)}</li>
+ * <li>{@link #getResultSetMetaDataPolicy()}</li>
+ * <li>{@link #setResultSetMetaDataPolicy(ResultSetMetaDataPolicy)}</li>
  * <li>{@link #getGzipResult()}</li>
  * <li>{@link #setGzipResult(boolean)}</li>
  * <li>{@link #getProgress()}</li>
@@ -267,7 +271,6 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	    throw new AceQLException(e.getMessage(), 0, e, null, HttpURLConnection.HTTP_OK);
 	}
 
-	setResultSetMetaDataPolicy(ResultSetMetaDataPolicy.auto);
 
     }
 
@@ -362,6 +365,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      *
      * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#getMetaData()
      */
+
     @Override
     public DatabaseMetaData getMetaData() throws SQLException {
 	List<Class<?>> params = new ArrayList<>();
@@ -372,9 +376,9 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 
 	// If ResultSetMetaDataPolicy.auto has been set, fill now ResultSetMetaData at
 	// each SELECT call.
-	if (this.getResultSetMetaDataPolicy().equals(ResultSetMetaDataPolicy.auto)) {
-	    this.aceQLHttpApi.setFillResultSetMetaData(true);
-	}
+//	if (this.getResultSetMetaDataPolicy().equals(ResultSetMetaDataPolicy.auto)) {
+//	    this.aceQLHttpApi.setFillResultSetMetaData(true);
+//	}
 
 	try {
 	    SimpleClassCaller simpleClassCaller = new SimpleClassCaller(
@@ -387,6 +391,18 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	    throw new SQLException(e);
 	}
     }
+
+
+//    @Override
+//    public DatabaseMetaData getMetaData() throws SQLException {
+//	AceQLConnectionWrapper aceQLConnectionWrapper = new AceQLConnectionWrapper(this);
+//	AceQLHttpApi aceQLHttpApi = aceQLConnectionWrapper.getAceQLHttpApi();
+//	JdbcDatabaseMetaDataDto jdbcDatabaseMetaDataDto = aceQLHttpApi.getDbMetadata();
+//	JdbcDatabaseMetaData jdbcDatabaseMetaData = jdbcDatabaseMetaDataDto.getJdbcDatabaseMetaData();
+//
+//	AceQLDatabaseMetaData aceQLDatabaseMetaData = new AceQLDatabaseMetaData(this, jdbcDatabaseMetaData);
+//	return aceQLDatabaseMetaData;
+//    }
 
     /**
      * Returns a RemoteDatabaseMetaData instance in order to retrieve metadata info
@@ -412,7 +428,8 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	} catch (AceQLException e) {
 	    // Because close() can not throw an Exception, we wrap the
 	    // AceQLException with a RuntimeException
-	    throw new IllegalStateException(e.getMessage(), e);
+	    //throw new IllegalStateException(e.getMessage(), e);
+	    e.printStackTrace();
 	}
     }
 
@@ -422,7 +439,8 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	} catch (AceQLException e) {
 	    // Because close() can not throw an Exception, we wrap the
 	    // AceQLException with a RuntimeException
-	    throw new IllegalStateException(e.getMessage(), e);
+	    //throw new IllegalStateException(e.getMessage(), e);
+	    e.printStackTrace();
 	}
     }
 
@@ -559,6 +577,26 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      */
     @Override
     public Statement createStatement() throws SQLException {
+	AceQLStatement aceQLStatement = new AceQLStatement(this);
+	return aceQLStatement;
+    }
+
+
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#createStatement(int, int)
+     */
+    @Override
+    public Statement createStatement(int resultSetType, int resultSetConcurrency) throws SQLException {
+	AceQLStatement aceQLStatement = new AceQLStatement(this);
+	return aceQLStatement;
+    }
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#createStatement(int, int, int)
+     */
+    @Override
+    public Statement createStatement(int resultSetType, int resultSetConcurrency, int resultSetHoldability) {
 	AceQLStatement aceQLStatement = new AceQLStatement(this);
 	return aceQLStatement;
     }
@@ -728,6 +766,95 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	aceQLHttpApi.setProgress(progress);
     }
 
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#clearWarnings()
+     */
+    @Override
+    public void clearWarnings() throws SQLException {
+
+    }
+
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#isValid(int)
+     */
+    @Override
+    public boolean isValid(int timeout) throws SQLException {
+	return true;
+    }
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#getClientInfo()
+     */
+    @Override
+    public Properties getClientInfo() throws SQLException {
+	return null;
+    }
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#getClientInfo(java.lang.String)
+     */
+    @Override
+    public String getClientInfo(String name) throws SQLException {
+	return null;
+    }
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#setClientInfo(java.util.Properties)
+     */
+    @Override
+    public void setClientInfo(Properties properties) throws SQLClientInfoException {
+
+    }
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#setClientInfo(java.lang.String, java.lang.String)
+     */
+    @Override
+    public void setClientInfo(String name, String value) throws SQLClientInfoException {
+
+    }
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#setNetworkTimeout(java.util.concurrent.Executor, int)
+     */
+    @Override
+    public void setNetworkTimeout(Executor arg0, int arg1) throws SQLException {
+
+    }
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#setSavepoint()
+     */
+    @Override
+    public Savepoint setSavepoint() throws SQLException {
+	return null;
+    }
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#setSavepoint(java.lang.String)
+     */
+    @Override
+    public Savepoint setSavepoint(String name) throws SQLException {
+	return null;
+    }
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#rollback(java.sql.Savepoint)
+     */
+    @Override
+    public void rollback(Savepoint savepoint) throws SQLException {
+
+    }
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#releaseSavepoint(java.sql.Savepoint)
+     */
+    @Override
+    public void releaseSavepoint(Savepoint savepoint) throws SQLException {
+
+    }
+
     /*
      * (non-Javadoc)
      *
@@ -737,5 +864,8 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     public boolean isClosed() throws SQLException {
 	return closed;
     }
+
+
+
 
 }
