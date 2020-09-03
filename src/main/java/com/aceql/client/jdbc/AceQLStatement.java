@@ -46,6 +46,8 @@ import com.aceql.client.jdbc.util.json.StreamResultAnalyzer;
  */
 class AceQLStatement extends AbstractStatement implements Statement {
 
+    private static boolean DEBUG = true;
+
     // Can be private, not used in daughter AceQLPreparedStatement
     private AceQLConnection aceQLConnection = null;
 
@@ -61,7 +63,7 @@ class AceQLStatement extends AbstractStatement implements Statement {
     /** Maximum rows to get, very important to limit trafic */
     protected int maxRows = 0;
 
-    private int fetchSise = 99999999;
+    private int fetchSise = 0;
 
     /**
      * Constructor
@@ -111,13 +113,17 @@ class AceQLStatement extends AbstractStatement implements Statement {
 	    boolean isResultSet = streamResultAnalyzer.isResultSet();
 	    int rowCount = streamResultAnalyzer.getRowCount();
 
+	    debug("statement.isResultSet: " + isResultSet);
+	    debug("statement.rowCount   : " + rowCount);
+
 	    if (isResultSet)
 	    {
 		aceQLResultSet = new AceQLResultSet(file, this, rowCount);
 		return true;
 	    }
 	    else {
-		this.updateCount = rowCount;
+		// NO ! update count must be -1, as we have no more updates...
+		//this.updateCount = rowCount;
 		return false;
 	    }
 
@@ -146,7 +152,6 @@ class AceQLStatement extends AbstractStatement implements Statement {
     public int getUpdateCount() throws SQLException {
 	return this.updateCount;
     }
-
 
     /*
      * (non-Javadoc)
@@ -322,5 +327,9 @@ class AceQLStatement extends AbstractStatement implements Statement {
 
     }
 
-
+    private void debug(String s) {
+	if (DEBUG) {
+	    System.out.println(new java.util.Date() + " " + s);
+	}
+    }
 }

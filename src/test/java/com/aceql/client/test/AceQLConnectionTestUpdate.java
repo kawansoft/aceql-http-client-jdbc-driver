@@ -38,7 +38,6 @@ import com.aceql.client.test.connection.ConnectionParms;
  */
 public class AceQLConnectionTestUpdate {
 
-
     public static void main(String[] args) throws Exception {
 
 	boolean doContinue = true;
@@ -55,13 +54,17 @@ public class AceQLConnectionTestUpdate {
 	// Get a real Connection instance that points to remote AceQL server
 	Connection connection = ConnectionBuilder.createOnConfig();
 
-	((AceQLConnection) connection).setTraceOn(true);
-	((AceQLConnection) connection).setGzipResult(true);
-
 	connection.setAutoCommit(true);
-	System.out.println();
-	System.out.println("aceQLConnection.getServerVersion(): " + ((AceQLConnection) connection).getServerVersion());
-	System.out.println("aceQLConnection.getClientVersion(): " + ((AceQLConnection) connection).getClientVersion());
+
+	if (connection instanceof AceQLConnection) {
+	    ((AceQLConnection) connection).setTraceOn(true);
+	    ((AceQLConnection) connection).setGzipResult(true);
+	    System.out.println();
+	    System.out.println(
+		    "aceQLConnection.getServerVersion(): " + ((AceQLConnection) connection).getServerVersion());
+	    System.out.println(
+		    "aceQLConnection.getClientVersion(): " + ((AceQLConnection) connection).getClientVersion());
+	}
 
 	System.out.println("aceQLConnection.getAutoCommit() : " + connection.getAutoCommit());
 	System.out.println("aceQLConnection.isReadOnly()    : " + connection.isReadOnly());
@@ -71,6 +74,8 @@ public class AceQLConnectionTestUpdate {
 	System.out.println();
 
 	SqlUpdateTest sqlUpdateTest = new SqlUpdateTest(connection, System.out);
+
+	/** <pre><code>
 	sqlUpdateTest.updateCustomerAllStatement();
 	bigSelect(connection, 0);
 	System.out.println();
@@ -78,8 +83,11 @@ public class AceQLConnectionTestUpdate {
 	sqlUpdateTest.updateCustomerAllPreparedStatement();
 	bigSelect(connection, 0);
 	System.out.println();
+	</code></pre>
+	*/
 
 	sqlUpdateTest.updateCustomerAllExecuteRaw();
+	System.out.println();
 	bigSelect(connection, 0);
 	System.out.println();
 

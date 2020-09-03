@@ -97,4 +97,9 @@ public class ConnectionBuilder {
 	}
 	return connection;
     }
+
+    public static Connection getPostgreSqlConnection() throws SQLException {
+	// TODO Auto-generated method stub
+	return new  DirectConnectionBuilder().createPostgreSql();
+    }
 }
