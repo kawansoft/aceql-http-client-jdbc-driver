@@ -828,7 +828,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      */
     @Override
     public Savepoint setSavepoint() throws SQLException {
-	return null;
+	return new AceQLSavepoint();
     }
 
     /* (non-Javadoc)
@@ -836,7 +836,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      */
     @Override
     public Savepoint setSavepoint(String name) throws SQLException {
-	return null;
+	return new AceQLSavepoint();
     }
 
     /* (non-Javadoc)
@@ -844,7 +844,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      */
     @Override
     public void rollback(Savepoint savepoint) throws SQLException {
-
+	// Do nothing
     }
 
     /* (non-Javadoc)
@@ -852,7 +852,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      */
     @Override
     public void releaseSavepoint(Savepoint savepoint) throws SQLException {
-
+	// Do nothing
     }
 
     /*
