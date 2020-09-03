@@ -83,7 +83,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
     @SuppressWarnings("unused")
     private ResultSetMetaData resultSetMetaData;
 
-    private int fetchSize = 99999999;
+    private int fetchSize = 0;
 
     /**
      * Constructor.
