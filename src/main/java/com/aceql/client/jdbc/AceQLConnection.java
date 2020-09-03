@@ -771,9 +771,8 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      */
     @Override
     public void clearWarnings() throws SQLException {
-
+	// Do nothing for now. Future usage.
     }
-
 
     /* (non-Javadoc)
      * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#isValid(int)
@@ -804,7 +803,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      */
     @Override
     public void setClientInfo(Properties properties) throws SQLClientInfoException {
-
+	// Do nothing for now. Future usage.
     }
 
     /* (non-Javadoc)
@@ -812,7 +811,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      */
     @Override
     public void setClientInfo(String name, String value) throws SQLClientInfoException {
-
+	// Do nothing for now. Future usage.
     }
 
     /* (non-Javadoc)
@@ -820,7 +819,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      */
     @Override
     public void setNetworkTimeout(Executor arg0, int arg1) throws SQLException {
-
+	// Do nothing for now. Future usage.
     }
 
     /* (non-Javadoc)
@@ -844,7 +843,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      */
     @Override
     public void rollback(Savepoint savepoint) throws SQLException {
-	// Do nothing
+	// Do nothing for now. Future usage.
     }
 
     /* (non-Javadoc)
@@ -852,7 +851,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      */
     @Override
     public void releaseSavepoint(Savepoint savepoint) throws SQLException {
-	// Do nothing
+	// Do nothing for now. Future usage.
     }
 
     /*

@@ -291,7 +291,6 @@ class AceQLStatement extends AbstractStatement implements Statement {
 	return this.fetchSise;
     }
 
-
     /* (non-Javadoc)
      * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#setFetchSize(int)
      */
@@ -300,31 +299,28 @@ class AceQLStatement extends AbstractStatement implements Statement {
 	this.fetchSise = rows;
     }
 
-
     /* (non-Javadoc)
      * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#cancel()
      */
     @Override
     public void cancel() throws SQLException {
-
+	// Do nothing for now. Future usage.
     }
-
 
     /* (non-Javadoc)
      * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#clearWarnings()
      */
     @Override
     public void clearWarnings() throws SQLException {
-
+	// Do nothing for now. Future usage.
     }
-
 
     /* (non-Javadoc)
      * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#clearBatch()
      */
     @Override
     public void clearBatch() throws SQLException {
-
+	// Do nothing for now. Future usage.
     }
 
     private void debug(String s) {
