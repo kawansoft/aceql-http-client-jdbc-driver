@@ -21,6 +21,7 @@ package com.aceql.client.jdbc;
 import java.io.Closeable;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -34,6 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.FileUtils;
 import org.kawanfw.driver.jdbc.abstracts.AbstractResultSet;
 import org.kawanfw.driver.util.Tag;
 
@@ -52,7 +54,7 @@ import com.aceql.client.jdbc.util.json.RowParser;
  */
 public class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
 
-    public boolean DEBUG = false;
+    public boolean DEBUG = true;
 
     /** A File containing the result set returned by an /execute_query call */
     public File jsonFile;
@@ -143,6 +145,18 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	if (!jsonFile.exists()) {
 	    throw new SQLException(new FileNotFoundException(
 		    "jsonFile does not exist: " + jsonFile));
+	}
+
+	if (DEBUG) {
+	    try {
+		String content = FileUtils.readFileToString(jsonFile, "UTF-8");
+		System.out.println();
+		System.out.println(content);
+		System.out.println();
+	    } catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	    }
 	}
 
 	this.jsonFile = jsonFile;
@@ -313,11 +327,25 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	    throw new SQLException("Invalid column name: " + string);
 	}
 
-	if (rowParser.getIndexsPerColName().get(string) == null) {
+	if (rowParser.getIndexsPerColName().get(string) == null
+		&& rowParser.getIndexsPerColName().get(string.toLowerCase()) == null
+		&& rowParser.getIndexsPerColName().get(string.toUpperCase()) == null) {
 	    throw new SQLException("Invalid column name: " + string);
 	}
 
-	int index = rowParser.getIndexsPerColName().get(string);
+	int index = -1;
+
+	if (rowParser.getIndexsPerColName().get(string) != null) {
+	    index = rowParser.getIndexsPerColName().get(string);
+	} else if (rowParser.getIndexsPerColName().get(string.toLowerCase()) != null) {
+	    index = rowParser.getIndexsPerColName().get(string.toLowerCase());
+	}
+	else if (rowParser.getIndexsPerColName().get(string.toUpperCase()) != null) {
+	    index = rowParser.getIndexsPerColName().get(string.toUpperCase());
+	}
+	else {
+	    throw new SQLException("(Impossible path) Invalid column name: " + string);
+	}
 
 	String value = valuesPerColIndex.get(index);
 
