@@ -54,7 +54,7 @@ import com.aceql.client.jdbc.util.json.RowParser;
  */
 public class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
 
-    public boolean DEBUG = true;
+    public boolean DEBUG = false;
 
     /** A File containing the result set returned by an /execute_query call */
     public File jsonFile;

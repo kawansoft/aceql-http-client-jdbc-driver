@@ -46,7 +46,7 @@ import com.aceql.client.jdbc.util.json.StreamResultAnalyzer;
  */
 class AceQLStatement extends AbstractStatement implements Statement {
 
-    private static boolean DEBUG = true;
+    private static boolean DEBUG = false;
 
     // Can be private, not used in daughter AceQLPreparedStatement
     private AceQLConnection aceQLConnection = null;
