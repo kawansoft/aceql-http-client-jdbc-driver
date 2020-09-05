@@ -672,6 +672,35 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
     }
 
 
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getLong(int)
+     */
+    @Override
+    public long getLong(int columnIndex) throws SQLException {
+	String value = getStringValue(columnIndex);
+
+	if (value == null || value.equals("NULL")) {
+	    return 0;
+	}
+	return AceQLResultSetUtil.getLongValue(value);
+    }
+
+
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getLong(java.lang.String)
+     */
+    @Override
+    public long getLong(String columnName) throws SQLException {
+	String value = getStringValue(columnName);
+	if (value == null || value.equals("NULL")) {
+	    return 0;
+	}
+	return AceQLResultSetUtil.getLongValue(value);
+    }
+
+
     /* (non-Javadoc)
      * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getWarnings()
      */
@@ -679,8 +708,6 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
     public SQLWarning getWarnings() throws SQLException {
 	return null;
     }
-
-
 
     /* (non-Javadoc)
      * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getFetchSize()
@@ -718,6 +745,26 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
     public int getType() throws SQLException {
 	return ResultSet.TYPE_FORWARD_ONLY;
     }
+
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getFetchDirection()
+     */
+    @Override
+    public int getFetchDirection() throws SQLException {
+	return ResultSet.FETCH_FORWARD;
+    }
+
+
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#setFetchDirection(int)
+     */
+    @Override
+    public void setFetchDirection(int direction) throws SQLException {
+	// Do nothing
+    }
+
 
 
     /**

@@ -323,6 +323,24 @@ class AceQLStatement extends AbstractStatement implements Statement {
 	// Do nothing for now. Future usage.
     }
 
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#getFetchDirection()
+     */
+    @Override
+    public int getFetchDirection() throws SQLException {
+	return ResultSet.FETCH_FORWARD;
+    }
+
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#setFetchDirection(int)
+     */
+    @Override
+    public void setFetchDirection(int direction) throws SQLException {
+	// Do nothing
+    }
+
+
     private void debug(String s) {
 	if (DEBUG) {
 	    System.out.println(new java.util.Date() + " " + s);
