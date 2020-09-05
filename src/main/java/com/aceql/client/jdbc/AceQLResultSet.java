@@ -709,6 +709,17 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	super.clearWarnings();
     }
 
+
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getType()
+     */
+    @Override
+    public int getType() throws SQLException {
+	return ResultSet.TYPE_FORWARD_ONLY;
+    }
+
+
     /**
      * @return
      * @throws SQLException
