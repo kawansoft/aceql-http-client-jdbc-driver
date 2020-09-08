@@ -18,11 +18,8 @@
  */
 package com.aceql.client.jdbc;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.Reader;
 import java.math.BigDecimal;
 import java.net.HttpURLConnection;
@@ -47,11 +44,9 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.io.IOUtils;
 import org.kawanfw.driver.jdbc.abstracts.AbstractConnection;
 import org.kawanfw.driver.util.FrameworkFileUtil;
 
-import com.aceql.client.jdbc.util.AceQLStatementUtil;
 import com.aceql.client.jdbc.util.AceQLTypes;
 import com.aceql.client.jdbc.util.json.PrepStatementParametersBuilder;
 import com.aceql.client.jdbc.util.json.SqlParameter;
@@ -77,8 +72,8 @@ class AceQLPreparedStatement extends AceQLStatement implements PreparedStatement
     protected boolean isStoredProcedure = false;
 
     // For execute() command
-    //private AceQLResultSet aceQLResultSet;
-    //private int updateCount = -1;
+    // private AceQLResultSet aceQLResultSet;
+    // private int updateCount = -1;
 
     /**
      * Constructor
@@ -360,30 +355,12 @@ class AceQLPreparedStatement extends AceQLStatement implements PreparedStatement
 	updateCount = -1;
 
 	try {
+	    PreparedStatementResultSetFileBuilder statementResultSetFileBuilder = new PreparedStatementResultSetFileBuilder(
+		    sql, isStoredProcedure, statementParameters, aceQLHttpApi, localResultSetFiles, maxRows);
 
-	    File file = AceQLStatement.buildtResultSetFile();
-	    this.localResultSetFiles.add(file);
-
-	    aceQLHttpApi.trace("file: " + file);
-	    boolean isPreparedStatement = true;
-
-	    try (InputStream in = aceQLHttpApi.execute(sql, isPreparedStatement, statementParameters, maxRows);
-		    OutputStream out = new BufferedOutputStream(new FileOutputStream(file));) {
-
-		if (in != null) {
-		    IOUtils.copy(in, out);
-		}
-	    }
-
-	    StreamResultAnalyzer streamResultAnalyzer = new StreamResultAnalyzer(file, aceQLHttpApi.getHttpStatusCode(),
-		    aceQLHttpApi.getHttpStatusMessage());
-	    if (!streamResultAnalyzer.isStatusOk()) {
-		throw new AceQLException(streamResultAnalyzer.getErrorMessage(), streamResultAnalyzer.getErrorId(),
-			null, streamResultAnalyzer.getStackTrace(), aceQLHttpApi.getHttpStatusCode());
-	    }
-
-	    boolean isResultSet = streamResultAnalyzer.isResultSet();
-	    int rowCount = streamResultAnalyzer.getRowCount();
+	    File file = statementResultSetFileBuilder.buildAndGetFile();
+	    int rowCount = statementResultSetFileBuilder.getRowCount();
+	    boolean isResultSet = statementResultSetFileBuilder.isResultSet();
 
 	    if (isResultSet) {
 		aceQLResultSet = new AceQLResultSet(file, this, rowCount);
@@ -398,10 +375,46 @@ class AceQLPreparedStatement extends AceQLStatement implements PreparedStatement
 	} catch (Exception e) {
 	    throw new AceQLException(e.getMessage(), 0, e, null, aceQLHttpApi.getHttpStatusCode());
 	}
-
     }
 
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractPreparedStatement#executeQuery
+     * ()
+     */
+    @Override
+    public ResultSet executeQuery() throws SQLException {
 
+	try {
+	    Map<String, String> statementParameters = builder.getHttpFormattedStatementParameters();
+	    PreparedStatementResultSetFileBuilder statementResultSetFileBuilder = new PreparedStatementResultSetFileBuilder(
+		    sql, isStoredProcedure, statementParameters, aceQLHttpApi, localResultSetFiles, maxRows);
+
+	    File file = statementResultSetFileBuilder.buildAndGetFile();
+	    int rowCount = statementResultSetFileBuilder.getRowCount();
+
+	    if (isStoredProcedure) {
+		Map<Integer, SqlParameter> callableOutParameters = builder.getCallableOutParameters();
+		debug("callableOutParameters: " + callableOutParameters);
+		updateOutParameters(statementResultSetFileBuilder.getStreamResultAnalyzer(), callableOutParameters);
+	    }
+
+	    /*
+	     * if (DEBUG) { String fileContent = FileUtils.readFileToString(file,
+	     * Charset.forName("UTF-8")); debug(fileContent); }
+	     */
+
+	    AceQLResultSet aceQLResultSet = new AceQLResultSet(file, this, rowCount);
+	    return aceQLResultSet;
+
+	} catch (AceQLException aceQlException) {
+	    throw aceQlException;
+	} catch (Exception e) {
+	    throw new AceQLException(e.getMessage(), 0, e, null, aceQLHttpApi.getHttpStatusCode());
+	}
+
+    }
     /*
      * (non-Javadoc)
      *
@@ -432,70 +445,7 @@ class AceQLPreparedStatement extends AceQLStatement implements PreparedStatement
 
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractPreparedStatement#executeQuery
-     * ()
-     */
-    @Override
-    public ResultSet executeQuery() throws SQLException {
 
-	try {
-
-	    File file = AceQLStatement.buildtResultSetFile();
-	    this.localResultSetFiles.add(file);
-
-	    aceQLHttpApi.trace("file: " + file);
-	    aceQLHttpApi.trace("gzipResult: " + aceQLHttpApi.isGzipResult());
-
-	    boolean isPreparedStatement = true;
-	    Map<String, String> statementParameters = builder.getHttpFormattedStatementParameters();
-
-	    // To be passed to the AceQLResult
-	    //LastSelectStore lastSelectStore = new LastSelectStore(sql, isPreparedStatement, isStoredProcedure, aceQLHttpApi.isGzipResult(), aceQLHttpApi.isPrettyPrinting());
-
-	    try (InputStream in = aceQLHttpApi.executeQuery(sql, isPreparedStatement, isStoredProcedure,
-		    statementParameters, maxRows); OutputStream out = new BufferedOutputStream(new FileOutputStream(file));) {
-
-		if (in != null) {
-		    // Do not use resource try {} ==> We don't want to create an
-		    // empty file
-
-		    InputStream inFinal = AceQLStatementUtil.getFinalInputStream(in, aceQLHttpApi.isGzipResult());
-		    IOUtils.copy(inFinal, out);
-		}
-	    }
-
-	    StreamResultAnalyzer streamResultAnalyzer = new StreamResultAnalyzer(file, aceQLHttpApi.getHttpStatusCode(),
-		    aceQLHttpApi.getHttpStatusMessage());
-	    if (!streamResultAnalyzer.isStatusOk()) {
-		throw new AceQLException(streamResultAnalyzer.getErrorMessage(), streamResultAnalyzer.getErrorId(),
-			null, streamResultAnalyzer.getStackTrace(), aceQLHttpApi.getHttpStatusCode());
-	    }
-
-	    if (isStoredProcedure) {
-		Map<Integer, SqlParameter> callableOutParameters = builder.getCallableOutParameters();
-		debug("callableOutParameters: " + callableOutParameters);
-		updateOutParameters(streamResultAnalyzer, callableOutParameters);
-	    }
-
-	    /*
-	     * if (DEBUG) { String fileContent = FileUtils.readFileToString(file,
-	     * Charset.forName("UTF-8")); debug(fileContent); }
-	     */
-
-	    int rowCount = streamResultAnalyzer.getRowCount();
-	    AceQLResultSet aceQLResultSet = new AceQLResultSet(file, this, rowCount);
-	    return aceQLResultSet;
-
-	} catch (AceQLException aceQlException) {
-	    throw aceQlException;
-	} catch (Exception e) {
-	    throw new AceQLException(e.getMessage(), 0, e, null, aceQLHttpApi.getHttpStatusCode());
-	}
-
-    }
 
     private void updateOutParameters(StreamResultAnalyzer streamResultAnalyzer,
 	    Map<Integer, SqlParameter> callableOutParameters) throws SQLException {
@@ -529,7 +479,6 @@ class AceQLPreparedStatement extends AceQLStatement implements PreparedStatement
 
     }
 
-
     /*
      * (non-Javadoc)
      *
@@ -548,11 +497,12 @@ class AceQLPreparedStatement extends AceQLStatement implements PreparedStatement
 
     /**************************************************************
      *
-     *			 Unimplemented Methods
+     * Unimplemented Methods
      *
      **************************************************************
-
-    /* (non-Javadoc)
+     *
+     * /* (non-Javadoc)
+     *
      * @see java.sql.PreparedStatement#setByte(int, byte)
      */
     @Override
@@ -563,7 +513,9 @@ class AceQLPreparedStatement extends AceQLStatement implements PreparedStatement
 
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see java.sql.PreparedStatement#setBytes(int, byte[])
      */
     @Override
@@ -574,7 +526,9 @@ class AceQLPreparedStatement extends AceQLStatement implements PreparedStatement
 
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see java.sql.PreparedStatement#setAsciiStream(int, java.io.InputStream, int)
      */
     @Override
@@ -585,8 +539,11 @@ class AceQLPreparedStatement extends AceQLStatement implements PreparedStatement
 
     }
 
-    /* (non-Javadoc)
-     * @see java.sql.PreparedStatement#setUnicodeStream(int, java.io.InputStream, int)
+    /*
+     * (non-Javadoc)
+     *
+     * @see java.sql.PreparedStatement#setUnicodeStream(int, java.io.InputStream,
+     * int)
      */
     @Override
     public void setUnicodeStream(int parameterIndex, InputStream x, int length) throws SQLException {
@@ -596,7 +553,9 @@ class AceQLPreparedStatement extends AceQLStatement implements PreparedStatement
 
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see java.sql.PreparedStatement#clearParameters()
      */
     @Override
@@ -607,7 +566,9 @@ class AceQLPreparedStatement extends AceQLStatement implements PreparedStatement
 
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see java.sql.PreparedStatement#setObject(int, java.lang.Object, int)
      */
     @Override
@@ -618,7 +579,9 @@ class AceQLPreparedStatement extends AceQLStatement implements PreparedStatement
 
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see java.sql.PreparedStatement#setObject(int, java.lang.Object)
      */
     @Override
@@ -628,7 +591,9 @@ class AceQLPreparedStatement extends AceQLStatement implements PreparedStatement
 	throwExceptionIfCalled(methodName);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see java.sql.PreparedStatement#addBatch()
      */
     @Override
@@ -638,7 +603,9 @@ class AceQLPreparedStatement extends AceQLStatement implements PreparedStatement
 	throwExceptionIfCalled(methodName);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see java.sql.PreparedStatement#setCharacterStream(int, java.io.Reader, int)
      */
     @Override
@@ -648,7 +615,9 @@ class AceQLPreparedStatement extends AceQLStatement implements PreparedStatement
 	throwExceptionIfCalled(methodName);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see java.sql.PreparedStatement#setRef(int, java.sql.Ref)
      */
     @Override
@@ -658,7 +627,9 @@ class AceQLPreparedStatement extends AceQLStatement implements PreparedStatement
 	throwExceptionIfCalled(methodName);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see java.sql.PreparedStatement#setBlob(int, java.sql.Blob)
      */
     @Override
@@ -668,7 +639,9 @@ class AceQLPreparedStatement extends AceQLStatement implements PreparedStatement
 	throwExceptionIfCalled(methodName);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see java.sql.PreparedStatement#setClob(int, java.sql.Clob)
      */
     @Override
@@ -678,7 +651,9 @@ class AceQLPreparedStatement extends AceQLStatement implements PreparedStatement
 	throwExceptionIfCalled(methodName);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see java.sql.PreparedStatement#setArray(int, java.sql.Array)
      */
     @Override
@@ -688,7 +663,9 @@ class AceQLPreparedStatement extends AceQLStatement implements PreparedStatement
 	throwExceptionIfCalled(methodName);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see java.sql.PreparedStatement#getMetaData()
      */
     @Override
@@ -699,8 +676,11 @@ class AceQLPreparedStatement extends AceQLStatement implements PreparedStatement
 	return null;
     }
 
-    /* (non-Javadoc)
-     * @see java.sql.PreparedStatement#setDate(int, java.sql.Date, java.util.Calendar)
+    /*
+     * (non-Javadoc)
+     *
+     * @see java.sql.PreparedStatement#setDate(int, java.sql.Date,
+     * java.util.Calendar)
      */
     @Override
     public void setDate(int parameterIndex, Date x, Calendar cal) throws SQLException {
@@ -710,8 +690,11 @@ class AceQLPreparedStatement extends AceQLStatement implements PreparedStatement
 
     }
 
-    /* (non-Javadoc)
-     * @see java.sql.PreparedStatement#setTime(int, java.sql.Time, java.util.Calendar)
+    /*
+     * (non-Javadoc)
+     *
+     * @see java.sql.PreparedStatement#setTime(int, java.sql.Time,
+     * java.util.Calendar)
      */
     @Override
     public void setTime(int parameterIndex, Time x, Calendar cal) throws SQLException {
@@ -721,8 +704,11 @@ class AceQLPreparedStatement extends AceQLStatement implements PreparedStatement
 
     }
 
-    /* (non-Javadoc)
-     * @see java.sql.PreparedStatement#setTimestamp(int, java.sql.Timestamp, java.util.Calendar)
+    /*
+     * (non-Javadoc)
+     *
+     * @see java.sql.PreparedStatement#setTimestamp(int, java.sql.Timestamp,
+     * java.util.Calendar)
      */
     @Override
     public void setTimestamp(int parameterIndex, Timestamp x, Calendar cal) throws SQLException {
@@ -732,7 +718,9 @@ class AceQLPreparedStatement extends AceQLStatement implements PreparedStatement
 
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see java.sql.PreparedStatement#setNull(int, int, java.lang.String)
      */
     @Override
@@ -743,7 +731,9 @@ class AceQLPreparedStatement extends AceQLStatement implements PreparedStatement
 
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see java.sql.PreparedStatement#getParameterMetaData()
      */
     @Override
@@ -754,7 +744,9 @@ class AceQLPreparedStatement extends AceQLStatement implements PreparedStatement
 	return null;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see java.sql.PreparedStatement#setRowId(int, java.sql.RowId)
      */
     @Override
@@ -764,7 +756,9 @@ class AceQLPreparedStatement extends AceQLStatement implements PreparedStatement
 	throwExceptionIfCalled(methodName);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see java.sql.PreparedStatement#setNString(int, java.lang.String)
      */
     @Override
@@ -774,8 +768,11 @@ class AceQLPreparedStatement extends AceQLStatement implements PreparedStatement
 	throwExceptionIfCalled(methodName);
     }
 
-    /* (non-Javadoc)
-     * @see java.sql.PreparedStatement#setNCharacterStream(int, java.io.Reader, long)
+    /*
+     * (non-Javadoc)
+     *
+     * @see java.sql.PreparedStatement#setNCharacterStream(int, java.io.Reader,
+     * long)
      */
     @Override
     public void setNCharacterStream(int parameterIndex, Reader value, long length) throws SQLException {
@@ -784,7 +781,9 @@ class AceQLPreparedStatement extends AceQLStatement implements PreparedStatement
 	throwExceptionIfCalled(methodName);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see java.sql.PreparedStatement#setNClob(int, java.sql.NClob)
      */
     @Override
@@ -794,7 +793,9 @@ class AceQLPreparedStatement extends AceQLStatement implements PreparedStatement
 	throwExceptionIfCalled(methodName);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see java.sql.PreparedStatement#setClob(int, java.io.Reader, long)
      */
     @Override
@@ -804,7 +805,9 @@ class AceQLPreparedStatement extends AceQLStatement implements PreparedStatement
 	throwExceptionIfCalled(methodName);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see java.sql.PreparedStatement#setBlob(int, java.io.InputStream, long)
      */
     @Override
@@ -814,7 +817,9 @@ class AceQLPreparedStatement extends AceQLStatement implements PreparedStatement
 	throwExceptionIfCalled(methodName);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see java.sql.PreparedStatement#setNClob(int, java.io.Reader, long)
      */
     @Override
@@ -824,7 +829,9 @@ class AceQLPreparedStatement extends AceQLStatement implements PreparedStatement
 	throwExceptionIfCalled(methodName);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see java.sql.PreparedStatement#setSQLXML(int, java.sql.SQLXML)
      */
     @Override
@@ -834,7 +841,9 @@ class AceQLPreparedStatement extends AceQLStatement implements PreparedStatement
 	throwExceptionIfCalled(methodName);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see java.sql.PreparedStatement#setObject(int, java.lang.Object, int, int)
      */
     @Override
@@ -844,8 +853,11 @@ class AceQLPreparedStatement extends AceQLStatement implements PreparedStatement
 	throwExceptionIfCalled(methodName);
     }
 
-    /* (non-Javadoc)
-     * @see java.sql.PreparedStatement#setAsciiStream(int, java.io.InputStream, long)
+    /*
+     * (non-Javadoc)
+     *
+     * @see java.sql.PreparedStatement#setAsciiStream(int, java.io.InputStream,
+     * long)
      */
     @Override
     public void setAsciiStream(int parameterIndex, InputStream x, long length) throws SQLException {
@@ -854,7 +866,9 @@ class AceQLPreparedStatement extends AceQLStatement implements PreparedStatement
 	throwExceptionIfCalled(methodName);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see java.sql.PreparedStatement#setCharacterStream(int, java.io.Reader, long)
      */
     @Override
@@ -864,7 +878,9 @@ class AceQLPreparedStatement extends AceQLStatement implements PreparedStatement
 	throwExceptionIfCalled(methodName);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see java.sql.PreparedStatement#setAsciiStream(int, java.io.InputStream)
      */
     @Override
@@ -874,7 +890,9 @@ class AceQLPreparedStatement extends AceQLStatement implements PreparedStatement
 	throwExceptionIfCalled(methodName);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see java.sql.PreparedStatement#setCharacterStream(int, java.io.Reader)
      */
     @Override
@@ -885,7 +903,9 @@ class AceQLPreparedStatement extends AceQLStatement implements PreparedStatement
 
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see java.sql.PreparedStatement#setNCharacterStream(int, java.io.Reader)
      */
     @Override
@@ -895,7 +915,9 @@ class AceQLPreparedStatement extends AceQLStatement implements PreparedStatement
 	throwExceptionIfCalled(methodName);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see java.sql.PreparedStatement#setClob(int, java.io.Reader)
      */
     @Override
@@ -905,7 +927,9 @@ class AceQLPreparedStatement extends AceQLStatement implements PreparedStatement
 	throwExceptionIfCalled(methodName);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see java.sql.PreparedStatement#setBlob(int, java.io.InputStream)
      */
     @Override
@@ -915,7 +939,9 @@ class AceQLPreparedStatement extends AceQLStatement implements PreparedStatement
 	throwExceptionIfCalled(methodName);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see java.sql.PreparedStatement#setNClob(int, java.io.Reader)
      */
     @Override

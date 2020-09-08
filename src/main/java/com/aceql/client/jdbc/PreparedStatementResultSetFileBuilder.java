@@ -59,6 +59,7 @@ class PreparedStatementResultSetFileBuilder {
     private boolean isResultSet;
     private boolean isStoredProcedure;
     private Map<String, String> statementParameters;
+    private StreamResultAnalyzer streamResultAnalyzer;
 
 
     /**
@@ -74,6 +75,7 @@ class PreparedStatementResultSetFileBuilder {
 	    List<File> localResultSetFiles, int maxRows) {
 	this.sql = sql;
 	this.isStoredProcedure = isStoredProcedure;
+	this.statementParameters = statementParameters;
 	this.aceQLHttpApi = aceQLHttpApi;
 	this.localResultSetFiles = localResultSetFiles;
 	this.maxRows = maxRows;
@@ -105,7 +107,7 @@ class PreparedStatementResultSetFileBuilder {
 	    }
 	}
 
-	StreamResultAnalyzer streamResultAnalyzer = new StreamResultAnalyzer(file, aceQLHttpApi.getHttpStatusCode(),
+	streamResultAnalyzer = new StreamResultAnalyzer(file, aceQLHttpApi.getHttpStatusCode(),
 		aceQLHttpApi.getHttpStatusMessage());
 	if (!streamResultAnalyzer.isStatusOk()) {
 	    throw new AceQLException(streamResultAnalyzer.getErrorMessage(), streamResultAnalyzer.getErrorId(), null,
@@ -133,6 +135,16 @@ class PreparedStatementResultSetFileBuilder {
      */
     public boolean isResultSet() {
         return isResultSet;
+    }
+
+
+
+    /**
+     * Gets the StreamResultAnalyzer. Will be used to update Out parameters in stored procedure.
+     * @return the streamResultAnalyzer
+     */
+    public StreamResultAnalyzer getStreamResultAnalyzer() {
+        return streamResultAnalyzer;
     }
 
     private static File initResultSetFile() {
