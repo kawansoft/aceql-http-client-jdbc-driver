@@ -182,7 +182,7 @@ import com.aceql.client.metadata.ResultSetMetaDataPolicy;
 public class AceQLConnection extends AbstractConnection implements Connection, Cloneable, Closeable {
 
     /** The Http instance that does all Http stuff */
-    AceQLHttpApi aceQLHttpApi = null;
+    protected AceQLHttpApi aceQLHttpApi = null;
 
     /** is Connection open or closed */
     private boolean closed = false;

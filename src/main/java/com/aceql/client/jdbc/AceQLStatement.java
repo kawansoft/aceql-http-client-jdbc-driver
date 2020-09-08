@@ -18,11 +18,7 @@
  */
 package com.aceql.client.jdbc;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -32,13 +28,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.io.IOUtils;
 import org.kawanfw.driver.jdbc.abstracts.AbstractStatement;
 import org.kawanfw.driver.util.FrameworkFileUtil;
 
 import com.aceql.client.jdbc.http.AceQLHttpApi;
-import com.aceql.client.jdbc.util.AceQLStatementUtil;
-import com.aceql.client.jdbc.util.json.StreamResultAnalyzer;
 
 /**
  * @author Nicolas de Pomereu
@@ -88,30 +81,11 @@ class AceQLStatement extends AbstractStatement implements Statement {
 
 	try {
 
-	    File file = buildtResultSetFile();
-	    this.localResultSetFiles.add(file);
+	    StatementResultSetFileBuilder statementResultSetFileBuilder = new StatementResultSetFileBuilder(sql, aceQLHttpApi, localResultSetFiles, maxRows);
 
-	    aceQLHttpApi.trace("file: " + file);
-
-	    boolean isPreparedStatement = false;
-	    Map<String, String> statementParameters = null;
-
-	    try (InputStream in = aceQLHttpApi.execute(sql, isPreparedStatement, statementParameters, maxRows); OutputStream out = new BufferedOutputStream(new FileOutputStream(file));) {
-
-		if (in != null) {
-		    IOUtils.copy(in, out);
-		}
-	    }
-
-	    StreamResultAnalyzer streamResultAnalyzer = new StreamResultAnalyzer(file, aceQLHttpApi.getHttpStatusCode(),
-		    aceQLHttpApi.getHttpStatusMessage());
-	    if (!streamResultAnalyzer.isStatusOk()) {
-		throw new AceQLException(streamResultAnalyzer.getErrorMessage(), streamResultAnalyzer.getErrorId(),
-			null, streamResultAnalyzer.getStackTrace(), aceQLHttpApi.getHttpStatusCode());
-	    }
-
-	    boolean isResultSet = streamResultAnalyzer.isResultSet();
-	    int rowCount = streamResultAnalyzer.getRowCount();
+	    File file = statementResultSetFileBuilder.buildAndGetFile();
+	    boolean isResultSet = statementResultSetFileBuilder.isResultSet();
+	    int rowCount = statementResultSetFileBuilder.getRowCount();
 
 	    debug("statement.isResultSet: " + isResultSet);
 	    debug("statement.rowCount   : " + rowCount);
@@ -179,34 +153,8 @@ class AceQLStatement extends AbstractStatement implements Statement {
 
 	try {
 
-	    File file = buildtResultSetFile();
-	    this.localResultSetFiles.add(file);
-
-	    aceQLHttpApi.trace("file: " + file);
-	    aceQLHttpApi.trace("gzipResult: " + aceQLHttpApi.isGzipResult());
-
-	    boolean isPreparedStatement = false;
-	    boolean isStoredProcedure = false;
-	    Map<String, String> statementParameters = null;
-
-	    try (InputStream in = aceQLHttpApi.executeQuery(sql, isPreparedStatement, isStoredProcedure,
-		    statementParameters, maxRows); OutputStream out = new BufferedOutputStream(new FileOutputStream(file));) {
-
-		if (in != null) {
-		    InputStream inFinal = AceQLStatementUtil.getFinalInputStream(in, aceQLHttpApi.isGzipResult());
-		    IOUtils.copy(inFinal, out);
-		}
-	    }
-
-	    StreamResultAnalyzer streamResultAnalyzer = new StreamResultAnalyzer(file, aceQLHttpApi.getHttpStatusCode(),
-		    aceQLHttpApi.getHttpStatusMessage());
-	    if (!streamResultAnalyzer.isStatusOk()) {
-		throw new AceQLException(streamResultAnalyzer.getErrorMessage(), streamResultAnalyzer.getErrorId(),
-			null, streamResultAnalyzer.getStackTrace(), aceQLHttpApi.getHttpStatusCode());
-	    }
-
-	    int rowCount = streamResultAnalyzer.getRowCount();
-	    AceQLResultSet aceQLResultSet = new AceQLResultSet(file, this, rowCount);
+	    StatementResultSetFileBuilder statementResultSetFileBuilder = new StatementResultSetFileBuilder(sql, aceQLHttpApi, localResultSetFiles, maxRows);
+	    AceQLResultSet aceQLResultSet = new AceQLResultSet(statementResultSetFileBuilder.buildAndGetFile(), this, statementResultSetFileBuilder.getRowCount());
 	    return aceQLResultSet;
 
 	} catch (AceQLException aceQlException) {

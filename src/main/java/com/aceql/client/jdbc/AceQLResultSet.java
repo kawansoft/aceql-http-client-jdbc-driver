@@ -24,6 +24,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.sql.Array;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -763,6 +764,37 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
     @Override
     public void setFetchDirection(int direction) throws SQLException {
 	// Do nothing
+    }
+
+
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getArray(int)
+     */
+    @Override
+    public Array getArray(int columnIndex) throws SQLException {
+	String value = getStringValue(columnIndex);
+	if (value == null || value.equals("NULL")) {
+	    return null;
+	}
+
+	return null;
+
+    }
+
+
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getArray(java.lang.String)
+     */
+    @Override
+    public Array getArray(String colName) throws SQLException {
+	String value = getStringValue(colName);
+
+	if (value == null || value.equals("NULL")) {
+	    return null;
+	}
+	return null;
     }
 
 

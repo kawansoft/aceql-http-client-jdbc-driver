@@ -467,13 +467,11 @@ class AceQLPreparedStatement extends AceQLStatement implements PreparedStatement
 		}
 	    }
 
-	    int httpStatusCode = aceQLHttpApi.getHttpStatusCode();
-
-	    StreamResultAnalyzer streamResultAnalyzer = new StreamResultAnalyzer(file, httpStatusCode,
+	    StreamResultAnalyzer streamResultAnalyzer = new StreamResultAnalyzer(file, aceQLHttpApi.getHttpStatusCode(),
 		    aceQLHttpApi.getHttpStatusMessage());
 	    if (!streamResultAnalyzer.isStatusOk()) {
 		throw new AceQLException(streamResultAnalyzer.getErrorMessage(), streamResultAnalyzer.getErrorId(),
-			null, streamResultAnalyzer.getStackTrace(), httpStatusCode);
+			null, streamResultAnalyzer.getStackTrace(), aceQLHttpApi.getHttpStatusCode());
 	    }
 
 	    if (isStoredProcedure) {
