@@ -88,7 +88,44 @@ public class PreparedStatementResultSetFileBuilder {
      * @throws SQLException
      * @throws IOException
      */
-    public File buildAndGetFile() throws SQLException, IOException {
+    public File buildAndGetFileExecute() throws SQLException, IOException {
+	File file = initResultSetFile();
+	this.localResultSetFiles.add(file);
+
+	aceQLHttpApi.trace("file: " + file);
+	aceQLHttpApi.trace("gzipResult: " + aceQLHttpApi.isGzipResult());
+
+	boolean isPreparedStatement = true;
+
+	try (InputStream in = aceQLHttpApi.execute(sql, isPreparedStatement,
+		statementParameters, maxRows);
+		OutputStream out = new BufferedOutputStream(new FileOutputStream(file));) {
+
+	    if (in != null) {
+		IOUtils.copy(in, out);
+	    }
+	}
+
+	streamResultAnalyzer = new StreamResultAnalyzer(file, aceQLHttpApi.getHttpStatusCode(),
+		aceQLHttpApi.getHttpStatusMessage());
+	if (!streamResultAnalyzer.isStatusOk()) {
+	    throw new AceQLException(streamResultAnalyzer.getErrorMessage(), streamResultAnalyzer.getErrorId(), null,
+		    streamResultAnalyzer.getStackTrace(), aceQLHttpApi.getHttpStatusCode());
+	}
+
+	isResultSet = streamResultAnalyzer.isResultSet();
+	this.rowCount = streamResultAnalyzer.getRowCount();
+	return file;
+    }
+
+    /**
+     * Builds the File that contains the ResultSet by calling server side and downloading ResultSet in Json format.
+     *
+     * @return
+     * @throws SQLException
+     * @throws IOException
+     */
+    public File buildAndGetFileExecuteQuery() throws SQLException, IOException {
 	File file = initResultSetFile();
 	this.localResultSetFiles.add(file);
 

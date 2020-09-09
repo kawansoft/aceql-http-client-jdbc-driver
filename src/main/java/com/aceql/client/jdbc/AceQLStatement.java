@@ -82,7 +82,7 @@ public class AceQLStatement extends AbstractStatement implements Statement {
 	    StatementResultSetFileBuilder statementResultSetFileBuilder = new StatementResultSetFileBuilder(sql,
 		    aceQLHttpApi, localResultSetFiles, maxRows);
 
-	    File file = statementResultSetFileBuilder.buildAndGetFile();
+	    File file = statementResultSetFileBuilder.buildAndGetFileExecute();
 	    boolean isResultSet = statementResultSetFileBuilder.isResultSet();
 	    int rowCount = statementResultSetFileBuilder.getRowCount();
 
@@ -117,7 +117,7 @@ public class AceQLStatement extends AbstractStatement implements Statement {
 	try {
 	    StatementResultSetFileBuilder statementResultSetFileBuilder = new StatementResultSetFileBuilder(sql,
 		    aceQLHttpApi, localResultSetFiles, maxRows);
-	    AceQLResultSet aceQLResultSet = new AceQLResultSet(statementResultSetFileBuilder.buildAndGetFile(), this,
+	    AceQLResultSet aceQLResultSet = new AceQLResultSet(statementResultSetFileBuilder.buildAndGetFileExecuteQuery(), this,
 		    statementResultSetFileBuilder.getRowCount());
 	    return aceQLResultSet;
 	} catch (AceQLException aceQlException) {

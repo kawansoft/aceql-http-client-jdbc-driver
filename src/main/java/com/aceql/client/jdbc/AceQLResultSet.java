@@ -373,7 +373,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 
     @Override
     public ResultSetMetaData getMetaData() throws SQLException {
-	throw new IllegalArgumentException(Tag.PRODUCT +  ". " + "getMetaData() call requires AceQL JDBC Driver version 5 or higher.");
+	throw new IllegalArgumentException(Tag.PRODUCT +  ". " + "ResultSet.getMetaData() call requires AceQL JDBC Driver version 5 or higher.");
     }
 
     /*

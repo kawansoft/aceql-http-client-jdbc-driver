@@ -60,7 +60,7 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
 
     private static boolean DEBUG = false;
 
-    private String sql = null;
+    protected String sql = null;
 
     private List<InputStream> localInputStreams = new ArrayList<InputStream>();
     private List<String> localBlobIds = new ArrayList<String>();
@@ -358,7 +358,7 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
 	    PreparedStatementResultSetFileBuilder statementResultSetFileBuilder = new PreparedStatementResultSetFileBuilder(
 		    sql, isStoredProcedure, statementParameters, aceQLHttpApi, localResultSetFiles, maxRows);
 
-	    File file = statementResultSetFileBuilder.buildAndGetFile();
+	    File file = statementResultSetFileBuilder.buildAndGetFileExecute();
 	    int rowCount = statementResultSetFileBuilder.getRowCount();
 	    boolean isResultSet = statementResultSetFileBuilder.isResultSet();
 
@@ -391,7 +391,7 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
 	    PreparedStatementResultSetFileBuilder statementResultSetFileBuilder = new PreparedStatementResultSetFileBuilder(
 		    sql, isStoredProcedure, statementParameters, aceQLHttpApi, localResultSetFiles, maxRows);
 
-	    File file = statementResultSetFileBuilder.buildAndGetFile();
+	    File file = statementResultSetFileBuilder.buildAndGetFileExecuteQuery();
 	    int rowCount = statementResultSetFileBuilder.getRowCount();
 
 	    if (isStoredProcedure) {
@@ -447,7 +447,7 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
 
 
 
-    private void updateOutParameters(StreamResultAnalyzer streamResultAnalyzer,
+    protected void updateOutParameters(StreamResultAnalyzer streamResultAnalyzer,
 	    Map<Integer, SqlParameter> callableOutParameters) throws SQLException {
 	// Immediate return in case no parameters
 	if (callableOutParameters == null || callableOutParameters.isEmpty()) {
@@ -489,7 +489,7 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
 	super.close();
     }
 
-    private void debug(String s) {
+    protected void debug(String s) {
 	if (DEBUG) {
 	    System.out.println(new java.util.Date() + " " + s);
 	}

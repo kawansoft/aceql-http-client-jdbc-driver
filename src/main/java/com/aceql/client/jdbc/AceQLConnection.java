@@ -360,7 +360,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 
     @Override
     public DatabaseMetaData getMetaData() throws SQLException {
-	throw new SQLException(Tag.PRODUCT +  ". " + "getMetaData() call requires AceQL JDBC Driver version 5 or higher.");
+	throw new SQLException(Tag.PRODUCT +  ". " + "Connection.getMetaData() call requires AceQL JDBC Driver version 5 or higher.");
     }
 
 
