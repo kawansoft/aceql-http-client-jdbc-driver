@@ -44,7 +44,7 @@ import com.aceql.client.jdbc.util.json.StreamResultAnalyzer;
  *
  */
 
-class StatementResultSetFileBuilder {
+public class StatementResultSetFileBuilder {
 
     private String sql = null;
     private AceQLHttpApi aceQLHttpApi = null;

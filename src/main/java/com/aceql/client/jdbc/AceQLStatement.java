@@ -22,7 +22,6 @@ import java.io.File;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.SQLWarning;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +36,7 @@ import com.aceql.client.jdbc.http.AceQLHttpApi;
  * @author Nicolas de Pomereu
  *
  */
-class AceQLStatement extends AbstractStatement implements Statement {
+public class AceQLStatement extends AbstractStatement implements Statement {
 
     private static boolean DEBUG = false;
 
@@ -55,8 +54,6 @@ class AceQLStatement extends AbstractStatement implements Statement {
 
     /** Maximum rows to get, very important to limit trafic */
     protected int maxRows = 0;
-
-    private int fetchSise = 0;
 
     /**
      * Constructor
@@ -225,86 +222,6 @@ class AceQLStatement extends AbstractStatement implements Statement {
 	return false;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#getWarnings()
-     */
-    @Override
-    public SQLWarning getWarnings() throws SQLException {
-	return null;
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#getFetchSize()
-     */
-    @Override
-    public int getFetchSize() throws SQLException {
-	return this.fetchSise;
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#setFetchSize(int)
-     */
-    @Override
-    public void setFetchSize(int rows) throws SQLException {
-	this.fetchSise = rows;
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#cancel()
-     */
-    @Override
-    public void cancel() throws SQLException {
-	// Do nothing for now. Future usage.
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#clearWarnings()
-     */
-    @Override
-    public void clearWarnings() throws SQLException {
-	// Do nothing for now. Future usage.
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#clearBatch()
-     */
-    @Override
-    public void clearBatch() throws SQLException {
-	// Do nothing for now. Future usage.
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#getFetchDirection()
-     */
-    @Override
-    public int getFetchDirection() throws SQLException {
-	return ResultSet.FETCH_FORWARD;
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.kawanfw.driver.jdbc.abstracts.AbstractStatement#setFetchDirection(int)
-     */
-    @Override
-    public void setFetchDirection(int direction) throws SQLException {
-	// Do nothing
-    }
 
     private void debug(String s) {
 	if (DEBUG) {

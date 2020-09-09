@@ -24,16 +24,12 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
-import java.sql.Array;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.sql.SQLWarning;
 import java.sql.Statement;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
@@ -41,9 +37,7 @@ import org.kawanfw.driver.jdbc.abstracts.AbstractResultSet;
 import org.kawanfw.driver.util.Tag;
 
 import com.aceql.client.jdbc.http.AceQLHttpApi;
-import com.aceql.client.jdbc.util.AceQLConnectionUtil;
 import com.aceql.client.jdbc.util.AceQLResultSetUtil;
-import com.aceql.client.jdbc.util.SimpleClassCaller;
 import com.aceql.client.jdbc.util.json.RowParser;
 
 /**
@@ -79,12 +73,6 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
     /** Says if the last accessed value was null */
     private boolean wasNull = false;
 
-
-    // Futur usage
-    @SuppressWarnings("unused")
-    private ResultSetMetaData resultSetMetaData;
-
-    private int fetchSize = 0;
 
     /**
      * Constructor.
@@ -298,7 +286,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	return this.statement;
     }
 
-    private String getStringValue(int index) throws SQLException {
+    protected String getStringValue(int index) throws SQLException {
 
 	if (isClosed) {
 	    throw new SQLException("ResultSet is closed.");
@@ -318,7 +306,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	return value;
     }
 
-    private String getStringValue(String string) throws SQLException {
+    protected String getStringValue(String string) throws SQLException {
 
 	if (isClosed) {
 	    throw new SQLException("ResultSet is closed.");
@@ -385,53 +373,8 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 
     @Override
     public ResultSetMetaData getMetaData() throws SQLException {
-
-	List<Class<?>> params = new ArrayList<>();
-	List<Object> values = new ArrayList<>();
-
-	params.add(File.class);
-	values.add(this.jsonFile);
-
-	if (! AceQLConnectionUtil.isJdbcMetaDataSupported(this.aceQLConnection)) {
-	    throw new SQLException(
-		    "AceQL Server version must be >= " + AceQLConnectionUtil.META_DATA_CALLS_MIN_SERVER_VERSION
-			    + " in order to call ResultSetMetaData.getMetaData().");
-	}
-
-	if (!this.aceQLHttpApi.isFillResultSetMetaData()) {
-	    throw new SQLException(Tag.PRODUCT +  ". " + "Cannot get Result.getMetata(). Call AceQLConnection.setResultSetMetaDataPolicy(ResultSetMetaDataPolicy.on) in order to activate"
-	    	+ " access to Result.getMetata(). Or add to AceQLDriver the property resultSetMetaDataPolicy=auto");
-	}
-
-	try {
-	    SimpleClassCaller simpleClassCaller = new SimpleClassCaller("com.aceql.driver.reflection.ResultSetMetaDataGetter");
-
-	    Object obj = simpleClassCaller.callMehod("getMetaData", params, values);
-	    return (ResultSetMetaData) obj;
-	} catch (ClassNotFoundException e) {
-	    throw new IllegalArgumentException(Tag.PRODUCT +  ". " + "getMetaData() call requires AceQL JDBC Driver version 5 or higher.");
-	}
-	catch (Exception e) {
-	    throw new SQLException(e);
-	}
+	throw new IllegalArgumentException(Tag.PRODUCT +  ". " + "getMetaData() call requires AceQL JDBC Driver version 5 or higher.");
     }
-
-
-//    @Override
-//    public ResultSetMetaData getMetaData() throws SQLException {
-//	ResultSetMetaDataParser resultSetMetaDataParser = new ResultSetMetaDataParser(jsonFile);
-//	String jsonString = resultSetMetaDataParser.getJsonString();
-//
-//	ResultSetMetaData resultSetMetaData = null;
-//
-//	if (jsonString != null) {
-//	    ResultSetMetaDataHolder resultSetMetaDataHolder = GsonWsUtil.fromJson(jsonString,
-//		    ResultSetMetaDataHolder.class);
-//	    resultSetMetaData = new AceQLResultSetMetaData(resultSetMetaDataHolder);
-//	}
-//
-//	return resultSetMetaData;
-//    }
 
     /*
      * (non-Javadoc)
@@ -700,103 +643,6 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	}
 	return AceQLResultSetUtil.getLongValue(value);
     }
-
-
-    /* (non-Javadoc)
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getWarnings()
-     */
-    @Override
-    public SQLWarning getWarnings() throws SQLException {
-	return null;
-    }
-
-    /* (non-Javadoc)
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getFetchSize()
-     */
-    @Override
-    public int getFetchSize() throws SQLException {
-	return this.fetchSize;
-    }
-
-
-    /* (non-Javadoc)
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#setFetchSize(int)
-     */
-    @Override
-    public void setFetchSize(int rows) throws SQLException {
-	this.fetchSize = rows;
-    }
-
-
-    /* (non-Javadoc)
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#clearWarnings()
-     */
-    @Override
-    public void clearWarnings() throws SQLException {
-	// TODO Auto-generated method stub
-	super.clearWarnings();
-    }
-
-
-
-    /* (non-Javadoc)
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getType()
-     */
-    @Override
-    public int getType() throws SQLException {
-	return ResultSet.TYPE_FORWARD_ONLY;
-    }
-
-
-    /* (non-Javadoc)
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getFetchDirection()
-     */
-    @Override
-    public int getFetchDirection() throws SQLException {
-	return ResultSet.FETCH_FORWARD;
-    }
-
-
-
-    /* (non-Javadoc)
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#setFetchDirection(int)
-     */
-    @Override
-    public void setFetchDirection(int direction) throws SQLException {
-	// Do nothing
-    }
-
-
-
-    /* (non-Javadoc)
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getArray(int)
-     */
-    @Override
-    public Array getArray(int columnIndex) throws SQLException {
-	String value = getStringValue(columnIndex);
-	if (value == null || value.equals("NULL")) {
-	    return null;
-	}
-
-	return null;
-
-    }
-
-
-
-    /* (non-Javadoc)
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getArray(java.lang.String)
-     */
-    @Override
-    public Array getArray(String colName) throws SQLException {
-	String value = getStringValue(colName);
-
-	if (value == null || value.equals("NULL")) {
-	    return null;
-	}
-	return null;
-    }
-
 
 
     /**
