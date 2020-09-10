@@ -27,9 +27,15 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
+import java.sql.SQLClientInfoException;
 import java.sql.SQLException;
+import java.sql.Savepoint;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.Properties;
+import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -38,6 +44,7 @@ import org.kawanfw.driver.util.Tag;
 
 import com.aceql.client.jdbc.http.AceQLHttpApi;
 import com.aceql.client.jdbc.util.AceQLConnectionUtil;
+import com.aceql.client.jdbc.util.SimpleClassCaller;
 import com.aceql.client.metadata.RemoteDatabaseMetaData;
 import com.aceql.client.metadata.ResultSetMetaDataPolicy;
 
@@ -360,10 +367,32 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 
     @Override
     public DatabaseMetaData getMetaData() throws SQLException {
+<<<<<<< HEAD
 	throw new SQLException(Tag.PRODUCT +  ". " + "Connection.getMetaData() call requires AceQL JDBC Driver version 5 or higher.");
+=======
+	List<Class<?>> params = new ArrayList<>();
+	List<Object> values = new ArrayList<>();
+
+	params.add(AceQLConnection.class);
+	values.add(this);
+
+	try {
+	    SimpleClassCaller simpleClassCaller = new SimpleClassCaller(
+		    "com.aceql.driver.reflection.DatabaseMetaDataGetter");
+	    Object obj = simpleClassCaller.callMehod("getMetaData", params, values);
+	    return (DatabaseMetaData) obj;
+	} catch (ClassNotFoundException e) {
+	    throw new IllegalArgumentException("getMetaData() call requires AceQL JDBC Driver version 5 or higher.");
+	} catch (Exception e) {
+	    throw new SQLException(e);
+	}
+>>>>>>> refs/heads/5.0.1
     }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> refs/heads/5.0.1
     /**
      * Returns a RemoteDatabaseMetaData instance in order to retrieve metadata info
      * for all client SDKs.
@@ -696,6 +725,113 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	aceQLHttpApi.setProgress(progress);
     }
 
+<<<<<<< HEAD
+=======
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#clearWarnings()
+     */
+    @Override
+    public void clearWarnings() throws SQLException {
+	// Do nothing for now. Future usage.
+    }
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#isValid(int)
+     */
+    @Override
+    public boolean isValid(int timeout) throws SQLException {
+	return true;
+    }
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#getClientInfo()
+     */
+    @Override
+    public Properties getClientInfo() throws SQLException {
+	return null;
+    }
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#getClientInfo(java.lang.String)
+     */
+    @Override
+    public String getClientInfo(String name) throws SQLException {
+	return null;
+    }
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#setClientInfo(java.util.Properties)
+     */
+    @Override
+    public void setClientInfo(Properties properties) throws SQLClientInfoException {
+	// Do nothing for now. Future usage.
+    }
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#setClientInfo(java.lang.String, java.lang.String)
+     */
+    @Override
+    public void setClientInfo(String name, String value) throws SQLClientInfoException {
+	// Do nothing for now. Future usage.
+    }
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#setNetworkTimeout(java.util.concurrent.Executor, int)
+     */
+    @Override
+    public void setNetworkTimeout(Executor arg0, int arg1) throws SQLException {
+	// Do nothing for now. Future usage.
+    }
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#setSavepoint()
+     */
+    @Override
+    public Savepoint setSavepoint() throws SQLException {
+	return new AceQLSavepoint();
+    }
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#setSavepoint(java.lang.String)
+     */
+    @Override
+    public Savepoint setSavepoint(String name) throws SQLException {
+	return new AceQLSavepoint();
+    }
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#rollback(java.sql.Savepoint)
+     */
+    @Override
+    public void rollback(Savepoint savepoint) throws SQLException {
+	// Do nothing for now. Future usage.
+    }
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#releaseSavepoint(java.sql.Savepoint)
+     */
+    @Override
+    public void releaseSavepoint(Savepoint savepoint) throws SQLException {
+	// Do nothing for now. Future usage.
+    }
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#setCatalog(java.lang.String)
+     */
+    @Override
+    public void setCatalog(String catalog) throws SQLException {
+	// Do nothing for now. Future usage.
+    }
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#setSchema(java.lang.String)
+     */
+    @Override
+    public void setSchema(String arg0) throws SQLException {
+	// Do nothing for now. Future usage.
+    }
+
+>>>>>>> refs/heads/5.0.1
     /*
      * (non-Javadoc)
      *

@@ -24,6 +24,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.sql.Array;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -37,8 +38,14 @@ import org.kawanfw.driver.jdbc.abstracts.AbstractResultSet;
 import org.kawanfw.driver.util.Tag;
 
 import com.aceql.client.jdbc.http.AceQLHttpApi;
+<<<<<<< HEAD
+=======
+import com.aceql.client.jdbc.http.metadata.AceQLArrayDto;
+import com.aceql.client.jdbc.util.AceQLConnectionUtil;
+>>>>>>> refs/heads/5.0.1
 import com.aceql.client.jdbc.util.AceQLResultSetUtil;
 import com.aceql.client.jdbc.util.json.RowParser;
+import com.aceql.client.metadata.util.GsonWsUtil;
 
 /**
  * Class that allows to built a {@code ResultSet} from a JSON file or JSON
@@ -645,6 +652,104 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
     }
 
 
+<<<<<<< HEAD
+=======
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getArray(int)
+     */
+    @Override
+    public Array getArray(int columnIndex) throws SQLException {
+	String value = getStringValue(columnIndex);
+	if (value == null || value.equals("NULL")) {
+	    return null;
+	}
+
+	AceQLArrayDto aceQLArrayDto = GsonWsUtil.fromJson(value, AceQLArrayDto.class);
+	Array array = aceQLArrayDto.getAceQLArray();
+	return array;
+    }
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getArray(java.lang.String)
+     */
+    @Override
+    public Array getArray(String colName) throws SQLException {
+	String value = getStringValue(colName);
+
+	if (value == null || value.equals("NULL")) {
+	    return null;
+	}
+	AceQLArrayDto aceQLArrayDto = GsonWsUtil.fromJson(value, AceQLArrayDto.class);
+	Array array = aceQLArrayDto.getAceQLArray();
+	return array;
+    }
+
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getWarnings()
+     */
+    @Override
+    public SQLWarning getWarnings() throws SQLException {
+	return null;
+    }
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getFetchSize()
+     */
+    @Override
+    public int getFetchSize() throws SQLException {
+	return this.fetchSize;
+    }
+
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#setFetchSize(int)
+     */
+    @Override
+    public void setFetchSize(int rows) throws SQLException {
+	this.fetchSize = rows;
+    }
+
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#clearWarnings()
+     */
+    @Override
+    public void clearWarnings() throws SQLException {
+	// TODO Auto-generated method stub
+	super.clearWarnings();
+    }
+
+
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getType()
+     */
+    @Override
+    public int getType() throws SQLException {
+	return ResultSet.TYPE_FORWARD_ONLY;
+    }
+
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getFetchDirection()
+     */
+    @Override
+    public int getFetchDirection() throws SQLException {
+	return ResultSet.FETCH_FORWARD;
+    }
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#setFetchDirection(int)
+     */
+    @Override
+    public void setFetchDirection(int direction) throws SQLException {
+	// Do nothing
+    }
+
+
+
+>>>>>>> refs/heads/5.0.1
     /**
      * @return
      * @throws SQLException
