@@ -374,12 +374,6 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	params.add(AceQLConnection.class);
 	values.add(this);
 
-	// If ResultSetMetaDataPolicy.auto has been set, fill now ResultSetMetaData at
-	// each SELECT call.
-//	if (this.getResultSetMetaDataPolicy().equals(ResultSetMetaDataPolicy.auto)) {
-//	    this.aceQLHttpApi.setFillResultSetMetaData(true);
-//	}
-
 	try {
 	    SimpleClassCaller simpleClassCaller = new SimpleClassCaller(
 		    "com.aceql.driver.reflection.DatabaseMetaDataGetter");
@@ -391,18 +385,6 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	    throw new SQLException(e);
 	}
     }
-
-
-//    @Override
-//    public DatabaseMetaData getMetaData() throws SQLException {
-//	AceQLConnectionWrapper aceQLConnectionWrapper = new AceQLConnectionWrapper(this);
-//	AceQLHttpApi aceQLHttpApi = aceQLConnectionWrapper.getAceQLHttpApi();
-//	JdbcDatabaseMetaDataDto jdbcDatabaseMetaDataDto = aceQLHttpApi.getDbMetadata();
-//	JdbcDatabaseMetaData jdbcDatabaseMetaData = jdbcDatabaseMetaDataDto.getJdbcDatabaseMetaData();
-//
-//	AceQLDatabaseMetaData aceQLDatabaseMetaData = new AceQLDatabaseMetaData(this, jdbcDatabaseMetaData);
-//	return aceQLDatabaseMetaData;
-//    }
 
     /**
      * Returns a RemoteDatabaseMetaData instance in order to retrieve metadata info
@@ -901,8 +883,6 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     public void releaseSavepoint(Savepoint savepoint) throws SQLException {
 	// Do nothing for now. Future usage.
     }
-
-
 
     /* (non-Javadoc)
      * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#setCatalog(java.lang.String)
