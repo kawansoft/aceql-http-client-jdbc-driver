@@ -41,8 +41,8 @@ public class RowParser {
 
     private File jsonFile;
 
-    private Map<Integer, String> valuesPerColIndex = new HashMap<>();
-    private Map<String, Integer> indexsPerColName = new HashMap<>();
+    private Map<Integer, String> valuesPerColIndex = null;
+    private Map<String, Integer> indexsPerColName = null;
 
     private boolean traceOn;
 
@@ -110,25 +110,23 @@ public class RowParser {
 
 		if (parser.getString().equals("row_" + rowNum) && !isInsideRowValuesArray) {
 
-		    if (parser.hasNext()) {
+		    if (parser.hasNext())  {
 			parser.next();
-		    } else {
+		    }
+		    else {
 			return;
 		    }
 
-		    // Security check
 		    if (indexsPerColName == null) {
-			indexsPerColName = new HashMap<>();
+			indexsPerColName = new HashMap<String, Integer>();
 		    }
 
-		    if (valuesPerColIndex == null) {
-			valuesPerColIndex = new HashMap<>();
-		    }
+		    valuesPerColIndex = new HashMap<Integer, String>();
 
 		    int colIndex = 0;
 
 		    boolean doContinue = treatWhile(rowNum, event, colIndex);
-		    if (!doContinue) {
+		    if (! doContinue) {
 			return;
 		    }
 		}

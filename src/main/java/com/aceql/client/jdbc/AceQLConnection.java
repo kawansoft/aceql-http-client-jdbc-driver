@@ -29,6 +29,7 @@ import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.SQLClientInfoException;
 import java.sql.SQLException;
+import java.sql.SQLWarning;
 import java.sql.Savepoint;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -40,7 +41,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.kawanfw.driver.jdbc.abstracts.AbstractConnection;
-import org.kawanfw.driver.util.Tag;
 
 import com.aceql.client.jdbc.http.AceQLHttpApi;
 import com.aceql.client.jdbc.util.AceQLConnectionUtil;
@@ -182,7 +182,7 @@ import com.aceql.client.metadata.ResultSetMetaDataPolicy;
 public class AceQLConnection extends AbstractConnection implements Connection, Cloneable, Closeable {
 
     /** The Http instance that does all Http stuff */
-    protected AceQLHttpApi aceQLHttpApi = null;
+    AceQLHttpApi aceQLHttpApi = null;
 
     /** is Connection open or closed */
     private boolean closed = false;
@@ -270,6 +270,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	} catch (Exception e) {
 	    throw new AceQLException(e.getMessage(), 0, e, null, HttpURLConnection.HTTP_OK);
 	}
+
 
     }
 
@@ -367,9 +368,6 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 
     @Override
     public DatabaseMetaData getMetaData() throws SQLException {
-<<<<<<< HEAD
-	throw new SQLException(Tag.PRODUCT +  ". " + "Connection.getMetaData() call requires AceQL JDBC Driver version 5 or higher.");
-=======
 	List<Class<?>> params = new ArrayList<>();
 	List<Object> values = new ArrayList<>();
 
@@ -386,13 +384,8 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	} catch (Exception e) {
 	    throw new SQLException(e);
 	}
->>>>>>> refs/heads/5.0.1
     }
 
-<<<<<<< HEAD
-
-=======
->>>>>>> refs/heads/5.0.1
     /**
      * Returns a RemoteDatabaseMetaData instance in order to retrieve metadata info
      * for all client SDKs.
@@ -417,7 +410,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	} catch (AceQLException e) {
 	    // Because close() can not throw an Exception, we wrap the
 	    // AceQLException with a RuntimeException
-	    // throw new IllegalStateException(e.getMessage(), e);
+	    //throw new IllegalStateException(e.getMessage(), e);
 	    e.printStackTrace();
 	}
     }
@@ -428,7 +421,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	} catch (AceQLException e) {
 	    // Because close() can not throw an Exception, we wrap the
 	    // AceQLException with a RuntimeException
-	    // throw new IllegalStateException(e.getMessage(), e);
+	    //throw new IllegalStateException(e.getMessage(), e);
 	    e.printStackTrace();
 	}
     }
@@ -570,6 +563,26 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	return aceQLStatement;
     }
 
+
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#createStatement(int, int)
+     */
+    @Override
+    public Statement createStatement(int resultSetType, int resultSetConcurrency) throws SQLException {
+	AceQLStatement aceQLStatement = new AceQLStatement(this);
+	return aceQLStatement;
+    }
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#createStatement(int, int, int)
+     */
+    @Override
+    public Statement createStatement(int resultSetType, int resultSetConcurrency, int resultSetHoldability) {
+	AceQLStatement aceQLStatement = new AceQLStatement(this);
+	return aceQLStatement;
+    }
+
     /*
      * (non-Javadoc)
      *
@@ -578,6 +591,54 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      */
     @Override
     public PreparedStatement prepareStatement(String sql) throws SQLException {
+	AceQLPreparedStatement aceQLPreparedStatement = new AceQLPreparedStatement(this, sql);
+	return aceQLPreparedStatement;
+    }
+
+
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#prepareStatement(java.lang.String, int, int)
+     */
+    @Override
+    public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency) throws SQLException {
+	AceQLPreparedStatement aceQLPreparedStatement = new AceQLPreparedStatement(this, sql);
+	return aceQLPreparedStatement;
+    }
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#prepareStatement(java.lang.String, int, int, int)
+     */
+    @Override
+    public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency,
+	    int resultSetHoldability) throws SQLException {
+	AceQLPreparedStatement aceQLPreparedStatement = new AceQLPreparedStatement(this, sql);
+	return aceQLPreparedStatement;
+    }
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#prepareStatement(java.lang.String, int)
+     */
+    @Override
+    public PreparedStatement prepareStatement(String sql, int autoGeneratedKeys) throws SQLException {
+	AceQLPreparedStatement aceQLPreparedStatement = new AceQLPreparedStatement(this, sql);
+	return aceQLPreparedStatement;
+    }
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#prepareStatement(java.lang.String, int[])
+     */
+    @Override
+    public PreparedStatement prepareStatement(String sql, int[] columnIndexes) throws SQLException {
+	AceQLPreparedStatement aceQLPreparedStatement = new AceQLPreparedStatement(this, sql);
+	return aceQLPreparedStatement;
+    }
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#prepareStatement(java.lang.String, java.lang.String[])
+     */
+    @Override
+    public PreparedStatement prepareStatement(String sql, String[] columnNames) throws SQLException {
 	AceQLPreparedStatement aceQLPreparedStatement = new AceQLPreparedStatement(this, sql);
 	return aceQLPreparedStatement;
     }
@@ -593,6 +654,16 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     public CallableStatement prepareCall(String sql) throws SQLException {
 	AceQLCallableStatement aceQLCallableStatement = new AceQLCallableStatement(this, sql);
 	return aceQLCallableStatement;
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#getWarnings()
+     */
+    @Override
+    public SQLWarning getWarnings() throws SQLException {
+	return null;
     }
 
     /*
@@ -725,8 +796,6 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	aceQLHttpApi.setProgress(progress);
     }
 
-<<<<<<< HEAD
-=======
     /* (non-Javadoc)
      * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#clearWarnings()
      */
@@ -831,7 +900,6 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	// Do nothing for now. Future usage.
     }
 
->>>>>>> refs/heads/5.0.1
     /*
      * (non-Javadoc)
      *
@@ -841,5 +909,6 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     public boolean isClosed() throws SQLException {
 	return closed;
     }
+
 
 }

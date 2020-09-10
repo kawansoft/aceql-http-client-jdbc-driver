@@ -57,8 +57,6 @@ public class AceQLConnectionTest {
 	    throws SQLException, AceQLException, FileNotFoundException, IOException, NoSuchAlgorithmException {
 	Connection connection = ConnectionBuilder.createOnConfig();
 	doItPassConnection(connection);
-<<<<<<< HEAD
-=======
     }
     /**
      * Test main SQL orders.
@@ -71,23 +69,7 @@ public class AceQLConnectionTest {
      */
     public static void doItPassConnection(Connection connection)
 	    throws SQLException, AceQLException, FileNotFoundException, IOException, NoSuchAlgorithmException {
->>>>>>> refs/heads/5.0.1
 
-<<<<<<< HEAD
-    }
-    /**
-     * Test main SQL orders.
-     *
-     * @throws SQLException
-     * @throws AceQLException
-     * @throws FileNotFoundException
-     * @throws IOException
-     * @throws NoSuchAlgorithmException
-     */
-    public static void doItPassConnection(Connection connection)
-	    throws SQLException, AceQLException, FileNotFoundException, IOException, NoSuchAlgorithmException {
-=======
->>>>>>> refs/heads/5.0.1
 
 	new File(ConnectionParms.IN_DIRECTORY).mkdirs();
 	new File(ConnectionParms.OUT_DIRECTORY).mkdirs();
@@ -202,14 +184,8 @@ public class AceQLConnectionTest {
 	}
     }
 
-
-
     /**
-<<<<<<< HEAD
-     * @param connection TODO
-=======
      * @param connection
->>>>>>> refs/heads/5.0.1
      * @param sqlBlobTest
      * @param customerId
      * @param itemId
@@ -225,11 +201,7 @@ public class AceQLConnectionTest {
 
 
     /**
-<<<<<<< HEAD
-     * @param connection TODO
-=======
      * @param connection
->>>>>>> refs/heads/5.0.1
      * @param sqlDeleteTest
      * @param sqlBlobTest
      * @param fileUpload

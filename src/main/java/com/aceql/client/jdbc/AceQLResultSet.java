@@ -29,8 +29,11 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.SQLWarning;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
@@ -38,12 +41,10 @@ import org.kawanfw.driver.jdbc.abstracts.AbstractResultSet;
 import org.kawanfw.driver.util.Tag;
 
 import com.aceql.client.jdbc.http.AceQLHttpApi;
-<<<<<<< HEAD
-=======
 import com.aceql.client.jdbc.http.metadata.AceQLArrayDto;
 import com.aceql.client.jdbc.util.AceQLConnectionUtil;
->>>>>>> refs/heads/5.0.1
 import com.aceql.client.jdbc.util.AceQLResultSetUtil;
+import com.aceql.client.jdbc.util.SimpleClassCaller;
 import com.aceql.client.jdbc.util.json.RowParser;
 import com.aceql.client.metadata.util.GsonWsUtil;
 
@@ -80,6 +81,12 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
     /** Says if the last accessed value was null */
     private boolean wasNull = false;
 
+
+    // Futur usage
+    @SuppressWarnings("unused")
+    private ResultSetMetaData resultSetMetaData;
+
+    private int fetchSize = 0;
 
     /**
      * Constructor.
@@ -293,7 +300,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	return this.statement;
     }
 
-    protected String getStringValue(int index) throws SQLException {
+    private String getStringValue(int index) throws SQLException {
 
 	if (isClosed) {
 	    throw new SQLException("ResultSet is closed.");
@@ -313,7 +320,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	return value;
     }
 
-    protected String getStringValue(String string) throws SQLException {
+    private String getStringValue(String string) throws SQLException {
 
 	if (isClosed) {
 	    throw new SQLException("ResultSet is closed.");
@@ -380,8 +387,53 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 
     @Override
     public ResultSetMetaData getMetaData() throws SQLException {
-	throw new IllegalArgumentException(Tag.PRODUCT +  ". " + "ResultSet.getMetaData() calls requires AceQL JDBC Driver version 5 or higher.");
+
+	List<Class<?>> params = new ArrayList<>();
+	List<Object> values = new ArrayList<>();
+
+	params.add(File.class);
+	values.add(this.jsonFile);
+
+	if (! AceQLConnectionUtil.isJdbcMetaDataSupported(this.aceQLConnection)) {
+	    throw new SQLException(
+		    "AceQL Server version must be >= " + AceQLConnectionUtil.META_DATA_CALLS_MIN_SERVER_VERSION
+			    + " in order to call ResultSetMetaData.getMetaData().");
+	}
+
+	if (!this.aceQLHttpApi.isFillResultSetMetaData()) {
+	    throw new SQLException(Tag.PRODUCT +  ". " + "Cannot get Result.getMetata(). Call AceQLConnection.setResultSetMetaDataPolicy(ResultSetMetaDataPolicy.on) in order to activate"
+	    	+ " access to Result.getMetata(). Or add to AceQLDriver the property resultSetMetaDataPolicy=auto");
+	}
+
+	try {
+	    SimpleClassCaller simpleClassCaller = new SimpleClassCaller("com.aceql.driver.reflection.ResultSetMetaDataGetter");
+
+	    Object obj = simpleClassCaller.callMehod("getMetaData", params, values);
+	    return (ResultSetMetaData) obj;
+	} catch (ClassNotFoundException e) {
+	    throw new IllegalArgumentException(Tag.PRODUCT +  ". " + "getMetaData() call requires AceQL JDBC Driver version 5 or higher.");
+	}
+	catch (Exception e) {
+	    throw new SQLException(e);
+	}
     }
+
+
+//    @Override
+//    public ResultSetMetaData getMetaData() throws SQLException {
+//	ResultSetMetaDataParser resultSetMetaDataParser = new ResultSetMetaDataParser(jsonFile);
+//	String jsonString = resultSetMetaDataParser.getJsonString();
+//
+//	ResultSetMetaData resultSetMetaData = null;
+//
+//	if (jsonString != null) {
+//	    ResultSetMetaDataHolder resultSetMetaDataHolder = GsonWsUtil.fromJson(jsonString,
+//		    ResultSetMetaDataHolder.class);
+//	    resultSetMetaData = new AceQLResultSetMetaData(resultSetMetaDataHolder);
+//	}
+//
+//	return resultSetMetaData;
+//    }
 
     /*
      * (non-Javadoc)
@@ -652,8 +704,6 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
     }
 
 
-<<<<<<< HEAD
-=======
     /* (non-Javadoc)
      * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getArray(int)
      */
@@ -749,7 +799,6 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 
 
 
->>>>>>> refs/heads/5.0.1
     /**
      * @return
      * @throws SQLException

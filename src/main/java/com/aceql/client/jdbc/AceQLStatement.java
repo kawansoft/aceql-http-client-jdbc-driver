@@ -18,25 +18,33 @@
  */
 package com.aceql.client.jdbc;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLWarning;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.IOUtils;
 import org.kawanfw.driver.jdbc.abstracts.AbstractStatement;
 import org.kawanfw.driver.util.FrameworkFileUtil;
 
 import com.aceql.client.jdbc.http.AceQLHttpApi;
+import com.aceql.client.jdbc.util.AceQLStatementUtil;
+import com.aceql.client.jdbc.util.json.StreamResultAnalyzer;
 
 /**
  * @author Nicolas de Pomereu
  *
  */
-public class AceQLStatement extends AbstractStatement implements Statement {
+class AceQLStatement extends AbstractStatement implements Statement {
 
     private static boolean DEBUG = false;
 
@@ -55,6 +63,8 @@ public class AceQLStatement extends AbstractStatement implements Statement {
     /** Maximum rows to get, very important to limit trafic */
     protected int maxRows = 0;
 
+    private int fetchSise = 0;
+
     /**
      * Constructor
      *
@@ -65,11 +75,10 @@ public class AceQLStatement extends AbstractStatement implements Statement {
 	this.aceQLHttpApi = aceQLConnection.aceQLHttpApi;
     }
 
+
     /*
      * (non-Javadoc)
-     *
-     * @see
-     * org.kawanfw.driver.jdbc.abstracts.AbstractStatement#execute(java.lang.String)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#execute(java.lang.String)
      */
     @Override
     public boolean execute(String sql) throws SQLException {
@@ -79,22 +88,42 @@ public class AceQLStatement extends AbstractStatement implements Statement {
 
 	try {
 
-	    StatementResultSetFileBuilder statementResultSetFileBuilder = new StatementResultSetFileBuilder(sql,
-		    aceQLHttpApi, localResultSetFiles, maxRows);
+	    File file = buildtResultSetFile();
+	    this.localResultSetFiles.add(file);
 
-	    File file = statementResultSetFileBuilder.buildAndGetFileExecute();
-	    boolean isResultSet = statementResultSetFileBuilder.isResultSet();
-	    int rowCount = statementResultSetFileBuilder.getRowCount();
+	    aceQLHttpApi.trace("file: " + file);
+
+	    boolean isPreparedStatement = false;
+	    Map<String, String> statementParameters = null;
+
+	    try (InputStream in = aceQLHttpApi.execute(sql, isPreparedStatement, statementParameters, maxRows); OutputStream out = new BufferedOutputStream(new FileOutputStream(file));) {
+
+		if (in != null) {
+		    IOUtils.copy(in, out);
+		}
+	    }
+
+	    StreamResultAnalyzer streamResultAnalyzer = new StreamResultAnalyzer(file, aceQLHttpApi.getHttpStatusCode(),
+		    aceQLHttpApi.getHttpStatusMessage());
+	    if (!streamResultAnalyzer.isStatusOk()) {
+		throw new AceQLException(streamResultAnalyzer.getErrorMessage(), streamResultAnalyzer.getErrorId(),
+			null, streamResultAnalyzer.getStackTrace(), aceQLHttpApi.getHttpStatusCode());
+	    }
+
+	    boolean isResultSet = streamResultAnalyzer.isResultSet();
+	    int rowCount = streamResultAnalyzer.getRowCount();
 
 	    debug("statement.isResultSet: " + isResultSet);
 	    debug("statement.rowCount   : " + rowCount);
 
-	    if (isResultSet) {
+	    if (isResultSet)
+	    {
 		aceQLResultSet = new AceQLResultSet(file, this, rowCount);
 		return true;
-	    } else {
+	    }
+	    else {
 		// NO ! update count must be -1, as we have no more updates...
-		// this.updateCount = rowCount;
+		//this.updateCount = rowCount;
 		return false;
 	    }
 
@@ -107,29 +136,6 @@ public class AceQLStatement extends AbstractStatement implements Statement {
 
     /*
      * (non-Javadoc)
-     *
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#executeQuery(java.
-     * lang.String)
-     */
-    @Override
-    public ResultSet executeQuery(String sql) throws SQLException {
-
-	try {
-	    StatementResultSetFileBuilder statementResultSetFileBuilder = new StatementResultSetFileBuilder(sql,
-		    aceQLHttpApi, localResultSetFiles, maxRows);
-	    AceQLResultSet aceQLResultSet = new AceQLResultSet(statementResultSetFileBuilder.buildAndGetFileExecuteQuery(), this,
-		    statementResultSetFileBuilder.getRowCount());
-	    return aceQLResultSet;
-	} catch (AceQLException aceQlException) {
-	    throw aceQlException;
-	} catch (Exception e) {
-	    throw new AceQLException(e.getMessage(), 0, e, null, aceQLHttpApi.getHttpStatusCode());
-	}
-    }
-
-    /*
-     * (non-Javadoc)
-     *
      * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#getResultSet()
      */
     @Override
@@ -137,9 +143,9 @@ public class AceQLStatement extends AbstractStatement implements Statement {
 	return this.aceQLResultSet;
     }
 
+
     /*
      * (non-Javadoc)
-     *
      * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#getUpdateCount()
      */
     @Override
@@ -162,7 +168,54 @@ public class AceQLStatement extends AbstractStatement implements Statement {
 	return aceQLHttpApi.executeUpdate(sql, isPreparedStatement, isStoredProcedure, statementParameters, null);
     }
 
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#executeQuery(java.
+     * lang.String)
+     */
+    @Override
+    public ResultSet executeQuery(String sql) throws SQLException {
 
+	try {
+
+	    File file = buildtResultSetFile();
+	    this.localResultSetFiles.add(file);
+
+	    aceQLHttpApi.trace("file: " + file);
+	    aceQLHttpApi.trace("gzipResult: " + aceQLHttpApi.isGzipResult());
+
+	    boolean isPreparedStatement = false;
+	    boolean isStoredProcedure = false;
+	    Map<String, String> statementParameters = null;
+
+	    try (InputStream in = aceQLHttpApi.executeQuery(sql, isPreparedStatement, isStoredProcedure,
+		    statementParameters, maxRows); OutputStream out = new BufferedOutputStream(new FileOutputStream(file));) {
+
+		if (in != null) {
+		    InputStream inFinal = AceQLStatementUtil.getFinalInputStream(in, aceQLHttpApi.isGzipResult());
+		    IOUtils.copy(inFinal, out);
+		}
+	    }
+
+	    StreamResultAnalyzer streamResultAnalyzer = new StreamResultAnalyzer(file, aceQLHttpApi.getHttpStatusCode(),
+		    aceQLHttpApi.getHttpStatusMessage());
+	    if (!streamResultAnalyzer.isStatusOk()) {
+		throw new AceQLException(streamResultAnalyzer.getErrorMessage(), streamResultAnalyzer.getErrorId(),
+			null, streamResultAnalyzer.getStackTrace(), aceQLHttpApi.getHttpStatusCode());
+	    }
+
+	    int rowCount = streamResultAnalyzer.getRowCount();
+	    AceQLResultSet aceQLResultSet = new AceQLResultSet(file, this, rowCount);
+	    return aceQLResultSet;
+
+	} catch (AceQLException aceQlException) {
+	    throw aceQlException;
+	} catch (Exception e) {
+	    throw new AceQLException(e.getMessage(), 0, e, null, aceQLHttpApi.getHttpStatusCode());
+	}
+
+    }
 
     /*
      * (non-Javadoc)
@@ -192,19 +245,18 @@ public class AceQLStatement extends AbstractStatement implements Statement {
 	return file;
     }
 
+
     /*
      * (non-Javadoc)
-     *
      * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#getMaxRows()
      */
     @Override
     public int getMaxRows() throws SQLException {
-	return this.maxRows;
+	return this.maxRows ;
     }
 
     /*
      * (non-Javadoc)
-     *
      * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#setMaxRows(int)
      */
     @Override
@@ -214,12 +266,78 @@ public class AceQLStatement extends AbstractStatement implements Statement {
 
     /*
      * (non-Javadoc)
-     *
      * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#getMoreResults()
      */
     @Override
     public boolean getMoreResults() throws SQLException {
 	return false;
+    }
+
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#getWarnings()
+     */
+    @Override
+    public SQLWarning getWarnings() throws SQLException {
+	return null;
+    }
+
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#getFetchSize()
+     */
+    @Override
+    public int getFetchSize() throws SQLException {
+	return this.fetchSise;
+    }
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#setFetchSize(int)
+     */
+    @Override
+    public void setFetchSize(int rows) throws SQLException {
+	this.fetchSise = rows;
+    }
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#cancel()
+     */
+    @Override
+    public void cancel() throws SQLException {
+	// Do nothing for now. Future usage.
+    }
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#clearWarnings()
+     */
+    @Override
+    public void clearWarnings() throws SQLException {
+	// Do nothing for now. Future usage.
+    }
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#clearBatch()
+     */
+    @Override
+    public void clearBatch() throws SQLException {
+	// Do nothing for now. Future usage.
+    }
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#getFetchDirection()
+     */
+    @Override
+    public int getFetchDirection() throws SQLException {
+	return ResultSet.FETCH_FORWARD;
+    }
+
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#setFetchDirection(int)
+     */
+    @Override
+    public void setFetchDirection(int direction) throws SQLException {
+	// Do nothing
     }
 
 
