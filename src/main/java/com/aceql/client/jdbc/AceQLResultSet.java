@@ -24,6 +24,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.sql.Array;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -40,10 +41,12 @@ import org.kawanfw.driver.jdbc.abstracts.AbstractResultSet;
 import org.kawanfw.driver.util.Tag;
 
 import com.aceql.client.jdbc.http.AceQLHttpApi;
+import com.aceql.client.jdbc.http.metadata.AceQLArrayDto;
 import com.aceql.client.jdbc.util.AceQLConnectionUtil;
 import com.aceql.client.jdbc.util.AceQLResultSetUtil;
 import com.aceql.client.jdbc.util.SimpleClassCaller;
 import com.aceql.client.jdbc.util.json.RowParser;
+import com.aceql.client.metadata.util.GsonWsUtil;
 
 /**
  * Class that allows to built a {@code ResultSet} from a JSON file or JSON
@@ -702,6 +705,37 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 
 
     /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getArray(int)
+     */
+    @Override
+    public Array getArray(int columnIndex) throws SQLException {
+	String value = getStringValue(columnIndex);
+	if (value == null || value.equals("NULL")) {
+	    return null;
+	}
+
+	AceQLArrayDto aceQLArrayDto = GsonWsUtil.fromJson(value, AceQLArrayDto.class);
+	Array array = aceQLArrayDto.getAceQLArray();
+	return array;
+    }
+
+    /* (non-Javadoc)
+     * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getArray(java.lang.String)
+     */
+    @Override
+    public Array getArray(String colName) throws SQLException {
+	String value = getStringValue(colName);
+
+	if (value == null || value.equals("NULL")) {
+	    return null;
+	}
+	AceQLArrayDto aceQLArrayDto = GsonWsUtil.fromJson(value, AceQLArrayDto.class);
+	Array array = aceQLArrayDto.getAceQLArray();
+	return array;
+    }
+
+
+    /* (non-Javadoc)
      * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getWarnings()
      */
     @Override
@@ -754,8 +788,6 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
     public int getFetchDirection() throws SQLException {
 	return ResultSet.FETCH_FORWARD;
     }
-
-
 
     /* (non-Javadoc)
      * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#setFetchDirection(int)
