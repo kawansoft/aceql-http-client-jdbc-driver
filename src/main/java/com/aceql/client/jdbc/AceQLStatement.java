@@ -123,7 +123,7 @@ class AceQLStatement extends AbstractStatement implements Statement {
 	    }
 	    else {
 		// NO ! update count must be -1, as we have no more updates...
-		//this.updateCount = rowCount;
+		this.updateCount = rowCount;
 		return false;
 	    }
 
@@ -150,7 +150,9 @@ class AceQLStatement extends AbstractStatement implements Statement {
      */
     @Override
     public int getUpdateCount() throws SQLException {
-	return this.updateCount;
+	int returnValue = this.updateCount;
+	this.updateCount = -1;
+	return returnValue;
     }
 
     /*

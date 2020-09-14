@@ -416,6 +416,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     }
 
     public void logout() {
+	this.closed = true;
 	try {
 	    aceQLHttpApi.logout();
 	} catch (AceQLException e) {

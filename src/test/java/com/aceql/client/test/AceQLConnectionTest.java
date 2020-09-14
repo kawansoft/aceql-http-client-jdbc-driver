@@ -91,9 +91,6 @@ public class AceQLConnectionTest {
 	System.out.println("aceQLConnection.getHoldability(): " + connection.getHoldability());
 	System.out.println("aceQLConnection.getTransactionIsolation() : " + connection.getTransactionIsolation());
 
-	// Close and reopen
-	connection.close();
-	connection = ConnectionBuilder.createOnConfig();
 	((AceQLConnection) connection).setGzipResult(true);
 
 	System.out.println("aceQLConnection.getTransactionIsolation() : " + connection.getTransactionIsolation());

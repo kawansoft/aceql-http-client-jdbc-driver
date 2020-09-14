@@ -25,6 +25,8 @@ AceQL Java Client SDK - Version 5.0 - 10-Sep-2020
 What's New:
 - Connection.getSchema() has been added.
 - Statement.execute() & PreparedStatement.execute() have been added.
+- Connection.getMetaData() and ResultSet.getMetaData() are 
+  implemented (for access via the AceQL JDBC Driver only).
 
 Bugs fixed:
 - The pom.xml included erroneously a reference to a previous version of 
