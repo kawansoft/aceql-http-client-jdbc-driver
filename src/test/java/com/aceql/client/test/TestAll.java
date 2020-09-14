@@ -37,9 +37,8 @@ public class TestAll {
      */
     public static void main(String[] args) throws Exception {
 
-	// Get a real Connection instance that points to remote AceQL server
-	AceQLConnectionTest.doIt();
-	// connection is closed inside
+	AceQLConnectionTestFourDbs.doIt();
+	AceConnectionTestAuthentication.doIt();
 
 	Connection connection = ConnectionBuilder.createOnConfig();
 	AceQLConnectionSchemaTest.doIt(connection);

@@ -30,7 +30,18 @@ public class AceQLConnectionTestFourDbs {
      * @param args
      */
     public static void main(String[] args)  throws Exception {
+	doIt();
+    }
 
+    /**
+     * @throws SQLException
+     * @throws AceQLException
+     * @throws FileNotFoundException
+     * @throws IOException
+     * @throws NoSuchAlgorithmException
+     */
+    public static void doIt()
+	    throws SQLException, AceQLException, FileNotFoundException, IOException, NoSuchAlgorithmException {
 	testPostgreSQL();
 	testMySQL();
 	testSqlServer();

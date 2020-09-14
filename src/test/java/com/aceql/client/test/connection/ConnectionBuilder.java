@@ -62,14 +62,14 @@ public class ConnectionBuilder {
 
     public static Connection createDefaultLocal() throws SQLException, IOException {
 	String database = ConnectionParms.database;
-	String username = ConnectionParms.usernameLdap1;
+	String username = ConnectionParms.username;
 	char[] password = ConnectionParms.password;
 	return create(ConnectionParms.serverUrlLocalhostEmbedded, database, username, password, false);
     }
 
     public static Connection createDefaultLocalLdapAuth() throws SQLException, IOException {
 	String database = ConnectionParms.database;
-	String username = ConnectionParms.username;
+	String username = ConnectionParms.usernameLdap1;
 	char[] password = ConnectionParms.password;
 	return create(ConnectionParms.serverUrlLocalhostEmbedded, database, username, password, false);
     }
