@@ -48,7 +48,7 @@ public class AceQLArray implements Array {
 
     private String baseTypeName;
     private int baseType;
-    String[] stringArray;
+    private String[] stringArray;
 
     /**
      * Necessary void constructor for JSON.
@@ -61,8 +61,8 @@ public class AceQLArray implements Array {
 	if (array == null) {
 	    this.baseTypeName = "NULL";
 	    this.baseType = 0;
-	    stringArray = new String[1];
-	    stringArray[1] = "NULL";
+	    //stringArray = new String[1];
+	    ///stringArray[0] = "NULL";
 	    return;
 	}
 
@@ -97,9 +97,7 @@ public class AceQLArray implements Array {
 	    for (int i = 0; i < objectArray.length; i++) {
 		stringArray[i] = objectArray[i].toString();
 	    }
-
 	}
-
     }
 
     /*
