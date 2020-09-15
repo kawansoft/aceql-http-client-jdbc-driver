@@ -41,7 +41,7 @@ import org.kawanfw.driver.jdbc.abstracts.AbstractResultSet;
 import org.kawanfw.driver.util.Tag;
 
 import com.aceql.client.jdbc.http.AceQLHttpApi;
-import com.aceql.client.jdbc.http.metadata.AceQLArrayDto;
+import com.aceql.client.jdbc.http.metadata.AceQLArray;
 import com.aceql.client.jdbc.util.AceQLConnectionUtil;
 import com.aceql.client.jdbc.util.AceQLResultSetUtil;
 import com.aceql.client.jdbc.util.SimpleClassCaller;
@@ -714,8 +714,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	    return null;
 	}
 
-	AceQLArrayDto aceQLArrayDto = GsonWsUtil.fromJson(value, AceQLArrayDto.class);
-	Array array = aceQLArrayDto.getAceQLArray();
+	AceQLArray array  = GsonWsUtil.fromJson(value, AceQLArray.class);
 	return array;
     }
 
@@ -729,8 +728,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	if (value == null || value.equals("NULL")) {
 	    return null;
 	}
-	AceQLArrayDto aceQLArrayDto = GsonWsUtil.fromJson(value, AceQLArrayDto.class);
-	Array array = aceQLArrayDto.getAceQLArray();
+	AceQLArray array  = GsonWsUtil.fromJson(value, AceQLArray.class);
 	return array;
     }
 
