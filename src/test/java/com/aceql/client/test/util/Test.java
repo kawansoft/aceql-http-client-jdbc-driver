@@ -3,11 +3,12 @@
  */
 package com.aceql.client.test.util;
 
-import java.lang.reflect.Type;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.Date;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
+import com.aceql.client.test.connection.ConnectionBuilder;
 
 /**
  * @author Nicolas de Pomereu
@@ -27,16 +28,70 @@ public class Test {
      */
     public static void main(String[] args) throws Exception {
 
-	String [] stringArray = {"Nicolas", "de", "Pomereu André", "d'Aligre"};
+	System.out.println(new Date() + " Begin...");
+	Connection connection = ConnectionBuilder.getPostgreSqlConnection();
 
-	Type typeOfSrc = new TypeToken<String[]>(){}.getType();
+	// Lock job & update worker inside one transaction
+	connection.setAutoCommit(false);
 
-	final GsonBuilder builder = new GsonBuilder();
-	final Gson gson = builder.setPrettyPrinting().disableHtmlEscaping().create();
-	String jsonString =  gson.toJson(stringArray, typeOfSrc);
+	try {
+	    executeUpdate1(connection);
+	    boolean doIt = true;
+	    if (doIt) throw new SQLException("SQL Exception asked!");
+ 	    executeUpdate2(connection);
 
-	System.out.println(jsonString);
+	    connection.commit();
+	    System.out.println(new Date() + " commit done");
 
+	} catch (SQLException e) {
+
+	    if (!connection.getAutoCommit()) {
+		connection.rollback();
+		System.out.println(new Date() + " Rollback done as asked!");
+	    }
+
+	    throw e;
+	} finally {
+	    connection.setAutoCommit(true);
+	    System.out.println(new Date() + " End.");
+	}
+
+
+
+    }
+
+    /**
+     * @param connection
+     * @throws SQLException
+     */
+    private static void executeUpdate1(Connection connection) throws SQLException {
+	String sql = "update customer set customer_title = 'Miss' where customer_id > ?";
+
+	int i = 1;
+	PreparedStatement stmt = connection.prepareStatement(sql);
+
+	stmt.setInt(i++, 1);
+
+	System.out.println(new Date() + " executeUpdate1...");
+	stmt.executeUpdate();
+	stmt.close();
+    }
+
+    /**
+     * @param connection
+     * @throws SQLException
+     */
+    private static void executeUpdate2(Connection connection) throws SQLException {
+	String sql = "update banned_usernames set username = ?";
+
+	int i = 1;
+	PreparedStatement stmt = connection.prepareStatement(sql);
+
+	stmt.setString(i++, "toto");
+
+	System.out.println(new Date() + " executeUpdate2...");
+	stmt.executeUpdate();
+	stmt.close();
     }
 
 }
