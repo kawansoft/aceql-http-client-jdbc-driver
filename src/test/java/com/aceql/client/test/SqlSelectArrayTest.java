@@ -74,7 +74,7 @@ public class SqlSelectArrayTest {
     }
 
     public static void main(String[] args) throws Exception {
-	Connection connection = ConnectionBuilder.getPostgreSqlConnection();
+	Connection connection = ConnectionBuilder.createOnConfig();
 	SqlSelectArrayTest sqlSelectArrayTest = new SqlSelectArrayTest(connection, System.out);
 	sqlSelectArrayTest.selectOnRegions();
     }

@@ -41,12 +41,10 @@ import org.kawanfw.driver.jdbc.abstracts.AbstractResultSet;
 import org.kawanfw.driver.util.Tag;
 
 import com.aceql.client.jdbc.http.AceQLHttpApi;
-import com.aceql.client.jdbc.http.metadata.AceQLArray;
 import com.aceql.client.jdbc.util.AceQLConnectionUtil;
 import com.aceql.client.jdbc.util.AceQLResultSetUtil;
 import com.aceql.client.jdbc.util.SimpleClassCaller;
 import com.aceql.client.jdbc.util.json.RowParser;
-import com.aceql.client.metadata.util.GsonWsUtil;
 
 /**
  * Class that allows to built a {@code ResultSet} from a JSON file or JSON
@@ -411,29 +409,12 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	    Object obj = simpleClassCaller.callMehod("getMetaData", params, values);
 	    return (ResultSetMetaData) obj;
 	} catch (ClassNotFoundException e) {
-	    throw new IllegalArgumentException(Tag.PRODUCT +  ". " + "getMetaData() call requires AceQL JDBC Driver version 5 or higher.");
+	    throw new IllegalArgumentException(Tag.PRODUCT +  " " + "ResultSet.getMetaData() call requires AceQL JDBC Driver version 5 or higher.");
 	}
 	catch (Exception e) {
 	    throw new SQLException(e);
 	}
     }
-
-
-//    @Override
-//    public ResultSetMetaData getMetaData() throws SQLException {
-//	ResultSetMetaDataParser resultSetMetaDataParser = new ResultSetMetaDataParser(jsonFile);
-//	String jsonString = resultSetMetaDataParser.getJsonString();
-//
-//	ResultSetMetaData resultSetMetaData = null;
-//
-//	if (jsonString != null) {
-//	    ResultSetMetaDataHolder resultSetMetaDataHolder = GsonWsUtil.fromJson(jsonString,
-//		    ResultSetMetaDataHolder.class);
-//	    resultSetMetaData = new AceQLResultSetMetaData(resultSetMetaDataHolder);
-//	}
-//
-//	return resultSetMetaData;
-//    }
 
     /*
      * (non-Javadoc)
@@ -714,9 +695,9 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	    return null;
 	}
 
-	AceQLArray array  = GsonWsUtil.fromJson(value, AceQLArray.class);
-	return array;
+	return getArrayFromValue(value);
     }
+
 
     /* (non-Javadoc)
      * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getArray(java.lang.String)
@@ -728,10 +709,42 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	if (value == null || value.equals("NULL")) {
 	    return null;
 	}
-	AceQLArray array  = GsonWsUtil.fromJson(value, AceQLArray.class);
-	return array;
+	return getArrayFromValue(value);
     }
 
+    /**
+     * Gets the array from the value.
+     * @param value
+     * @return
+     * @throws SQLException
+     */
+    private Array getArrayFromValue(String value) throws SQLException {
+
+	if (! AceQLConnectionUtil.isJdbcMetaDataSupported(this.aceQLConnection)) {
+	    throw new SQLException(
+		    "AceQL Server version must be >= " + AceQLConnectionUtil.META_DATA_CALLS_MIN_SERVER_VERSION
+			    + " in order to call getArray().");
+	}
+
+	List<Class<?>> params = new ArrayList<>();
+	List<Object> values = new ArrayList<>();
+
+	params.add(String.class);
+	values.add(value);
+
+	try {
+	    SimpleClassCaller simpleClassCaller = new SimpleClassCaller("com.aceql.driver.reflection.ArrayGetter");
+
+	    Object obj = simpleClassCaller.callMehod("getArray", params, values);
+	    return (Array) obj;
+	} catch (ClassNotFoundException e) {
+	    throw new IllegalArgumentException(Tag.PRODUCT +  " " + "ResultSet.getArray() call requires AceQL JDBC Driver version 5 or higher.");
+	}
+	catch (Exception e) {
+	    throw new SQLException(e);
+	}
+
+    }
 
     /* (non-Javadoc)
      * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getWarnings()

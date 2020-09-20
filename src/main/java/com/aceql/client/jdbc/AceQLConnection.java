@@ -41,6 +41,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.kawanfw.driver.jdbc.abstracts.AbstractConnection;
+import org.kawanfw.driver.util.Tag;
 
 import com.aceql.client.jdbc.http.AceQLHttpApi;
 import com.aceql.client.jdbc.util.AceQLConnectionUtil;
@@ -380,7 +381,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	    Object obj = simpleClassCaller.callMehod("getMetaData", params, values);
 	    return (DatabaseMetaData) obj;
 	} catch (ClassNotFoundException e) {
-	    throw new IllegalArgumentException("getMetaData() call requires AceQL JDBC Driver version 5 or higher.");
+	    throw new IllegalArgumentException(Tag.PRODUCT +  " " + "Connection.getMetaData() call requires AceQL JDBC Driver version 5 or higher.");
 	} catch (Exception e) {
 	    throw new SQLException(e);
 	}
