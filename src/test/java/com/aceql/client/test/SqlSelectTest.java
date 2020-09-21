@@ -43,6 +43,40 @@ public class SqlSelectTest {
 	statement.close();
     }
 
+    public void selectCustomerExecute() throws SQLException {
+	String sql = "select * from customer where customer_id >= 1 order by customer_id";
+	Statement statement = connection.createStatement();
+	statement.execute(sql);
+
+	ResultSet rs =statement.getResultSet();
+
+	while (rs.next()) {
+	    out.println();
+	    out.println("customer_id   : " + rs.getInt("customer_id"));
+	    out.println("customer_title: " + rs.getString("customer_title"));
+	    out.println("fname         : " + rs.getString("fname"));
+	}
+
+	statement.close();
+	rs.close();
+    }
+
+    public  void selectCustomerStatement() throws SQLException {
+	String sql = "select * from customer where customer_id >= 1 order by customer_id limit 1";
+	Statement preparedStatement = connection.createStatement();
+	ResultSet rs = preparedStatement.executeQuery(sql);
+
+	while (rs.next()) {
+	    out.println();
+	    out.println("customer_id   : " + rs.getInt("customer_id"));
+	    out.println("customer_title: " + rs.getString("customer_title"));
+	    out.println("fname         : " + rs.getString("fname"));
+	}
+
+	preparedStatement.close();
+	rs.close();
+    }
+
     public void selectCustomerPreparedStatement() throws SQLException {
 	String sql = "select * from customer where customer_id >= ? order by customer_id";
 	PreparedStatement preparedStatement = connection.prepareStatement(sql);

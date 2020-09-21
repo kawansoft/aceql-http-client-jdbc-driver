@@ -19,10 +19,15 @@
 
 package com.aceql.client.test;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.Connection;
+import java.sql.SQLException;
 
 import com.aceql.client.jdbc.AceQLConnection;
+import com.aceql.client.jdbc.AceQLException;
 import com.aceql.client.test.connection.ConnectionBuilder;
+import com.aceql.client.test.connection.FourDbConnections;
 import com.aceql.client.test.stored_procedures.PotsgreSqlStoredProcedureTest;
 
 /**
@@ -37,19 +42,51 @@ public class TestAll {
      */
     public static void main(String[] args) throws Exception {
 
-	// Get a real Connection instance that points to remote AceQL server
-	AceQLConnectionTest.doIt();
-	// connection is closed inside
+	AceQLConnectionTestFourDbs.doIt();
+	AceConnectionTestAuthentication.doIt();
+	AceConnectionTestFirewall.doIt();
 
-	Connection connection = ConnectionBuilder.createOnConfig();
-	AceQLConnectionSchemaTest.doIt(connection);
-	connection.close();
-	((AceQLConnection) connection).logout();
+	Connection connection;
+	testSchemaMethodsFourDbs();
 
 	connection = ConnectionBuilder.createOnConfig();
 	PotsgreSqlStoredProcedureTest.testStoredProcedures(connection);
 	connection.close();
 	((AceQLConnection) connection).logout();
 
+    }
+
+    /**
+     * @throws SQLException
+     * @throws IOException
+     * @throws AceQLException
+     * @throws FileNotFoundException
+     */
+    public static void testSchemaMethodsFourDbs() throws SQLException, IOException, AceQLException, FileNotFoundException {
+	Connection connection = ConnectionBuilder.createOnConfig();
+	testSchemaMethods(connection);
+
+	connection = FourDbConnections.getMySQLConnection();
+	testSchemaMethods(connection);
+
+	connection = FourDbConnections.getSqlServerConnection();
+	testSchemaMethods(connection);
+
+	connection = FourDbConnections.getOracleConnection();
+	testSchemaMethods(connection);
+    }
+
+    /**
+     * @param connection
+     * @throws SQLException
+     * @throws AceQLException
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
+    public static void testSchemaMethods(Connection connection)
+	    throws SQLException, AceQLException, FileNotFoundException, IOException {
+	AceQLConnectionSchemaTest.doIt(connection);
+	connection.close();
+	((AceQLConnection) connection).logout();
     }
 }

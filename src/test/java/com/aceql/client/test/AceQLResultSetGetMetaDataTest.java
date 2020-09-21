@@ -22,7 +22,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -38,7 +37,7 @@ import com.aceql.client.test.connection.ConnectionBuilder;
  * @author Nicolas de Pomereu
  *
  */
-public class AceQLDatabaseMetaDataTest {
+public class AceQLResultSetGetMetaDataTest {
 
     private static Connection connection;
 
@@ -79,71 +78,6 @@ public class AceQLDatabaseMetaDataTest {
 	System.out.println("connection.getCatalog(): " + connection.getCatalog());
 
 	testResultSetMetaData();
-
-	// Futur usage
-	System.out.println("connection.getSchema() : " + connection.getSchema());
-	System.out.println();
-
-	boolean testAllMetaData = true;
-	if (! testAllMetaData) {
-	    return;
-	}
-
-	DatabaseMetaData databaseMetaData = connection.getMetaData();
-	System.out
-		.println("databaseMetaData.allProceduresAreCallable(): " + databaseMetaData.allProceduresAreCallable());
-
-	System.out.println();
-	System.out.println("databaseMetaData.getClientInfoProperties():");
-	ResultSet rs = databaseMetaData.getClientInfoProperties();
-	while (rs.next()) {
-	    String name = rs.getString(1);
-	    System.out.println("NAME   : " + name);
-	    int maxLen = rs.getInt(2);
-	    System.out.println("MAX_LEN: " + maxLen);
-	    System.out.println();
-	}
-
-	System.out.println("databaseMetaData.getTableTypes():");
-	rs = databaseMetaData.getTableTypes();
-
-	while (rs.next()) {
-	    String tableType = rs.getString(1);
-	    System.out.println("tableType: " + tableType);
-	}
-
-
-	String schema = null;
-	String catalog = null;
-
-	System.out.println();
-	System.out.println("databaseMetaData.getTables():");
-	String[] types = { "TABLE", "VIEW" };
-	String tableNamePattern = null; // List all tables
-	rs = databaseMetaData.getTables(catalog, schema, tableNamePattern, types);
-	while (rs.next()) {
-	    String tableName = rs.getString(3);
-	    String tableType = rs.getString(4);
-	    System.out.println("TABLE_NAME: " + tableName);
-	    System.out.println("TABLE_TYPE: " + tableType);
-	    System.out.println();
-	}
-
-	System.out.println();
-	System.out.println("databaseMetaData.getColumns():");
-	rs = databaseMetaData.getColumns(schema, catalog, null, "customer_id");
-
-	while (rs.next()) {
-	    String tableName = rs.getString(3);
-	    String colName = rs.getString(4);
-	    String dataType = rs.getString(5);
-	    System.out.println("TABLE_NAME : " + tableName);
-	    System.out.println("COLUMN_NAME: " + colName);
-	    System.out.println("DATA_TYPE  : " + dataType);
-	    System.out.println();
-	}
-
-	rs.close();
 
 	System.out.println(new Date() + " End");
 

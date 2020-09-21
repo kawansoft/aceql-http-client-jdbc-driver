@@ -41,6 +41,7 @@ import org.kawanfw.sql.version.VersionValues;
 import com.aceql.client.jdbc.AceQLException;
 import com.aceql.client.jdbc.util.UserLoginStore;
 import com.aceql.client.jdbc.util.json.SqlParameter;
+import com.aceql.client.metadata.ResultSetMetaDataPolicy;
 import com.aceql.client.metadata.dto.JdbcDatabaseMetaDataDto;
 import com.aceql.client.metadata.dto.TableDto;
 import com.aceql.client.metadata.dto.TableNamesDto;
@@ -77,7 +78,10 @@ public class AceQLHttpApi {
 
     private String url = null;
 
-    private boolean fillResultSetMetaData;
+    /** If true, ResultSetMetaData will be downloaded along with ResultSet in Json result */
+    private boolean fillResultSetMetaData = true;
+
+    private ResultSetMetaDataPolicy resultSetMetaDataPolicy = ResultSetMetaDataPolicy.off;
 
     private AtomicBoolean cancelled;
     private AtomicInteger progress;
@@ -219,6 +223,47 @@ public class AceQLHttpApi {
 	    throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
 	}
 
+    }
+
+
+    /**
+     * Returns {@code true} if the server will fill the {@code ResultSetMetaData} along with the {@code ResultSet} when a SELECT is done.
+     * @return {@code true} if the server will fill the {@code ResultSetMetaData} along with the {@code ResultSet} when a SELECT is done.
+     */
+     public boolean isFillResultSetMetaData() {
+         return fillResultSetMetaData;
+     }
+
+
+    /**
+     * Sets fillResultSetMetaData. if {@code true}, the server will fill the {@code ResultSetMetaData} along with the {@code ResultSet} when a SELECT is done.
+     * @param fillResultSetMetaData the fillResultSetMetaData to set
+     */
+    public void setFillResultSetMetaData(boolean fillResultSetMetaData) {
+        this.fillResultSetMetaData = fillResultSetMetaData;
+    }
+
+    /**
+     * Sets the {@code ResultSetMetaDataPolicy} to use.
+     * @param resultSetMetaDataPolicy the  {@code ResultSetMetaDataPolicy} to use
+     */
+    public void setResultSetMetaDataPolicy(ResultSetMetaDataPolicy resultSetMetaDataPolicy) {
+	this.resultSetMetaDataPolicy = resultSetMetaDataPolicy;
+
+	if (resultSetMetaDataPolicy.equals(ResultSetMetaDataPolicy.on)) {
+	    this.fillResultSetMetaData = true;
+	}
+	else if (resultSetMetaDataPolicy.equals(ResultSetMetaDataPolicy.off)) {
+	    this.fillResultSetMetaData = false;
+	}
+    }
+
+    /**
+     * Returns the {@code ResultSetMetaDataPolicy} in use.
+     * @return the {@code ResultSetMetaDataPolicy} in use.
+     */
+    public ResultSetMetaDataPolicy getResultSetMetaDataPolicy() {
+        return resultSetMetaDataPolicy;
     }
 
     public void trace() {
@@ -400,24 +445,6 @@ public class AceQLHttpApi {
      */
     public void setGzipResult(boolean gzipResult) {
 	this.gzipResult = gzipResult;
-    }
-
-
-   /**
-    * Returns {@code true} if the server will fill the {@code ResultSetMetaData} along with the {@code ResultSet} when a SELECT is done.
-    * @return {@code true} if the server will fill the {@code ResultSetMetaData} along with the {@code ResultSet} when a SELECT is done.
-    */
-    public boolean isFillResultSetMetaData() {
-        return fillResultSetMetaData;
-    }
-
-    /**
-     * Says if the server will fill the {@code ResultSetMetaData} along with the {@code ResultSet} when a SELECT is done.
-     * Defaults to {@code false}.
-     * @param fillResultSetMetaData if true, server side will return along
-     */
-    public void setFillResultSetMetaData(boolean fillResultSetMetaData) {
-	this.fillResultSetMetaData = fillResultSetMetaData;
     }
 
 
@@ -604,6 +631,63 @@ public class AceQLHttpApi {
 
 
     /**
+     * Calls /execute API
+     *
+     * @param sql                 an SQL <code>INSERT</code>, <code>UPDATE</code> or
+     *                            <code>DELETE</code> statement or an SQL statement
+     *                            that returns nothing
+     * @param isPreparedStatement if true, the server will generate a prepared
+     *                            statement, else a simple statement
+     * @param statementParameters the statement parameters in JSON format. Maybe
+     *                            null for simple statement call.
+     * @param maxRows as set by Statement.setMaxRows(int)
+     * @return the input stream containing either an error, or the result set in
+     *         JSON format. See user documentation.
+     * @throws AceQLException if any Exception occurs
+     */
+    public InputStream execute(String sql, boolean isPreparedStatement, Map<String, String> statementParameters, int maxRows) throws AceQLException {
+
+	try {
+	    if (sql == null) {
+		Objects.requireNonNull(sql, "sql cannot be null!");
+	    }
+
+	    String action = "execute";
+
+	    Map<String, String> parametersMap = new HashMap<String, String>();
+	    parametersMap.put("sql", sql);
+	    parametersMap.put("prepared_statement", "" + isPreparedStatement);
+	    parametersMap.put("stored_procedure", "" + false);
+	    parametersMap.put("gzip_result", "" + false); // Always false
+	    parametersMap.put("fill_result_set_meta_data", "" + fillResultSetMetaData);
+	    parametersMap.put("pretty_printing", "" + prettyPrinting);
+	    parametersMap.put("max_rows", "" + maxRows);
+
+	    // Add the statement parameters map
+	    if (statementParameters != null) {
+		parametersMap.putAll(statementParameters);
+	    }
+
+	    trace("sql: " + sql);
+	    trace("statement_parameters: " + statementParameters);
+
+	    URL theUrl = new URL(url + action);
+	    InputStream in = httpManager.callWithPost(theUrl, parametersMap);
+	    return in;
+
+	} catch (Exception e) {
+	    if (e instanceof AceQLException) {
+		throw (AceQLException) e;
+	    } else {
+		throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
+	    }
+	}
+
+    }
+
+
+
+    /**
      * Calls /execute_update API
      *
      * @param sql                   an SQL <code>INSERT</code>, <code>UPDATE</code>
@@ -679,6 +763,64 @@ public class AceQLHttpApi {
 
     }
 
+
+    /**
+     * Calls /execute_query API
+     *
+     * @param sql                 an SQL <code>INSERT</code>, <code>UPDATE</code> or
+     *                            <code>DELETE</code> statement or an SQL statement
+     *                            that returns nothing
+     * @param isPreparedStatement if true, the server will generate a prepared
+     *                            statement, else a simple statement
+     * @param isStoredProcedure   true if the call is a stored procedure
+     * @param statementParameters the statement parameters in JSON format. Maybe
+     *                            null for simple statement call.
+     * @param maxRows as set by Statement.setMaxRows(int)
+     * @return the input stream containing either an error, or the result set in
+     *         JSON format. See user documentation.
+     * @throws AceQLException if any Exception occurs
+     */
+    public InputStream executeQuery(String sql, boolean isPreparedStatement, boolean isStoredProcedure,
+	    Map<String, String> statementParameters, int maxRows) throws AceQLException {
+
+	try {
+	    if (sql == null) {
+		Objects.requireNonNull(sql, "sql cannot be null!");
+	    }
+
+	    String action = "execute_query";
+
+	    Map<String, String> parametersMap = new HashMap<String, String>();
+	    parametersMap.put("sql", sql);
+	    parametersMap.put("prepared_statement", "" + isPreparedStatement);
+	    parametersMap.put("stored_procedure", "" + isStoredProcedure);
+	    parametersMap.put("gzip_result", "" + gzipResult);
+	    parametersMap.put("fill_result_set_meta_data", "" + fillResultSetMetaData);
+	    parametersMap.put("pretty_printing", "" + prettyPrinting);
+	    parametersMap.put("max_rows", "" + maxRows);
+
+	    // Add the statement parameters map
+	    if (statementParameters != null) {
+		parametersMap.putAll(statementParameters);
+	    }
+
+	    trace("sql: " + sql);
+	    trace("statement_parameters: " + statementParameters);
+
+	    URL theUrl = new URL(url + action);
+	    InputStream in = httpManager.callWithPost(theUrl, parametersMap);
+	    return in;
+
+	} catch (Exception e) {
+	    if (e instanceof AceQLException) {
+		throw (AceQLException) e;
+	    } else {
+		throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
+	    }
+	}
+
+    }
+
     /**
      * Update the Map of callable OUT parameters using the result string in
      * ResultAnalyzer
@@ -717,60 +859,7 @@ public class AceQLHttpApi {
 
     }
 
-    /**
-     * Calls /execute_query API
-     *
-     * @param sql                 an SQL <code>INSERT</code>, <code>UPDATE</code> or
-     *                            <code>DELETE</code> statement or an SQL statement
-     *                            that returns nothing
-     * @param isPreparedStatement if true, the server will generate a prepared
-     *                            statement, else a simple statement
-     * @param isStoredProcedure   true if the call is a stored procedure
-     * @param statementParameters the statement parameters in JSON format. Maybe
-     *                            null for simple statement call.
-     * @return the input stream containing either an error, or the result set in
-     *         JSON format. See user documentation.
-     * @throws AceQLException if any Exception occurs
-     */
-    public InputStream executeQuery(String sql, boolean isPreparedStatement, boolean isStoredProcedure,
-	    Map<String, String> statementParameters) throws AceQLException {
 
-	try {
-	    if (sql == null) {
-		Objects.requireNonNull(sql, "sql cannot be null!");
-	    }
-
-	    String action = "execute_query";
-
-	    Map<String, String> parametersMap = new HashMap<String, String>();
-	    parametersMap.put("sql", sql);
-	    parametersMap.put("prepared_statement", "" + isPreparedStatement);
-	    parametersMap.put("stored_procedure", "" + isStoredProcedure);
-	    parametersMap.put("gzip_result", "" + gzipResult);
-	    parametersMap.put("fill_result_set_meta_data", "" + fillResultSetMetaData);
-	    parametersMap.put("pretty_printing", "" + prettyPrinting);
-
-	    // Add the statement parameters map
-	    if (statementParameters != null) {
-		parametersMap.putAll(statementParameters);
-	    }
-
-	    trace("sql: " + sql);
-	    trace("statement_parameters: " + statementParameters);
-
-	    URL theUrl = new URL(url + action);
-	    InputStream in = httpManager.callWithPost(theUrl, parametersMap);
-	    return in;
-
-	} catch (Exception e) {
-	    if (e instanceof AceQLException) {
-		throw (AceQLException) e;
-	    } else {
-		throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
-	    }
-	}
-
-    }
 
     /**
      * Calls /blob_upload API.
@@ -928,8 +1017,9 @@ public class AceQLHttpApi {
 	return httpManager.getHttpStatusMessage();
     }
 
-
-
+    public boolean isPrettyPrinting() {
+        return prettyPrinting;
+    }
 
 
 }

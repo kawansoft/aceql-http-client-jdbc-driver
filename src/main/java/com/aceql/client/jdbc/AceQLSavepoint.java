@@ -16,13 +16,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kawanfw.sql.version;
+package com.aceql.client.jdbc;
+
+import java.sql.SQLException;
+import java.sql.Savepoint;
 
 /**
- * Contains the package Version info
+ * A Dummy Savepoint to make sure JDBC Driver don't fail.
+ * @author Nicolas de Pomereu
+ *
  */
+public class AceQLSavepoint implements Savepoint {
 
-public class VersionValues {
-    public static final String VERSION = "v5.0";
-    public static final String DATE = "21-Sep-2020";
+
+
+    /*
+     * (non-Javadoc)
+     * @see java.sql.Savepoint#getSavepointId()
+     */
+    @Override
+    public int getSavepointId() throws SQLException {
+	return 1;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see java.sql.Savepoint#getSavepointName()
+     */
+    @Override
+    public String getSavepointName() throws SQLException {
+	return "AceQLDummySavepoint";
+    }
+
+
 }

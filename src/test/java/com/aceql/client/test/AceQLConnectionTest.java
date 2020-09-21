@@ -39,11 +39,10 @@ import com.aceql.client.test.util.Sha1;
  */
 public class AceQLConnectionTest {
 
-    private static Connection connection;
-
     public static void main(String[] args) throws Exception {
 	doIt();
     }
+
 
     /**
      * Test main SQL orders.
@@ -56,8 +55,22 @@ public class AceQLConnectionTest {
      */
     public static void doIt()
 	    throws SQLException, AceQLException, FileNotFoundException, IOException, NoSuchAlgorithmException {
+	Connection connection = ConnectionBuilder.createOnConfig();
+	doItPassConnection(connection);
+    }
+    /**
+     * Test main SQL orders.
+     *
+     * @throws SQLException
+     * @throws AceQLException
+     * @throws FileNotFoundException
+     * @throws IOException
+     * @throws NoSuchAlgorithmException
+     */
+    public static void doItPassConnection(Connection connection)
+	    throws SQLException, AceQLException, FileNotFoundException, IOException, NoSuchAlgorithmException {
 
-	connection = ConnectionBuilder.createOnConfig();
+
 	new File(ConnectionParms.IN_DIRECTORY).mkdirs();
 	new File(ConnectionParms.OUT_DIRECTORY).mkdirs();
 
@@ -78,9 +91,6 @@ public class AceQLConnectionTest {
 	System.out.println("aceQLConnection.getHoldability(): " + connection.getHoldability());
 	System.out.println("aceQLConnection.getTransactionIsolation() : " + connection.getTransactionIsolation());
 
-	// Close and reopen
-	connection.close();
-	connection = ConnectionBuilder.createOnConfig();
 	((AceQLConnection) connection).setGzipResult(true);
 
 	System.out.println("aceQLConnection.getTransactionIsolation() : " + connection.getTransactionIsolation());
@@ -98,6 +108,7 @@ public class AceQLConnectionTest {
 
 	System.out.println("catalog: " + connection.getCatalog());
 
+	connection.setAutoCommit(true);
 	falseQuery(falseQuery, sqlSelectTest);
 
 	int records = 300;
@@ -123,8 +134,8 @@ public class AceQLConnectionTest {
 	int customerId = 1;
 	int itemId = 1;
 
-	blobUpload(sqlDeleteTest, sqlBlobTest, fileUpload, customerId, itemId);
-	blobDownload(sqlBlobTest, customerId, itemId, fileDownload);
+	blobUpload(connection, sqlDeleteTest, sqlBlobTest, fileUpload, customerId, itemId);
+	blobDownload(connection, sqlBlobTest, customerId, itemId, fileDownload);
 	checkBlobIntegrity(fileUpload, fileDownload);
 
 	if (doSelectOnRegions) {
@@ -171,6 +182,7 @@ public class AceQLConnectionTest {
     }
 
     /**
+     * @param connection
      * @param sqlBlobTest
      * @param customerId
      * @param itemId
@@ -178,13 +190,15 @@ public class AceQLConnectionTest {
      * @throws SQLException
      * @throws IOException
      */
-    private static void blobDownload(SqlBlobTest sqlBlobTest, int customerId, int itemId, File fileDownload)
+    private static void blobDownload(Connection connection, SqlBlobTest sqlBlobTest, int customerId, int itemId, File fileDownload)
 	    throws SQLException, IOException {
 	connection.setAutoCommit(false); // Must be in Autocommit false with PostgreSQL
 	sqlBlobTest.blobDownload(customerId, itemId, fileDownload);
     }
 
+
     /**
+     * @param connection
      * @param sqlDeleteTest
      * @param sqlBlobTest
      * @param fileUpload
@@ -193,8 +207,8 @@ public class AceQLConnectionTest {
      * @throws SQLException
      * @throws FileNotFoundException
      */
-    private static void blobUpload(SqlDeleteTest sqlDeleteTest, SqlBlobTest sqlBlobTest, File fileUpload,
-	    int customerId, int itemId) throws SQLException, FileNotFoundException {
+    private static void blobUpload(Connection connection, SqlDeleteTest sqlDeleteTest, SqlBlobTest sqlBlobTest,
+	    File fileUpload, int customerId, int itemId) throws SQLException, FileNotFoundException {
 	connection.setAutoCommit(true);
 	sqlDeleteTest.deleteOrderlogAll();
 
@@ -202,5 +216,6 @@ public class AceQLConnectionTest {
 	sqlBlobTest.blobUpload(customerId, itemId, fileUpload);
 	connection.commit();
     }
+
 
 }

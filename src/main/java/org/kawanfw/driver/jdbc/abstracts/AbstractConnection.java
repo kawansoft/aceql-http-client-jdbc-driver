@@ -46,7 +46,7 @@ import java.util.concurrent.Executor;
 
 public class AbstractConnection implements Connection {
 
-    public static final String FEATURE_NOT_SUPPORTED_IN_THIS_VERSION = "Method is not yet implemented: ";
+    public static final String FEATURE_NOT_SUPPORTED_IN_THIS_VERSION = "AceQL Client SDK. Method is not yet implemented: ";
 
     /**
      * A constant indicating that transactions are not supported.
@@ -1371,7 +1371,6 @@ public class AbstractConnection implements Connection {
      *             on a closed connection
      *             <p>
      * @since 1.6
-     *        <p>
      * @see java.sql.DatabaseMetaData#getClientInfoProperties
      */
     @Override
@@ -1403,7 +1402,6 @@ public class AbstractConnection implements Connection {
      *                if the value supplied for <code>timeout</code> is less
      *                then 0
      * @since 1.6
-     *        <p>
      * @see java.sql.DatabaseMetaData#getClientInfoProperties
      */
     @Override
@@ -1466,16 +1464,13 @@ public class AbstractConnection implements Connection {
      *
      * @param properties
      *            the list of client info properties to set
-     *            <p>
      * @see java.sql.Connection#setClientInfo(String, String)
      *      setClientInfo(String, String)
      * @since 1.6
-     *        <p>
      * @throws SQLClientInfoException
      *             if the database server returns an error while setting the
      *             clientInfo values on the database server or this method is
      *             called on a closed connection
-     *             <p>
      */
 
     @Override
@@ -1518,7 +1513,6 @@ public class AbstractConnection implements Connection {
      * required to support these properties however if the driver supports a
      * client info property that can be described by one of the standard
      * properties, the standard property name should be used.
-     * <p>
      * <ul>
      * <li>ApplicationName - The name of the application currently utilizing the
      * connection</li>

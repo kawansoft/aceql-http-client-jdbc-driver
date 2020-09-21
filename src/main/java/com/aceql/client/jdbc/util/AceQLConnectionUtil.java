@@ -20,6 +20,7 @@ package com.aceql.client.jdbc.util;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import com.aceql.client.jdbc.AceQLConnection;
 import com.aceql.client.jdbc.AceQLException;
@@ -113,7 +114,7 @@ public class AceQLConnectionUtil {
      * @return true if server version  >= 6.0
      * @throws AceQLException
      */
-    public static boolean isJdbcMetaDataSupported(Connection connection) throws AceQLException {
+    public static boolean isJdbcMetaDataSupported(Connection connection) throws SQLException {
 	AceQLConnection aceqlConnection = (AceQLConnection)connection;
 	if (SERVER_VERSION_NUMBER == 0) {
 	    SERVER_VERSION_NUMBER = aceqlConnection.getServerVersionNumber();

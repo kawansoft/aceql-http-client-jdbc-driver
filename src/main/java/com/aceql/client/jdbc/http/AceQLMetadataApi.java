@@ -38,6 +38,7 @@ public class AceQLMetadataApi {
 
 	    Map<String, String> parameters = new HashMap<String, String>();
 	    parameters.put("json_database_meta_data_method_call_dto", jsonDatabaseMetaDataMethodCallDTO);
+	    parameters.put("fill_result_set_meta_data", "" + true);
 
 	    InputStream in = null;
 

@@ -23,25 +23,34 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Reader;
 import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.sql.Connection;
+import java.sql.Array;
+import java.sql.Blob;
+import java.sql.Clob;
 import java.sql.Date;
+import java.sql.NClob;
+import java.sql.ParameterMetaData;
 import java.sql.PreparedStatement;
+import java.sql.Ref;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.RowId;
 import java.sql.SQLException;
+import java.sql.SQLXML;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
-import org.kawanfw.driver.jdbc.abstracts.AbstractPreparedStatement;
+import org.kawanfw.driver.jdbc.abstracts.AbstractConnection;
 import org.kawanfw.driver.util.FrameworkFileUtil;
 
-import com.aceql.client.jdbc.http.AceQLHttpApi;
 import com.aceql.client.jdbc.util.AceQLStatementUtil;
 import com.aceql.client.jdbc.util.AceQLTypes;
 import com.aceql.client.jdbc.util.json.PrepStatementParametersBuilder;
@@ -52,25 +61,24 @@ import com.aceql.client.jdbc.util.json.StreamResultAnalyzer;
  * @author Nicolas de Pomereu
  *
  */
-class AceQLPreparedStatement extends AbstractPreparedStatement implements PreparedStatement {
+class AceQLPreparedStatement extends AceQLStatement implements PreparedStatement {
 
     private static boolean DEBUG = false;
 
-    private AceQLConnection aceQLConnection = null;
     private String sql = null;
 
-    private List<File> localResultSetFiles = new ArrayList<File>();
     private List<InputStream> localInputStreams = new ArrayList<InputStream>();
     private List<String> localBlobIds = new ArrayList<String>();
     private List<Long> localLengths = new ArrayList<Long>();
-
-    /** The Http instance that does all Http stuff */
-    private AceQLHttpApi aceQLHttpApi = null;
 
     protected PrepStatementParametersBuilder builder = new PrepStatementParametersBuilder();
 
     /** is set to true if CallableStatement */
     protected boolean isStoredProcedure = false;
+
+    // For execute() command
+    //private AceQLResultSet aceQLResultSet;
+    //private int updateCount = -1;
 
     /**
      * Constructor
@@ -80,10 +88,15 @@ class AceQLPreparedStatement extends AbstractPreparedStatement implements Prepar
      *                        parameter placeholders
      */
     public AceQLPreparedStatement(AceQLConnection aceQLConnection, String sql) throws SQLException {
-	super();
-	this.aceQLConnection = aceQLConnection;
-	this.aceQLHttpApi = aceQLConnection.aceQLHttpApi;
+	super(aceQLConnection);
 	this.sql = sql;
+    }
+
+    /**
+     * Will throw a SQL Exception if calling method is not authorized
+     **/
+    private void throwExceptionIfCalled(String methodName) throws SQLException {
+	throw new SQLException(AbstractConnection.FEATURE_NOT_SUPPORTED_IN_THIS_VERSION + methodName);
     }
 
     /*
@@ -339,6 +352,56 @@ class AceQLPreparedStatement extends AbstractPreparedStatement implements Prepar
 	return file;
     }
 
+    @Override
+    public boolean execute() throws SQLException {
+	Map<String, String> statementParameters = builder.getHttpFormattedStatementParameters();
+
+	aceQLResultSet = null;
+	updateCount = -1;
+
+	try {
+
+	    File file = AceQLStatement.buildtResultSetFile();
+	    this.localResultSetFiles.add(file);
+
+	    aceQLHttpApi.trace("file: " + file);
+	    boolean isPreparedStatement = true;
+
+	    try (InputStream in = aceQLHttpApi.execute(sql, isPreparedStatement, statementParameters, maxRows);
+		    OutputStream out = new BufferedOutputStream(new FileOutputStream(file));) {
+
+		if (in != null) {
+		    IOUtils.copy(in, out);
+		}
+	    }
+
+	    StreamResultAnalyzer streamResultAnalyzer = new StreamResultAnalyzer(file, aceQLHttpApi.getHttpStatusCode(),
+		    aceQLHttpApi.getHttpStatusMessage());
+	    if (!streamResultAnalyzer.isStatusOk()) {
+		throw new AceQLException(streamResultAnalyzer.getErrorMessage(), streamResultAnalyzer.getErrorId(),
+			null, streamResultAnalyzer.getStackTrace(), aceQLHttpApi.getHttpStatusCode());
+	    }
+
+	    boolean isResultSet = streamResultAnalyzer.isResultSet();
+	    int rowCount = streamResultAnalyzer.getRowCount();
+
+	    if (isResultSet) {
+		aceQLResultSet = new AceQLResultSet(file, this, rowCount);
+		return true;
+	    } else {
+		this.updateCount = rowCount;
+		return false;
+	    }
+
+	} catch (AceQLException aceQlException) {
+	    throw aceQlException;
+	} catch (Exception e) {
+	    throw new AceQLException(e.getMessage(), 0, e, null, aceQLHttpApi.getHttpStatusCode());
+	}
+
+    }
+
+
     /*
      * (non-Javadoc)
      *
@@ -389,8 +452,11 @@ class AceQLPreparedStatement extends AbstractPreparedStatement implements Prepar
 	    boolean isPreparedStatement = true;
 	    Map<String, String> statementParameters = builder.getHttpFormattedStatementParameters();
 
+	    // To be passed to the AceQLResult
+	    //LastSelectStore lastSelectStore = new LastSelectStore(sql, isPreparedStatement, isStoredProcedure, aceQLHttpApi.isGzipResult(), aceQLHttpApi.isPrettyPrinting());
+
 	    try (InputStream in = aceQLHttpApi.executeQuery(sql, isPreparedStatement, isStoredProcedure,
-		    statementParameters); OutputStream out = new BufferedOutputStream(new FileOutputStream(file));) {
+		    statementParameters, maxRows); OutputStream out = new BufferedOutputStream(new FileOutputStream(file));) {
 
 		if (in != null) {
 		    // Do not use resource try {} ==> We don't want to create an
@@ -465,15 +531,6 @@ class AceQLPreparedStatement extends AbstractPreparedStatement implements Prepar
 
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#getConnection()
-     */
-    @Override
-    public Connection getConnection() throws SQLException {
-	return this.aceQLConnection;
-    }
 
     /*
      * (non-Javadoc)
@@ -482,15 +539,392 @@ class AceQLPreparedStatement extends AbstractPreparedStatement implements Prepar
      */
     @Override
     public void close() throws SQLException {
-	for (File file : localResultSetFiles) {
-	    file.delete();
-	}
+	super.close();
     }
 
     private void debug(String s) {
 	if (DEBUG) {
 	    System.out.println(new java.util.Date() + " " + s);
 	}
+    }
+
+    /**************************************************************
+     *
+     *			 Unimplemented Methods
+     *
+     **************************************************************
+
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setByte(int, byte)
+     */
+    @Override
+    public void setByte(int parameterIndex, byte x) throws SQLException {
+	String methodName = new Object() {
+	}.getClass().getEnclosingMethod().getName();
+	throwExceptionIfCalled(methodName);
+
+    }
+
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setBytes(int, byte[])
+     */
+    @Override
+    public void setBytes(int parameterIndex, byte[] x) throws SQLException {
+	String methodName = new Object() {
+	}.getClass().getEnclosingMethod().getName();
+	throwExceptionIfCalled(methodName);
+
+    }
+
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setAsciiStream(int, java.io.InputStream, int)
+     */
+    @Override
+    public void setAsciiStream(int parameterIndex, InputStream x, int length) throws SQLException {
+	String methodName = new Object() {
+	}.getClass().getEnclosingMethod().getName();
+	throwExceptionIfCalled(methodName);
+
+    }
+
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setUnicodeStream(int, java.io.InputStream, int)
+     */
+    @Override
+    public void setUnicodeStream(int parameterIndex, InputStream x, int length) throws SQLException {
+	String methodName = new Object() {
+	}.getClass().getEnclosingMethod().getName();
+	throwExceptionIfCalled(methodName);
+
+    }
+
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#clearParameters()
+     */
+    @Override
+    public void clearParameters() throws SQLException {
+	String methodName = new Object() {
+	}.getClass().getEnclosingMethod().getName();
+	throwExceptionIfCalled(methodName);
+
+    }
+
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setObject(int, java.lang.Object, int)
+     */
+    @Override
+    public void setObject(int parameterIndex, Object x, int targetSqlType) throws SQLException {
+	String methodName = new Object() {
+	}.getClass().getEnclosingMethod().getName();
+	throwExceptionIfCalled(methodName);
+
+    }
+
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setObject(int, java.lang.Object)
+     */
+    @Override
+    public void setObject(int parameterIndex, Object x) throws SQLException {
+	String methodName = new Object() {
+	}.getClass().getEnclosingMethod().getName();
+	throwExceptionIfCalled(methodName);
+    }
+
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#addBatch()
+     */
+    @Override
+    public void addBatch() throws SQLException {
+	String methodName = new Object() {
+	}.getClass().getEnclosingMethod().getName();
+	throwExceptionIfCalled(methodName);
+    }
+
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setCharacterStream(int, java.io.Reader, int)
+     */
+    @Override
+    public void setCharacterStream(int parameterIndex, Reader reader, int length) throws SQLException {
+	String methodName = new Object() {
+	}.getClass().getEnclosingMethod().getName();
+	throwExceptionIfCalled(methodName);
+    }
+
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setRef(int, java.sql.Ref)
+     */
+    @Override
+    public void setRef(int parameterIndex, Ref x) throws SQLException {
+	String methodName = new Object() {
+	}.getClass().getEnclosingMethod().getName();
+	throwExceptionIfCalled(methodName);
+    }
+
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setBlob(int, java.sql.Blob)
+     */
+    @Override
+    public void setBlob(int parameterIndex, Blob x) throws SQLException {
+	String methodName = new Object() {
+	}.getClass().getEnclosingMethod().getName();
+	throwExceptionIfCalled(methodName);
+    }
+
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setClob(int, java.sql.Clob)
+     */
+    @Override
+    public void setClob(int parameterIndex, Clob x) throws SQLException {
+	String methodName = new Object() {
+	}.getClass().getEnclosingMethod().getName();
+	throwExceptionIfCalled(methodName);
+    }
+
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setArray(int, java.sql.Array)
+     */
+    @Override
+    public void setArray(int parameterIndex, Array x) throws SQLException {
+	String methodName = new Object() {
+	}.getClass().getEnclosingMethod().getName();
+	throwExceptionIfCalled(methodName);
+    }
+
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#getMetaData()
+     */
+    @Override
+    public ResultSetMetaData getMetaData() throws SQLException {
+	String methodName = new Object() {
+	}.getClass().getEnclosingMethod().getName();
+	throwExceptionIfCalled(methodName);
+	return null;
+    }
+
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setDate(int, java.sql.Date, java.util.Calendar)
+     */
+    @Override
+    public void setDate(int parameterIndex, Date x, Calendar cal) throws SQLException {
+	String methodName = new Object() {
+	}.getClass().getEnclosingMethod().getName();
+	throwExceptionIfCalled(methodName);
+
+    }
+
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setTime(int, java.sql.Time, java.util.Calendar)
+     */
+    @Override
+    public void setTime(int parameterIndex, Time x, Calendar cal) throws SQLException {
+	String methodName = new Object() {
+	}.getClass().getEnclosingMethod().getName();
+	throwExceptionIfCalled(methodName);
+
+    }
+
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setTimestamp(int, java.sql.Timestamp, java.util.Calendar)
+     */
+    @Override
+    public void setTimestamp(int parameterIndex, Timestamp x, Calendar cal) throws SQLException {
+	String methodName = new Object() {
+	}.getClass().getEnclosingMethod().getName();
+	throwExceptionIfCalled(methodName);
+
+    }
+
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setNull(int, int, java.lang.String)
+     */
+    @Override
+    public void setNull(int parameterIndex, int sqlType, String typeName) throws SQLException {
+	String methodName = new Object() {
+	}.getClass().getEnclosingMethod().getName();
+	throwExceptionIfCalled(methodName);
+
+    }
+
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#getParameterMetaData()
+     */
+    @Override
+    public ParameterMetaData getParameterMetaData() throws SQLException {
+	String methodName = new Object() {
+	}.getClass().getEnclosingMethod().getName();
+	throwExceptionIfCalled(methodName);
+	return null;
+    }
+
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setRowId(int, java.sql.RowId)
+     */
+    @Override
+    public void setRowId(int parameterIndex, RowId x) throws SQLException {
+	String methodName = new Object() {
+	}.getClass().getEnclosingMethod().getName();
+	throwExceptionIfCalled(methodName);
+    }
+
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setNString(int, java.lang.String)
+     */
+    @Override
+    public void setNString(int parameterIndex, String value) throws SQLException {
+	String methodName = new Object() {
+	}.getClass().getEnclosingMethod().getName();
+	throwExceptionIfCalled(methodName);
+    }
+
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setNCharacterStream(int, java.io.Reader, long)
+     */
+    @Override
+    public void setNCharacterStream(int parameterIndex, Reader value, long length) throws SQLException {
+	String methodName = new Object() {
+	}.getClass().getEnclosingMethod().getName();
+	throwExceptionIfCalled(methodName);
+    }
+
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setNClob(int, java.sql.NClob)
+     */
+    @Override
+    public void setNClob(int parameterIndex, NClob value) throws SQLException {
+	String methodName = new Object() {
+	}.getClass().getEnclosingMethod().getName();
+	throwExceptionIfCalled(methodName);
+    }
+
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setClob(int, java.io.Reader, long)
+     */
+    @Override
+    public void setClob(int parameterIndex, Reader reader, long length) throws SQLException {
+	String methodName = new Object() {
+	}.getClass().getEnclosingMethod().getName();
+	throwExceptionIfCalled(methodName);
+    }
+
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setBlob(int, java.io.InputStream, long)
+     */
+    @Override
+    public void setBlob(int parameterIndex, InputStream inputStream, long length) throws SQLException {
+	String methodName = new Object() {
+	}.getClass().getEnclosingMethod().getName();
+	throwExceptionIfCalled(methodName);
+    }
+
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setNClob(int, java.io.Reader, long)
+     */
+    @Override
+    public void setNClob(int parameterIndex, Reader reader, long length) throws SQLException {
+	String methodName = new Object() {
+	}.getClass().getEnclosingMethod().getName();
+	throwExceptionIfCalled(methodName);
+    }
+
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setSQLXML(int, java.sql.SQLXML)
+     */
+    @Override
+    public void setSQLXML(int parameterIndex, SQLXML xmlObject) throws SQLException {
+	String methodName = new Object() {
+	}.getClass().getEnclosingMethod().getName();
+	throwExceptionIfCalled(methodName);
+    }
+
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setObject(int, java.lang.Object, int, int)
+     */
+    @Override
+    public void setObject(int parameterIndex, Object x, int targetSqlType, int scaleOrLength) throws SQLException {
+	String methodName = new Object() {
+	}.getClass().getEnclosingMethod().getName();
+	throwExceptionIfCalled(methodName);
+    }
+
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setAsciiStream(int, java.io.InputStream, long)
+     */
+    @Override
+    public void setAsciiStream(int parameterIndex, InputStream x, long length) throws SQLException {
+	String methodName = new Object() {
+	}.getClass().getEnclosingMethod().getName();
+	throwExceptionIfCalled(methodName);
+    }
+
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setCharacterStream(int, java.io.Reader, long)
+     */
+    @Override
+    public void setCharacterStream(int parameterIndex, Reader reader, long length) throws SQLException {
+	String methodName = new Object() {
+	}.getClass().getEnclosingMethod().getName();
+	throwExceptionIfCalled(methodName);
+    }
+
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setAsciiStream(int, java.io.InputStream)
+     */
+    @Override
+    public void setAsciiStream(int parameterIndex, InputStream x) throws SQLException {
+	String methodName = new Object() {
+	}.getClass().getEnclosingMethod().getName();
+	throwExceptionIfCalled(methodName);
+    }
+
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setCharacterStream(int, java.io.Reader)
+     */
+    @Override
+    public void setCharacterStream(int parameterIndex, Reader reader) throws SQLException {
+	String methodName = new Object() {
+	}.getClass().getEnclosingMethod().getName();
+	throwExceptionIfCalled(methodName);
+
+    }
+
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setNCharacterStream(int, java.io.Reader)
+     */
+    @Override
+    public void setNCharacterStream(int parameterIndex, Reader value) throws SQLException {
+	String methodName = new Object() {
+	}.getClass().getEnclosingMethod().getName();
+	throwExceptionIfCalled(methodName);
+    }
+
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setClob(int, java.io.Reader)
+     */
+    @Override
+    public void setClob(int parameterIndex, Reader reader) throws SQLException {
+	String methodName = new Object() {
+	}.getClass().getEnclosingMethod().getName();
+	throwExceptionIfCalled(methodName);
+    }
+
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setBlob(int, java.io.InputStream)
+     */
+    @Override
+    public void setBlob(int parameterIndex, InputStream inputStream) throws SQLException {
+	String methodName = new Object() {
+	}.getClass().getEnclosingMethod().getName();
+	throwExceptionIfCalled(methodName);
+    }
+
+    /* (non-Javadoc)
+     * @see java.sql.PreparedStatement#setNClob(int, java.io.Reader)
+     */
+    @Override
+    public void setNClob(int parameterIndex, Reader reader) throws SQLException {
+	String methodName = new Object() {
+	}.getClass().getEnclosingMethod().getName();
+	throwExceptionIfCalled(methodName);
     }
 
 }
