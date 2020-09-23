@@ -70,9 +70,7 @@ public class AceQLResultSetGetMetaDataTest {
 
 	System.out.println(new Date() + " Begin");
 
-	System.out.println("aceQLConnection.getServerVersion()      : " + ((AceQLConnection) connection).getServerVersion());
-	System.out.println("aceQLConnection.getServerVersionNumber(): " + ((AceQLConnection) connection).getServerVersionNumber());
-	System.out.println();
+	System.out.println("aceQLConnection.getServerVersion(): " + ((AceQLConnection) connection).getServerVersion());
 	System.out.println("aceQLConnection.getClientVersion(): " + ((AceQLConnection) connection).getClientVersion());
 	System.out.println();
 	System.out.println("connection.getCatalog(): " + connection.getCatalog());

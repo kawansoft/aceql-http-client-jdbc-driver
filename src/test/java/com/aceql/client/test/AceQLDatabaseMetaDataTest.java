@@ -71,14 +71,12 @@ public class AceQLDatabaseMetaDataTest {
 
 	System.out.println(new Date() + " Begin");
 
-	System.out.println("aceQLConnection.getServerVersion()      : " + ((AceQLConnection) connection).getServerVersion());
-	System.out.println("aceQLConnection.getServerVersionNumber(): " + ((AceQLConnection) connection).getServerVersionNumber());
-	System.out.println();
+	System.out.println("aceQLConnection.getServerVersion(): " + ((AceQLConnection) connection).getServerVersion());
 	System.out.println("aceQLConnection.getClientVersion(): " + ((AceQLConnection) connection).getClientVersion());
 	System.out.println();
 	System.out.println("connection.getCatalog(): " + connection.getCatalog());
 
-	testResultSetMetaData();
+	//testResultSetMetaData();
 
 	// Futur usage
 	System.out.println("connection.getSchema() : " + connection.getSchema());
@@ -149,7 +147,7 @@ public class AceQLDatabaseMetaDataTest {
 
     }
 
-    private static void testResultSetMetaData() throws SQLException {
+    public static void testResultSetMetaData() throws SQLException {
 	String sql = "select * from customer where customer_id >= ? order by customer_id";
 	PreparedStatement preparedStatement = connection.prepareStatement(sql);
 

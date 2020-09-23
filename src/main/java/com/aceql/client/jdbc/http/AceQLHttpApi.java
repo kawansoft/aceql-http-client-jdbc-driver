@@ -35,7 +35,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.kawanfw.sql.version.VersionValues;
 
 import com.aceql.client.jdbc.AceQLException;
@@ -458,17 +457,6 @@ public class AceQLHttpApi {
 	return result;
     }
 
-    /**
-     * Returns the server version as a number.
-     * @return the server version as a number.
-     * @throws AceQLException
-     */
-    public double getServerVersionNumber() throws AceQLException {
-	String serverVersion = getServerVersion();
-	String rawVersion = StringUtils.substringBetween(serverVersion, "v", "-").trim();
-	Double version = Double.parseDouble(rawVersion);
-	return version;
-    }
 
     /**
      * Gets the SDK version

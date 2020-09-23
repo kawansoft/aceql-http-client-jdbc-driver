@@ -381,7 +381,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	    Object obj = simpleClassCaller.callMehod("getMetaData", params, values);
 	    return (DatabaseMetaData) obj;
 	} catch (ClassNotFoundException e) {
-	    throw new IllegalArgumentException(Tag.PRODUCT +  " " + "Connection.getMetaData() call requires AceQL JDBC Driver version 5 or higher.");
+	    throw new UnsupportedOperationException(Tag.PRODUCT +  " " + "Connection.getMetaData() call requires AceQL JDBC Driver version 5 or higher.");
 	} catch (Exception e) {
 	    throw new SQLException(e);
 	}
@@ -702,16 +702,6 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      */
     public String getServerVersion() throws AceQLException {
 	return aceQLHttpApi.getServerVersion();
-    }
-
-    /**
-     * Returns the server product version number. Allows comparisons.
-     *
-     * @return the server product version number.
-     * @throws AceQLException if any Exception occurs
-     */
-    public double getServerVersionNumber() throws AceQLException {
-	return aceQLHttpApi.getServerVersionNumber();
     }
 
     /**

@@ -21,6 +21,9 @@ package com.aceql.client.jdbc.util;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Objects;
+
+import org.apache.commons.lang3.StringUtils;
 
 import com.aceql.client.jdbc.AceQLConnection;
 import com.aceql.client.jdbc.AceQLException;
@@ -34,8 +37,8 @@ public class AceQLConnectionUtil {
     private static final String TRANSACTION_READ_UNCOMMITTED_TEXT = "read_uncommitted";
 
     // Minimum version for Connection.getMetaData() and ResultSet.getMetaData()
-    public static final double META_DATA_CALLS_MIN_SERVER_VERSION = 6.0;
-    private static double SERVER_VERSION_NUMBER = 0;
+    public static final String META_DATA_CALLS_MIN_SERVER_VERSION = "6.0";
+    private static String SERVER_VERSION_NUMBER = null;
 
     protected AceQLConnectionUtil() {
 
@@ -116,10 +119,19 @@ public class AceQLConnectionUtil {
      */
     public static boolean isJdbcMetaDataSupported(Connection connection) throws SQLException {
 	AceQLConnection aceqlConnection = (AceQLConnection)connection;
-	if (SERVER_VERSION_NUMBER == 0) {
-	    SERVER_VERSION_NUMBER = aceqlConnection.getServerVersionNumber();
+	if (SERVER_VERSION_NUMBER == null) {
+	    SERVER_VERSION_NUMBER =  aceqlConnection.getServerVersion();
 	}
-	return SERVER_VERSION_NUMBER >= META_DATA_CALLS_MIN_SERVER_VERSION;
+
+	String rawServerVersion = extractRawServerVersion(SERVER_VERSION_NUMBER);
+	return rawServerVersion.compareToIgnoreCase(META_DATA_CALLS_MIN_SERVER_VERSION) >= 0 ;
+    }
+
+    private static String extractRawServerVersion(String version) {
+	Objects.requireNonNull(version, "version cannot be null!");
+	version = StringUtils.substringBetween(version, " v", "-");
+	version = version.trim();
+	return version;
     }
 
 }

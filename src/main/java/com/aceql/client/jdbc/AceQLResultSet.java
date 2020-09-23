@@ -409,7 +409,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	    Object obj = simpleClassCaller.callMehod("getMetaData", params, values);
 	    return (ResultSetMetaData) obj;
 	} catch (ClassNotFoundException e) {
-	    throw new IllegalArgumentException(Tag.PRODUCT +  " " + "ResultSet.getMetaData() call requires AceQL JDBC Driver version 5 or higher.");
+	    throw new UnsupportedOperationException(Tag.PRODUCT +  " " + "ResultSet.getMetaData() call requires AceQL JDBC Driver version 5 or higher.");
 	}
 	catch (Exception e) {
 	    throw new SQLException(e);
@@ -738,7 +738,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	    Object obj = simpleClassCaller.callMehod("getArray", params, values);
 	    return (Array) obj;
 	} catch (ClassNotFoundException e) {
-	    throw new IllegalArgumentException(Tag.PRODUCT +  " " + "ResultSet.getArray() call requires AceQL JDBC Driver version 5 or higher.");
+	    throw new UnsupportedOperationException(Tag.PRODUCT +  " " + "ResultSet.getArray() call requires AceQL JDBC Driver version 5 or higher.");
 	}
 	catch (Exception e) {
 	    throw new SQLException(e);
