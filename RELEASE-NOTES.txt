@@ -18,6 +18,14 @@ The AceQL Java Client SDK is licensed under the Apache 2.0
 License.
 
 
+AceQL Java Client SDK - Version 5.0.2 - 24-Oct-2020
+---------------------------------------------------
+
+Whats New:
+- Junit library has been updated to 4.13.1 for security reasons.
+  (See https://github.com/advisories/GHSA-269g-pwp5-87pp).
+
+
 AceQL Java Client SDK - Version 5.0.1 - 23-Sep-2020
 ---------------------------------------------------
 

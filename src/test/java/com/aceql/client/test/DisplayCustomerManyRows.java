@@ -13,7 +13,7 @@ import java.sql.Statement;
 import java.util.Date;
 
 import com.aceql.client.jdbc.AceQLConnection;
-import com.aceql.sdk.jdbc.examples.MyRemoteConnection;
+import com.aceql.client.test.connection.ConnectionBuilder;
 
 /**
  * @author Nicolas de Pomereu
@@ -53,7 +53,7 @@ public class DisplayCustomerManyRows {
 	    connection = getLocalConnection();
 	} else {
 	    System.out.println(new Date() + " AceQL Remote Connection...");
-	    connection = MyRemoteConnection.remoteConnectionBuilder();
+	    connection = ConnectionBuilder.createOnConfig();
 	    ((AceQLConnection) connection).setGzipResult(true);
 	}
     }
