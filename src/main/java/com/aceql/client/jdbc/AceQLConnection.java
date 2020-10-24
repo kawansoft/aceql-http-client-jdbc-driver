@@ -173,7 +173,7 @@ import com.aceql.client.metadata.ResultSetMetaDataPolicy;
  * </pre>
  *
  * </blockquote> See the source code of
- * <a href= "https://www.aceql.com/rest/soft_java_client/5.0/src/SqlProgressMonitorDemo.java"
+ * <a href= "https://www.aceql.com/rest/soft_java_client/5.0.2/src/SqlProgressMonitorDemo.java"
  * >SqlProgressMonitorDemo.java</a> that demonstrates the use of atomic
  * variables when inserting a Blob.
  *
