@@ -94,7 +94,7 @@ Note that we will soon release a real JDBC Driver. Please contact us at [contact
 <dependency>
     <groupId>com.aceql</groupId>
     <artifactId>aceql-http-client-sdk</artifactId>
-    <version>5.0.2</version>
+    <version>5.1</version>
 </dependency>
 ```
 ### Single Jar 
