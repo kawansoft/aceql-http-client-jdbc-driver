@@ -24,8 +24,8 @@ AceQL Java Client SDK - Version 5.1 - 11-Nov-2020
 
 Whats New:
 - The new AceQLConnection.addRequestProperty(String key, String value)
-  allows to add request properties (headers, ...) for the session. 
-- AceQLConnection.resetRequestPropertes(() allows to reset request
+  method allows to add request properties (headers, ...) for the session. 
+- AceQLConnection.resetRequestPropertes() allows to reset request
   properties (added request properties are suppressed in subsequent requests).
   
   
