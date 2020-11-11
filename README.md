@@ -155,11 +155,11 @@ Note that AceQL is optimized as much as possible:
 
 We will use the same `sampledb` database for all our code samples. 
 
-The schema is available here: [sampledb.txt](http://www.aceql.com/rest/soft_java_client/5.0.2/src/sampledb.txt). 
+The schema is available here: [sampledb.txt](http://www.aceql.com/rest/soft_java_client/5.1/src/sampledb.txt). 
 
 ## Connection creation
 
-The  `Connection` to the remote database is created using AceQL’s [AceQLConnection](https://www.aceql.com/rest/soft_java_client/5.0.2/javadoc/com/aceql/client/jdbc/AceQLConnection.html) class and passing the URL of the `ServerSqlManager` Servlet of your server configuration:
+The  `Connection` to the remote database is created using AceQL’s [AceQLConnection](https://www.aceql.com/rest/soft_java_client/5.1/javadoc/com/aceql/client/jdbc/AceQLConnection.html) class and passing the URL of the `ServerSqlManager` Servlet of your server configuration:
 
 ```java
   // The URL of the AceQL Server servlet
@@ -207,7 +207,7 @@ If proxy requires authentication, pass the credentials using  a `java.net.Passwo
 
 ## Handling Exceptions
 
-Except for `NullPointerException`, exceptions thrown are always an instance of [AceQLException](https://www.aceql.com/rest/soft_java_client/5.0.2/javadoc/com/aceql/client/jdbc/AceQLException.html).
+Except for `NullPointerException`, exceptions thrown are always an instance of [AceQLException](https://www.aceql.com/rest/soft_java_client/5.1/javadoc/com/aceql/client/jdbc/AceQLException.html).
 
 The `AceQLException` contains 5 pieces of information :
 
@@ -419,9 +419,9 @@ The atomic variables values will be shared by AceQL download/upload processes an
 
 The values are to be initialized and passed to `AceQLConnection` before the JDBC actions with the static setters:
 
-- [AceQLConnection.setProgress(AtomicInteger progress)](https://www.aceql.com/rest/soft_java_client/5.0.2/javadoc/com/aceql/client/jdbc/AceQLConnection.html#setProgress(java.util.concurrent.atomic.AtomicInteger))
+- [AceQLConnection.setProgress(AtomicInteger progress)](https://www.aceql.com/rest/soft_java_client/5.1/javadoc/com/aceql/client/jdbc/AceQLConnection.html#setProgress(java.util.concurrent.atomic.AtomicInteger))
 
-- [AceQLConnection.setCancelled(AtomicBoolean cancelled)](https://www.aceql.com/rest/soft_java_client/5.0.2/javadoc/com/aceql/client/jdbc/AceQLConnection.html#setCancelled(java.util.concurrent.atomic.AtomicBoolean))
+- [AceQLConnection.setCancelled(AtomicBoolean cancelled)](https://www.aceql.com/rest/soft_java_client/5.1/javadoc/com/aceql/client/jdbc/AceQLConnection.html#setCancelled(java.util.concurrent.atomic.AtomicBoolean))
 
 
 Values will then be updated and read:
@@ -540,14 +540,14 @@ Assuming hat you want to display a progress indicator using `SwingWorker`, you w
 	}
 ```
 
-A complete example is available in [SqlProgressMonitorDemo.java](http://www.aceql.com/rest/soft_java_client/5.0.2/src/SqlProgressMonitorDemo.java) and [BlobExample.java](https://www.aceql.com/rest/soft_java_client/5.0.2/src/BlobExample.java) 
+A complete example is available in [SqlProgressMonitorDemo.java](http://www.aceql.com/rest/soft_java_client/5.1/src/SqlProgressMonitorDemo.java) and [BlobExample.java](https://www.aceql.com/rest/soft_java_client/5.1/src/BlobExample.java) 
 
 ## HTTP session options 
 
 You can set the http timeout values with the static setters to be called before `AceQLConnection` creation:
 
-- [AceQLConnection.setConnectTimeout(int connectTimeout)](https://www.aceql.com/rest/soft_java_client/5.0.2/javadoc/com/aceql/client/jdbc/AceQLConnection.html#setConnectTimeout(int))
-- [AceQLConnection.setReadTimeout(int readTimeout)](https://www.aceql.com/rest/soft_java_client/5.0.2/javadoc/com/aceql/client/jdbc/AceQLConnection.html#setReadTimeout(int))
+- [AceQLConnection.setConnectTimeout(int connectTimeout)](https://www.aceql.com/rest/soft_java_client/5.1/javadoc/com/aceql/client/jdbc/AceQLConnection.html#setConnectTimeout(int))
+- [AceQLConnection.setReadTimeout(int readTimeout)](https://www.aceql.com/rest/soft_java_client/5.1/javadoc/com/aceql/client/jdbc/AceQLConnection.html#setReadTimeout(int))
 
 ## Using outer authentication without a password  and with an AceQL Session ID
 
@@ -598,17 +598,17 @@ RemoteDatabaseMetaData remoteDatabaseMetaData =
 
 ## Downloading database schema into a file
 
-Downloading a schema into a Java `File` is done through the method. See the `RemoteDatabaseMetaData` [javadoc](https://www.aceql.com/rest/soft_java_client/5.0.2/javadoc/com/aceql/client/metadata/RemoteDatabaseMetaData.html): 
+Downloading a schema into a Java `File` is done through the method. See the `RemoteDatabaseMetaData` [javadoc](https://www.aceql.com/rest/soft_java_client/5.1/javadoc/com/aceql/client/metadata/RemoteDatabaseMetaData.html): 
 
 ```java
 File file = new File("db_schema.out.html");
 remoteDatabaseMetaData.dbSchemaDownload(file);
 ```
-See an example of the built HTML schema:  [db_schema.out.html](https://www.aceql.com/rest/soft_java_client/5.0.2/src/db_schema.out.html)
+See an example of the built HTML schema:  [db_schema.out.html](https://www.aceql.com/rest/soft_java_client/5.1/src/db_schema.out.html)
 
 ## Accessing remote database main properties
 
-The [JdbcDatabaseMetaData](https://www.aceql.com/rest/soft_java_client/5.0.2/javadoc/com/aceql/client/metadata/JdbcDatabaseMetaData.html) class wraps instance the main value retrieved by a remote JDBC call to `Connection.getMetaData`(): 
+The [JdbcDatabaseMetaData](https://www.aceql.com/rest/soft_java_client/5.1/javadoc/com/aceql/client/metadata/JdbcDatabaseMetaData.html) class wraps instance the main value retrieved by a remote JDBC call to `Connection.getMetaData`(): 
 
 ```java
 JdbcDatabaseMetaData jdbcDatabaseMetaData = remoteDatabaseMetaData.getJdbcDatabaseMetaData();

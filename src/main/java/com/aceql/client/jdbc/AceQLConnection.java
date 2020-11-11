@@ -173,7 +173,7 @@ import com.aceql.client.metadata.ResultSetMetaDataPolicy;
  * </pre>
  *
  * </blockquote> See the source code of <a href=
- * "https://www.aceql.com/rest/soft_java_client/5.0.2/src/SqlProgressMonitorDemo.java"
+ * "https://www.aceql.com/rest/soft_java_client/5.1/src/SqlProgressMonitorDemo.java"
  * >SqlProgressMonitorDemo.java</a> that demonstrates the use of atomic
  * variables when inserting a Blob.
  *
@@ -233,9 +233,9 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     }
 
     /**
-     * Adds a general request property to the the underlying {@link URLConnection
-     * }specified by a key-value pair. This method will not overwrite existing
-     * values associated with the same key.
+     * Adds a general request property to the the underlying {@link URLConnection}
+     * specified by a key-value pair. This method will not overwrite existing values
+     * associated with the same key.
      *
      * @param key   the keyword by which the request is known (e.g.,
      *              "{@code Accept}").
