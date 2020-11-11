@@ -86,6 +86,8 @@ public class ConnectionBuilder {
 
 	Connection connection = null;
 
+	AceQLConnection.addRequestProperty("user-agent", "aceql-client");
+
 	if (!useAuthenticatedProxy) {
 	    connection = new AceQLConnection(serverUrl, database, username, password);
 	} else {

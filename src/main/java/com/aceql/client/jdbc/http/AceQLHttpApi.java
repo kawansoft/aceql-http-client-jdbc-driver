@@ -37,6 +37,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.commons.io.IOUtils;
 import org.kawanfw.sql.version.VersionValues;
 
+import com.aceql.client.jdbc.AceQLConnection;
 import com.aceql.client.jdbc.AceQLException;
 import com.aceql.client.jdbc.util.UserLoginStore;
 import com.aceql.client.jdbc.util.json.SqlParameter;
@@ -69,6 +70,22 @@ public class AceQLHttpApi {
 
     private static int connectTimeout = 0;
     private static int readTimeout = 0;
+
+    private static Map<String, String> requestProperties = new HashMap<>();
+
+    /**
+     * @return the requestProperties
+     */
+    public static Map<String, String> getRequestProperties() {
+        return requestProperties;
+    }
+
+    /**
+     * @param requestProperties the requestProperties to set
+     */
+    public static void setRequestProperties(Map<String, String> requestProperties) {
+        AceQLHttpApi.requestProperties = requestProperties;
+    }
 
     /** Always true and can not be changed */
     private final boolean prettyPrinting = true;
@@ -116,6 +133,30 @@ public class AceQLHttpApi {
 	AceQLHttpApi.connectTimeout = connectTimeout;
     }
 
+
+    /**
+     * Adds a general request property to the the underlying {@link URLConnection }specified by a
+     * key-value pair.  This method will not overwrite
+     * existing values associated with the same key.
+     * @param   key     the keyword by which the request is known
+     *                  (e.g., "{@code Accept}").
+     * @param   value  the value associated with it.
+     * @throws IllegalStateException if already connected
+     * @throws NullPointerException if key is null
+     */
+    public static void addRequestProperty(String key, String value) {
+	Objects.requireNonNull(key, "key cannot be null!");
+	requestProperties.put(key, value);
+    }
+
+    /**
+     * Resets the request properties. The previously added request properties with
+     * {@link AceQLConnection#addRequestProperty(String, String)} will be
+     * suppressed.
+     */
+    public static void resetRequestProperties() {
+	requestProperties = new HashMap<>();
+    }
 
     /**
      * Login on the AceQL server and connect to a database
@@ -882,6 +923,7 @@ public class AceQLHttpApi {
 	    conn.setRequestMethod("POST");
 	    conn.setReadTimeout(readTimeout);
 	    conn.setDoOutput(true);
+	    addUserRequestProperties(conn);
 
 	    final MultipartUtility http = new MultipartUtility(theURL, conn, connectTimeout, progress, cancelled,
 		    totalLength);
@@ -1009,5 +1051,15 @@ public class AceQLHttpApi {
         return prettyPrinting;
     }
 
+    /**
+     * Add all the request properties asked by the client.
+     * @param conn	the current URL Connection
+     */
+    public static void addUserRequestProperties(HttpURLConnection conn) {
+        Map<String, String> map = getRequestProperties();
+        for (String key : map.keySet()) {
+            conn.addRequestProperty(key, map.get(key));
+        }
+    }
 
 }

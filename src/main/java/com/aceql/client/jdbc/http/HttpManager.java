@@ -158,6 +158,7 @@ public class HttpManager {
 	conn.setReadTimeout(readTimeout);
 	conn.setRequestMethod("GET");
 	conn.setDoOutput(true);
+	AceQLHttpApi.addUserRequestProperties(conn);
 
 	trace();
 	trace("Executing request " + url);
@@ -176,6 +177,8 @@ public class HttpManager {
 
 	return in;
     }
+
+
 
     public String callWithGet(String url)
 	    throws MalformedURLException, IOException, ProtocolException, UnsupportedEncodingException {
@@ -218,6 +221,7 @@ public class HttpManager {
 	conn.setReadTimeout(readTimeout);
 	conn.setRequestMethod("POST");
 	conn.setDoOutput(true);
+	AceQLHttpApi.addUserRequestProperties(conn);
 
 	TimeoutConnector timeoutConnector = new TimeoutConnector(conn, connectTimeout);
 
