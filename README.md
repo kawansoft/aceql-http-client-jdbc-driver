@@ -50,7 +50,7 @@
 
 This document describes how to use the AceQL Java Client SDK and gives some details about how it operates with the server side.
 
-The AceQL Java Client SDK allows users to wrap the [AceQL HTTP APIs](https://github.com/kawansoft/aceql-http/blob/master/aceql-http-6.1-user-guide-api.md) and eliminate the tedious work of handling communication errors and parsing JSON results.
+The AceQL Java Client SDK allows users to wrap the [AceQL HTTP APIs](https://github.com/kawansoft/aceql-http/blob/master/aceql-http-6.2-user-guide-api.md) and eliminate the tedious work of handling communication errors and parsing JSON results.
 
 Android and Java Desktop application developers can access remote SQL databases and/or SQL databases in the cloud, simply by including standard JDBC calls in their code, just like they would for a local database.
 
@@ -553,7 +553,7 @@ You can set the http timeout values with the static setters to be called before 
 
 Some working environments (Intranet, etc.) require that the client user authenticates himself without a password. Thus, it is not possible for this users to authenticate though the AceQL client SDK.
 
-In this case, you may use directly the native HTTP [login](https://github.com/kawansoft/aceql-http/blob/master/aceql-http-6.1-user-guide-api.md#login) API to authenticate the users and retrieve the `session_id` returned by the API.
+In this case, you may use directly the native HTTP [login](https://github.com/kawansoft/aceql-http/blob/master/aceql-http-6.2-user-guide-api.md#login) API to authenticate the users and retrieve the `session_id` returned by the API.
 
 The `session_id` value will be passed to the dedicated `AceQLConnection` constructor:
 
@@ -619,7 +619,7 @@ JdbcDatabaseMetaData jdbcDatabaseMetaData = remoteDatabaseMetaData.getJdbcDataba
 
 ## Getting Details of Tables and Columns
 
-See the [javadoc](https://www.aceql.com/rest/soft/6.0javadoc/com/aceql/client/metadata/package-summary.html) of the `com.aceql.client.metadata` package: 
+See the [javadoc](https://www.aceql.com/rest/soft_java_client/5.1/javadoc/com/aceql/client/metadata/package-summary.html) of the `com.aceql.client.metadata` package: 
 
 ```java
 System.out.println("Get the table names:");
