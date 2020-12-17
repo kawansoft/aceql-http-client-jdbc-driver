@@ -1,26 +1,20 @@
 /*
- * This file is part of AceQL.
- * AceQL: Remote JDBC access over HTTP.
- * Copyright (C) 2015,  KawanSoft SAS
+ * This file is part of AceQL Client SDK.
+ * AceQL Client SDK: Remote JDBC access over HTTP with AceQL HTTP.
+ * Copyright (C) 2020,  KawanSoft SAS
  * (http://www.kawansoft.com). All rights reserved.
  *
- * AceQL is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * AceQL is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
- * 02110-1301  USA
- *
- * Any modifications to this file must keep this entire header
- * intact.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.aceql.client.jdbc;
 
@@ -39,8 +33,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.kawanfw.driver.util.FrameworkDebug;
 import org.kawanfw.driver.util.JdbcUrlHeader;
 
-import com.aceql.client.metadata.ResultSetMetaDataPolicy;
-
 /**
  *
  * The <a href=http://www.aceql.com>Driver</a> class in order to access remote
@@ -55,8 +47,6 @@ import com.aceql.client.metadata.ResultSetMetaDataPolicy;
  * <li><b>password</b>: password to use when authenticating.</li>
  * <li><b>database</b>: name of remote database as defined in the server
  * {@code aceql-server.properties} file.</li>
- * <li><b>licenseKeyFolder</b>: path to the folder that contains the required
- * aceql_license_key.txt file. Defaults - if not set - to \"user.dir\" that is the resolved of at runtime.</li>
  * <li><b>proxyType</b>: java.net.Proxy Type to use: HTTP or SOCKS. Defaults to
  * HTTP.</li>
  * <li><b>proxyHostname</b>: java.net.Proxy hostname to use.</li>
@@ -74,14 +64,10 @@ import com.aceql.client.metadata.ResultSetMetaDataPolicy;
  * timeout of zero is interpreted as an infinite timeout.
  * <li><b>compression</b>: boolean to say if the Driver is configured to contact
  * the remote server using http compression. Defaults to <code>true</code>.</li>
- * <li><b>resultSetMetaDataPolicy</b>: Defines the policy to say if the
- * ResultSet MetaData is to be downloaded along with the ResultSet. Possible
- * values are "on" and "off". Defaults to "on". See
- * {@link ResultSetMetaDataPolicy}</li>
  * </ul>
  * <p>
  *
- * @since 5.0
+ * @since 6.0
  * @author Nicolas de Pomereu
  */
 

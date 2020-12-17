@@ -61,7 +61,7 @@ import com.aceql.client.jdbc.util.json.StreamResultAnalyzer;
  * @author Nicolas de Pomereu
  *
  */
-class AceQLPreparedStatement extends AceQLStatement implements PreparedStatement {
+public class AceQLPreparedStatement extends AceQLStatement implements PreparedStatement {
 
     private static boolean DEBUG = false;
 

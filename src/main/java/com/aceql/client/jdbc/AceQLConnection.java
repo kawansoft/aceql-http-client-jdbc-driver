@@ -199,7 +199,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      *                       infinite timeout. See
      *                       {@link URLConnection#setConnectTimeout(int)}
      */
-    static void setConnectTimeout(int connectTimeout) {
+    public static void setConnectTimeout(int connectTimeout) {
 	AceQLHttpApi.setConnectTimeout(connectTimeout);
     }
 
@@ -214,7 +214,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      *                    raised. A timeout of zero is interpreted as an infinite
      *                    timeout. See {@link URLConnection#setReadTimeout(int)}
      */
-    static void setReadTimeout(int readTimeout) {
+    public static void setReadTimeout(int readTimeout) {
 	AceQLHttpApi.setReadTimeout(readTimeout);
     }
 
@@ -405,7 +405,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	    return (DatabaseMetaData) obj;
 	} catch (ClassNotFoundException e) {
 	    throw new UnsupportedOperationException(Tag.PRODUCT + " "
-		    + "Connection.getMetaData() call requires AceQL JDBC Driver version 5 or higher.");
+		    + "Connection.getMetaData() call requires AceQL JDBC Driver Professional Edition.");
 	} catch (Exception e) {
 	    throw new SQLException(e);
 	}
@@ -703,8 +703,29 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      */
     @Override
     public CallableStatement prepareCall(String sql) throws SQLException {
-	AceQLCallableStatement aceQLCallableStatement = new AceQLCallableStatement(this, sql);
-	return aceQLCallableStatement;
+	//AceQLCallableStatement aceQLCallableStatement = new AceQLCallableStatement(this, sql);
+	//return aceQLCallableStatement;
+
+	List<Class<?>> params = new ArrayList<>();
+	List<Object> values = new ArrayList<>();
+
+	params.add(AceQLConnection.class);
+	values.add(this);
+
+	params.add(String.class);
+	values.add(sql);
+
+	try {
+	    SimpleClassCaller simpleClassCaller = new SimpleClassCaller(
+		    "com.aceql.driver.reflection.PrepareCallGetter");
+	    Object obj = simpleClassCaller.callMehod("prepareCall", params, values);
+	    return (CallableStatement) obj;
+	} catch (ClassNotFoundException e) {
+	    throw new UnsupportedOperationException(Tag.PRODUCT + " "
+		    + "Connection.prepareCall() call requires AceQL JDBC Driver Professional Edition.");
+	} catch (Exception e) {
+	    throw new SQLException(e);
+	}
     }
 
     /*
