@@ -355,7 +355,7 @@ BLOB creation is supported through `PreparedStatement.setBinaryStream()`:
 
 ### BLOB reading 
 
-BLOB reading is supported through `PreparedStatement.setBinaryStream()`:
+BLOB reading is supported through `ResultSet.getBinaryStream()`:
 
 ```java
    /**
