@@ -35,7 +35,7 @@ import com.aceql.client.jdbc.AceQLConnection;
  */
 public class ConnectionBuilder {
 
-    public static final  boolean useLocal = true;
+    public static final boolean useLocal = true;
     public static final boolean useLdapAuth = false;
     public static final boolean useAuthenticatedProxy = false;
 
@@ -86,10 +86,17 @@ public class ConnectionBuilder {
 
 	Connection connection = null;
 
-	AceQLConnection.addRequestProperty("user-agent", "aceql-client");
+	// AceQLConnection.addRequestProperty("user-agent", "aceql-client");
 
 	if (!useAuthenticatedProxy) {
-	    connection = new AceQLConnection(serverUrl, database, username, password);
+	    // connection = new AceQLConnection(serverUrl, database, username, password);
+
+	    try {
+		connection = DriverLoader.getConnection(serverUrl, username, new String(password), database);
+	    } catch (Exception e) {
+		throw new SQLException(e);
+	    }
+
 	} else {
 	    MyProxyInfo myProxyInfo = new MyProxyInfo();
 	    Proxy proxy = myProxyInfo.getProxy();
@@ -102,6 +109,6 @@ public class ConnectionBuilder {
 
     public static Connection getPostgreSqlConnection() throws SQLException {
 	// TODO Auto-generated method stub
-	return new  DirectConnectionBuilder().createPostgreSql();
+	return new DirectConnectionBuilder().createPostgreSql();
     }
 }

@@ -199,7 +199,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      *                       infinite timeout. See
      *                       {@link URLConnection#setConnectTimeout(int)}
      */
-    public static void setConnectTimeout(int connectTimeout) {
+    static void setConnectTimeout(int connectTimeout) {
 	AceQLHttpApi.setConnectTimeout(connectTimeout);
     }
 
@@ -214,7 +214,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      *                    raised. A timeout of zero is interpreted as an infinite
      *                    timeout. See {@link URLConnection#setReadTimeout(int)}
      */
-    public static void setReadTimeout(int readTimeout) {
+    static void setReadTimeout(int readTimeout) {
 	AceQLHttpApi.setReadTimeout(readTimeout);
     }
 
@@ -243,7 +243,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      * @throws IllegalStateException if already connected
      * @throws NullPointerException  if key is null
      */
-    public static void addRequestProperty(String key, String value) {
+    static void addRequestProperty(String key, String value) {
 	AceQLHttpApi.addRequestProperty(key, value);
     }
 
