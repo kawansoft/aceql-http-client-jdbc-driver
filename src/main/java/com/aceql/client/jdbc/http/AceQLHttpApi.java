@@ -18,7 +18,6 @@
  */
 package com.aceql.client.jdbc.http;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -28,13 +27,12 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.apache.commons.io.IOUtils;
 import org.kawanfw.sql.version.VersionValues;
 
 import com.aceql.client.jdbc.AceQLConnection;
@@ -421,6 +419,34 @@ public class AceQLHttpApi {
      */
     public void setTraceOn(boolean traceOn) {
 	TRACE_ON = traceOn;
+    }
+
+    /**
+     * @return the url
+     */
+    public String getUrl() {
+        return url;
+    }
+
+    /**
+     * @return the connectTimeout
+     */
+    public static int getConnectTimeout() {
+        return connectTimeout;
+    }
+
+    /**
+     * @return the readTimeout
+     */
+    public static int getReadTimeout() {
+        return readTimeout;
+    }
+
+    /**
+     * @return the httpManager
+     */
+    public HttpManager getHttpManager() {
+        return httpManager;
     }
 
     /**
@@ -888,7 +914,15 @@ public class AceQLHttpApi {
 
     }
 
+    public void blobUpload(String blobId, List<Byte> bytes, long totalLength) throws AceQLException {
+	byte [] byteArray = new byte [bytes.size()];
+	for (int i = 0; i < bytes.size(); i++) {
+	    byteArray[i] = bytes.get(i);
+	}
 
+	BlobUploader blobUploader = new BlobUploader(this);
+	blobUploader.blobUpload(blobId, byteArray, byteArray.length);
+    }
 
     /**
      * Calls /blob_upload API.
@@ -897,6 +931,7 @@ public class AceQLHttpApi {
      * @param inputStream the local Blob/Clob local file input stream
      * @throws AceQLException if any Exception occurs
      */
+    /** <pre><code>
     public void blobUpload(String blobId, InputStream inputStream, long totalLength) throws AceQLException {
 
 	try {
@@ -984,6 +1019,7 @@ public class AceQLHttpApi {
 	    }
 	}
     }
+    </code></pre> */
 
     /**
      * Calls /get_blob_length API
@@ -1061,5 +1097,7 @@ public class AceQLHttpApi {
             conn.addRequestProperty(key, map.get(key));
         }
     }
+
+
 
 }

@@ -28,6 +28,12 @@ public class Test {
      */
     public static void main(String[] args) throws Exception {
 
+	long heapSize = Runtime.getRuntime().totalMemory();
+	System.out.println(new Date() + " heapSize: " + heapSize + " " + 255328256 / (1024 * 1024));
+
+	boolean doIt = false;
+	if (! doIt) return;
+
 	System.out.println(new Date() + " Begin...");
 	Connection connection = ConnectionBuilder.getPostgreSqlConnection();
 
@@ -36,7 +42,7 @@ public class Test {
 
 	try {
 	    executeUpdate1(connection);
-	    boolean doIt = true;
+
 	    if (doIt) throw new SQLException("SQL Exception asked!");
  	    executeUpdate2(connection);
 
