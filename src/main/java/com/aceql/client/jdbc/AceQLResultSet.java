@@ -276,6 +276,18 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	return absolute(rowCount);
     }
 
+    private byte [] getByteArray(String blobId) throws SQLException {
+
+	// long length = aceQLHttpApi.getBlobLength(blobId);
+	// AceQLConnection aceQLConnection =
+	// (AceQLConnection)this.getStatement().getConnection();
+	// blobDownload(blobId, file, aceQLConnection.getProgress(),
+	// aceQLConnection.getCancelled(), length);
+
+	byte [] bytes = aceQLHttpApi.blobDownloadGetBytes(blobId);
+	return bytes;
+    }
+
     private InputStream getInputStream(String blobId) throws SQLException {
 
 	// long length = aceQLHttpApi.getBlobLength(blobId);
@@ -284,7 +296,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	// blobDownload(blobId, file, aceQLConnection.getProgress(),
 	// aceQLConnection.getCancelled(), length);
 
-	InputStream in = aceQLHttpApi.blobDownload(blobId);
+	InputStream in = aceQLHttpApi.blobDownloadGetStream(blobId);
 	return in;
     }
 
@@ -416,6 +428,40 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	}
     }
 
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see
+     * org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getBytes(int)
+     */
+    @Override
+    public byte[] getBytes(int columnIndex) throws SQLException {
+	String value = getString(columnIndex);
+
+	if (value == null || value.equals("NULL")) {
+	    return null;
+	}
+	return getByteArray(value);
+    }
+
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see
+     * org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getBytes(String)
+     */
+    @Override
+    public byte[] getBytes(String columnName) throws SQLException {
+	String value = getString(columnName);
+
+	if (value == null || value.equals("NULL")) {
+	    return null;
+	}
+	return getByteArray(value);
+    }
+
     /*
      * (non-Javadoc)
      *
@@ -426,7 +472,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
     public InputStream getBinaryStream(int columnIndex) throws SQLException {
 	String value = getString(columnIndex);
 
-	if (value.equals("NULL")) {
+	if (value == null || value.equals("NULL")) {
 	    return null;
 	}
 	return getInputStream(value);

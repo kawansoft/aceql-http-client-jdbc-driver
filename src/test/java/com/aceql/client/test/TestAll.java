@@ -62,7 +62,7 @@ public class TestAll {
      * @throws AceQLException
      * @throws FileNotFoundException
      */
-    public static void testSchemaMethodsFourDbs() throws SQLException, IOException, AceQLException, FileNotFoundException {
+    public static void testSchemaMethodsFourDbs() throws Exception {
 	Connection connection = ConnectionBuilder.createOnConfig();
 	testSchemaMethods(connection);
 

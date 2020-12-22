@@ -19,9 +19,8 @@
 
 package com.aceql.client.test;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
@@ -48,12 +47,11 @@ public class SqlBlobTest {
 	this.out = out;
     }
 
-    public void blobUpload(int customerId, int itemId, File file) throws SQLException, FileNotFoundException {
+    public void blobUpload(int customerId, int itemId, File file) throws SQLException, IOException {
 
 	String sql = "insert into orderlog values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
-	InputStream in = new FileInputStream(file);
 	int j = 1;
 	preparedStatement.setInt(j++, customerId);
 	preparedStatement.setInt(j++, itemId);
@@ -61,7 +59,12 @@ public class SqlBlobTest {
 	preparedStatement.setInt(j++, itemId * 1000);
 	preparedStatement.setDate(j++, new java.sql.Date(System.currentTimeMillis()));
 	preparedStatement.setTimestamp(j++, new java.sql.Timestamp(System.currentTimeMillis()));
-	preparedStatement.setBinaryStream(j++, in, file.length());
+
+	//InputStream in = new FileInputStream(file);
+	//preparedStatement.setBinaryStream(j++, in, file.length());
+	byte [] bytes = FileUtils.readFileToByteArray(file);
+	preparedStatement.setBytes(j++, bytes);
+
 	preparedStatement.setInt(j++, customerId);
 	preparedStatement.setInt(j++, itemId * 1000);
 
@@ -94,7 +97,14 @@ public class SqlBlobTest {
 	    // IOUtils.copy(input, output);
 	    // }
 
-	    try (InputStream in = rs.getBinaryStream(i++);) {
+//	    try (InputStream in = rs.getBinaryStream(i++);) {
+//		FileUtils.copyToFile(in, file);
+//	    }
+
+	   byte [] bytes = rs.getBytes(i++);
+	   ByteArrayInputStream arrayInputStream = new ByteArrayInputStream(bytes);
+
+	    try (InputStream in = arrayInputStream;) {
 		FileUtils.copyToFile(in, file);
 	    }
 

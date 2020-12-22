@@ -4,9 +4,6 @@
 package com.aceql.client.test.connection;
 
 import java.sql.Connection;
-import java.sql.SQLException;
-
-import com.aceql.client.jdbc.AceQLConnection;
 
 /**
  *  Desribe the parameters in order to have a Connecion on main Four databases
@@ -32,23 +29,23 @@ public class FourDbConnections {
 
     }
 
-    public static Connection getPostgreSQLConnection() throws SQLException {
-	Connection connection = new AceQLConnection(serverUrl, databasePostgreSQL, username, password.toCharArray());
+    public static Connection getPostgreSQLConnection() throws Exception {
+	Connection connection = AceQLDriverLoader.getConnection(serverUrl, databasePostgreSQL, username, password);
 	return connection;
     }
 
-    public static Connection getMySQLConnection() throws SQLException {
-	Connection connection = new AceQLConnection(serverUrl, databaseMySQL, username, password.toCharArray());
+    public static Connection getMySQLConnection() throws Exception {
+	Connection connection = AceQLDriverLoader.getConnection(serverUrl, databaseMySQL, username, password);
 	return connection;
     }
 
-    public static Connection getSqlServerConnection() throws SQLException {
-	Connection connection = new AceQLConnection(serverUrl, databaseSqlServer, username, password.toCharArray());
+    public static Connection getSqlServerConnection() throws Exception {
+	Connection connection = AceQLDriverLoader.getConnection(serverUrl, databaseSqlServer, username, password);
 	return connection;
     }
 
-    public static Connection getOracleConnection() throws SQLException {
-	Connection connection = new AceQLConnection(serverUrl, databaseOracle, username, password.toCharArray());
+    public static Connection getOracleConnection() throws Exception {
+	Connection connection = AceQLDriverLoader.getConnection(serverUrl, databaseOracle, username, password);
 	return connection;
     }
 

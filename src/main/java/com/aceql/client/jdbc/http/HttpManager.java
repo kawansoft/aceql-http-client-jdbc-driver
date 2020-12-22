@@ -22,6 +22,7 @@ import java.net.URLEncoder;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
+import org.kawanfw.driver.util.Tag;
 
 /**
  * A HttpManger that does all the basic GET and POST.
@@ -42,6 +43,9 @@ public class HttpManager {
 
     private int connectTimeout;
     private int readTimeout;
+
+    public static final int MEDIUMB_BLOB_LENGTH_MB = 16;
+    public static final int MEDIUM_BLOB_LENGTH = MEDIUMB_BLOB_LENGTH_MB * 1024 * 1024;
 
     /**
      * Constructor.
@@ -254,6 +258,36 @@ public class HttpManager {
 	}
 
 	return in;
+    }
+
+    public byte [] callWithPostReturnBytes(URL theUrl, Map<String, String> parametersMap)
+	    throws IOException, ProtocolException, SocketTimeoutException, UnsupportedEncodingException {
+
+	try (InputStream in = callWithPost(theUrl, parametersMap);) {
+
+	    if (in != null) {
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+		int defaultBuffeSize = 1024 * 4;
+		byte[] buffer = new byte [defaultBuffeSize];
+
+	        long count = 0;
+	        int n;
+	        while (IOUtils.EOF != (n = in.read(buffer))) {
+	            out.write(buffer, 0, n);
+	            count += n;
+
+	            if (count > MEDIUM_BLOB_LENGTH) {
+			throw new IOException(Tag.PRODUCT + " " + "Can not download Blob. Length > " + MEDIUMB_BLOB_LENGTH_MB + "Mb maximum length.");
+	            }
+	        }
+
+		return out.toByteArray();
+	    }
+	    else {
+		return null;
+	    }
+	}
     }
 
     public String callWithPostReturnString(URL theUrl, Map<String, String> parametersMap)

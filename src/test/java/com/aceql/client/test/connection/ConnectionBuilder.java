@@ -92,7 +92,7 @@ public class ConnectionBuilder {
 	    // connection = new AceQLConnection(serverUrl, database, username, password);
 
 	    try {
-		connection = DriverLoader.getConnection(serverUrl, username, new String(password), database);
+		connection = AceQLDriverLoader.getConnection(serverUrl, database, username, new String(password));
 	    } catch (Exception e) {
 		throw new SQLException(e);
 	    }

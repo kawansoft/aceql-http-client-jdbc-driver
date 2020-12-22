@@ -25,11 +25,10 @@ import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 
 import org.junit.Test;
 
-import com.aceql.client.jdbc.AceQLConnection;
+import com.aceql.client.test.connection.AceQLDriverLoader;
 
 /**
  * Class to test that the AceQL JSON key names "row_n" and "row_count" can safely be used as column names.
@@ -55,9 +54,9 @@ public class AceQLHttpConnectionTestColumnAsKeyName {
     public final String password = "password";
     public final String dbname = "sampledb";
 
-    private AceQLConnection connection = null;
+    private Connection connection = null;
 
-    public Connection getConnection() throws SQLException {
+    public Connection getConnection() throws Exception {
 
 	if (! new File(IN_DIRECTORY).exists()) {
 	    new File(IN_DIRECTORY).mkdirs();
@@ -67,8 +66,8 @@ public class AceQLHttpConnectionTestColumnAsKeyName {
 	}
 
 	if (connection == null) {
-	    connection = new AceQLConnection(serverUrl, dbname, username,
-		    password.toCharArray());
+	    connection = AceQLDriverLoader.getConnection(serverUrl, dbname, username,
+		    password);
 	}
 	return connection;
     }

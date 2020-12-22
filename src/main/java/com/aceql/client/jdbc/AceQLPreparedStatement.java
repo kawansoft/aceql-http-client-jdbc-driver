@@ -50,8 +50,10 @@ import java.util.Map;
 import org.apache.commons.io.IOUtils;
 import org.kawanfw.driver.jdbc.abstracts.AbstractConnection;
 import org.kawanfw.driver.util.FrameworkFileUtil;
+import org.kawanfw.driver.util.Tag;
 
 import com.aceql.client.jdbc.http.BlobUploader;
+import com.aceql.client.jdbc.http.HttpManager;
 import com.aceql.client.jdbc.util.AceQLStatementUtil;
 import com.aceql.client.jdbc.util.AceQLTypes;
 import com.aceql.client.jdbc.util.json.PrepStatementParametersBuilder;
@@ -322,12 +324,10 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
 
 	if (x != null) {
 
-	    int mediumBblobLengthMb = 16;
-	    int mediumBblobLength = mediumBblobLengthMb * 1024 * 1024;
 
-	    if (x.length > mediumBblobLength) {
-		throw new SQLException("Can not upload Blob. Length > " + mediumBblobLengthMb + "Mb. Length is: "
-			+ mediumBblobLength / (1024 * 1024));
+	    if (x.length > HttpManager.MEDIUM_BLOB_LENGTH) {
+		throw new SQLException(Tag.PRODUCT + " " + "Can not upload Blob. Length > " + HttpManager.MEDIUMB_BLOB_LENGTH_MB + "Mb maximum length. Length is: "
+			+ x.length / (1024 * 1024));
 	    }
 
 	    List<Byte> bytes = new ArrayList<>();

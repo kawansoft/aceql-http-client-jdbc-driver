@@ -41,7 +41,7 @@ public class AceQLConnectionTestFourDbs {
      * @throws NoSuchAlgorithmException
      */
     public static void doIt()
-	    throws SQLException, AceQLException, FileNotFoundException, IOException, NoSuchAlgorithmException {
+	    throws Exception {
 	testPostgreSQL();
 	testMySQL();
 	testSqlServer();
@@ -57,7 +57,7 @@ public class AceQLConnectionTestFourDbs {
      * @throws NoSuchAlgorithmException
      */
     public static void testPostgreSQL()
-	    throws SQLException, AceQLException, FileNotFoundException, IOException, NoSuchAlgorithmException {
+	    throws Exception  {
 	Connection connection = FourDbConnections.getPostgreSQLConnection();
 	AceQLConnectionTest.doItPassConnection(connection);
 	connection.close();
@@ -72,7 +72,7 @@ public class AceQLConnectionTestFourDbs {
      * @throws NoSuchAlgorithmException
      */
     public static void testMySQL()
-	    throws SQLException, AceQLException, FileNotFoundException, IOException, NoSuchAlgorithmException {
+	    throws Exception {
 	Connection connection = FourDbConnections.getMySQLConnection();
 	AceQLConnectionTest.doItPassConnection(connection);
 	connection.close();
@@ -87,7 +87,7 @@ public class AceQLConnectionTestFourDbs {
      * @throws NoSuchAlgorithmException
      */
     public static void testSqlServer()
-	    throws SQLException, AceQLException, FileNotFoundException, IOException, NoSuchAlgorithmException {
+	    throws Exception {
 	Connection connection = FourDbConnections.getSqlServerConnection();
 	AceQLConnectionTest.doItPassConnection(connection);
 	connection.close();
@@ -103,7 +103,7 @@ public class AceQLConnectionTestFourDbs {
      * @throws NoSuchAlgorithmException
      */
     public static void testOracle()
-	    throws SQLException, AceQLException, FileNotFoundException, IOException, NoSuchAlgorithmException {
+	    throws Exception{
 	Connection connection = FourDbConnections.getSqlServerConnection();
 	AceQLConnectionTest.doItPassConnection(connection);
 	connection.close();

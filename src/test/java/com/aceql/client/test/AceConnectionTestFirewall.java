@@ -10,14 +10,8 @@ import java.util.Date;
 
 import org.junit.Assert;
 
-import com.aceql.client.jdbc.AceQLConnection;
+import com.aceql.client.test.connection.AceQLDriverLoader;
 
-/**
- * Tests all
- *
- * @author Nicolas de Pomereu
- *
- */
 public class AceConnectionTestFirewall {
 
     /**
@@ -36,7 +30,7 @@ public class AceConnectionTestFirewall {
     /**
      * @throws SQLException
      */
-    public static void doIt() throws SQLException, IOException {
+    public static void doIt() throws SQLException, IOException, Exception {
 	System.out.println(new Date() + " Begin...");
 	System.out.println();
 
@@ -72,13 +66,13 @@ public class AceConnectionTestFirewall {
 
     }
 
-    private static Connection getFirewallConnection() throws SQLException {
+    private static Connection getFirewallConnection() throws Exception {
 	String serverUrl = "http://localhost:9096/aceql";
 	String database = "sampledb";
 	String username = "user1";
 	String password = "password1";
 
-	Connection connection = new AceQLConnection(serverUrl, database, username, password.toCharArray());
+	Connection connection = AceQLDriverLoader.getConnection(serverUrl, database, username, password);
 	return connection;
     }
 

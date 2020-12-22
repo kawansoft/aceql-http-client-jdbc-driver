@@ -205,10 +205,10 @@ public class AceQLConnectionTest {
      * @param customerId
      * @param itemId
      * @throws SQLException
-     * @throws FileNotFoundException
+     * @throws IOException
      */
     private static void blobUpload(Connection connection, SqlDeleteTest sqlDeleteTest, SqlBlobTest sqlBlobTest,
-	    File fileUpload, int customerId, int itemId) throws SQLException, FileNotFoundException {
+	    File fileUpload, int customerId, int itemId) throws SQLException, IOException {
 	connection.setAutoCommit(true);
 	sqlDeleteTest.deleteOrderlogAll();
 

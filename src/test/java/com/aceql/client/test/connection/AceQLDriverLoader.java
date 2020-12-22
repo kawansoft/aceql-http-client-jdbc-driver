@@ -14,14 +14,14 @@ import java.util.Properties;
  * @author Nicolas de Pomereu
  *
  */
-public class DriverLoader {
+public class AceQLDriverLoader {
 
     /**
      * Create a connection extracted from Driver.
      * @param url
+     * @param database
      * @param user
      * @param password
-     * @param database
      * @return
      * @throws ClassNotFoundException
      * @throws NoSuchMethodException
@@ -32,9 +32,10 @@ public class DriverLoader {
      * @throws InvocationTargetException
      * @throws SQLException
      */
-    public static Connection getConnection(String url, String user, String password, String database)
+    public static Connection getConnection(String url, String database, String user, String password)
 	    throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException,
 	    IllegalAccessException, IllegalArgumentException, InvocationTargetException, SQLException {
+
 	String driverClassName = "com.aceql.client.jdbc.AceQLDriver";
 	Class<?> c = Class.forName(driverClassName);
 	Constructor<?> constructor = c.getConstructor();

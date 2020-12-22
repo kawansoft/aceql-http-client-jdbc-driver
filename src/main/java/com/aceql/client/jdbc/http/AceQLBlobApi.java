@@ -96,6 +96,47 @@ public class AceQLBlobApi {
      *         JSON format. See user documentation.
      * @throws AceQLException if any Exception occurs
      */
+    public byte [] blobDownloadGetBytes(String blobId) throws AceQLException {
+
+	try {
+
+	    if (blobId == null) {
+		Objects.requireNonNull(blobId, "blobId cannot be null!");
+	    }
+
+	    String action = "blob_download";
+
+	    Map<String, String> parameters = new HashMap<String, String>();
+	    parameters.put("blob_id", blobId);
+
+	    URL theUrl = new URL(url + action);
+	    byte [] bytes= httpManager.callWithPostReturnBytes(theUrl, parameters);
+
+	    // if (httpStatusCode != HttpURLConnection.HTTP_OK) {
+	    // throw new AceQLException("HTTP_FAILURE" + " " + httpStatusCode
+	    // + " " + httpStatusMessage, 0, httpStatusCode,
+	    // httpStatusMessage);
+	    // }
+
+	    return bytes;
+
+	} catch (Exception e) {
+	    if (e instanceof AceQLException) {
+		throw (AceQLException) e;
+	    } else {
+		throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
+	    }
+	}
+    }
+
+    /**
+     * Calls /blob_download API
+     *
+     * @param blobId the Blob/Clob Id
+     * @return the input stream containing either an error, or the result set in
+     *         JSON format. See user documentation.
+     * @throws AceQLException if any Exception occurs
+     */
     public InputStream blobDownload(String blobId) throws AceQLException {
 
 	try {

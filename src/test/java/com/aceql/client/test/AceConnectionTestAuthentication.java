@@ -41,7 +41,7 @@ public class AceConnectionTestAuthentication {
     /**
      * @throws SQLException
      */
-    public static void doIt() throws SQLException, IOException {
+    public static void doIt() throws Exception {
 	System.out.println(new Date() + " Begin...");
 	testLDAPOK();
 
@@ -105,7 +105,7 @@ public class AceConnectionTestAuthentication {
     /**
      * @throws SQLException
      */
-    public static void testLDAPOK() throws SQLException {
+    public static void testLDAPOK() throws Exception {
 	System.out.println(new Date() + " Testing LDAP Authentication...");
 	String username = "cn=read-only-admin,dc=example,dc=com";
 	String password = "password";
@@ -117,7 +117,7 @@ public class AceConnectionTestAuthentication {
     /**
      * @throws SQLException
      */
-    public static void testSSKOK() throws SQLException {
+    public static void testSSKOK() throws Exception {
 	System.out.println(new Date() + " Testing SSH Authentication...");
 	String username = "user1";
 	String password = "password1";
@@ -130,7 +130,7 @@ public class AceConnectionTestAuthentication {
      * @throws SQLException
      * @throws IOException
      */
-    public static void testWindowsOK() throws SQLException, IOException {
+    public static void testWindowsOK() throws Exception {
 	System.out.println(new Date() + " Testing Windows Authentication...");
 	String username = "user1";
 	String password = FileUtils.readFileToString(new File("I:\\__NDP\\_MyPasswords\\login_user1.txt"), "UTF-8");
@@ -143,7 +143,7 @@ public class AceConnectionTestAuthentication {
      * @throws SQLException
      * @throws IOException
      */
-    public static void testWebServiceOK() throws SQLException, IOException {
+    public static void testWebServiceOK() throws Exception {
 	System.out.println(new Date() + " Testing Web Service Authentication...");
 	String username = "user1";
 	String password = "password1";
