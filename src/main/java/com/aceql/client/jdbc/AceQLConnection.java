@@ -182,6 +182,8 @@ import com.aceql.client.metadata.ResultSetMetaDataPolicy;
  */
 public class AceQLConnection extends AbstractConnection implements Connection, Cloneable, Closeable {
 
+    static final String COM_ACEQL_DRIVERPRO_REFLECTION = "com.aceql.driverpro.reflection";
+
     /** The Http instance that does all Http stuff */
     AceQLHttpApi aceQLHttpApi = null;
 
@@ -400,7 +402,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 
 	try {
 	    SimpleClassCaller simpleClassCaller = new SimpleClassCaller(
-		    "com.aceql.driver.reflection.DatabaseMetaDataGetter");
+		    COM_ACEQL_DRIVERPRO_REFLECTION + ".DatabaseMetaDataGetter");
 	    Object obj = simpleClassCaller.callMehod("getMetaData", params, values);
 	    return (DatabaseMetaData) obj;
 	} catch (ClassNotFoundException e) {
@@ -717,7 +719,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 
 	try {
 	    SimpleClassCaller simpleClassCaller = new SimpleClassCaller(
-		    "com.aceql.driver.reflection.PrepareCallGetter");
+		    AceQLConnection.COM_ACEQL_DRIVERPRO_REFLECTION + ".PrepareCallGetter");
 	    Object obj = simpleClassCaller.callMehod("prepareCall", params, values);
 	    return (CallableStatement) obj;
 	} catch (ClassNotFoundException e) {

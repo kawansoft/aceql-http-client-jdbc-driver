@@ -56,6 +56,7 @@ import com.aceql.client.jdbc.http.BlobUploader;
 import com.aceql.client.jdbc.http.HttpManager;
 import com.aceql.client.jdbc.util.AceQLStatementUtil;
 import com.aceql.client.jdbc.util.AceQLTypes;
+import com.aceql.client.jdbc.util.SimpleClassCaller;
 import com.aceql.client.jdbc.util.json.PrepStatementParametersBuilder;
 import com.aceql.client.jdbc.util.json.SqlParameter;
 import com.aceql.client.jdbc.util.json.StreamResultAnalyzer;
@@ -324,7 +325,6 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
 
 	if (x != null) {
 
-
 	    if (x.length > HttpManager.MEDIUM_BLOB_LENGTH) {
 		throw new SQLException(Tag.PRODUCT + " " + "Can not upload Blob. Length > " + HttpManager.MEDIUMB_BLOB_LENGTH_MB + "Mb maximum length. Length is: "
 			+ x.length / (1024 * 1024));
@@ -363,8 +363,35 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
 	    // localBlobIds.add(blobId);
 	    // localInputStreams.add(inputStream);
 	    // localLengths.add(length);
+	    //BlobStreamParamsManager.update(blobParamsHolder, blobId, inputStream, length);
 
-	    BlobParamsManager.update(blobParamsHolder, blobId, inputStream, length);
+	    List<Class<?>> params = new ArrayList<>();
+	    List<Object> values = new ArrayList<>();
+
+	    params.add(BlobParamsHolder.class);
+	    values.add(blobParamsHolder);
+
+	    params.add(String.class);
+	    values.add(blobId);
+
+	    params.add(InputStream.class);
+	    values.add(inputStream);
+
+	    params.add(long.class);
+	    values.add(length);
+
+	    try {
+		SimpleClassCaller simpleClassCaller = new SimpleClassCaller(
+			AceQLConnection.COM_ACEQL_DRIVERPRO_REFLECTION + ".BlobStreamParamsManagerCaller");
+		@SuppressWarnings("unused")
+		Object obj = simpleClassCaller.callMehod("update", params, values);
+	    } catch (ClassNotFoundException e) {
+		throw new UnsupportedOperationException(Tag.PRODUCT + " "
+			+ "Connection.prepareCall() call requires AceQL JDBC Driver Professional Edition.");
+	    } catch (Exception e) {
+		throw new SQLException(e);
+	    }
+
 	} else {
 	    builder.setInParameter(parameterIndex, AceQLTypes.BLOB, null);
 	}

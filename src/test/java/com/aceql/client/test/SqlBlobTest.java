@@ -21,6 +21,7 @@ package com.aceql.client.test;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
@@ -33,14 +34,16 @@ import org.apache.commons.io.FileUtils;
 
 /**
  * Blob Test. Allows to insert a Blob, and read back the file.
+ *
  * @author Nicolas de Pomereu
  *
  */
 public class SqlBlobTest {
 
+    public static boolean IS_DRIVER_PRO = false;
+
     private Connection connection;
     private PrintStream out;
-
 
     public SqlBlobTest(Connection connection, PrintStream out) {
 	this.connection = connection;
@@ -60,10 +63,14 @@ public class SqlBlobTest {
 	preparedStatement.setDate(j++, new java.sql.Date(System.currentTimeMillis()));
 	preparedStatement.setTimestamp(j++, new java.sql.Timestamp(System.currentTimeMillis()));
 
-	//InputStream in = new FileInputStream(file);
-	//preparedStatement.setBinaryStream(j++, in, file.length());
-	byte [] bytes = FileUtils.readFileToByteArray(file);
-	preparedStatement.setBytes(j++, bytes);
+	if (IS_DRIVER_PRO) {
+	    out.println("BLOB UPLOAD USING DRIVER PRO!");
+	    InputStream in = new FileInputStream(file);
+	    preparedStatement.setBinaryStream(j++, in, file.length());
+	} else {
+	    byte[] bytes = FileUtils.readFileToByteArray(file);
+	    preparedStatement.setBytes(j++, bytes);
+	}
 
 	preparedStatement.setInt(j++, customerId);
 	preparedStatement.setInt(j++, itemId * 1000);
@@ -82,14 +89,14 @@ public class SqlBlobTest {
 
 	while (rs.next()) {
 	    int i = 1;
-	   out.println();
-	   out.println("customer_id   : " + rs.getInt(i++));
-	   out.println("item_id       : " + rs.getInt(i++));
-	   out.println("description   : " + rs.getString(i++));
-	   out.println("item_cost     : " + rs.getInt(i++));
-	   out.println("date_placed   : " + rs.getDate(i++));
-	   out.println("date_shipped  : " + rs.getTimestamp(i++));
-	   out.println("jpeg_image    : " + "<binary>");
+	    out.println();
+	    out.println("customer_id   : " + rs.getInt(i++));
+	    out.println("item_id       : " + rs.getInt(i++));
+	    out.println("description   : " + rs.getString(i++));
+	    out.println("item_cost     : " + rs.getInt(i++));
+	    out.println("date_placed   : " + rs.getDate(i++));
+	    out.println("date_shipped  : " + rs.getTimestamp(i++));
+	    out.println("jpeg_image    : " + "<binary>");
 
 	    // Java 7 syntax
 	    // try (InputStream input = rs.getBinaryStream(i++);
@@ -97,19 +104,22 @@ public class SqlBlobTest {
 	    // IOUtils.copy(input, output);
 	    // }
 
-//	    try (InputStream in = rs.getBinaryStream(i++);) {
-//		FileUtils.copyToFile(in, file);
-//	    }
+	    if (IS_DRIVER_PRO) {
+		out.println("BLOB DOWNLOAD USING DRIVER PRO!");
+		try (InputStream in = rs.getBinaryStream(i++);) {
+		    FileUtils.copyToFile(in, file);
+		}
+	    } else {
+		byte[] bytes = rs.getBytes(i++);
+		ByteArrayInputStream arrayInputStream = new ByteArrayInputStream(bytes);
 
-	   byte [] bytes = rs.getBytes(i++);
-	   ByteArrayInputStream arrayInputStream = new ByteArrayInputStream(bytes);
-
-	    try (InputStream in = arrayInputStream;) {
-		FileUtils.copyToFile(in, file);
+		try (InputStream in = arrayInputStream;) {
+		    FileUtils.copyToFile(in, file);
+		}
 	    }
 
-	   out.println("is_delivered  : " + rs.getBoolean(i++));
-	   out.println("quantity      : " + rs.getInt(i++));
+	    out.println("is_delivered  : " + rs.getBoolean(i++));
+	    out.println("quantity      : " + rs.getInt(i++));
 
 	}
 	preparedStatement.close();
