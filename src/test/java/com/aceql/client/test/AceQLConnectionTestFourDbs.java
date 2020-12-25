@@ -9,7 +9,7 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import com.aceql.client.jdbc.AceQLException;
+import com.aceql.client.jdbc.driver.AceQLException;
 import com.aceql.client.test.connection.FourDbConnections;
 
 /**

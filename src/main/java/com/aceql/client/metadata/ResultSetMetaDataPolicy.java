@@ -3,7 +3,7 @@
  */
 package com.aceql.client.metadata;
 
-import com.aceql.client.jdbc.AceQLConnection;
+import com.aceql.client.jdbc.driver.AceQLConnection;
 
 /**
  * Defines the policy for {@code ResultSetMetaData} access:

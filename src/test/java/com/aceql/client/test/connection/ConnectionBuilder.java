@@ -25,7 +25,7 @@ import java.net.Proxy;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import com.aceql.client.jdbc.AceQLConnection;
+import com.aceql.client.jdbc.driver.AceQLConnection;
 
 /**
  * Simple AceQLConncetion Creators.

@@ -42,7 +42,7 @@ import javax.swing.JTextArea;
 import javax.swing.ProgressMonitor;
 import javax.swing.SwingWorker;
 
-import com.aceql.client.jdbc.AceQLConnection;
+import com.aceql.client.jdbc.driver.AceQLConnection;
 
 /**
  *

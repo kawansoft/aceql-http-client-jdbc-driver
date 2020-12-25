@@ -16,28 +16,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.aceql.client.test.connection.raw;
+package com.aceql.client.jdbc.driver;
 
-import com.aceql.client.jdbc.driver.util.AceQLTypes;
-import com.aceql.client.jdbc.driver.util.json.PrepStatementParametersBuilder;
+import java.util.Objects;
+
+import com.aceql.client.jdbc.driver.http.AceQLHttpApi;
 
 /**
+ * A wrapper to AceQLConnection in order for hidden retrieve of underlying
+ * AceQLHttpApi
+ *
  * @author Nicolas de Pomereu
  *
  */
-public class PrepStatementParametersBuilderExample {
+public class AceQLConnectionWrapper {
 
-    /**
-     * @param args
-     */
-    public static void main(String[] args) throws Exception{
-        PrepStatementParametersBuilder builder = new PrepStatementParametersBuilder();
-        int j = 1;
-        builder.setInParameter(j++, AceQLTypes.VARCHAR, "Jim");
-        builder.setInParameter(j++, AceQLTypes.INTEGER, 1 + "");
-        System.out.println(builder.getHttpFormattedStatementParameters());
+    /** The AceQLConnection instance */
+    private AceQLConnection aceQLConnection = null;
 
-
+    public AceQLConnectionWrapper(AceQLConnection aceQLConnection) {
+	this.aceQLConnection = Objects.requireNonNull(aceQLConnection, "aceQLConnection cannot ne null!");
     }
 
+    /**
+     * Unwraps the AceQLConnection underlying AceQLHttpApi instance.
+     *
+     * @return the AceQLConnection underlying AceQLHttpApi instance.
+     */
+    public AceQLHttpApi getAceQLHttpApi() {
+	AceQLHttpApi aceQLHttpApi = aceQLConnection.aceQLHttpApi;
+	return aceQLHttpApi;
+    }
 }

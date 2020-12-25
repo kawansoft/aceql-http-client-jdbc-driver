@@ -16,37 +16,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.aceql.client.test;
+package com.aceql.client.jdbc.driver;
 
-import java.io.File;
-import java.nio.charset.Charset;
-import java.util.Map;
-
-import org.apache.commons.io.FileUtils;
-
-import com.aceql.client.jdbc.driver.http.ResultAnalyzer;
-import com.aceql.client.test.connection.ConnectionParms;
+import java.sql.SQLException;
+import java.sql.Savepoint;
 
 /**
+ * A Dummy Savepoint to make sure JDBC Driver don't fail.
  * @author Nicolas de Pomereu
  *
  */
-public class ResultAnalyzerTest {
+public class AceQLSavepoint implements Savepoint {
 
-    /**
-     * @param args
+
+
+    /*
+     * (non-Javadoc)
+     * @see java.sql.Savepoint#getSavepointId()
      */
-    public static void main(String[] args) throws Exception {
-
-	//AceQLConnection.setTraceOn(true);
-
-	ResultAnalyzer resultAnalyzer = new ResultAnalyzer(FileUtils.readFileToString(new File(ConnectionParms.IN_DIRECTORY + File.separator + "json_out.txt"), Charset.defaultCharset()), 200, "OK");
-	Map<Integer, String> parametersOutPerIndex = resultAnalyzer.getParametersOutPerIndex();
-
-	System.out.println();
-	System.out.println("parametersOutPerIndex: ");
-	System.out.println(parametersOutPerIndex);
-
+    @Override
+    public int getSavepointId() throws SQLException {
+	return 1;
     }
+
+    /*
+     * (non-Javadoc)
+     * @see java.sql.Savepoint#getSavepointName()
+     */
+    @Override
+    public String getSavepointName() throws SQLException {
+	return "AceQLDummySavepoint";
+    }
+
 
 }

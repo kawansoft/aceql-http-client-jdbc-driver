@@ -26,8 +26,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.aceql.client.jdbc.AceQLConnection;
-import com.aceql.client.jdbc.AceQLException;
+import com.aceql.client.jdbc.driver.AceQLConnection;
+import com.aceql.client.jdbc.driver.AceQLException;
 import com.aceql.client.test.connection.ConnectionBuilder;
 import com.aceql.client.test.connection.ConnectionParms;
 import com.aceql.client.test.util.Sha1;

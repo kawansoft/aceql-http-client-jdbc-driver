@@ -29,10 +29,10 @@ import java.util.Objects;
 
 import org.apache.commons.io.IOUtils;
 
-import com.aceql.client.jdbc.AceQLConnection;
-import com.aceql.client.jdbc.AceQLConnectionWrapper;
-import com.aceql.client.jdbc.AceQLException;
-import com.aceql.client.jdbc.http.AceQLHttpApi;
+import com.aceql.client.jdbc.driver.AceQLConnection;
+import com.aceql.client.jdbc.driver.AceQLConnectionWrapper;
+import com.aceql.client.jdbc.driver.AceQLException;
+import com.aceql.client.jdbc.driver.http.AceQLHttpApi;
 import com.aceql.client.metadata.dto.JdbcDatabaseMetaDataDto;
 import com.aceql.client.metadata.dto.TableDto;
 import com.aceql.client.metadata.dto.TableNamesDto;

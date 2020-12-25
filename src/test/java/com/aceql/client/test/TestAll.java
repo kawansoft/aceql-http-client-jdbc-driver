@@ -24,8 +24,8 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import com.aceql.client.jdbc.AceQLConnection;
-import com.aceql.client.jdbc.AceQLException;
+import com.aceql.client.jdbc.driver.AceQLConnection;
+import com.aceql.client.jdbc.driver.AceQLException;
 import com.aceql.client.test.connection.ConnectionBuilder;
 import com.aceql.client.test.connection.FourDbConnections;
 import com.aceql.client.test.stored_procedures.PotsgreSqlStoredProcedureTest;
