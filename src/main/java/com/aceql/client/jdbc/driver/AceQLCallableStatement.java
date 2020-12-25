@@ -68,7 +68,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
     }
 
     /* (non-Javadoc)
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractPreparedStatement#execute()
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractPreparedStatement#execute()
      */
     @Override
     public boolean execute() throws SQLException {

@@ -35,7 +35,8 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
-import org.kawanfw.driver.util.FrameworkDebug;
+
+import com.aceql.client.jdbc.driver.util.framework.FrameworkDebug;
 
 /**
  *

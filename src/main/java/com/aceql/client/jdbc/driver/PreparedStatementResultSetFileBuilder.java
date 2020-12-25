@@ -30,10 +30,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
-import org.kawanfw.driver.util.FrameworkFileUtil;
 
 import com.aceql.client.jdbc.driver.http.AceQLHttpApi;
 import com.aceql.client.jdbc.driver.util.AceQLStatementUtil;
+import com.aceql.client.jdbc.driver.util.framework.FrameworkFileUtil;
 import com.aceql.client.jdbc.driver.util.json.StreamResultAnalyzer;
 
 /**

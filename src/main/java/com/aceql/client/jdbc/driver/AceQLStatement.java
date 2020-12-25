@@ -33,11 +33,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
-import org.kawanfw.driver.jdbc.abstracts.AbstractStatement;
-import org.kawanfw.driver.util.FrameworkFileUtil;
 
+import com.aceql.client.jdbc.driver.abstracts.AbstractStatement;
 import com.aceql.client.jdbc.driver.http.AceQLHttpApi;
 import com.aceql.client.jdbc.driver.util.AceQLStatementUtil;
+import com.aceql.client.jdbc.driver.util.framework.FrameworkFileUtil;
 import com.aceql.client.jdbc.driver.util.json.StreamResultAnalyzer;
 
 /**
@@ -78,7 +78,7 @@ class AceQLStatement extends AbstractStatement implements Statement {
 
     /*
      * (non-Javadoc)
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#execute(java.lang.String)
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractStatement#execute(java.lang.String)
      */
     @Override
     public boolean execute(String sql) throws SQLException {
@@ -136,7 +136,7 @@ class AceQLStatement extends AbstractStatement implements Statement {
 
     /*
      * (non-Javadoc)
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#getResultSet()
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractStatement#getResultSet()
      */
     @Override
     public ResultSet getResultSet() throws SQLException {
@@ -146,7 +146,7 @@ class AceQLStatement extends AbstractStatement implements Statement {
 
     /*
      * (non-Javadoc)
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#getUpdateCount()
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractStatement#getUpdateCount()
      */
     @Override
     public int getUpdateCount() throws SQLException {
@@ -158,7 +158,7 @@ class AceQLStatement extends AbstractStatement implements Statement {
     /*
      * (non-Javadoc)
      *
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#executeUpdate(java.
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractStatement#executeUpdate(java.
      * lang.String)
      */
     @Override
@@ -173,7 +173,7 @@ class AceQLStatement extends AbstractStatement implements Statement {
     /*
      * (non-Javadoc)
      *
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#executeQuery(java.
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractStatement#executeQuery(java.
      * lang.String)
      */
     @Override
@@ -222,7 +222,7 @@ class AceQLStatement extends AbstractStatement implements Statement {
     /*
      * (non-Javadoc)
      *
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#close()
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractStatement#close()
      */
     @Override
     public void close() throws SQLException {
@@ -234,7 +234,7 @@ class AceQLStatement extends AbstractStatement implements Statement {
     /*
      * (non-Javadoc)
      *
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#getConnection()
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractStatement#getConnection()
      */
     @Override
     public Connection getConnection() throws SQLException {
@@ -250,7 +250,7 @@ class AceQLStatement extends AbstractStatement implements Statement {
 
     /*
      * (non-Javadoc)
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#getMaxRows()
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractStatement#getMaxRows()
      */
     @Override
     public int getMaxRows() throws SQLException {
@@ -259,7 +259,7 @@ class AceQLStatement extends AbstractStatement implements Statement {
 
     /*
      * (non-Javadoc)
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#setMaxRows(int)
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractStatement#setMaxRows(int)
      */
     @Override
     public void setMaxRows(int max) throws SQLException {
@@ -268,7 +268,7 @@ class AceQLStatement extends AbstractStatement implements Statement {
 
     /*
      * (non-Javadoc)
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#getMoreResults()
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractStatement#getMoreResults()
      */
     @Override
     public boolean getMoreResults() throws SQLException {
@@ -277,7 +277,7 @@ class AceQLStatement extends AbstractStatement implements Statement {
 
 
     /* (non-Javadoc)
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#getWarnings()
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractStatement#getWarnings()
      */
     @Override
     public SQLWarning getWarnings() throws SQLException {
@@ -286,7 +286,7 @@ class AceQLStatement extends AbstractStatement implements Statement {
 
 
     /* (non-Javadoc)
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#getFetchSize()
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractStatement#getFetchSize()
      */
     @Override
     public int getFetchSize() throws SQLException {
@@ -294,7 +294,7 @@ class AceQLStatement extends AbstractStatement implements Statement {
     }
 
     /* (non-Javadoc)
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#setFetchSize(int)
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractStatement#setFetchSize(int)
      */
     @Override
     public void setFetchSize(int rows) throws SQLException {
@@ -302,7 +302,7 @@ class AceQLStatement extends AbstractStatement implements Statement {
     }
 
     /* (non-Javadoc)
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#cancel()
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractStatement#cancel()
      */
     @Override
     public void cancel() throws SQLException {
@@ -310,7 +310,7 @@ class AceQLStatement extends AbstractStatement implements Statement {
     }
 
     /* (non-Javadoc)
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#clearWarnings()
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractStatement#clearWarnings()
      */
     @Override
     public void clearWarnings() throws SQLException {
@@ -318,7 +318,7 @@ class AceQLStatement extends AbstractStatement implements Statement {
     }
 
     /* (non-Javadoc)
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#clearBatch()
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractStatement#clearBatch()
      */
     @Override
     public void clearBatch() throws SQLException {
@@ -326,7 +326,7 @@ class AceQLStatement extends AbstractStatement implements Statement {
     }
 
     /* (non-Javadoc)
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#getFetchDirection()
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractStatement#getFetchDirection()
      */
     @Override
     public int getFetchDirection() throws SQLException {
@@ -335,7 +335,7 @@ class AceQLStatement extends AbstractStatement implements Statement {
 
 
     /* (non-Javadoc)
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#setFetchDirection(int)
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractStatement#setFetchDirection(int)
      */
     @Override
     public void setFetchDirection(int direction) throws SQLException {

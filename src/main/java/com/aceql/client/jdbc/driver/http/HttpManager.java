@@ -22,7 +22,8 @@ import java.net.URLEncoder;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
-import org.kawanfw.driver.util.Tag;
+
+import com.aceql.client.jdbc.driver.util.framework.Tag;
 
 /**
  * A HttpManger that does all the basic GET and POST.

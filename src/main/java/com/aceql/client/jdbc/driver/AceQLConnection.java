@@ -40,14 +40,13 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.kawanfw.driver.jdbc.abstracts.AbstractConnection;
-import org.kawanfw.driver.util.Tag;
-
+import com.aceql.client.jdbc.driver.abstracts.AbstractConnection;
 import com.aceql.client.jdbc.driver.http.AceQLHttpApi;
+import com.aceql.client.jdbc.driver.metadata.RemoteDatabaseMetaData;
+import com.aceql.client.jdbc.driver.metadata.ResultSetMetaDataPolicy;
 import com.aceql.client.jdbc.driver.util.AceQLConnectionUtil;
 import com.aceql.client.jdbc.driver.util.SimpleClassCaller;
-import com.aceql.client.metadata.RemoteDatabaseMetaData;
-import com.aceql.client.metadata.ResultSetMetaDataPolicy;
+import com.aceql.client.jdbc.driver.util.framework.Tag;
 
 /**
  * Provides a <code>Connection</code> implementation that enable to use a
@@ -389,7 +388,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     /*
      * (non-Javadoc)
      *
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#getMetaData()
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractConnection#getMetaData()
      */
 
     @Override
@@ -520,7 +519,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      * (non-Javadoc)
      *
      * @see
-     * org.kawanfw.driver.jdbc.abstracts.AbstractConnection#setReadOnly(boolean)
+     * com.aceql.client.jdbc.driver.abstracts.AbstractConnection#setReadOnly(boolean)
      */
     @Override
     public void setReadOnly(boolean readOnly) throws SQLException {
@@ -563,7 +562,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     /*
      * (non-Javadoc)
      *
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#getCatalog()
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractConnection#getCatalog()
      */
     @Override
     public String getCatalog() throws SQLException {
@@ -573,7 +572,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     /*
      * (non-Javadoc)
      *
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#getSchema()
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractConnection#getSchema()
      */
     @Override
     public String getSchema() throws SQLException {
@@ -595,7 +594,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      * (non-Javadoc)
      *
      * @see
-     * org.kawanfw.driver.jdbc.abstracts.AbstractConnection#createStatement(int,
+     * com.aceql.client.jdbc.driver.abstracts.AbstractConnection#createStatement(int,
      * int)
      */
     @Override
@@ -608,7 +607,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      * (non-Javadoc)
      *
      * @see
-     * org.kawanfw.driver.jdbc.abstracts.AbstractConnection#createStatement(int,
+     * com.aceql.client.jdbc.driver.abstracts.AbstractConnection#createStatement(int,
      * int, int)
      */
     @Override
@@ -620,7 +619,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     /*
      * (non-Javadoc)
      *
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#prepareStatement
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractConnection#prepareStatement
      * (java.lang.String)
      */
     @Override
@@ -633,7 +632,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      * (non-Javadoc)
      *
      * @see
-     * org.kawanfw.driver.jdbc.abstracts.AbstractConnection#prepareStatement(java.
+     * com.aceql.client.jdbc.driver.abstracts.AbstractConnection#prepareStatement(java.
      * lang.String, int, int)
      */
     @Override
@@ -647,7 +646,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      * (non-Javadoc)
      *
      * @see
-     * org.kawanfw.driver.jdbc.abstracts.AbstractConnection#prepareStatement(java.
+     * com.aceql.client.jdbc.driver.abstracts.AbstractConnection#prepareStatement(java.
      * lang.String, int, int, int)
      */
     @Override
@@ -661,7 +660,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      * (non-Javadoc)
      *
      * @see
-     * org.kawanfw.driver.jdbc.abstracts.AbstractConnection#prepareStatement(java.
+     * com.aceql.client.jdbc.driver.abstracts.AbstractConnection#prepareStatement(java.
      * lang.String, int)
      */
     @Override
@@ -674,7 +673,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      * (non-Javadoc)
      *
      * @see
-     * org.kawanfw.driver.jdbc.abstracts.AbstractConnection#prepareStatement(java.
+     * com.aceql.client.jdbc.driver.abstracts.AbstractConnection#prepareStatement(java.
      * lang.String, int[])
      */
     @Override
@@ -687,7 +686,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      * (non-Javadoc)
      *
      * @see
-     * org.kawanfw.driver.jdbc.abstracts.AbstractConnection#prepareStatement(java.
+     * com.aceql.client.jdbc.driver.abstracts.AbstractConnection#prepareStatement(java.
      * lang.String, java.lang.String[])
      */
     @Override
@@ -700,7 +699,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      * (non-Javadoc)
      *
      * @see
-     * org.kawanfw.driver.jdbc.abstracts.AbstractConnection#prepareCall(java.lang.
+     * com.aceql.client.jdbc.driver.abstracts.AbstractConnection#prepareCall(java.lang.
      * String)
      */
     @Override
@@ -733,7 +732,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     /*
      * (non-Javadoc)
      *
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#getWarnings()
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractConnection#getWarnings()
      */
     @Override
     public SQLWarning getWarnings() throws SQLException {
@@ -863,7 +862,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     /*
      * (non-Javadoc)
      *
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#clearWarnings()
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractConnection#clearWarnings()
      */
     @Override
     public void clearWarnings() throws SQLException {
@@ -873,7 +872,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     /*
      * (non-Javadoc)
      *
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#isValid(int)
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractConnection#isValid(int)
      */
     @Override
     public boolean isValid(int timeout) throws SQLException {
@@ -883,7 +882,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     /*
      * (non-Javadoc)
      *
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#getClientInfo()
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractConnection#getClientInfo()
      */
     @Override
     public Properties getClientInfo() throws SQLException {
@@ -894,7 +893,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      * (non-Javadoc)
      *
      * @see
-     * org.kawanfw.driver.jdbc.abstracts.AbstractConnection#getClientInfo(java.lang.
+     * com.aceql.client.jdbc.driver.abstracts.AbstractConnection#getClientInfo(java.lang.
      * String)
      */
     @Override
@@ -906,7 +905,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      * (non-Javadoc)
      *
      * @see
-     * org.kawanfw.driver.jdbc.abstracts.AbstractConnection#setClientInfo(java.util.
+     * com.aceql.client.jdbc.driver.abstracts.AbstractConnection#setClientInfo(java.util.
      * Properties)
      */
     @Override
@@ -918,7 +917,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      * (non-Javadoc)
      *
      * @see
-     * org.kawanfw.driver.jdbc.abstracts.AbstractConnection#setClientInfo(java.lang.
+     * com.aceql.client.jdbc.driver.abstracts.AbstractConnection#setClientInfo(java.lang.
      * String, java.lang.String)
      */
     @Override
@@ -930,7 +929,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      * (non-Javadoc)
      *
      * @see
-     * org.kawanfw.driver.jdbc.abstracts.AbstractConnection#setNetworkTimeout(java.
+     * com.aceql.client.jdbc.driver.abstracts.AbstractConnection#setNetworkTimeout(java.
      * util.concurrent.Executor, int)
      */
     @Override
@@ -941,7 +940,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     /*
      * (non-Javadoc)
      *
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#setSavepoint()
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractConnection#setSavepoint()
      */
     @Override
     public Savepoint setSavepoint() throws SQLException {
@@ -952,7 +951,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      * (non-Javadoc)
      *
      * @see
-     * org.kawanfw.driver.jdbc.abstracts.AbstractConnection#setSavepoint(java.lang.
+     * com.aceql.client.jdbc.driver.abstracts.AbstractConnection#setSavepoint(java.lang.
      * String)
      */
     @Override
@@ -963,7 +962,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     /*
      * (non-Javadoc)
      *
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractConnection#rollback(java.sql.
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractConnection#rollback(java.sql.
      * Savepoint)
      */
     @Override
@@ -975,7 +974,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      * (non-Javadoc)
      *
      * @see
-     * org.kawanfw.driver.jdbc.abstracts.AbstractConnection#releaseSavepoint(java.
+     * com.aceql.client.jdbc.driver.abstracts.AbstractConnection#releaseSavepoint(java.
      * sql.Savepoint)
      */
     @Override
@@ -987,7 +986,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      * (non-Javadoc)
      *
      * @see
-     * org.kawanfw.driver.jdbc.abstracts.AbstractConnection#setCatalog(java.lang.
+     * com.aceql.client.jdbc.driver.abstracts.AbstractConnection#setCatalog(java.lang.
      * String)
      */
     @Override
@@ -999,7 +998,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      * (non-Javadoc)
      *
      * @see
-     * org.kawanfw.driver.jdbc.abstracts.AbstractConnection#setSchema(java.lang.
+     * com.aceql.client.jdbc.driver.abstracts.AbstractConnection#setSchema(java.lang.
      * String)
      */
     @Override

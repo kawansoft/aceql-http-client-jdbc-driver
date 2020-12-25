@@ -33,16 +33,15 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.kawanfw.sql.version.VersionValues;
-
 import com.aceql.client.jdbc.driver.AceQLConnection;
 import com.aceql.client.jdbc.driver.AceQLException;
+import com.aceql.client.jdbc.driver.metadata.ResultSetMetaDataPolicy;
+import com.aceql.client.jdbc.driver.metadata.dto.JdbcDatabaseMetaDataDto;
+import com.aceql.client.jdbc.driver.metadata.dto.TableDto;
+import com.aceql.client.jdbc.driver.metadata.dto.TableNamesDto;
 import com.aceql.client.jdbc.driver.util.UserLoginStore;
 import com.aceql.client.jdbc.driver.util.json.SqlParameter;
-import com.aceql.client.metadata.ResultSetMetaDataPolicy;
-import com.aceql.client.metadata.dto.JdbcDatabaseMetaDataDto;
-import com.aceql.client.metadata.dto.TableDto;
-import com.aceql.client.metadata.dto.TableNamesDto;
+import com.aceql.client.jdbc.driver.version.VersionValues;
 
 /**
  * @author Nicolas de Pomereu
@@ -531,7 +530,7 @@ public class AceQLHttpApi {
      * @throws AceQLException if any Exception occurs
      */
     public String getClientVersion() {
-	return org.kawanfw.sql.version.Version.getVersion();
+	return com.aceql.client.jdbc.driver.version.Version.getVersion();
     }
 
     /**

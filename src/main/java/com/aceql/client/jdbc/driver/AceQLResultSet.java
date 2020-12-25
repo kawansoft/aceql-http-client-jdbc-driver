@@ -37,13 +37,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
-import org.kawanfw.driver.jdbc.abstracts.AbstractResultSet;
-import org.kawanfw.driver.util.Tag;
 
+import com.aceql.client.jdbc.driver.abstracts.AbstractResultSet;
 import com.aceql.client.jdbc.driver.http.AceQLHttpApi;
 import com.aceql.client.jdbc.driver.util.AceQLConnectionUtil;
 import com.aceql.client.jdbc.driver.util.AceQLResultSetUtil;
 import com.aceql.client.jdbc.driver.util.SimpleClassCaller;
+import com.aceql.client.jdbc.driver.util.framework.Tag;
 import com.aceql.client.jdbc.driver.util.json.RowParser;
 
 /**
@@ -303,7 +303,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
     /*
      * (non-Javadoc)
      *
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getStatement()
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractResultSet#getStatement()
      */
     @Override
     public Statement getStatement() throws SQLException {
@@ -392,7 +392,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 
     /*
      * (non-Javadoc)
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getMetaData()
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractResultSet#getMetaData()
      */
 
     @Override
@@ -433,7 +433,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
      * (non-Javadoc)
      *
      * @see
-     * org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getBytes(int)
+     * com.aceql.client.jdbc.driver.abstracts.AbstractResultSet#getBytes(int)
      */
     @Override
     public byte[] getBytes(int columnIndex) throws SQLException {
@@ -450,7 +450,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
      * (non-Javadoc)
      *
      * @see
-     * org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getBytes(String)
+     * com.aceql.client.jdbc.driver.abstracts.AbstractResultSet#getBytes(String)
      */
     @Override
     public byte[] getBytes(String columnName) throws SQLException {
@@ -466,7 +466,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
      * (non-Javadoc)
      *
      * @see
-     * org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getBinaryStream(int)
+     * com.aceql.client.jdbc.driver.abstracts.AbstractResultSet#getBinaryStream(int)
      */
     @Override
     public InputStream getBinaryStream(int columnIndex) throws SQLException {
@@ -482,7 +482,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
      * (non-Javadoc)
      *
      * @see
-     * org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getBinaryStream(java.
+     * com.aceql.client.jdbc.driver.abstracts.AbstractResultSet#getBinaryStream(java.
      * lang.String)
      */
     @Override
@@ -507,7 +507,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 
 
     /* (non-Javadoc)
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getObject(int)
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractResultSet#getObject(int)
      */
     @Override
     public Object getObject(int columnIndex) throws SQLException {
@@ -520,7 +520,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 
 
     /* (non-Javadoc)
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getObject(java.lang.String)
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractResultSet#getObject(java.lang.String)
      */
     @Override
     public Object getObject(String columnName) throws SQLException {
@@ -704,7 +704,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 
 
     /* (non-Javadoc)
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getLong(int)
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractResultSet#getLong(int)
      */
     @Override
     public long getLong(int columnIndex) throws SQLException {
@@ -719,7 +719,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 
 
     /* (non-Javadoc)
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getLong(java.lang.String)
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractResultSet#getLong(java.lang.String)
      */
     @Override
     public long getLong(String columnName) throws SQLException {
@@ -732,7 +732,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 
 
     /* (non-Javadoc)
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getArray(int)
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractResultSet#getArray(int)
      */
     @Override
     public Array getArray(int columnIndex) throws SQLException {
@@ -746,7 +746,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 
 
     /* (non-Javadoc)
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getArray(java.lang.String)
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractResultSet#getArray(java.lang.String)
      */
     @Override
     public Array getArray(String colName) throws SQLException {
@@ -793,7 +793,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
     }
 
     /* (non-Javadoc)
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getWarnings()
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractResultSet#getWarnings()
      */
     @Override
     public SQLWarning getWarnings() throws SQLException {
@@ -801,7 +801,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
     }
 
     /* (non-Javadoc)
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getFetchSize()
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractResultSet#getFetchSize()
      */
     @Override
     public int getFetchSize() throws SQLException {
@@ -810,7 +810,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 
 
     /* (non-Javadoc)
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#setFetchSize(int)
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractResultSet#setFetchSize(int)
      */
     @Override
     public void setFetchSize(int rows) throws SQLException {
@@ -819,7 +819,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 
 
     /* (non-Javadoc)
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#clearWarnings()
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractResultSet#clearWarnings()
      */
     @Override
     public void clearWarnings() throws SQLException {
@@ -830,7 +830,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 
 
     /* (non-Javadoc)
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getType()
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractResultSet#getType()
      */
     @Override
     public int getType() throws SQLException {
@@ -839,7 +839,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 
 
     /* (non-Javadoc)
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#getFetchDirection()
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractResultSet#getFetchDirection()
      */
     @Override
     public int getFetchDirection() throws SQLException {
@@ -847,7 +847,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
     }
 
     /* (non-Javadoc)
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractResultSet#setFetchDirection(int)
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractResultSet#setFetchDirection(int)
      */
     @Override
     public void setFetchDirection(int direction) throws SQLException {

@@ -7,10 +7,10 @@ import java.util.Map;
 import java.util.Objects;
 
 import com.aceql.client.jdbc.driver.AceQLException;
-import com.aceql.client.metadata.dto.JdbcDatabaseMetaDataDto;
-import com.aceql.client.metadata.dto.TableDto;
-import com.aceql.client.metadata.dto.TableNamesDto;
-import com.aceql.client.metadata.util.GsonWsUtil;
+import com.aceql.client.jdbc.driver.metadata.dto.JdbcDatabaseMetaDataDto;
+import com.aceql.client.jdbc.driver.metadata.dto.TableDto;
+import com.aceql.client.jdbc.driver.metadata.dto.TableNamesDto;
+import com.aceql.client.jdbc.driver.metadata.util.GsonWsUtil;
 
 /**
  * Dedicated HTTP and API operations for meta data API.

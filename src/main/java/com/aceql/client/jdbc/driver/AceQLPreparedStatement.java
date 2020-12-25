@@ -48,15 +48,15 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
-import org.kawanfw.driver.jdbc.abstracts.AbstractConnection;
-import org.kawanfw.driver.util.FrameworkFileUtil;
-import org.kawanfw.driver.util.Tag;
 
+import com.aceql.client.jdbc.driver.abstracts.AbstractConnection;
 import com.aceql.client.jdbc.driver.http.BlobUploader;
 import com.aceql.client.jdbc.driver.http.HttpManager;
 import com.aceql.client.jdbc.driver.util.AceQLStatementUtil;
 import com.aceql.client.jdbc.driver.util.AceQLTypes;
 import com.aceql.client.jdbc.driver.util.SimpleClassCaller;
+import com.aceql.client.jdbc.driver.util.framework.FrameworkFileUtil;
+import com.aceql.client.jdbc.driver.util.framework.Tag;
 import com.aceql.client.jdbc.driver.util.json.PrepStatementParametersBuilder;
 import com.aceql.client.jdbc.driver.util.json.SqlParameter;
 import com.aceql.client.jdbc.driver.util.json.StreamResultAnalyzer;
@@ -107,7 +107,7 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
     /*
      * (non-Javadoc)
      *
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractPreparedStatement#setNull(int,
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractPreparedStatement#setNull(int,
      * int)
      */
     @Override
@@ -118,7 +118,7 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
     /*
      * (non-Javadoc)
      *
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractPreparedStatement#setBoolean
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractPreparedStatement#setBoolean
      * (int, boolean)
      */
     @Override
@@ -132,7 +132,7 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
      * (non-Javadoc)
      *
      * @see
-     * org.kawanfw.driver.jdbc.abstracts.AbstractPreparedStatement#setShort(int,
+     * com.aceql.client.jdbc.driver.abstracts.AbstractPreparedStatement#setShort(int,
      * short)
      */
     @Override
@@ -145,7 +145,7 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
     /*
      * (non-Javadoc)
      *
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractPreparedStatement#setInt(int,
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractPreparedStatement#setInt(int,
      * int)
      */
     @Override
@@ -158,7 +158,7 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
     /*
      * (non-Javadoc)
      *
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractPreparedStatement#setLong(int,
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractPreparedStatement#setLong(int,
      * long)
      */
     @Override
@@ -172,7 +172,7 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
      * (non-Javadoc)
      *
      * @see
-     * org.kawanfw.driver.jdbc.abstracts.AbstractPreparedStatement#setFloat(int,
+     * com.aceql.client.jdbc.driver.abstracts.AbstractPreparedStatement#setFloat(int,
      * float)
      */
     @Override
@@ -185,7 +185,7 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
     /*
      * (non-Javadoc)
      *
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractPreparedStatement#setDouble
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractPreparedStatement#setDouble
      * (int, double)
      */
     @Override
@@ -199,7 +199,7 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
      * (non-Javadoc)
      *
      * @see
-     * org.kawanfw.driver.jdbc.abstracts.AbstractPreparedStatement#setBigDecimal
+     * com.aceql.client.jdbc.driver.abstracts.AbstractPreparedStatement#setBigDecimal
      * (int, java.math.BigDecimal)
      */
     @Override
@@ -218,7 +218,7 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
     /*
      * (non-Javadoc)
      *
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractPreparedStatement#setString
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractPreparedStatement#setString
      * (int, java.lang.String)
      */
     @Override
@@ -229,7 +229,7 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
     /*
      * (non-Javadoc)
      *
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractPreparedStatement#setDate(int,
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractPreparedStatement#setDate(int,
      * java.sql.Date)
      */
     @Override
@@ -247,7 +247,7 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
     /*
      * (non-Javadoc)
      *
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractPreparedStatement#setTime(int,
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractPreparedStatement#setTime(int,
      * java.sql.Time)
      */
     @Override
@@ -263,7 +263,7 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
     /*
      * (non-Javadoc)
      *
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractPreparedStatement#setTimestamp
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractPreparedStatement#setTimestamp
      * (int, java.sql.Timestamp)
      */
     @Override
@@ -280,7 +280,7 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
     /*
      * (non-Javadoc)
      *
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractPreparedStatement#setURL(int,
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractPreparedStatement#setURL(int,
      * java.net.URL)
      */
     @Override
@@ -296,7 +296,7 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
     /*
      * (non-Javadoc)
      *
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractPreparedStatement#
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractPreparedStatement#
      * setBinaryStream( int, java.io.InputStream, int)
      */
     @Override
@@ -307,7 +307,7 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
     /*
      * (non-Javadoc)
      *
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractPreparedStatement#
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractPreparedStatement#
      * setBinaryStream( int, java.io.InputStream)
      */
     @Override
@@ -349,7 +349,7 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
     /*
      * (non-Javadoc)
      *
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractPreparedStatement#
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractPreparedStatement#
      * setBinaryStream (int, java.io.InputStream, long)
      */
     @Override
@@ -407,7 +407,7 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
      * (non-Javadoc)
      *
      * @see
-     * org.kawanfw.driver.jdbc.abstracts.AbstractPreparedStatement#executeUpdate ()
+     * com.aceql.client.jdbc.driver.abstracts.AbstractPreparedStatement#executeUpdate ()
      */
     @Override
     public int executeUpdate() throws SQLException {
@@ -497,7 +497,7 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
     /*
      * (non-Javadoc)
      *
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractPreparedStatement#executeQuery
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractPreparedStatement#executeQuery
      * ()
      */
     @Override
@@ -599,7 +599,7 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
     /*
      * (non-Javadoc)
      *
-     * @see org.kawanfw.driver.jdbc.abstracts.AbstractStatement#close()
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractStatement#close()
      */
     @Override
     public void close() throws SQLException {

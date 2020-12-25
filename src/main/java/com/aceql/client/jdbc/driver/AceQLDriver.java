@@ -30,8 +30,9 @@ import java.util.Properties;
 import java.util.logging.Logger;
 
 import org.apache.commons.lang3.StringUtils;
-import org.kawanfw.driver.util.FrameworkDebug;
-import org.kawanfw.driver.util.JdbcUrlHeader;
+
+import com.aceql.client.jdbc.driver.util.framework.FrameworkDebug;
+import com.aceql.client.jdbc.driver.util.framework.JdbcUrlHeader;
 
 /**
  *
