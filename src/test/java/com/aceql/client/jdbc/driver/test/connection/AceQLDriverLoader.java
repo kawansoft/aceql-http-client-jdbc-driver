@@ -3,7 +3,6 @@
  */
 package com.aceql.client.jdbc.driver.test.connection;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -37,9 +36,10 @@ public class AceQLDriverLoader {
 	    IllegalAccessException, IllegalArgumentException, InvocationTargetException, SQLException {
 
 	String driverClassName = "com.aceql.client.jdbc.driver.AceQLDriver";
+	@SuppressWarnings("unused")
 	Class<?> c = Class.forName(driverClassName);
-	Constructor<?> constructor = c.getConstructor();
-	constructor.newInstance();
+	//Constructor<?> constructor = c.getConstructor();
+	//constructor.newInstance();
 
 	Properties info = new Properties();
 	info.put("user", user);

@@ -86,14 +86,6 @@ final public class AceQLDriver implements java.sql.Driver {
 	}
     }
 
-
-    /**
-     * No instantiation.
-     */
-    protected AceQLDriver() {
-
-    }
-
     /**
      * Attempts to make a database connection to the given URL.
      *
