@@ -103,7 +103,9 @@ import com.aceql.client.jdbc.driver.util.framework.Tag;
  * info.put("password", password);
  * info.put("database", database);
  *
+ * String driverClassName = "com.aceql.client.jdbc.driver.AceQLDriver";
  * Connection connection = DriverManager.getConnection(url, info);
+ * Class<?> c = Class.forName(driverClassName);
  *
  * // We can now use our remote JDBC Connection as a regular JDBC
  * // Connection for our queries and updates:
@@ -162,7 +164,7 @@ import com.aceql.client.jdbc.driver.util.framework.Tag;
  *
  * <pre>
  * // Attempts to establish a connection to the remote database:
- * Connection connection = new AceQLConnection(url, username, password, database);
+ * Connection connection = DriverManager.getConnection(url, info);
  *
  * // Pass the mutable &amp; sharable progress and canceled to the
  * // underlying AceQLConnection.
