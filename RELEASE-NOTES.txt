@@ -18,7 +18,7 @@ The AceQL Java Client JDBC Driver is licensed under the Apache 2.0
 License.
 
 
-AceQL Java Client JDBC Driver - Version 6.0 - 25-Dec-2020
+AceQL Java Client JDBC Driver - Version 6.0 - 28-Dec-2020
 ---------------------------------------------------------
 
 Whats New:

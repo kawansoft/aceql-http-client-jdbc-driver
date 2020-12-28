@@ -26,6 +26,7 @@ import java.net.URLConnection;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLClientInfoException;
 import java.sql.SQLException;
@@ -58,10 +59,8 @@ import com.aceql.client.jdbc.driver.util.framework.Tag;
  * This <code>Connection</code> implementation supports:
  * <ul>
  * <li>Main JDBC data formats.</li>
- * <li><code>Blob/Clob</code> updates with clean streaming behavior when
- * uploading.</li>
- * <li><code>Blob/Clob</code> reads with clean streaming behavior when
- * downloading.</li>
+ * <li><code>Blob/Clob</code> updates.</li>
+ * <li><code>Blob/Clob</code> reads.<:li>
  * <li>Transaction through <code>commit</code> and <code>rollback</code> orders.
  * </li>
  * </ul>
@@ -69,9 +68,11 @@ import com.aceql.client.jdbc.driver.util.framework.Tag;
  * Supplementary specific methods that are not of instance of Connection are
  * also added.
  *
- * After creating the <code>AceQLConnection</code>, just use it like a regular
- * <code>Connection</code> to execute your <code>PreparedStatement</code> and
- * <code>Statement</code>, and to navigate through your <code>ResultSet</code>.
+ * After getting the <code>AceQLConnection</code> with
+ * {@link DriverManager#getConnection(String, Properties)} just use it like a
+ * regular <code>Connection</code> to execute your
+ * <code>PreparedStatement</code> and <code>Statement</code>, and to navigate
+ * through your <code>ResultSet</code>.
  * <p>
  * All thrown exceptions are of type {@link AceQLException}. Use
  * {@link SQLException#getCause()} to get the original wrapped Exception.<br>
@@ -97,7 +98,12 @@ import com.aceql.client.jdbc.driver.util.framework.Tag;
  * String password = &quot;MyPassword&quot;;
  *
  * // Attempts to establish a connection to the remote database:
- * Connection connection = new AceQLConnection(serverUrl, database, username, password);
+ * Properties info = new Properties();
+ * info.put("user", user);
+ * info.put("password", password);
+ * info.put("database", database);
+ *
+ * Connection connection = DriverManager.getConnection(url, info);
  *
  * // We can now use our remote JDBC Connection as a regular JDBC
  * // Connection for our queries and updates:
@@ -516,8 +522,8 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     /*
      * (non-Javadoc)
      *
-     * @see
-     * com.aceql.client.jdbc.driver.abstracts.AbstractConnection#setReadOnly(boolean)
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractConnection#setReadOnly(
+     * boolean)
      */
     @Override
     public void setReadOnly(boolean readOnly) throws SQLException {
@@ -592,8 +598,8 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      * (non-Javadoc)
      *
      * @see
-     * com.aceql.client.jdbc.driver.abstracts.AbstractConnection#createStatement(int,
-     * int)
+     * com.aceql.client.jdbc.driver.abstracts.AbstractConnection#createStatement(
+     * int, int)
      */
     @Override
     public Statement createStatement(int resultSetType, int resultSetConcurrency) throws SQLException {
@@ -605,8 +611,8 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      * (non-Javadoc)
      *
      * @see
-     * com.aceql.client.jdbc.driver.abstracts.AbstractConnection#createStatement(int,
-     * int, int)
+     * com.aceql.client.jdbc.driver.abstracts.AbstractConnection#createStatement(
+     * int, int, int)
      */
     @Override
     public Statement createStatement(int resultSetType, int resultSetConcurrency, int resultSetHoldability) {
@@ -617,7 +623,8 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     /*
      * (non-Javadoc)
      *
-     * @see com.aceql.client.jdbc.driver.abstracts.AbstractConnection#prepareStatement
+     * @see
+     * com.aceql.client.jdbc.driver.abstracts.AbstractConnection#prepareStatement
      * (java.lang.String)
      */
     @Override
@@ -630,8 +637,8 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      * (non-Javadoc)
      *
      * @see
-     * com.aceql.client.jdbc.driver.abstracts.AbstractConnection#prepareStatement(java.
-     * lang.String, int, int)
+     * com.aceql.client.jdbc.driver.abstracts.AbstractConnection#prepareStatement(
+     * java. lang.String, int, int)
      */
     @Override
     public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency)
@@ -644,8 +651,8 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      * (non-Javadoc)
      *
      * @see
-     * com.aceql.client.jdbc.driver.abstracts.AbstractConnection#prepareStatement(java.
-     * lang.String, int, int, int)
+     * com.aceql.client.jdbc.driver.abstracts.AbstractConnection#prepareStatement(
+     * java. lang.String, int, int, int)
      */
     @Override
     public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency,
@@ -658,8 +665,8 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      * (non-Javadoc)
      *
      * @see
-     * com.aceql.client.jdbc.driver.abstracts.AbstractConnection#prepareStatement(java.
-     * lang.String, int)
+     * com.aceql.client.jdbc.driver.abstracts.AbstractConnection#prepareStatement(
+     * java. lang.String, int)
      */
     @Override
     public PreparedStatement prepareStatement(String sql, int autoGeneratedKeys) throws SQLException {
@@ -671,8 +678,8 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      * (non-Javadoc)
      *
      * @see
-     * com.aceql.client.jdbc.driver.abstracts.AbstractConnection#prepareStatement(java.
-     * lang.String, int[])
+     * com.aceql.client.jdbc.driver.abstracts.AbstractConnection#prepareStatement(
+     * java. lang.String, int[])
      */
     @Override
     public PreparedStatement prepareStatement(String sql, int[] columnIndexes) throws SQLException {
@@ -684,8 +691,8 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      * (non-Javadoc)
      *
      * @see
-     * com.aceql.client.jdbc.driver.abstracts.AbstractConnection#prepareStatement(java.
-     * lang.String, java.lang.String[])
+     * com.aceql.client.jdbc.driver.abstracts.AbstractConnection#prepareStatement(
+     * java. lang.String, java.lang.String[])
      */
     @Override
     public PreparedStatement prepareStatement(String sql, String[] columnNames) throws SQLException {
@@ -697,13 +704,14 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      * (non-Javadoc)
      *
      * @see
-     * com.aceql.client.jdbc.driver.abstracts.AbstractConnection#prepareCall(java.lang.
-     * String)
+     * com.aceql.client.jdbc.driver.abstracts.AbstractConnection#prepareCall(java.
+     * lang. String)
      */
     @Override
     public CallableStatement prepareCall(String sql) throws SQLException {
-	//AceQLCallableStatement aceQLCallableStatement = new AceQLCallableStatement(this, sql);
-	//return aceQLCallableStatement;
+	// AceQLCallableStatement aceQLCallableStatement = new
+	// AceQLCallableStatement(this, sql);
+	// return aceQLCallableStatement;
 
 	List<Class<?>> params = new ArrayList<>();
 	List<Object> values = new ArrayList<>();
@@ -860,7 +868,8 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     /*
      * (non-Javadoc)
      *
-     * @see com.aceql.client.jdbc.driver.abstracts.AbstractConnection#clearWarnings()
+     * @see
+     * com.aceql.client.jdbc.driver.abstracts.AbstractConnection#clearWarnings()
      */
     @Override
     public void clearWarnings() throws SQLException {
@@ -880,7 +889,8 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     /*
      * (non-Javadoc)
      *
-     * @see com.aceql.client.jdbc.driver.abstracts.AbstractConnection#getClientInfo()
+     * @see
+     * com.aceql.client.jdbc.driver.abstracts.AbstractConnection#getClientInfo()
      */
     @Override
     public Properties getClientInfo() throws SQLException {
@@ -891,8 +901,8 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      * (non-Javadoc)
      *
      * @see
-     * com.aceql.client.jdbc.driver.abstracts.AbstractConnection#getClientInfo(java.lang.
-     * String)
+     * com.aceql.client.jdbc.driver.abstracts.AbstractConnection#getClientInfo(java.
+     * lang. String)
      */
     @Override
     public String getClientInfo(String name) throws SQLException {
@@ -903,8 +913,8 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      * (non-Javadoc)
      *
      * @see
-     * com.aceql.client.jdbc.driver.abstracts.AbstractConnection#setClientInfo(java.util.
-     * Properties)
+     * com.aceql.client.jdbc.driver.abstracts.AbstractConnection#setClientInfo(java.
+     * util. Properties)
      */
     @Override
     public void setClientInfo(Properties properties) throws SQLClientInfoException {
@@ -915,8 +925,8 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      * (non-Javadoc)
      *
      * @see
-     * com.aceql.client.jdbc.driver.abstracts.AbstractConnection#setClientInfo(java.lang.
-     * String, java.lang.String)
+     * com.aceql.client.jdbc.driver.abstracts.AbstractConnection#setClientInfo(java.
+     * lang. String, java.lang.String)
      */
     @Override
     public void setClientInfo(String name, String value) throws SQLClientInfoException {
@@ -927,8 +937,8 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      * (non-Javadoc)
      *
      * @see
-     * com.aceql.client.jdbc.driver.abstracts.AbstractConnection#setNetworkTimeout(java.
-     * util.concurrent.Executor, int)
+     * com.aceql.client.jdbc.driver.abstracts.AbstractConnection#setNetworkTimeout(
+     * java. util.concurrent.Executor, int)
      */
     @Override
     public void setNetworkTimeout(Executor arg0, int arg1) throws SQLException {
@@ -949,8 +959,8 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      * (non-Javadoc)
      *
      * @see
-     * com.aceql.client.jdbc.driver.abstracts.AbstractConnection#setSavepoint(java.lang.
-     * String)
+     * com.aceql.client.jdbc.driver.abstracts.AbstractConnection#setSavepoint(java.
+     * lang. String)
      */
     @Override
     public Savepoint setSavepoint(String name) throws SQLException {
@@ -960,7 +970,8 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     /*
      * (non-Javadoc)
      *
-     * @see com.aceql.client.jdbc.driver.abstracts.AbstractConnection#rollback(java.sql.
+     * @see
+     * com.aceql.client.jdbc.driver.abstracts.AbstractConnection#rollback(java.sql.
      * Savepoint)
      */
     @Override
@@ -972,8 +983,8 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      * (non-Javadoc)
      *
      * @see
-     * com.aceql.client.jdbc.driver.abstracts.AbstractConnection#releaseSavepoint(java.
-     * sql.Savepoint)
+     * com.aceql.client.jdbc.driver.abstracts.AbstractConnection#releaseSavepoint(
+     * java. sql.Savepoint)
      */
     @Override
     public void releaseSavepoint(Savepoint savepoint) throws SQLException {
@@ -984,8 +995,8 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      * (non-Javadoc)
      *
      * @see
-     * com.aceql.client.jdbc.driver.abstracts.AbstractConnection#setCatalog(java.lang.
-     * String)
+     * com.aceql.client.jdbc.driver.abstracts.AbstractConnection#setCatalog(java.
+     * lang. String)
      */
     @Override
     public void setCatalog(String catalog) throws SQLException {
@@ -996,8 +1007,8 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      * (non-Javadoc)
      *
      * @see
-     * com.aceql.client.jdbc.driver.abstracts.AbstractConnection#setSchema(java.lang.
-     * String)
+     * com.aceql.client.jdbc.driver.abstracts.AbstractConnection#setSchema(java.
+     * lang. String)
      */
     @Override
     public void setSchema(String arg0) throws SQLException {
