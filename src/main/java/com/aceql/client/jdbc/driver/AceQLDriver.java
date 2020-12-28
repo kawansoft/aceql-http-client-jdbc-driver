@@ -74,8 +74,6 @@ import com.aceql.client.jdbc.driver.util.framework.JdbcUrlHeader;
 
 final public class AceQLDriver implements java.sql.Driver {
 
-    public static int LICENSE_INFO ;
-
     /** The debug flag */
     private static boolean DEBUG = FrameworkDebug.isSet(AceQLDriver.class);
 
@@ -86,6 +84,14 @@ final public class AceQLDriver implements java.sql.Driver {
 	    e.printStackTrace();
 	    throw new IllegalStateException("Can not register AceQL JDBC Driver: " + e.getMessage());
 	}
+    }
+
+
+    /**
+     * No instantiation.
+     */
+    protected AceQLDriver() {
+
     }
 
     /**
@@ -264,7 +270,7 @@ final public class AceQLDriver implements java.sql.Driver {
 
     /**
      * Reports whether this driver is a genuine JDBC
-     * Compliant<sup><font size=-2>TM</font></sup> driver. A driver may only report
+     * Compliant &trade; driver. A driver may only report
      * <code>true</code> here if it passes the JDBC compliance tests; otherwise it
      * is required to return <code>false</code>.
      * <P>
@@ -272,7 +278,7 @@ final public class AceQLDriver implements java.sql.Driver {
      * SQL 92 Entry Level.
      * <P>
      * Because the AceQL driver works as a special Driver over HTTP to support many SQL databases vendors, it does not aim to be a genuine JDBC
-     * Compliant<sup><font size=-2>TM</font></sup> driver. Thus, method returns
+     * Compliant &trade; driver. Thus, method returns
      * <code>false</code>.
      *
      * @return <code>false</code>

@@ -416,7 +416,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	}
 
 	try {
-	    SimpleClassCaller simpleClassCaller = new SimpleClassCaller(AceQLConnection.COM_ACEQL_DRIVERPRO_REFLECTION  + ".ResultSetMetaDataGetter");
+	    SimpleClassCaller simpleClassCaller = new SimpleClassCaller(SimpleClassCaller.DRIVER_PRO_REFLECTION_PACKAGE  + ".ResultSetMetaDataGetter");
 
 	    Object obj = simpleClassCaller.callMehod("getMetaData", params, values);
 	    return (ResultSetMetaData) obj;
@@ -779,7 +779,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	values.add(value);
 
 	try {
-	    SimpleClassCaller simpleClassCaller = new SimpleClassCaller(AceQLConnection.COM_ACEQL_DRIVERPRO_REFLECTION +".ArrayGetter");
+	    SimpleClassCaller simpleClassCaller = new SimpleClassCaller(SimpleClassCaller.DRIVER_PRO_REFLECTION_PACKAGE +".ArrayGetter");
 
 	    Object obj = simpleClassCaller.callMehod("getArray", params, values);
 	    return (Array) obj;

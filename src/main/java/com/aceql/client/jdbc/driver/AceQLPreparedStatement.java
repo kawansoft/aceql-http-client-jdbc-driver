@@ -382,7 +382,7 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
 
 	    try {
 		SimpleClassCaller simpleClassCaller = new SimpleClassCaller(
-			AceQLConnection.COM_ACEQL_DRIVERPRO_REFLECTION + ".BlobStreamParamsManagerCaller");
+			SimpleClassCaller.DRIVER_PRO_REFLECTION_PACKAGE + ".BlobStreamParamsManagerCaller");
 		@SuppressWarnings("unused")
 		Object obj = simpleClassCaller.callMehod("update", params, values);
 	    } catch (ClassNotFoundException e) {

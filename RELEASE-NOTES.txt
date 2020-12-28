@@ -1,11 +1,11 @@
 
-                 AceQL Java Client SDK
+                 AceQL Java Client JDBC Driver
                      Release Notes
 
 Introduction
 ------------
 
-The AceQL Java Client SDK allows to wrap the AceQL HTTP APIs and 
+The AceQL Java Client JDBC Driver allows to wrap the AceQL HTTP APIs and 
 eliminate the tedious works of handling communications errors and 
 parsing JSON results.
 
@@ -14,9 +14,17 @@ remote SQL databases and/or SQL databases in the cloud by simply
 including standard JDBC calls in their code, just like 
 they would for a local database.
 
-The AceQL Java Client SDK is licensed under the Apache 2.0
+The AceQL Java Client JDBC Driver is licensed under the Apache 2.0
 License.
 
+
+AceQL Java Client JDBC Driver - Version 6.0 - 25-Dec-2020
+---------------------------------------------------------
+
+Whats New:
+- The AceQL Java Client is now a real JDBC Driver. 
+  It can thus be loaded by any application without the need to modify
+  the application's source code.
 
   
 AceQL Java Client SDK - Version 5.1 - 11-Nov-2020
