@@ -60,7 +60,7 @@ import com.aceql.client.jdbc.driver.util.framework.Tag;
  * <ul>
  * <li>Main JDBC data formats.</li>
  * <li><code>Blob/Clob</code> updates.</li>
- * <li><code>Blob/Clob</code> reads.<:li>
+ * <li><code>Blob/Clob</code> reads.</li>
  * <li>Transaction through <code>commit</code> and <code>rollback</code> orders.
  * </li>
  * </ul>
@@ -104,8 +104,8 @@ import com.aceql.client.jdbc.driver.util.framework.Tag;
  * info.put("database", database);
  *
  * String driverClassName = "com.aceql.client.jdbc.driver.AceQLDriver";
+ * Class&lt;?&gt; c = Class.forName(driverClassName);
  * Connection connection = DriverManager.getConnection(url, info);
- * Class<?> c = Class.forName(driverClassName);
  *
  * // We can now use our remote JDBC Connection as a regular JDBC
  * // Connection for our queries and updates:
