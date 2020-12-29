@@ -98,9 +98,9 @@ final public class AceQLDriver implements java.sql.Driver {
      *
      * <P>
      * The <code>java.util.Properties</code> argument can be used to pass arbitrary
-     * string tag/value pairs as connection arguments. At least "user" and
-     * "password" properties should be included in the <code>Properties</code>
-     * object.
+     * string tag/value pairs as connection arguments. At least "user", "password"
+     * and "database" properties should be included in the <code>Properties</code> object,
+     * or either passed through the URL parameter.
      *
      * @param url  the URL of the database to which to connect
      * @param info a list of arbitrary string tag/value pairs as connection
@@ -146,7 +146,6 @@ final public class AceQLDriver implements java.sql.Driver {
 	if (database == null) {
 	    throw new SQLException("database not set. Please provide a database.");
 	}
-
 
 	// Add proxy lookup
 	String proxyType = info.getProperty("proxyType");
@@ -213,8 +212,6 @@ final public class AceQLDriver implements java.sql.Driver {
 
     }
 
-
-
     /**
      * Gets information about the possible properties for this driver.
      * <P>
@@ -235,8 +232,9 @@ final public class AceQLDriver implements java.sql.Driver {
     @Override
     public DriverPropertyInfo[] getPropertyInfo(String url, Properties info) throws SQLException {
 	DriverPropertyInfoBuilder driverPropertyInfoBuilder = new DriverPropertyInfoBuilder();
-	List <DriverPropertyInfo> driverPropertyInfoList = driverPropertyInfoBuilder.build(info);
-	DriverPropertyInfo[] arrayOfDriverPropertyInfo =  driverPropertyInfoList.toArray(new DriverPropertyInfo[driverPropertyInfoList.size()]);
+	List<DriverPropertyInfo> driverPropertyInfoList = driverPropertyInfoBuilder.build(info);
+	DriverPropertyInfo[] arrayOfDriverPropertyInfo = driverPropertyInfoList
+		.toArray(new DriverPropertyInfo[driverPropertyInfoList.size()]);
 	return arrayOfDriverPropertyInfo;
     }
 
@@ -261,17 +259,16 @@ final public class AceQLDriver implements java.sql.Driver {
     }
 
     /**
-     * Reports whether this driver is a genuine JDBC
-     * Compliant &trade; driver. A driver may only report
-     * <code>true</code> here if it passes the JDBC compliance tests; otherwise it
-     * is required to return <code>false</code>.
+     * Reports whether this driver is a genuine JDBC Compliant &trade; driver. A
+     * driver may only report <code>true</code> here if it passes the JDBC
+     * compliance tests; otherwise it is required to return <code>false</code>.
      * <P>
      * JDBC compliance requires full support for the JDBC API and full support for
      * SQL 92 Entry Level.
      * <P>
-     * Because the AceQL driver works as a special Driver over HTTP to support many SQL databases vendors, it does not aim to be a genuine JDBC
-     * Compliant &trade; driver. Thus, method returns
-     * <code>false</code>.
+     * Because the AceQL driver works as a special Driver over HTTP to support many
+     * SQL databases vendors, it does not aim to be a genuine JDBC Compliant &trade;
+     * driver. Thus, method returns <code>false</code>.
      *
      * @return <code>false</code>
      */
