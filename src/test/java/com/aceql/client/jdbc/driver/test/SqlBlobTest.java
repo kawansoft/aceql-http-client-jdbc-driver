@@ -32,6 +32,9 @@ import java.sql.SQLException;
 
 import org.apache.commons.io.FileUtils;
 
+import com.aceql.client.jdbc.driver.AceQLConnection;
+import com.aceql.client.jdbc.driver.EditionType;
+
 /**
  * Blob Test. Allows to insert a Blob, and read back the file.
  *
@@ -40,8 +43,6 @@ import org.apache.commons.io.FileUtils;
  */
 public class SqlBlobTest {
 
-    public static boolean IS_DRIVER_PRO = false;
-
     private Connection connection;
     private PrintStream out;
 
@@ -49,6 +50,16 @@ public class SqlBlobTest {
 	this.connection = connection;
 	this.out = out;
     }
+
+    private boolean isDriverPro(Connection connection) {
+	if (! (connection instanceof AceQLConnection)) {
+	    return false;
+	}
+
+	AceQLConnection aceQLConnection = (AceQLConnection) connection;
+	return aceQLConnection.getEditionType().equals(EditionType.Professional);
+    }
+
 
     public void blobUpload(int customerId, int itemId, File file) throws SQLException, IOException {
 
@@ -63,7 +74,7 @@ public class SqlBlobTest {
 	preparedStatement.setDate(j++, new java.sql.Date(System.currentTimeMillis()));
 	preparedStatement.setTimestamp(j++, new java.sql.Timestamp(System.currentTimeMillis()));
 
-	if (IS_DRIVER_PRO) {
+	if (isDriverPro(connection)) {
 	    out.println("BLOB UPLOAD USING DRIVER PRO!");
 	    InputStream in = new FileInputStream(file);
 	    preparedStatement.setBinaryStream(j++, in, file.length());
@@ -78,6 +89,7 @@ public class SqlBlobTest {
 	preparedStatement.executeUpdate();
 	preparedStatement.close();
     }
+
 
     public void blobDownload(int customerId, int itemId, File file) throws SQLException, IOException {
 	String sql = "select * from orderlog where customer_id = ? and item_id = ?";
@@ -104,7 +116,7 @@ public class SqlBlobTest {
 	    // IOUtils.copy(input, output);
 	    // }
 
-	    if (IS_DRIVER_PRO) {
+		if (isDriverPro(connection)) {
 		out.println("BLOB DOWNLOAD USING DRIVER PRO!");
 		try (InputStream in = rs.getBinaryStream(i++);) {
 		    FileUtils.copyToFile(in, file);

@@ -13,7 +13,7 @@ package com.aceql.client.jdbc.driver;
 public enum EditionType {
 
     /**
-     *  Community Edition. Open source license & Free.
+     *  Community Edition. Open source license & Free software.
      */
     Community,
 
