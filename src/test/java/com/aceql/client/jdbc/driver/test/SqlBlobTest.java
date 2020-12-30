@@ -25,12 +25,12 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import org.apache.commons.io.FileUtils;
 
 import com.aceql.client.jdbc.driver.AceQLConnection;
 import com.aceql.client.jdbc.driver.EditionType;
@@ -79,7 +79,7 @@ public class SqlBlobTest {
 	    InputStream in = new FileInputStream(file);
 	    preparedStatement.setBinaryStream(j++, in, file.length());
 	} else {
-	    byte[] bytes = FileUtils.readFileToByteArray(file);
+	    byte[] bytes = Files.readAllBytes(file.toPath());
 	    preparedStatement.setBytes(j++, bytes);
 	}
 
@@ -116,17 +116,17 @@ public class SqlBlobTest {
 	    // IOUtils.copy(input, output);
 	    // }
 
-		if (isDriverPro(connection)) {
+	    if (isDriverPro(connection)) {
 		out.println("BLOB DOWNLOAD USING DRIVER PRO!");
 		try (InputStream in = rs.getBinaryStream(i++);) {
-		    FileUtils.copyToFile(in, file);
+		    Files.copy(in, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
 		}
 	    } else {
 		byte[] bytes = rs.getBytes(i++);
 		ByteArrayInputStream arrayInputStream = new ByteArrayInputStream(bytes);
 
 		try (InputStream in = arrayInputStream;) {
-		    FileUtils.copyToFile(in, file);
+		    Files.copy(in, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
 		}
 	    }
 

@@ -180,7 +180,7 @@ import com.aceql.client.jdbc.driver.util.framework.Tag;
  * </pre>
  *
  * </blockquote> See the source code of <a href=
- * "https://www.aceql.com/rest/soft_java_client/5.1/src/SqlProgressMonitorDemo.java"
+ * "https://www.aceql.com/rest/soft_java_client/6.0/src/SqlProgressMonitorDemo.java"
  * >SqlProgressMonitorDemo.java</a> that demonstrates the use of atomic
  * variables when inserting a Blob.
  *
@@ -1054,6 +1054,23 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      */
     public EditionType getEditionType() {
 	return editionType;
+    }
+
+
+    /**
+     * Helper method that says if we are using the Community Edition.
+     * @return {@code true} if AceQL Edition is Community, else {@code false}.
+     */
+    public boolean isCommunityEdition() {
+	return this.getEditionType().equals(EditionType.Community);
+    }
+
+    /**
+     * Helper method that says if we are using the Professional Edition.
+     * @return {@code true} if AceQL Edition is Community, else {@code false}.
+     */
+    public boolean isProfessionalEdition() {
+	return this.getEditionType().equals(EditionType.Professional);
     }
 
     /*
