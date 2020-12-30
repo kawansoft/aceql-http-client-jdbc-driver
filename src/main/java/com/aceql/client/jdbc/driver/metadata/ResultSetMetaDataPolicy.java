@@ -13,12 +13,12 @@ import com.aceql.client.jdbc.driver.AceQLConnection;
  * <li>off: {@code ResulSetMetaData} will not be accessible because not
  * downloaded along with {@code ResultSet} for each {@code SELECT} call. This
  * may be changed with a
- * {@link AceQLConnection#setResultSetMetaDataPolicy(ResultSetMetaDataPolicy)}
+ * {@link AceQLConnection#setResultSetMetaDataPolicy(EditionType)}
  * call.</li>
  * </ul>
  * <p>
  * Default value for a new AceQLConnection is off. If the AceQL Driver is used, the default value
- * {@code ResultSetMetaDataPolicy.on}.
+ * {@code EditionType.on}.
  *
  * @since 5.0
  * @author Nicolas de Pomereu
@@ -35,7 +35,7 @@ public enum ResultSetMetaDataPolicy {
     /**
      * {@code ResulSetMetaData} will not be accessible because not downloaded along
      * with {@code ResultSet}. This may be changed with a
-     * {@link AceQLConnection#setResultSetMetaDataPolicy(ResultSetMetaDataPolicy)}
+     * {@link AceQLConnection#setResultSetMetaDataPolicy(EditionType)}
      * call.
      */
     off

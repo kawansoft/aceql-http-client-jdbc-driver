@@ -281,8 +281,8 @@ public class AceQLHttpApi {
     }
 
     /**
-     * Sets the {@code ResultSetMetaDataPolicy} to use.
-     * @param resultSetMetaDataPolicy the  {@code ResultSetMetaDataPolicy} to use
+     * Sets the {@code EditionType} to use.
+     * @param resultSetMetaDataPolicy the  {@code EditionType} to use
      */
     public void setResultSetMetaDataPolicy(ResultSetMetaDataPolicy resultSetMetaDataPolicy) {
 	this.resultSetMetaDataPolicy = resultSetMetaDataPolicy;
@@ -296,8 +296,8 @@ public class AceQLHttpApi {
     }
 
     /**
-     * Returns the {@code ResultSetMetaDataPolicy} in use.
-     * @return the {@code ResultSetMetaDataPolicy} in use.
+     * Returns the {@code EditionType} in use.
+     * @return the {@code EditionType} in use.
      */
     public ResultSetMetaDataPolicy getResultSetMetaDataPolicy() {
         return resultSetMetaDataPolicy;
@@ -521,16 +521,6 @@ public class AceQLHttpApi {
     public String getServerVersion() throws AceQLException {
 	String result = callApiWithResult("get_version", null);
 	return result;
-    }
-
-
-    /**
-     * Gets the SDK version
-     *
-     * @throws AceQLException if any Exception occurs
-     */
-    public String getClientVersion() {
-	return com.aceql.client.jdbc.driver.version.Version.getVersion();
     }
 
     /**

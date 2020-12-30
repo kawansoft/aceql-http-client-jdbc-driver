@@ -18,8 +18,6 @@
  */
 package com.aceql.client.jdbc.driver.util.framework;
 
-import com.aceql.client.jdbc.driver.version.Version;
-
 /**
  *
  * @author Nicolas de Pomereu Defines the leading Exception tags
@@ -40,10 +38,6 @@ public class Tag {
 	    + " SECURITY]";
     public static String PRODUCT_EXCEPTION_RAISED = "[" + RUNNING_PRODUCT
 	    + " - EXCEPTION RAISED]";
-
-    // For File Framework only
-    public static String PRODUCT_START = "["
-	    + Version.PRODUCT.NAME.toUpperCase() + " START]";
 
     public static final String ClassNotFoundException = "ClassNotFoundException";
     public static final String InstantiationException = "InstantiationException";

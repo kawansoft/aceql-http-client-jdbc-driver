@@ -173,7 +173,7 @@ final public class AceQLDriver implements java.sql.Driver {
 
 	AceQLConnection connection = DriverUtil.buildConnection(aceqlUrl, username, password, database, proxyUsername,
 		proxyPassword, proxy);
-
+	connection.setEditionType(EditionType.Community);
 	connection.setGzipResult(compression);
 	return connection;
 

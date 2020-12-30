@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Date;
 
+import com.aceql.client.jdbc.driver.AceQLConnectionWrapper;
 import com.aceql.client.jdbc.driver.test.connection.ConnectionBuilder;
 
 /**
@@ -27,6 +28,8 @@ public class Test {
      * @param args
      */
     public static void main(String[] args) throws Exception {
+
+	AceQLConnectionWrapper.setEditionType(null, null);
 
 	long heapSize = Runtime.getRuntime().totalMemory();
 	System.out.println(new Date() + " heapSize: " + heapSize + " " + 255328256 / (1024 * 1024));

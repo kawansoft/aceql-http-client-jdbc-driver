@@ -132,7 +132,7 @@ import com.aceql.client.jdbc.driver.util.framework.Tag;
  * <li>{@link #getCancelled()}</li>
  * <li>{@link #setCancelled(AtomicBoolean)}</li>
  * <li>{@link #getResultSetMetaDataPolicy()}</li>
- * <li>{@link #setResultSetMetaDataPolicy(ResultSetMetaDataPolicy)}</li>
+ * <li>{@link #setResultSetMetaDataPolicy(EditionType)}</li>
  * <li>{@link #isGzipResult()}</li>
  * <li>{@link #setGzipResult(boolean)}</li>
  * <li>{@link #getProgress()}</li>
@@ -194,6 +194,12 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 
     /** is Connection open or closed */
     private boolean closed = false;
+
+    /**
+     * Edition type defaults to Community, because there was no Edition type prior
+     * to 6.0
+     */
+    private EditionType editionType = EditionType.Community;
 
     /**
      * Sets the connect timeout.
@@ -306,18 +312,18 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     }
 
     /**
-     * Returns the {@link ResultSetMetaDataPolicy} in use.
+     * Returns the {@link EditionType} in use.
      *
-     * @return the {@code ResultSetMetaDataPolicy} in use.
+     * @return the {@code EditionType} in use.
      */
     public ResultSetMetaDataPolicy getResultSetMetaDataPolicy() {
 	return this.aceQLHttpApi.getResultSetMetaDataPolicy();
     }
 
     /**
-     * Sets the {@link ResultSetMetaDataPolicy} to use.
+     * Sets the {@link EditionType} to use.
      *
-     * @param resultSetMetaDataPolicy the {@code ResultSetMetaDataPolicy} to use
+     * @param resultSetMetaDataPolicy the {@code EditionType} to use
      */
     public void setResultSetMetaDataPolicy(ResultSetMetaDataPolicy resultSetMetaDataPolicy) {
 	this.aceQLHttpApi.setResultSetMetaDataPolicy(resultSetMetaDataPolicy);
@@ -769,7 +775,27 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      * @return the SDK current Version
      */
     public String getClientVersion() {
-	return aceQLHttpApi.getClientVersion();
+
+	if (editionType.equals(EditionType.Community)) {
+	    return com.aceql.client.jdbc.driver.version.Version.getVersion();
+	}
+
+	else {
+	    try {
+		SimpleClassCaller simpleClassCaller = new SimpleClassCaller(
+		    "com.aceql.client.jdbc.driver.pro.version.ProVersion");
+
+		List<Class<?>> params = new ArrayList<>();
+		List<Object> values = new ArrayList<>();
+
+		Object obj = simpleClassCaller.callMehod("getVersion", params, values);
+		String clientVersion = (String) obj;
+		return clientVersion;
+	    } catch (Exception  e) {
+		throw new RuntimeException(e);
+	    }
+	}
+
     }
 
     /**
@@ -1015,6 +1041,19 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     @Override
     public void setSchema(String arg0) throws SQLException {
 	// Do nothing for now. Future usage.
+    }
+
+    void setEditionType(EditionType editionType) {
+	this.editionType = editionType;
+    }
+
+    /**
+     * Gets the Edition type: Community or Professional.
+     *
+     * @return the editionType
+     */
+    public EditionType getEditionType() {
+	return editionType;
     }
 
     /*

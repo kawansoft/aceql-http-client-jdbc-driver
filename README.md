@@ -7,7 +7,7 @@
 
 # AceQL HTTP 
 
-## Java Client SDK v5.1 - November 2020, 11
+## Java Client SDK v6.0 - December 2020, 29
 
 <img src="https://www.aceql.com/favicon.png" alt="AceQ HTTP Icon"/>
 
@@ -48,7 +48,7 @@
 
 # Fundamentals 
 
-This document describes how to use the AceQL Java Client SDK and gives some details about how it operates with the server side.
+This document describes how to use the AceQL Client JDBC Driver and gives some details about how it operates with the server side.
 
 The AceQL Java Client SDK allows users to wrap the [AceQL HTTP APIs](https://github.com/kawansoft/aceql-http/blob/master/aceql-http-6.2-user-guide-api.md) and eliminate the tedious work of handling communication errors and parsing JSON results.
 
@@ -93,8 +93,8 @@ Note that we will soon release a real JDBC Driver. Please contact us at [contact
 ```xml
 <dependency>
     <groupId>com.aceql</groupId>
-    <artifactId>aceql-http-client-sdk</artifactId>
-    <version>5.1</version>
+    <artifactId>aceql-http-client-jdbc-driver</artifactId>
+    <version>6.0</version>
 </dependency>
 ```
 ### Single Jar 
