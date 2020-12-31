@@ -38,6 +38,8 @@ import java.sql.Struct;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 
+import com.aceql.client.jdbc.driver.util.framework.Tag;
+
 /**
  * Connection Wrapper. <br>
  * Implements all the Connection methods. Usage is exactly the same as a
@@ -46,7 +48,7 @@ import java.util.concurrent.Executor;
 
 public class AbstractConnection implements Connection {
 
-    public static final String FEATURE_NOT_SUPPORTED_IN_THIS_VERSION = "AceQL Client SDK. Method is not yet implemented: ";
+    public static final String FEATURE_NOT_SUPPORTED_IN_THIS_VERSION = Tag.METHOD_NOT_YET_IMPLEMENTED;
 
     /**
      * A constant indicating that transactions are not supported.

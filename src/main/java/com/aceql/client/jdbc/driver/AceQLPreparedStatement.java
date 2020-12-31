@@ -18,9 +18,12 @@
  */
 package com.aceql.client.jdbc.driver;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
@@ -107,7 +110,8 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
     /*
      * (non-Javadoc)
      *
-     * @see com.aceql.client.jdbc.driver.abstracts.AbstractPreparedStatement#setNull(int,
+     * @see
+     * com.aceql.client.jdbc.driver.abstracts.AbstractPreparedStatement#setNull(int,
      * int)
      */
     @Override
@@ -118,7 +122,8 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
     /*
      * (non-Javadoc)
      *
-     * @see com.aceql.client.jdbc.driver.abstracts.AbstractPreparedStatement#setBoolean
+     * @see
+     * com.aceql.client.jdbc.driver.abstracts.AbstractPreparedStatement#setBoolean
      * (int, boolean)
      */
     @Override
@@ -132,8 +137,8 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
      * (non-Javadoc)
      *
      * @see
-     * com.aceql.client.jdbc.driver.abstracts.AbstractPreparedStatement#setShort(int,
-     * short)
+     * com.aceql.client.jdbc.driver.abstracts.AbstractPreparedStatement#setShort(
+     * int, short)
      */
     @Override
     public void setShort(int parameterIndex, short x) throws SQLException {
@@ -145,7 +150,8 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
     /*
      * (non-Javadoc)
      *
-     * @see com.aceql.client.jdbc.driver.abstracts.AbstractPreparedStatement#setInt(int,
+     * @see
+     * com.aceql.client.jdbc.driver.abstracts.AbstractPreparedStatement#setInt(int,
      * int)
      */
     @Override
@@ -158,7 +164,8 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
     /*
      * (non-Javadoc)
      *
-     * @see com.aceql.client.jdbc.driver.abstracts.AbstractPreparedStatement#setLong(int,
+     * @see
+     * com.aceql.client.jdbc.driver.abstracts.AbstractPreparedStatement#setLong(int,
      * long)
      */
     @Override
@@ -172,8 +179,8 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
      * (non-Javadoc)
      *
      * @see
-     * com.aceql.client.jdbc.driver.abstracts.AbstractPreparedStatement#setFloat(int,
-     * float)
+     * com.aceql.client.jdbc.driver.abstracts.AbstractPreparedStatement#setFloat(
+     * int, float)
      */
     @Override
     public void setFloat(int parameterIndex, float x) throws SQLException {
@@ -185,7 +192,8 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
     /*
      * (non-Javadoc)
      *
-     * @see com.aceql.client.jdbc.driver.abstracts.AbstractPreparedStatement#setDouble
+     * @see
+     * com.aceql.client.jdbc.driver.abstracts.AbstractPreparedStatement#setDouble
      * (int, double)
      */
     @Override
@@ -198,9 +206,8 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
     /*
      * (non-Javadoc)
      *
-     * @see
-     * com.aceql.client.jdbc.driver.abstracts.AbstractPreparedStatement#setBigDecimal
-     * (int, java.math.BigDecimal)
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractPreparedStatement#
+     * setBigDecimal (int, java.math.BigDecimal)
      */
     @Override
     public void setBigDecimal(int parameterIndex, BigDecimal x) throws SQLException {
@@ -218,7 +225,8 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
     /*
      * (non-Javadoc)
      *
-     * @see com.aceql.client.jdbc.driver.abstracts.AbstractPreparedStatement#setString
+     * @see
+     * com.aceql.client.jdbc.driver.abstracts.AbstractPreparedStatement#setString
      * (int, java.lang.String)
      */
     @Override
@@ -229,7 +237,8 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
     /*
      * (non-Javadoc)
      *
-     * @see com.aceql.client.jdbc.driver.abstracts.AbstractPreparedStatement#setDate(int,
+     * @see
+     * com.aceql.client.jdbc.driver.abstracts.AbstractPreparedStatement#setDate(int,
      * java.sql.Date)
      */
     @Override
@@ -247,7 +256,8 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
     /*
      * (non-Javadoc)
      *
-     * @see com.aceql.client.jdbc.driver.abstracts.AbstractPreparedStatement#setTime(int,
+     * @see
+     * com.aceql.client.jdbc.driver.abstracts.AbstractPreparedStatement#setTime(int,
      * java.sql.Time)
      */
     @Override
@@ -263,7 +273,8 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
     /*
      * (non-Javadoc)
      *
-     * @see com.aceql.client.jdbc.driver.abstracts.AbstractPreparedStatement#setTimestamp
+     * @see
+     * com.aceql.client.jdbc.driver.abstracts.AbstractPreparedStatement#setTimestamp
      * (int, java.sql.Timestamp)
      */
     @Override
@@ -280,7 +291,8 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
     /*
      * (non-Javadoc)
      *
-     * @see com.aceql.client.jdbc.driver.abstracts.AbstractPreparedStatement#setURL(int,
+     * @see
+     * com.aceql.client.jdbc.driver.abstracts.AbstractPreparedStatement#setURL(int,
      * java.net.URL)
      */
     @Override
@@ -326,8 +338,9 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
 	if (x != null) {
 
 	    if (x.length > HttpManager.MEDIUM_BLOB_LENGTH) {
-		throw new SQLException(Tag.PRODUCT + " " + "Can not upload Blob. Length > " + HttpManager.MEDIUMB_BLOB_LENGTH_MB + "Mb maximum length. Length is: "
-			+ x.length / (1024 * 1024));
+		throw new SQLException(
+			Tag.PRODUCT + " " + "Can not upload Blob. Length > " + HttpManager.MEDIUMB_BLOB_LENGTH_MB
+				+ "Mb maximum length. Length is: " + x.length / (1024 * 1024));
 	    }
 
 	    List<Byte> bytes = new ArrayList<>();
@@ -363,7 +376,8 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
 	    // localBlobIds.add(blobId);
 	    // localInputStreams.add(inputStream);
 	    // localLengths.add(length);
-	    //BlobStreamParamsManager.update(blobParamsHolder, blobId, inputStream, length);
+	    // BlobStreamParamsManager.update(blobParamsHolder, blobId, inputStream,
+	    // length);
 
 	    List<Class<?>> params = new ArrayList<>();
 	    List<Object> values = new ArrayList<>();
@@ -406,8 +420,8 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
     /*
      * (non-Javadoc)
      *
-     * @see
-     * com.aceql.client.jdbc.driver.abstracts.AbstractPreparedStatement#executeUpdate ()
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractPreparedStatement#
+     * executeUpdate ()
      */
     @Override
     public int executeUpdate() throws SQLException {
@@ -497,7 +511,8 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
     /*
      * (non-Javadoc)
      *
-     * @see com.aceql.client.jdbc.driver.abstracts.AbstractPreparedStatement#executeQuery
+     * @see
+     * com.aceql.client.jdbc.driver.abstracts.AbstractPreparedStatement#executeQuery
      * ()
      */
     @Override
@@ -738,9 +753,35 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
      */
     @Override
     public void setBlob(int parameterIndex, Blob x) throws SQLException {
-	String methodName = new Object() {
-	}.getClass().getEnclosingMethod().getName();
-	throwExceptionIfCalled(methodName);
+	if (x instanceof AceQLBlob) {
+	    AceQLBlob blob = (AceQLBlob) x;
+	    File file = blob.getFile();
+
+	    if (file == null) {
+		throw new SQLException(Tag.PRODUCT + " " + "The underlying file of the Blob is null.");
+	    }
+
+	    if (!file.exists()) {
+		throw new SQLException(Tag.PRODUCT + " " + "The underlying file of the Blob does not exist: " + file);
+	    }
+
+	    InputStream in = null;
+	    try {
+		in = new BufferedInputStream(new FileInputStream(file));
+	    } catch (IOException ioe) {
+		throw new SQLException(Tag.PRODUCT + " " + "Can not process the Blob file " + file + ". IOException raised: " + ioe.getMessage());
+	    }
+
+	    setBinaryStream(parameterIndex, in);
+
+	} else {
+	    if (x == null) {
+		setBinaryStream(parameterIndex, null);
+	    } else {
+		InputStream in = x.getBinaryStream();
+		setBinaryStream(parameterIndex, in);
+	    }
+	}
     }
 
     /*
@@ -916,9 +957,7 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
      */
     @Override
     public void setBlob(int parameterIndex, InputStream inputStream, long length) throws SQLException {
-	String methodName = new Object() {
-	}.getClass().getEnclosingMethod().getName();
-	throwExceptionIfCalled(methodName);
+	setBinaryStream(parameterIndex, inputStream, length);
     }
 
     /*
@@ -1038,9 +1077,7 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
      */
     @Override
     public void setBlob(int parameterIndex, InputStream inputStream) throws SQLException {
-	String methodName = new Object() {
-	}.getClass().getEnclosingMethod().getName();
-	throwExceptionIfCalled(methodName);
+	setBinaryStream(parameterIndex, inputStream);
     }
 
     /*

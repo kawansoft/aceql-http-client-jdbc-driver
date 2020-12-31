@@ -41,6 +41,7 @@ import java.util.Objects;
 
 import com.aceql.client.jdbc.driver.util.AceQLResultSetUtil;
 import com.aceql.client.jdbc.driver.util.JavaSqlConversion;
+import com.aceql.client.jdbc.driver.util.framework.Tag;
 import com.aceql.client.jdbc.driver.util.json.SqlParameter;
 
 /**
@@ -52,7 +53,7 @@ import com.aceql.client.jdbc.driver.util.json.SqlParameter;
 //     value.equalsIgnoreCase("NULL")
 public class AceQLCallableStatement extends AceQLPreparedStatement implements CallableStatement {
 
-    private static final String FEATURE_NOT_SUPPORTED_IN_THIS_VERSION = "Method is not yet implemented: ";
+    private static final String FEATURE_NOT_SUPPORTED_IN_THIS_VERSION = Tag.METHOD_NOT_YET_IMPLEMENTED_FOR_METHOD;
 
     /** Says if the last accessed value was null */
     private boolean wasNull = false;

@@ -24,6 +24,7 @@ package com.aceql.client.jdbc.driver.util.framework;
  */
 public class Tag {
 
+
     // Common for all products, as we don't know the product name at run time,
     // we use
     // generic KAWANSOFT FRAMEWORK
@@ -54,4 +55,8 @@ public class Tag {
     // NIO case the uploaded .class file java version is incompatible with
     // server java version
     public static final String UnsupportedClassVersionError = "UnsupportedClassVersionError";
+
+    public static final String METHOD_NOT_YET_IMPLEMENTED = Tag.PRODUCT + " Method is not yet implemented.";
+    public static final String METHOD_NOT_YET_IMPLEMENTED_FOR_METHOD = Tag.PRODUCT + " Method is not yet implemented: ";
+    public static final String METHOD_NOT_SUPPORTED_IN_COMMUNITY_EDITION = Tag.PRODUCT + " Method is not supported in Community Edition. Please upgrade to Professional Edition.";
 }

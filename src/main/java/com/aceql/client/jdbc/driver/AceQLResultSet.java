@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.sql.Array;
+import java.sql.Blob;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -35,6 +36,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.apache.commons.io.FileUtils;
 
@@ -469,6 +471,59 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	}
 	return getByteArray(value);
     }
+
+    /**
+     * @param value
+     * @return
+     * @throws SQLException
+     */
+    private Blob getBlobFromBlobId(String value) throws SQLException {
+	Objects.requireNonNull(value, "value cannot be nul!");
+	AceQLBlob blob = null;
+	if (this.aceQLConnection.isCommunityEdition()) {
+	    blob = new AceQLBlob(getByteArray(value), EditionType.Community);
+	}
+	else {
+	    blob = new AceQLBlob(getInputStream(value), EditionType.Professional);
+	}
+
+	return blob;
+    }
+    /*
+     * (non-Javadoc)
+     *
+     * @see
+     * com.aceql.client.jdbc.driver.abstracts.AbstractResultSet#getBlob(int)
+     */
+    @Override
+    public Blob getBlob(int i) throws SQLException {
+	String value = getString(i);
+
+	if (value == null || value.equals("NULL")) {
+	    return null;
+	}
+
+	return getBlobFromBlobId(value);
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see
+     * com.aceql.client.jdbc.driver.abstracts.AbstractResultSet#getBlob(String)
+     */
+    @Override
+    public Blob getBlob(String colName) throws SQLException {
+	String value = getString(colName);
+
+	if (value == null || value.equals("NULL")) {
+	    return null;
+	}
+
+	return getBlobFromBlobId(value);
+    }
+
+
 
     /*
      * (non-Javadoc)

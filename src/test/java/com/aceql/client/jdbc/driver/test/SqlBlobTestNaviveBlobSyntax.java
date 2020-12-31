@@ -21,7 +21,6 @@ package com.aceql.client.jdbc.driver.test;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -45,26 +44,25 @@ import com.aceql.client.jdbc.driver.EditionType;
  * @author Nicolas de Pomereu
  *
  */
-public class SqlBlobTest {
-
-    public static boolean USE_BLOB_NATIVE_SYNTAX = true;
+public class SqlBlobTestNaviveBlobSyntax {
 
     private Connection connection;
     private PrintStream out;
 
-    public SqlBlobTest(Connection connection, PrintStream out) {
+    public SqlBlobTestNaviveBlobSyntax(Connection connection, PrintStream out) {
 	this.connection = connection;
 	this.out = out;
     }
 
     private boolean isDriverPro(Connection connection) {
-	if (!(connection instanceof AceQLConnection)) {
+	if (! (connection instanceof AceQLConnection)) {
 	    return false;
 	}
 
 	AceQLConnection aceQLConnection = (AceQLConnection) connection;
 	return aceQLConnection.getEditionType().equals(EditionType.Professional);
     }
+
 
     public void blobUpload(int customerId, int itemId, File file) throws SQLException, IOException {
 
@@ -79,28 +77,26 @@ public class SqlBlobTest {
 	preparedStatement.setDate(j++, new java.sql.Date(System.currentTimeMillis()));
 	preparedStatement.setTimestamp(j++, new java.sql.Timestamp(System.currentTimeMillis()));
 
-	if (USE_BLOB_NATIVE_SYNTAX) {
-	    if (isDriverPro(connection)) {
-		out.println("BLOB UPLOAD USING DRIVER PRO AND BLOB NATIVE SYNTAX!");
-		Blob blob = connection.createBlob();
-		OutputStream out = blob.setBinaryStream(1);
-		FileUtils.copyFile(file, out);
-		preparedStatement.setBlob(j++, blob);
-	    } else {
-		Blob blob = connection.createBlob();
-		byte[] bytes = Files.readAllBytes(file.toPath());
-		blob.setBytes(1, bytes);
-		preparedStatement.setBlob(j++, blob);
-	    }
+//	if (isDriverPro(connection)) {
+//	    out.println("BLOB UPLOAD USING DRIVER PRO!");
+//	    InputStream in = new FileInputStream(file);
+//	    preparedStatement.setBinaryStream(j++, in, file.length());
+//	} else {
+//	    byte[] bytes = Files.readAllBytes(file.toPath());
+//	    preparedStatement.setBytes(j++, bytes);
+//	}
+
+	if (isDriverPro(connection)) {
+	    out.println("BLOB UPLOAD USING DRIVER PRO AND BLOB NATIVE SYNTAX!");
+	    Blob blob = connection.createBlob();
+	    OutputStream out = blob.setBinaryStream(1);
+	    FileUtils.copyFile(file, out);
+	    preparedStatement.setBlob(j++, blob);
 	} else {
-	    if (isDriverPro(connection)) {
-		out.println("BLOB UPLOAD USING DRIVER PRO!");
-		InputStream in = new FileInputStream(file);
-		preparedStatement.setBinaryStream(j++, in, file.length());
-	    } else {
-		byte[] bytes = Files.readAllBytes(file.toPath());
-		preparedStatement.setBytes(j++, bytes);
-	    }
+	    Blob blob = connection.createBlob();
+	    byte[] bytes = Files.readAllBytes(file.toPath());
+	    blob.setBytes(1, bytes);
+	    preparedStatement.setBlob(j++, blob);
 	}
 
 	preparedStatement.setInt(j++, customerId);
@@ -109,6 +105,7 @@ public class SqlBlobTest {
 	preparedStatement.executeUpdate();
 	preparedStatement.close();
     }
+
 
     public void blobDownload(int customerId, int itemId, File file) throws SQLException, IOException {
 	String sql = "select * from orderlog where customer_id = ? and item_id = ?";
@@ -135,42 +132,17 @@ public class SqlBlobTest {
 	    // IOUtils.copy(input, output);
 	    // }
 
-	    if (USE_BLOB_NATIVE_SYNTAX) {
-		if (isDriverPro(connection)) {
-		    out.println("BLOB DOWNLOAD USING DRIVER PRO AND BLOB NATIVE SYNTAX!");
-		    Blob blob = rs.getBlob(i++);
-
-		    if (blob != null) {
-			try (InputStream in = blob.getBinaryStream()) {
-			    Files.copy(in, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
-			}
-		    }
-
-		} else {
-		    Blob blob = rs.getBlob(i++);
-
-		    if (blob != null) {
-			byte[] bytes = blob.getBytes(1, (int)blob.length());
-			ByteArrayInputStream arrayInputStream = new ByteArrayInputStream(bytes);
-
-			try (InputStream in = arrayInputStream;) {
-			    Files.copy(in, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
-			}
-		    }
+	    if (isDriverPro(connection)) {
+		out.println("BLOB DOWNLOAD USING DRIVER PRO!");
+		try (InputStream in = rs.getBinaryStream(i++);) {
+		    Files.copy(in, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
 		}
 	    } else {
-		if (isDriverPro(connection)) {
-		    out.println("BLOB DOWNLOAD USING DRIVER PRO!");
-		    try (InputStream in = rs.getBinaryStream(i++);) {
-			Files.copy(in, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
-		    }
-		} else {
-		    byte[] bytes = rs.getBytes(i++);
-		    ByteArrayInputStream arrayInputStream = new ByteArrayInputStream(bytes);
+		byte[] bytes = rs.getBytes(i++);
+		ByteArrayInputStream arrayInputStream = new ByteArrayInputStream(bytes);
 
-		    try (InputStream in = arrayInputStream;) {
-			Files.copy(in, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
-		    }
+		try (InputStream in = arrayInputStream;) {
+		    Files.copy(in, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
 		}
 	    }
 

@@ -23,6 +23,7 @@ import java.net.HttpURLConnection;
 import java.net.PasswordAuthentication;
 import java.net.Proxy;
 import java.net.URLConnection;
+import java.sql.Blob;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -395,6 +396,20 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      */
     private AceQLConnection(AceQLHttpApi aceQLHttpApi) {
 	this.aceQLHttpApi = aceQLHttpApi;
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see com.aceql.client.jdbc.driver.abstracts.AbstractConnection#createBlob()
+     */
+    @Override
+    public Blob createBlob() throws SQLException {
+	if (isClosed()) {
+	    throw new SQLException(Tag.PRODUCT + " Can not created Blob because Connection is closed.");
+	}
+	AceQLBlob blob = new AceQLBlob(getEditionType());
+	return blob;
     }
 
     /*
