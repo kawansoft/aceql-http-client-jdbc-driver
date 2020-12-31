@@ -40,6 +40,7 @@ import org.apache.commons.io.FileUtils;
 
 import com.aceql.client.jdbc.driver.abstracts.AbstractResultSet;
 import com.aceql.client.jdbc.driver.http.AceQLHttpApi;
+import com.aceql.client.jdbc.driver.http.HttpManager;
 import com.aceql.client.jdbc.driver.util.AceQLConnectionUtil;
 import com.aceql.client.jdbc.driver.util.AceQLResultSetUtil;
 import com.aceql.client.jdbc.driver.util.SimpleClassCaller;
@@ -277,27 +278,34 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
     }
 
     private byte [] getByteArray(String blobId) throws SQLException {
-
-	// long length = aceQLHttpApi.getBlobLength(blobId);
-	// AceQLConnection aceQLConnection =
-	// (AceQLConnection)this.getStatement().getConnection();
-	// blobDownload(blobId, file, aceQLConnection.getProgress(),
-	// aceQLConnection.getCancelled(), length);
-
 	byte [] bytes = aceQLHttpApi.blobDownloadGetBytes(blobId);
 	return bytes;
     }
 
     private InputStream getInputStream(String blobId) throws SQLException {
 
-	// long length = aceQLHttpApi.getBlobLength(blobId);
-	// AceQLConnection aceQLConnection =
-	// (AceQLConnection)this.getStatement().getConnection();
-	// blobDownload(blobId, file, aceQLConnection.getProgress(),
-	// aceQLConnection.getCancelled(), length);
+	List<Class<?>> params = new ArrayList<>();
+	List<Object> values = new ArrayList<>();
 
-	InputStream in = aceQLHttpApi.blobDownloadGetStream(blobId);
-	return in;
+	params.add(HttpManager.class);
+	params.add(String.class);
+	params.add(String.class);
+
+	values.add(aceQLHttpApi.getHttpManager());
+	values.add(aceQLHttpApi.getUrl());
+	values.add(blobId);
+
+	try {
+	    SimpleClassCaller simpleClassCaller = new SimpleClassCaller(SimpleClassCaller.DRIVER_PRO_REFLECTION_PACKAGE  + ".ResultSetInputStreamGetter");
+
+	    Object obj = simpleClassCaller.callMehod("getInputStream", params, values);
+	    return (InputStream) obj;
+	} catch (ClassNotFoundException e) {
+	    throw new UnsupportedOperationException(Tag.PRODUCT +  " " + "ResultSet.getBinaryStream(int) & getBinaryStream(Sgring) calls requires AceQL JDBC Driver Professional Edition.");
+	}
+	catch (Exception e) {
+	    throw new SQLException(e);
+	}
     }
 
     /*

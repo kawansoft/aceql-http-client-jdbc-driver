@@ -1035,19 +1035,6 @@ public class AceQLHttpApi {
 	return aceQLBlobApi.blobDownloadGetBytes(blobId);
     }
 
-    /**
-     * Calls /blob_download API
-     *
-     * @param blobId the Blob/Clob Id
-     * @return the input stream containing either an error, or the result set in
-     *         JSON format. See user documentation.
-     * @throws AceQLException if any Exception occurs
-     */
-    public InputStream blobDownloadGetStream(String blobId) throws AceQLException {
-	AceQLBlobApi aceQLBlobApi = new AceQLBlobApi(httpManager, url);
-	return aceQLBlobApi.blobDownload(blobId);
-    }
-
     public InputStream dbSchemaDownload(String format, String tableName) throws AceQLException {
 	AceQLMetadataApi aceQLMetadataApi = new AceQLMetadataApi(httpManager, url);
 	return aceQLMetadataApi.dbSchemaDownload(format, tableName);
