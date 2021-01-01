@@ -1,7 +1,7 @@
 /*
  * This file is part of AceQL Client SDK.
  * AceQL Client SDK: Remote JDBC access over HTTP with AceQL HTTP.
- * Copyright (C) 2020,  KawanSoft SAS
+ * Copyright (C) 2021,  KawanSoft SAS
  * (http://www.kawansoft.com). All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -53,7 +53,6 @@ public class AceQLBlobUtil {
      * @throws SQLException
      */
     InputStream getInputStreamFromBlob() throws SQLException {
-
 	if (x == null) {
 	    return null;
 	}
@@ -78,7 +77,6 @@ public class AceQLBlobUtil {
 	if (x == null) {
 	    return null;
 	}
-
 	return x.getBytes(1, (int) x.length());
     }
 
