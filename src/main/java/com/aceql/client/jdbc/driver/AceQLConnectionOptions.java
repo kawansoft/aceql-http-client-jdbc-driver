@@ -64,7 +64,6 @@ public class AceQLConnectionOptions {
 
     public AceQLConnectionOptions(int connectTimeout, int readTimeout, boolean gzipResult, EditionType editionType,
 	    ResultSetMetaDataPolicy resultSetMetaDataPolicy, Map<String, String> requestProperties) {
-	super();
 	this.connectTimeout = connectTimeout;
 	this.readTimeout = readTimeout;
 	this.gzipResult = gzipResult;

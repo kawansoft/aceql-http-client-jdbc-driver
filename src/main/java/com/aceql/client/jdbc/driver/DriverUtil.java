@@ -104,8 +104,8 @@ class DriverUtil {
     * @param info
     * @return
     */
-   public static boolean getCompression(Properties info) {
-	String compressionStr = info.getProperty("compression");
+   public static boolean getGzipResult(Properties info) {
+	String compressionStr = info.getProperty("gzipResult");
 	if(compressionStr == null) {
 	    compressionStr = "true";
 	}

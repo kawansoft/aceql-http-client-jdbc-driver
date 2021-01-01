@@ -36,7 +36,7 @@ public class DriverPropertyInfoBuilder {
     public static final String PROXY_CREDENTIAL_PASSWORD = "Proxy credential password";
     public static final String READ_TIMEOUT = "Read timeout to a specified timeout, in milliseconds. A non-zero value specifies the timeout when reading from Input stream when a connection is established to a resource. If the timeout expires before there is dataavailable for read, a java.net.SocketTimeoutException israised. A timeout of zero is interpreted as an infinite timeout.";
     public static final String TIMEOUT_VALUE_IN_MILLISECONDS = "Timeout value, in milliseconds, to be used when opening a communications link to the remote server. If the timeout expires before the connection can be established, a java.net.SocketTimeoutExceptionis raised. A timeout of zero is interpreted as an infinite timeout.";
-    public static final String COMPRESSION_MODE = "Compression mode. Boolean to say if the Driver is configured to contact the remote server using http compression. Defaults to true.";
+    public static final String GZIP_RESULT = "Boolean to say if the ResultSet is Gzipped before download. Defaults to true.";
 
     /**
      * Build a new DriverPropertyInfo with the passed property
@@ -107,8 +107,8 @@ public class DriverPropertyInfoBuilder {
 	driverPropertyInfo.required = false;
 	driverPropertyInfoList.add(driverPropertyInfo);
 
-	driverPropertyInfo = getNewDriverPropertyInfo("compression", info);
-	driverPropertyInfo.description = COMPRESSION_MODE;
+	driverPropertyInfo = getNewDriverPropertyInfo("gzipResult", info);
+	driverPropertyInfo.description = GZIP_RESULT;
 	driverPropertyInfo.value = "true";
 	driverPropertyInfo.required = false;
 	driverPropertyInfoList.add(driverPropertyInfo);

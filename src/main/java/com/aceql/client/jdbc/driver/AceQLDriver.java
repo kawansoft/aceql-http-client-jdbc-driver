@@ -66,8 +66,7 @@ import com.aceql.client.jdbc.driver.util.framework.JdbcUrlHeader;
  * connection is established to a resource. If the timeout expires before there
  * is data available for read, a java.net.SocketTimeoutException israised. A
  * timeout of zero is interpreted as an infinite timeout.
- * <li><b>compression</b>: boolean to say if the Driver is configured to contact
- * the remote server using http compression. Defaults to <code>true</code>.</li>
+ * <li><b>gzipResult</b>: Boolean to say if the ResultSet is Gzipped before download. Defaults to <code>true</code>.</li>
  * </ul>
  * <p>
  *
@@ -157,7 +156,7 @@ final public class AceQLDriver implements java.sql.Driver {
 	String proxyUsername = info.getProperty("proxyUsername");
 	String proxyPassword = info.getProperty("proxyPassword");
 
-	boolean compression = DriverUtil.getCompression(info);
+	boolean gzipResult = DriverUtil.getGzipResult(info);
 	int connectTimeout = DriverUtil.getConnectTimeout(info);
 	int readTimeout = DriverUtil.getReadTimeout(info);
 
@@ -168,7 +167,7 @@ final public class AceQLDriver implements java.sql.Driver {
 	debug("Proxy   : " + proxy);
 
 	Map<String, String> requestProperties = new HashMap<>();
-	AceQLConnectionOptions aceQLConnectionOptions = new AceQLConnectionOptions(connectTimeout, readTimeout, compression, EditionType.Community, ResultSetMetaDataPolicy.off, requestProperties);
+	AceQLConnectionOptions aceQLConnectionOptions = new AceQLConnectionOptions(connectTimeout, readTimeout, gzipResult, EditionType.Community, ResultSetMetaDataPolicy.off, requestProperties);
 
 	AceQLConnection connection = DriverUtil.buildConnection(aceqlUrl, username, password, database, proxyUsername,
 		proxyPassword, proxy, aceQLConnectionOptions);
