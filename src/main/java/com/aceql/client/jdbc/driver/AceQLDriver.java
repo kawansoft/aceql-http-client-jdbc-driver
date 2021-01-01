@@ -164,15 +164,9 @@ final public class AceQLDriver implements java.sql.Driver {
 	debug("aceqlUrl: " + aceqlUrl);
 	debug("Proxy   : " + proxy);
 
-	if (readTimeout != 0) {
-	    AceQLConnection.setConnectTimeout(connectTimeout);
-	}
-	if (readTimeout != 0) {
-	    AceQLConnection.setReadTimeout(readTimeout);
-	}
 
 	AceQLConnection connection = DriverUtil.buildConnection(aceqlUrl, username, password, database, proxyUsername,
-		proxyPassword, proxy);
+		proxyPassword, proxy, connectTimeout, readTimeout);
 	connection.setEditionType(EditionType.Community);
 	connection.setGzipResult(compression);
 	return connection;

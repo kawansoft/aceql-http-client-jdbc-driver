@@ -168,10 +168,12 @@ public class AceQLHttpApi {
      * @param passwordAuthentication the username and password holder to use for
      *                               authenticated proxy. Null if no proxy or if
      *                               proxy
+     * @param readTimeout TODO
+     * @param connectTimeout TODO
      * @throws AceQLException if any Exception occurs
      */
     public AceQLHttpApi(String serverUrl, String database, String username, char[] password, String sessionId,
-	    Proxy proxy, PasswordAuthentication passwordAuthentication) throws AceQLException {
+	    Proxy proxy, PasswordAuthentication passwordAuthentication, int readTimeout, int connectTimeout) throws AceQLException {
 
 	try {
 	    if (serverUrl == null) {
@@ -394,7 +396,7 @@ public class AceQLHttpApi {
 	AceQLHttpApi aceQLHttpApi;
 	try {
 	    aceQLHttpApi = new AceQLHttpApi(serverUrl, database, username, password, sessionId, httpManager.getProxy(),
-		    httpManager.getPasswordAuthentication());
+		    httpManager.getPasswordAuthentication(), readTimeout, connectTimeout);
 	    aceQLHttpApi.setGzipResult(gzipResult);
 	} catch (SQLException e) {
 	    throw new IllegalStateException(e);

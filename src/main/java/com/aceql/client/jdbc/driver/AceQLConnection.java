@@ -202,36 +202,6 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      */
     private EditionType editionType = EditionType.Community;
 
-    /**
-     * Sets the connect timeout.
-     *
-     * @param connectTimeout Sets a specified timeout value, in milliseconds, to be
-     *                       used when opening a communications link to the remote
-     *                       server. If the timeout expires before the connection
-     *                       can be established, a java.net.SocketTimeoutException
-     *                       is raised. A timeout of zero is interpreted as an
-     *                       infinite timeout. See
-     *                       {@link URLConnection#setConnectTimeout(int)}
-     */
-    public static void setConnectTimeout(int connectTimeout) {
-	AceQLHttpApi.setConnectTimeout(connectTimeout);
-    }
-
-    /**
-     * Sets the read timeout.
-     *
-     * @param readTimeout Sets the read timeout to a specified timeout, in
-     *                    milliseconds. A non-zero value specifies the timeout when
-     *                    reading from Input stream when a connection is established
-     *                    to a resource. If the timeout expires before there is data
-     *                    available for read, a java.net.SocketTimeoutException is
-     *                    raised. A timeout of zero is interpreted as an infinite
-     *                    timeout. See {@link URLConnection#setReadTimeout(int)}
-     */
-    public static void setReadTimeout(int readTimeout) {
-	AceQLHttpApi.setReadTimeout(readTimeout);
-    }
-
 
     /**
      * Adds a general request property to the the underlying {@link URLConnection}
@@ -269,10 +239,28 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      * @param passwordAuthentication the username and password holder to use for
      *                               authenticated proxy. Null if no proxy or if
      *                               proxy does not require authentication.
+     * @param readTimeout            Sets the read timeout to a specified timeout,
+     *                               in milliseconds. A non-zero value specifies the
+     *                               timeout when reading from Input stream when a
+     *                               connection is established to a resource. If the
+     *                               timeout expires before there is data available
+     *                               for read, a java.net.SocketTimeoutException is
+     *                               raised. A timeout of zero is interpreted as an
+     *                               infinite timeout. See
+     *                               {@link URLConnection#setReadTimeout(int)}
+     * @param connectTimeout         Sets a specified timeout value, in
+     *                               milliseconds, to be used when opening a
+     *                               communications link to the remote server. If
+     *                               the timeout expires before the connection can
+     *                               be established, a
+     *                               java.net.SocketTimeoutException is raised. A
+     *                               timeout of zero is interpreted as an infinite
+     *                               timeout. See
+     *                               {@link URLConnection#setConnectTimeout(int)}
      * @throws SQLException if any I/O error occurs
      */
     public AceQLConnection(String serverUrl, String database, String username, char[] password, Proxy proxy,
-	    PasswordAuthentication passwordAuthentication) throws SQLException {
+	    PasswordAuthentication passwordAuthentication, int readTimeout, int connectTimeout) throws SQLException {
 
 	try {
 	    if (serverUrl == null) {
@@ -289,7 +277,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	    }
 
 	    aceQLHttpApi = new AceQLHttpApi(serverUrl, database, username, password, null, proxy,
-		    passwordAuthentication);
+		    passwordAuthentication, readTimeout, connectTimeout);
 
 	} catch (AceQLException aceQlException) {
 	    throw aceQlException;
@@ -330,10 +318,28 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      * @param passwordAuthentication the username and password holder to use for
      *                               authenticated proxy. Null if no proxy or if
      *                               proxy does not require authentication.
+     * @param readTimeout            Sets the read timeout to a specified timeout,
+     *                               in milliseconds. A non-zero value specifies the
+     *                               timeout when reading from Input stream when a
+     *                               connection is established to a resource. If the
+     *                               timeout expires before there is data available
+     *                               for read, a java.net.SocketTimeoutException is
+     *                               raised. A timeout of zero is interpreted as an
+     *                               infinite timeout. See
+     *                               {@link URLConnection#setReadTimeout(int)}
+     * @param connectTimeout         Sets a specified timeout value, in
+     *                               milliseconds, to be used when opening a
+     *                               communications link to the remote server. If
+     *                               the timeout expires before the connection can
+     *                               be established, a
+     *                               java.net.SocketTimeoutException is raised. A
+     *                               timeout of zero is interpreted as an infinite
+     *                               timeout. See
+     *                               {@link URLConnection#setConnectTimeout(int)}
      * @throws SQLException if any I/O error occurs
      */
     public AceQLConnection(String serverUrl, String database, String username, String sessionId, Proxy proxy,
-	    PasswordAuthentication passwordAuthentication) throws SQLException {
+	    PasswordAuthentication passwordAuthentication, int readTimeout, int connectTimeout) throws SQLException {
 
 	try {
 
@@ -351,7 +357,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	    }
 
 	    aceQLHttpApi = new AceQLHttpApi(serverUrl, database, username, null, sessionId, proxy,
-		    passwordAuthentication);
+		    passwordAuthentication, readTimeout, connectTimeout);
 
 	} catch (AceQLException aceQlException) {
 	    throw aceQlException;
@@ -404,8 +410,8 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	    Object obj = simpleClassCaller.callMehod("getMetaData", params, values);
 	    return (DatabaseMetaData) obj;
 	} catch (ClassNotFoundException e) {
-	    throw new UnsupportedOperationException(Tag.PRODUCT + " "
-		    + "Connection.getMetaData() call " + Tag.REQUIRES_ACEQL_JDBC_DRIVER_PROFESSIONAL_EDITION);
+	    throw new UnsupportedOperationException(Tag.PRODUCT + " " + "Connection.getMetaData() call "
+		    + Tag.REQUIRES_ACEQL_JDBC_DRIVER_PROFESSIONAL_EDITION);
 	} catch (Exception e) {
 	    throw new SQLException(e);
 	}
@@ -723,8 +729,8 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	    Object obj = simpleClassCaller.callMehod("prepareCall", params, values);
 	    return (CallableStatement) obj;
 	} catch (ClassNotFoundException e) {
-	    throw new UnsupportedOperationException(Tag.PRODUCT + " "
-		    + "Connection.prepareCall() call " + Tag.REQUIRES_ACEQL_JDBC_DRIVER_PROFESSIONAL_EDITION);
+	    throw new UnsupportedOperationException(Tag.PRODUCT + " " + "Connection.prepareCall() call "
+		    + Tag.REQUIRES_ACEQL_JDBC_DRIVER_PROFESSIONAL_EDITION);
 	} catch (Exception e) {
 	    throw new SQLException(e);
 	}
@@ -770,7 +776,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	else {
 	    try {
 		SimpleClassCaller simpleClassCaller = new SimpleClassCaller(
-		    "com.aceql.client.jdbc.driver.pro.version.ProVersion");
+			"com.aceql.client.jdbc.driver.pro.version.ProVersion");
 
 		List<Class<?>> params = new ArrayList<>();
 		List<Object> values = new ArrayList<>();
@@ -778,7 +784,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 		Object obj = simpleClassCaller.callMehod("getVersion", params, values);
 		String clientVersion = (String) obj;
 		return clientVersion;
-	    } catch (Exception  e) {
+	    } catch (Exception e) {
 		throw new RuntimeException(e);
 	    }
 	}
@@ -1043,9 +1049,9 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	return editionType;
     }
 
-
     /**
      * Helper method that says if we are using the Community Edition.
+     *
      * @return {@code true} if AceQL Edition is Community, else {@code false}.
      */
     public boolean isCommunityEdition() {
@@ -1054,6 +1060,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 
     /**
      * Helper method that says if we are using the Professional Edition.
+     *
      * @return {@code true} if AceQL Edition is Community, else {@code false}.
      */
     public boolean isProfessionalEdition() {

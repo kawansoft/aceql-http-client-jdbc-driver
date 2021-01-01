@@ -18,6 +18,9 @@
  */
 package com.aceql.client.jdbc.driver;
 
+import java.net.PasswordAuthentication;
+import java.net.Proxy;
+import java.sql.SQLException;
 import java.util.Objects;
 
 import com.aceql.client.jdbc.driver.http.AceQLHttpApi;
@@ -38,6 +41,11 @@ public class AceQLConnectionWrapper {
 
     public AceQLConnectionWrapper(AceQLConnection aceQLConnection) {
 	this.aceQLConnection = Objects.requireNonNull(aceQLConnection, "aceQLConnection cannot ne null!");
+
+    }
+
+    public static void setAceQLConnection(String serverUrl, String database, String username, char[] password, Proxy proxy,
+	    PasswordAuthentication passwordAuthentication) throws SQLException {
 
     }
 

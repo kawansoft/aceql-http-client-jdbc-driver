@@ -260,11 +260,13 @@ class DriverUtil {
      * @param proxyUsername
      * @param proxyPassword
      * @param proxy
+     * @param connectTimeout TODO
+     * @param readTimeout TODO
      * @return
      * @throws SQLException
      */
     public static AceQLConnection buildConnection(final String url, String username, String password, String database,
-            String proxyUsername, String proxyPassword, Proxy proxy) throws SQLException {
+            String proxyUsername, String proxyPassword, Proxy proxy, int connectTimeout, int readTimeout) throws SQLException {
 
         Objects.requireNonNull(url, "url cannot be null!");
         Objects.requireNonNull(username, "username cannot be null!");
@@ -278,7 +280,7 @@ class DriverUtil {
         }
 
         AceQLConnection connection = new AceQLConnection(url, database, username, password.toCharArray(), proxy,
-        	passwordAuthentication);
+        	passwordAuthentication, connectTimeout, readTimeout);
         return connection;
     }
 
