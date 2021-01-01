@@ -21,9 +21,11 @@ package com.aceql.client.jdbc.driver;
 import java.net.PasswordAuthentication;
 import java.net.Proxy;
 import java.sql.SQLException;
+import java.util.Map;
 import java.util.Objects;
 
 import com.aceql.client.jdbc.driver.http.AceQLHttpApi;
+import com.aceql.client.jdbc.driver.metadata.ResultSetMetaDataPolicy;
 
 /**
  * A wrapper to AceQLConnection in order for hidden retrieve of underlying
@@ -61,5 +63,13 @@ public class AceQLConnectionWrapper {
     public AceQLHttpApi getAceQLHttpApi() {
 	AceQLHttpApi aceQLHttpApi = aceQLConnection.aceQLHttpApi;
 	return aceQLHttpApi;
+    }
+
+    public static AceQLConnectionOptions optionsBuilder(int connectTimeout, int readTimeout, boolean gzipResult,
+	    EditionType editionType, ResultSetMetaDataPolicy resultSetMetaDataPolicy,
+	    Map<String, String> requestProperties) {
+	AceQLConnectionOptions aceQLConnectionOptions = new AceQLConnectionOptions(connectTimeout, readTimeout,
+		gzipResult, editionType, resultSetMetaDataPolicy, requestProperties);
+	return aceQLConnectionOptions;
     }
 }

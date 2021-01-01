@@ -167,7 +167,8 @@ final public class AceQLDriver implements java.sql.Driver {
 	debug("Proxy   : " + proxy);
 
 	Map<String, String> requestProperties = new HashMap<>();
-	AceQLConnectionOptions aceQLConnectionOptions = new AceQLConnectionOptions(connectTimeout, readTimeout, gzipResult, EditionType.Community, ResultSetMetaDataPolicy.off, requestProperties);
+	AceQLConnectionOptions aceQLConnectionOptions = AceQLConnectionWrapper.optionsBuilder(connectTimeout, readTimeout,
+		gzipResult, EditionType.Community, ResultSetMetaDataPolicy.off, requestProperties);
 
         PasswordAuthentication passwordAuthentication = null;
         if (proxy != null && proxyUsername != null) {
@@ -177,7 +178,6 @@ final public class AceQLDriver implements java.sql.Driver {
         AceQLConnection connection = AceQLConnectionWrapper.AceQLConnectionBuilder(url, database, username, password.toCharArray(), proxy,
         	passwordAuthentication, aceQLConnectionOptions);
 	return connection;
-
     }
 
     /**
