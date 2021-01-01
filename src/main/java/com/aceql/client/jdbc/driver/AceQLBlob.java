@@ -40,7 +40,7 @@ public class AceQLBlob implements Blob {
     private OutputStream outputStream;
 
     /**
-     * Protected constructor to be used only for upload by
+     * Protected constructor to be used only for upload by {@code Connection#createBlob()}.
      * {@code AceQLConnection.createBlob()}
      */
     AceQLBlob(EditionType editionType) {
@@ -52,7 +52,7 @@ public class AceQLBlob implements Blob {
      * To be used with ResultSet. Package protected constructor to be used only for
      * Community Edition that does not support Streams
      *
-     * @param inputStream
+     * @param inputStream the input stream to use to build the Blob
      */
     AceQLBlob(InputStream inputStream, EditionType editionType) {
 	this.inputStream = inputStream;
@@ -64,7 +64,7 @@ public class AceQLBlob implements Blob {
      * To be used with ResultSet. Package protected constructor to be used only for
      * Community Edition & Professional Editions
      *
-     * @param bytes
+     * @param bytes the bye array to use to build the Blob
      */
     AceQLBlob(byte[] bytes, EditionType editionType) {
 	this.bytes = bytes;
@@ -84,22 +84,6 @@ public class AceQLBlob implements Blob {
     @Override
     public byte[] getBytes(long pos, int length) throws SQLException {
 	return getbytesStatic(pos, length, bytes);
-    }
-
-    /**
-     * @param pos
-     * @param length
-     * @return
-     */
-    public static byte[] getbytesStatic(long pos, int length, byte [] bytes) {
-	List<Byte>bytesList = new ArrayList<>();
-	for (int i = (int)pos - 1; i < length; i++) {
-	    bytesList.add(bytes[i]);
-	}
-
-	Byte [] bytesToReturnArray = bytesList.toArray(new Byte[bytesList.size()]);
-	byte[] bytesToReturn = ArrayUtils.toPrimitive(bytesToReturnArray);
-	return bytesToReturn;
     }
 
     @Override
@@ -144,12 +128,12 @@ public class AceQLBlob implements Blob {
     @Override
     public OutputStream setBinaryStream(long pos) throws SQLException {
 
-	if (editionType.equals(EditionType.Community)) {
-	    throw new UnsupportedOperationException(Tag.PRODUCT +  " " + "Blob.setBinaryStream(long) call " + Tag.REQUIRES_ACEQL_JDBC_DRIVER_PROFESSIONAL_EDITION);
-	}
-
 	if (pos != 1) {
 	    throw new SQLException(Tag.PRODUCT + " \"pos\" value can be 1 only.");
+	}
+
+	if (editionType.equals(EditionType.Community)) {
+	    throw new UnsupportedOperationException(Tag.PRODUCT +  " " + "Blob.setBinaryStream(long) call " + Tag.REQUIRES_ACEQL_JDBC_DRIVER_PROFESSIONAL_EDITION);
 	}
 
 	if (file == null) {
@@ -162,27 +146,6 @@ public class AceQLBlob implements Blob {
 	} catch (FileNotFoundException e) {
 	    throw new SQLException(e);
 	}
-    }
-
-    /**
-     * @return the file associated with the {@code OutputStream} created by
-     *         {@link AceQLBlob#setBinaryStream(long)}.
-     */
-    File getFile()  {
-	try {
-	    outputStream.close();
-	} catch (IOException e) {
-	    System.err.println(
-		    Tag.PRODUCT + " Warning: error when closing Blob OutputStream: " + e.getLocalizedMessage());
-	}
-
-	return file;
-    }
-
-    private static File createBlobFile() {
-	File file = new File(FrameworkFileUtil.getKawansoftTempDir() + File.separator + "blob-file-for-server-"
-		+ FrameworkFileUtil.getUniqueId() + ".txt");
-	return file;
     }
 
     @Override
@@ -214,6 +177,44 @@ public class AceQLBlob implements Blob {
 	    throw new SQLException(Tag.PRODUCT + " \"length\" value can be 0 only (meaning all bytes are returned).");
 	}
 	return getBinaryStream();
+    }
+
+    /**
+     * @return the file associated with the {@code OutputStream} created by
+     *         {@link AceQLBlob#setBinaryStream(long)}.
+     */
+    File getFile()  {
+	try {
+	    outputStream.close();
+	} catch (IOException e) {
+	    System.err.println(
+		    Tag.PRODUCT + " Warning: error when closing Blob OutputStream: " + e.getLocalizedMessage());
+	}
+
+	return file;
+    }
+
+    private static File createBlobFile() {
+	File file = new File(FrameworkFileUtil.getKawansoftTempDir() + File.separator + "blob-file-for-server-"
+		+ FrameworkFileUtil.getUniqueId() + ".txt");
+	return file;
+    }
+
+    /**
+     * getBytes wrapper, for easy external tests.
+     * @param pos
+     * @param length
+     * @return
+     */
+    static byte[] getbytesStatic(long pos, int length, byte [] bytes) {
+	List<Byte>bytesList = new ArrayList<>();
+	for (int i = (int)pos - 1; i < length; i++) {
+	    bytesList.add(bytes[i]);
+	}
+
+	Byte [] bytesToReturnArray = bytesList.toArray(new Byte[bytesList.size()]);
+	byte[] bytesToReturn = ArrayUtils.toPrimitive(bytesToReturnArray);
+	return bytesToReturn;
     }
 
 }
