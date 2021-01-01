@@ -480,7 +480,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
     private Blob getBlobFromBlobId(String value) throws SQLException {
 	Objects.requireNonNull(value, "value cannot be nul!");
 	AceQLBlob blob = null;
-	if (this.aceQLConnection.isCommunityEdition()) {
+	if (EditionUtil.isCommunityEdition(aceQLConnection)) {
 	    blob = new AceQLBlob(getByteArray(value), EditionType.Community);
 	}
 	else {

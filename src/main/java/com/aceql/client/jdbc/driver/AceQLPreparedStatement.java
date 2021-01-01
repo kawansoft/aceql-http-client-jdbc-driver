@@ -522,7 +522,7 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
 	    this.localResultSetFiles.add(file);
 
 	    aceQLHttpApi.trace("file: " + file);
-	    aceQLHttpApi.trace("gzipResult: " + aceQLHttpApi.isGzipResult());
+	    aceQLHttpApi.trace("gzipResult: " + aceQLHttpApi.getAceQLConnectionOptions().isGzipResult());
 
 	    boolean isPreparedStatement = true;
 	    Map<String, String> statementParameters = builder.getHttpFormattedStatementParameters();
@@ -540,7 +540,7 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
 		    // Do not use resource try {} ==> We don't want to create an
 		    // empty file
 
-		    InputStream inFinal = AceQLStatementUtil.getFinalInputStream(in, aceQLHttpApi.isGzipResult());
+		    InputStream inFinal = AceQLStatementUtil.getFinalInputStream(in, aceQLHttpApi.getAceQLConnectionOptions().isGzipResult());
 		    IOUtils.copy(inFinal, out);
 		}
 	    }
@@ -753,10 +753,7 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
     public void setBlob(int parameterIndex, Blob x) throws SQLException {
 
 	Connection connection = super.getConnection();
-	boolean professionalEdition = false;
-	if (connection instanceof AceQLConnection) {
-	    professionalEdition  = ((AceQLConnection) connection).isProfessionalEdition();
-	}
+	boolean professionalEdition = EditionUtil.isProfessionalEdition(connection);
 
 	if (professionalEdition) {
 	    AceQLBlobUtil aceQLBlobUtil = new AceQLBlobUtil(x);

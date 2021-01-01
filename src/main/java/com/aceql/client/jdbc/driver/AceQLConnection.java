@@ -22,7 +22,6 @@ import java.io.Closeable;
 import java.net.HttpURLConnection;
 import java.net.PasswordAuthentication;
 import java.net.Proxy;
-import java.net.URLConnection;
 import java.sql.Blob;
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -45,7 +44,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import com.aceql.client.jdbc.driver.abstracts.AbstractConnection;
 import com.aceql.client.jdbc.driver.http.AceQLHttpApi;
 import com.aceql.client.jdbc.driver.metadata.RemoteDatabaseMetaData;
-import com.aceql.client.jdbc.driver.metadata.ResultSetMetaDataPolicy;
 import com.aceql.client.jdbc.driver.util.AceQLConnectionUtil;
 import com.aceql.client.jdbc.driver.util.SimpleClassCaller;
 import com.aceql.client.jdbc.driver.util.framework.Tag;
@@ -196,36 +194,33 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     /** is Connection open or closed */
     private boolean closed = false;
 
-    /**
-     * Edition type defaults to Community, because there was no Edition type prior
-     * to 6.0
-     */
-    private EditionType editionType = EditionType.Community;
+    /** The Connections Advanced Options */
+    private AceQLConnectionOptions aceQLConnectionOptions;
 
 
-    /**
-     * Adds a general request property to the the underlying {@link URLConnection}
-     * specified by a key-value pair. This method will not overwrite existing values
-     * associated with the same key.
-     *
-     * @param key   the keyword by which the request is known (e.g.,
-     *              "{@code Accept}").
-     * @param value the value associated with it.
-     * @throws IllegalStateException if already connected
-     * @throws NullPointerException  if key is null
-     */
-    static void addRequestProperty(String key, String value) {
-	AceQLHttpApi.addRequestProperty(key, value);
-    }
-
-    /**
-     * Resets the request properties. The previously added request properties with
-     * {@link AceQLConnection#addRequestProperty(String, String)} will be
-     * suppressed.
-     */
-    public static void resetRequestProperties() {
-	AceQLHttpApi.resetRequestProperties();
-    }
+//    /**
+//     * Adds a general request property to the the underlying {@link URLConnection}
+//     * specified by a key-value pair. This method will not overwrite existing values
+//     * associated with the same key.
+//     *
+//     * @param key   the keyword by which the request is known (e.g.,
+//     *              "{@code Accept}").
+//     * @param value the value associated with it.
+//     * @throws IllegalStateException if already connected
+//     * @throws NullPointerException  if key is null
+//     */
+//    static void addRequestProperty(String key, String value) {
+//	AceQLHttpApi.addRequestProperty(key, value);
+//    }
+//
+//    /**
+//     * Resets the request properties. The previously added request properties with
+//     * {@link AceQLConnection#addRequestProperty(String, String)} will be
+//     * suppressed.
+//     */
+//    public static void resetRequestProperties() {
+//	AceQLHttpApi.resetRequestProperties();
+//    }
 
     /**
      * Login on the AceQL server and connect to a database.
@@ -239,45 +234,21 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      * @param passwordAuthentication the username and password holder to use for
      *                               authenticated proxy. Null if no proxy or if
      *                               proxy does not require authentication.
-     * @param readTimeout            Sets the read timeout to a specified timeout,
-     *                               in milliseconds. A non-zero value specifies the
-     *                               timeout when reading from Input stream when a
-     *                               connection is established to a resource. If the
-     *                               timeout expires before there is data available
-     *                               for read, a java.net.SocketTimeoutException is
-     *                               raised. A timeout of zero is interpreted as an
-     *                               infinite timeout. See
-     *                               {@link URLConnection#setReadTimeout(int)}
-     * @param connectTimeout         Sets a specified timeout value, in
-     *                               milliseconds, to be used when opening a
-     *                               communications link to the remote server. If
-     *                               the timeout expires before the connection can
-     *                               be established, a
-     *                               java.net.SocketTimeoutException is raised. A
-     *                               timeout of zero is interpreted as an infinite
-     *                               timeout. See
-     *                               {@link URLConnection#setConnectTimeout(int)}
+     * @param aceQLConnectionOptions Advanced Options.
      * @throws SQLException if any I/O error occurs
      */
     public AceQLConnection(String serverUrl, String database, String username, char[] password, Proxy proxy,
-	    PasswordAuthentication passwordAuthentication, int readTimeout, int connectTimeout) throws SQLException {
+	    PasswordAuthentication passwordAuthentication, AceQLConnectionOptions aceQLConnectionOptions) throws SQLException {
 
 	try {
-	    if (serverUrl == null) {
-		Objects.requireNonNull(serverUrl, "serverUrl can not be null!");
-	    }
-	    if (database == null) {
-		Objects.requireNonNull(database, "database can not be null!");
-	    }
-	    if (username == null) {
-		Objects.requireNonNull(username, "username can not be null!");
-	    }
-	    if (password == null) {
-		Objects.requireNonNull(password, "password can not be null!");
-	    }
+	    Objects.requireNonNull(serverUrl, "serverUrl can not be null!");
+	    Objects.requireNonNull(database, "database can not be null!");
+	    Objects.requireNonNull(username, "username can not be null!");
+	    Objects.requireNonNull(password, "password can not be null!");
+	    this.aceQLConnectionOptions = Objects.requireNonNull(aceQLConnectionOptions, "aceQLConnectionOptions can not be null!");
 
 	    aceQLHttpApi = new AceQLHttpApi(serverUrl, database, username, password, null, proxy,
-		    passwordAuthentication, readTimeout, connectTimeout);
+		    passwordAuthentication, aceQLConnectionOptions);
 
 	} catch (AceQLException aceQlException) {
 	    throw aceQlException;
@@ -285,24 +256,6 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	    throw new AceQLException(e.getMessage(), 0, e, null, HttpURLConnection.HTTP_OK);
 	}
 
-    }
-
-    /**
-     * Returns the {@link EditionType} in use.
-     *
-     * @return the {@code EditionType} in use.
-     */
-    public ResultSetMetaDataPolicy getResultSetMetaDataPolicy() {
-	return this.aceQLHttpApi.getResultSetMetaDataPolicy();
-    }
-
-    /**
-     * Sets the {@link EditionType} to use.
-     *
-     * @param resultSetMetaDataPolicy the {@code EditionType} to use
-     */
-    public void setResultSetMetaDataPolicy(ResultSetMetaDataPolicy resultSetMetaDataPolicy) {
-	this.aceQLHttpApi.setResultSetMetaDataPolicy(resultSetMetaDataPolicy);
     }
 
     /**
@@ -318,46 +271,22 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      * @param passwordAuthentication the username and password holder to use for
      *                               authenticated proxy. Null if no proxy or if
      *                               proxy does not require authentication.
-     * @param readTimeout            Sets the read timeout to a specified timeout,
-     *                               in milliseconds. A non-zero value specifies the
-     *                               timeout when reading from Input stream when a
-     *                               connection is established to a resource. If the
-     *                               timeout expires before there is data available
-     *                               for read, a java.net.SocketTimeoutException is
-     *                               raised. A timeout of zero is interpreted as an
-     *                               infinite timeout. See
-     *                               {@link URLConnection#setReadTimeout(int)}
-     * @param connectTimeout         Sets a specified timeout value, in
-     *                               milliseconds, to be used when opening a
-     *                               communications link to the remote server. If
-     *                               the timeout expires before the connection can
-     *                               be established, a
-     *                               java.net.SocketTimeoutException is raised. A
-     *                               timeout of zero is interpreted as an infinite
-     *                               timeout. See
-     *                               {@link URLConnection#setConnectTimeout(int)}
+     * @param aceQLConnectionOptions Advanced Options.
      * @throws SQLException if any I/O error occurs
      */
     public AceQLConnection(String serverUrl, String database, String username, String sessionId, Proxy proxy,
-	    PasswordAuthentication passwordAuthentication, int readTimeout, int connectTimeout) throws SQLException {
+	    PasswordAuthentication passwordAuthentication, AceQLConnectionOptions aceQLConnectionOptions) throws SQLException {
 
 	try {
-
-	    if (serverUrl == null) {
-		Objects.requireNonNull(serverUrl, "serverUrl can not be null!");
-	    }
-	    if (database == null) {
-		Objects.requireNonNull(database, "database can not be null!");
-	    }
-	    if (username == null) {
-		Objects.requireNonNull(username, "username can not be null!");
-	    }
-	    if (sessionId == null) {
-		Objects.requireNonNull(sessionId, "sessionId can not be null!");
-	    }
+	    Objects.requireNonNull(serverUrl, "serverUrl can not be null!");
+	    Objects.requireNonNull(database, "database can not be null!");
+	    Objects.requireNonNull(username, "username can not be null!");
+	    Objects.requireNonNull(sessionId, "sessionId can not be null!");
+	    Objects.requireNonNull(aceQLConnectionOptions, "aceQLConnectionOptions can not be null!");
+	    this.aceQLConnectionOptions = Objects.requireNonNull(aceQLConnectionOptions, "aceQLConnectionOptions can not be null!");
 
 	    aceQLHttpApi = new AceQLHttpApi(serverUrl, database, username, null, sessionId, proxy,
-		    passwordAuthentication, readTimeout, connectTimeout);
+		    passwordAuthentication, aceQLConnectionOptions);
 
 	} catch (AceQLException aceQlException) {
 	    throw aceQlException;
@@ -366,6 +295,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	}
 
     }
+
 
     /**
      * Private constructor for Clone
@@ -386,7 +316,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	if (isClosed()) {
 	    throw new SQLException(Tag.PRODUCT + " Can not created Blob because Connection is closed.");
 	}
-	AceQLBlob blob = new AceQLBlob(getEditionType());
+	AceQLBlob blob = new AceQLBlob(aceQLConnectionOptions.getEditionType());
 	return blob;
     }
 
@@ -769,7 +699,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      */
     public String getClientVersion() {
 
-	if (editionType.equals(EditionType.Community)) {
+	if (aceQLConnectionOptions.getEditionType().equals(EditionType.Community)) {
 	    return com.aceql.client.jdbc.driver.version.Version.getVersion();
 	}
 
@@ -818,26 +748,6 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      */
     public void setTraceOn(boolean traceOn) {
 	aceQLHttpApi.setTraceOn(traceOn);
-    }
-
-    /**
-     * Says the query result is returned compressed with the GZIP file format.
-     *
-     * @return {@code true} if the query result is returned compressed with the GZIP
-     *         file format, else {@code false}
-     */
-    public boolean isGzipResult() {
-	return aceQLHttpApi.isGzipResult();
-    }
-
-    /**
-     * Define if SQL result sets are returned compressed with the GZIP file format
-     * before download. Defaults to {@code true}.
-     *
-     * @param gzipResult if true, sets are compressed before download
-     */
-    public void setGzipResult(boolean gzipResult) {
-	aceQLHttpApi.setGzipResult(gzipResult);
     }
 
     /**
@@ -1036,37 +946,6 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	// Do nothing for now. Future usage.
     }
 
-    void setEditionType(EditionType editionType) {
-	this.editionType = editionType;
-    }
-
-    /**
-     * Gets the Edition type: Community or Professional.
-     *
-     * @return the editionType
-     */
-    public EditionType getEditionType() {
-	return editionType;
-    }
-
-    /**
-     * Helper method that says if we are using the Community Edition.
-     *
-     * @return {@code true} if AceQL Edition is Community, else {@code false}.
-     */
-    public boolean isCommunityEdition() {
-	return this.getEditionType().equals(EditionType.Community);
-    }
-
-    /**
-     * Helper method that says if we are using the Professional Edition.
-     *
-     * @return {@code true} if AceQL Edition is Community, else {@code false}.
-     */
-    public boolean isProfessionalEdition() {
-	return this.getEditionType().equals(EditionType.Professional);
-    }
-
     /*
      * (non-Javadoc)
      *
@@ -1075,6 +954,13 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     @Override
     public boolean isClosed() throws SQLException {
 	return closed;
+    }
+
+    /**
+     * @return the aceQLConnectionOptions
+     */
+    public AceQLConnectionOptions getAceQLConnectionOptions() {
+        return aceQLConnectionOptions;
     }
 
 }

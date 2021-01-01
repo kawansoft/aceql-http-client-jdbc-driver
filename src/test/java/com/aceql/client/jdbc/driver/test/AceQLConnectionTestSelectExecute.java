@@ -56,7 +56,7 @@ public class AceQLConnectionTestSelectExecute {
 	Connection connection = ConnectionBuilder.createOnConfig();
 
 	((AceQLConnection) connection).setTraceOn(true);
-	((AceQLConnection) connection).setGzipResult(true);
+	//((AceQLConnection) connection).setGzipResult(true);
 
 	connection.setAutoCommit(true);
 	System.out.println();

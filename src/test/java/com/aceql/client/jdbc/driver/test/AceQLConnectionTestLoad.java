@@ -57,7 +57,7 @@ public class AceQLConnectionTestLoad {
 	Connection connection = ConnectionBuilder.createOnConfig();
 
 	((AceQLConnection) connection).setTraceOn(true);
-	((AceQLConnection) connection).setGzipResult(true);
+	//((AceQLConnection) connection).setGzipResult(true);
 
 	System.out.println();
 	System.out.println("aceQLConnection.getServerVersion(): " + ((AceQLConnection) connection).getServerVersion());
@@ -71,7 +71,7 @@ public class AceQLConnectionTestLoad {
 	// Close and reopen
 	connection.close();
 	connection = ConnectionBuilder.createOnConfig();
-	((AceQLConnection) connection).setGzipResult(true);
+	//((AceQLConnection) connection).setGzipResult(true);
 
 	System.out.println("aceQLConnection.getTransactionIsolation() : " + connection.getTransactionIsolation());
 

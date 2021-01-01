@@ -25,12 +25,15 @@ import java.sql.DriverPropertyInfo;
 import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Logger;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.aceql.client.jdbc.driver.metadata.ResultSetMetaDataPolicy;
 import com.aceql.client.jdbc.driver.util.framework.FrameworkDebug;
 import com.aceql.client.jdbc.driver.util.framework.JdbcUrlHeader;
 
@@ -164,11 +167,11 @@ final public class AceQLDriver implements java.sql.Driver {
 	debug("aceqlUrl: " + aceqlUrl);
 	debug("Proxy   : " + proxy);
 
+	Map<String, String> requestProperties = new HashMap<>();
+	AceQLConnectionOptions aceQLConnectionOptions = new AceQLConnectionOptions(connectTimeout, readTimeout, compression, EditionType.Community, ResultSetMetaDataPolicy.off, requestProperties);
 
 	AceQLConnection connection = DriverUtil.buildConnection(aceqlUrl, username, password, database, proxyUsername,
-		proxyPassword, proxy, connectTimeout, readTimeout);
-	connection.setEditionType(EditionType.Community);
-	connection.setGzipResult(compression);
+		proxyPassword, proxy, aceQLConnectionOptions);
 	return connection;
 
     }

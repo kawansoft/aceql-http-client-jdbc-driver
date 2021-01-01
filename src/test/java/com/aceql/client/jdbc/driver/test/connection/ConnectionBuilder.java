@@ -102,7 +102,7 @@ public class ConnectionBuilder {
 	    Proxy proxy = myProxyInfo.getProxy();
 	    PasswordAuthentication passwordAuthentication = new PasswordAuthentication(myProxyInfo.getProxyUsername(),
 		    myProxyInfo.getProxyPassword());
-	    connection = new AceQLConnection(serverUrl, database, username, password, proxy, passwordAuthentication, 0, 0);
+	    connection = new AceQLConnection(serverUrl, database, username, password, proxy, passwordAuthentication, null);
 	}
 	return connection;
     }

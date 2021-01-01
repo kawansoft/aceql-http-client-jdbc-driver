@@ -20,8 +20,8 @@ public class BlobUploader {
 
     private AceQLHttpApi aceQLHttpApi;
     private String url;
-    private static int connectTimeout = 0;
-    private static int readTimeout = 0;
+    private int connectTimeout = 0;
+    private int readTimeout = 0;
 
     private HttpManager httpManager;
     private AtomicBoolean cancelled;
@@ -36,8 +36,8 @@ public class BlobUploader {
 
 	this.aceQLHttpApi = Objects.requireNonNull(aceQLHttpApi, "aceQLHttpApi can not be null!");
 	this.url = aceQLHttpApi.getUrl();
-	BlobUploader.connectTimeout = AceQLHttpApi.getConnectTimeout();
-	BlobUploader.readTimeout = AceQLHttpApi.getReadTimeout();
+	connectTimeout = aceQLHttpApi.getAceQLConnectionOptions().getConnectTimeout();
+	readTimeout = aceQLHttpApi.getAceQLConnectionOptions().getReadTimeout();
 
 	this.httpManager = aceQLHttpApi.getHttpManager();
 	this.cancelled = aceQLHttpApi.getCancelled();
@@ -90,7 +90,7 @@ public class BlobUploader {
 	    conn.setRequestMethod("POST");
 	    conn.setReadTimeout(readTimeout);
 	    conn.setDoOutput(true);
-	    AceQLHttpApi.addUserRequestProperties(conn);
+	    AceQLHttpApi.addUserRequestProperties(conn, aceQLHttpApi.getAceQLConnectionOptions());
 
 	    final MultipartUtility http = new MultipartUtility(theURL, conn, connectTimeout, progress, cancelled,
 		    totalLength);

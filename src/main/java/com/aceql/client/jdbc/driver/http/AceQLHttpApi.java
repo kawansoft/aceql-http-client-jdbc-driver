@@ -24,7 +24,6 @@ import java.net.HttpURLConnection;
 import java.net.PasswordAuthentication;
 import java.net.Proxy;
 import java.net.URL;
-import java.net.URLConnection;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
@@ -33,7 +32,7 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.aceql.client.jdbc.driver.AceQLConnection;
+import com.aceql.client.jdbc.driver.AceQLConnectionOptions;
 import com.aceql.client.jdbc.driver.AceQLException;
 import com.aceql.client.jdbc.driver.metadata.ResultSetMetaDataPolicy;
 import com.aceql.client.jdbc.driver.metadata.dto.JdbcDatabaseMetaDataDto;
@@ -65,29 +64,8 @@ public class AceQLHttpApi {
     private String sessionId;
     private String database;
 
-    private static int connectTimeout = 0;
-    private static int readTimeout = 0;
-
-    private static Map<String, String> requestProperties = new HashMap<>();
-
-    /**
-     * @return the requestProperties
-     */
-    public static Map<String, String> getRequestProperties() {
-        return requestProperties;
-    }
-
-    /**
-     * @param requestProperties the requestProperties to set
-     */
-    public static void setRequestProperties(Map<String, String> requestProperties) {
-        AceQLHttpApi.requestProperties = requestProperties;
-    }
-
     /** Always true and can not be changed */
     private final boolean prettyPrinting = true;
-
-    private boolean gzipResult = true;
 
     private String url = null;
 
@@ -102,58 +80,7 @@ public class AceQLHttpApi {
     /* The HttpManager */
     private HttpManager httpManager;
 
-
-    /**
-     * Sets the read timeout.
-     *
-     * @param readTimeout an <code>int</code> that specifies the read timeout value,
-     *                    in milliseconds, to be used when an http connection is
-     *                    established to the remote server. See
-     *                    {@link URLConnection#setReadTimeout(int)}
-     */
-    public static void setReadTimeout(int readTimeout) {
-	AceQLHttpApi.readTimeout = readTimeout;
-    }
-
-    /**
-     * Sets the connect timeout.
-     *
-     * @param connectTimeout Sets a specified timeout value, in milliseconds, to be
-     *                       used when opening a communications link to the remote
-     *                       server. If the timeout expires before the connection
-     *                       can be established, a java.net.SocketTimeoutException
-     *                       is raised. A timeout of zero is interpreted as an
-     *                       infinite timeout. See
-     *                       {@link URLConnection#setConnectTimeout(int)}
-     */
-    public static void setConnectTimeout(int connectTimeout) {
-	AceQLHttpApi.connectTimeout = connectTimeout;
-    }
-
-
-    /**
-     * Adds a general request property to the the underlying {@link URLConnection }specified by a
-     * key-value pair.  This method will not overwrite
-     * existing values associated with the same key.
-     * @param   key     the keyword by which the request is known
-     *                  (e.g., "{@code Accept}").
-     * @param   value  the value associated with it.
-     * @throws IllegalStateException if already connected
-     * @throws NullPointerException if key is null
-     */
-    public static void addRequestProperty(String key, String value) {
-	Objects.requireNonNull(key, "key cannot be null!");
-	requestProperties.put(key, value);
-    }
-
-    /**
-     * Resets the request properties. The previously added request properties with
-     * {@link AceQLConnection#addRequestProperty(String, String)} will be
-     * suppressed.
-     */
-    public static void resetRequestProperties() {
-	requestProperties = new HashMap<>();
-    }
+    private AceQLConnectionOptions aceQLConnectionOptions;
 
     /**
      * Login on the AceQL server and connect to a database
@@ -168,35 +95,27 @@ public class AceQLHttpApi {
      * @param passwordAuthentication the username and password holder to use for
      *                               authenticated proxy. Null if no proxy or if
      *                               proxy
-     * @param readTimeout TODO
-     * @param connectTimeout TODO
+     * @param aceQLConnectionOptions TODO
      * @throws AceQLException if any Exception occurs
      */
     public AceQLHttpApi(String serverUrl, String database, String username, char[] password, String sessionId,
-	    Proxy proxy, PasswordAuthentication passwordAuthentication, int readTimeout, int connectTimeout) throws AceQLException {
+	    Proxy proxy, PasswordAuthentication passwordAuthentication, AceQLConnectionOptions aceQLConnectionOptions) throws AceQLException {
 
 	try {
-	    if (serverUrl == null) {
-		Objects.requireNonNull(serverUrl, "serverUrl can not be null!");
-	    }
-	    if (database == null) {
-		Objects.requireNonNull(database, "database can not be null!");
-	    }
-	    if (username == null) {
-		Objects.requireNonNull(username, "username can not be null!");
-	    }
 
 	    if (password == null && sessionId == null) {
 		throw new IllegalArgumentException("password and sessionId are both null!");
 	    }
 
-	    this.serverUrl = serverUrl;
-	    this.username = username;
-	    this.database = database;
+	    this.serverUrl = Objects.requireNonNull(serverUrl, "serverUrl can not be null!");
+	    this.username = Objects.requireNonNull(username, "username can not be null!");
+	    this.database = Objects.requireNonNull(database, "database can not be null!");
+	    this.aceQLConnectionOptions = Objects.requireNonNull(aceQLConnectionOptions, "aceQLConnectionOptions can not be null!");
+
 	    this.password = password;
 	    this.sessionId = sessionId;
 
-	    httpManager = new HttpManager(proxy, passwordAuthentication, connectTimeout, readTimeout);
+	    httpManager = new HttpManager(proxy, passwordAuthentication, aceQLConnectionOptions.getConnectTimeout(), aceQLConnectionOptions.getReadTimeout(), aceQLConnectionOptions);
 
 	    UserLoginStore userLoginStore = new UserLoginStore(serverUrl, username, database);
 
@@ -262,6 +181,14 @@ public class AceQLHttpApi {
 	    throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
 	}
 
+    }
+
+
+    /**
+     * @return the aceQLConnectionOptions
+     */
+    public AceQLConnectionOptions getAceQLConnectionOptions() {
+        return aceQLConnectionOptions;
     }
 
 
@@ -396,8 +323,7 @@ public class AceQLHttpApi {
 	AceQLHttpApi aceQLHttpApi;
 	try {
 	    aceQLHttpApi = new AceQLHttpApi(serverUrl, database, username, password, sessionId, httpManager.getProxy(),
-		    httpManager.getPasswordAuthentication(), readTimeout, connectTimeout);
-	    aceQLHttpApi.setGzipResult(gzipResult);
+		    httpManager.getPasswordAuthentication(), aceQLConnectionOptions);
 	} catch (SQLException e) {
 	    throw new IllegalStateException(e);
 	}
@@ -427,20 +353,6 @@ public class AceQLHttpApi {
      */
     public String getUrl() {
         return url;
-    }
-
-    /**
-     * @return the connectTimeout
-     */
-    public static int getConnectTimeout() {
-        return connectTimeout;
-    }
-
-    /**
-     * @return the readTimeout
-     */
-    public static int getReadTimeout() {
-        return readTimeout;
     }
 
     /**
@@ -495,25 +407,6 @@ public class AceQLHttpApi {
     public void setProgress(AtomicInteger progress) {
 	this.progress = progress;
     }
-
-    /**
-     * Says the query result is returned compressed with the GZIP file format.
-     *
-     * @return the gzipResult
-     */
-    public boolean isGzipResult() {
-	return gzipResult;
-    }
-
-    /**
-     * Defines if result sets are compressed before download. Defaults to true.
-     *
-     * @param gzipResult if true, sets are compressed before download
-     */
-    public void setGzipResult(boolean gzipResult) {
-	this.gzipResult = gzipResult;
-    }
-
 
     /**
      * Calls /get_version API
@@ -840,7 +733,7 @@ public class AceQLHttpApi {
 	    parametersMap.put("sql", sql);
 	    parametersMap.put("prepared_statement", "" + isPreparedStatement);
 	    parametersMap.put("stored_procedure", "" + isStoredProcedure);
-	    parametersMap.put("gzip_result", "" + gzipResult);
+	    parametersMap.put("gzip_result", "" + aceQLConnectionOptions.isGzipResult());
 	    parametersMap.put("fill_result_set_meta_data", "" + fillResultSetMetaData);
 	    parametersMap.put("pretty_printing", "" + prettyPrinting);
 	    parametersMap.put("max_rows", "" + maxRows);
@@ -1082,8 +975,8 @@ public class AceQLHttpApi {
      * Add all the request properties asked by the client.
      * @param conn	the current URL Connection
      */
-    public static void addUserRequestProperties(HttpURLConnection conn) {
-        Map<String, String> map = getRequestProperties();
+    public static void addUserRequestProperties(HttpURLConnection conn, AceQLConnectionOptions aceQLConnectionOptions) {
+        Map<String, String> map =  aceQLConnectionOptions.getRequestProperties();
         for (String key : map.keySet()) {
             conn.addRequestProperty(key, map.get(key));
         }

@@ -87,7 +87,7 @@ public class StatementResultSetFileBuilder {
 	this.localResultSetFiles.add(file);
 
 	aceQLHttpApi.trace("file: " + file);
-	aceQLHttpApi.trace("gzipResult: " + aceQLHttpApi.isGzipResult());
+	aceQLHttpApi.trace("gzipResult: " + aceQLHttpApi.getAceQLConnectionOptions().isGzipResult());
 
 	boolean isPreparedStatement = false;
 	Map<String, String> statementParameters = null;
@@ -124,7 +124,7 @@ public class StatementResultSetFileBuilder {
 	this.localResultSetFiles.add(file);
 
 	aceQLHttpApi.trace("file: " + file);
-	aceQLHttpApi.trace("gzipResult: " + aceQLHttpApi.isGzipResult());
+	aceQLHttpApi.trace("gzipResult: " + aceQLHttpApi.getAceQLConnectionOptions().isGzipResult());
 
 	boolean isPreparedStatement = false;
 	boolean isStoredProcedure = false;
@@ -135,7 +135,7 @@ public class StatementResultSetFileBuilder {
 		OutputStream out = new BufferedOutputStream(new FileOutputStream(file));) {
 
 	    if (in != null) {
-		InputStream inFinal = AceQLStatementUtil.getFinalInputStream(in, aceQLHttpApi.isGzipResult());
+		InputStream inFinal = AceQLStatementUtil.getFinalInputStream(in, aceQLHttpApi.getAceQLConnectionOptions().isGzipResult());
 		IOUtils.copy(inFinal, out);
 	    }
 	}

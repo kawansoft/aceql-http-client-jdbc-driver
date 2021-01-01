@@ -12,7 +12,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
 
-import com.aceql.client.jdbc.driver.AceQLConnection;
 import com.aceql.client.jdbc.driver.test.connection.ConnectionBuilder;
 
 /**
@@ -54,7 +53,7 @@ public class DisplayCustomerManyRows {
 	} else {
 	    System.out.println(new Date() + " AceQL Remote Connection...");
 	    connection = ConnectionBuilder.createOnConfig();
-	    ((AceQLConnection) connection).setGzipResult(true);
+	    //((AceQLConnection) connection).setGzipResult(true);
 	}
     }
 

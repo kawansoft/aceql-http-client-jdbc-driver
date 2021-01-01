@@ -33,7 +33,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
-import com.aceql.client.jdbc.driver.AceQLConnection;
+import com.aceql.client.jdbc.driver.EditionUtil;
 
 /**
  *
@@ -102,7 +102,8 @@ public class BlobExample {
 	    prepStatement.setDate(i++, theDate);
 	    prepStatement.setTimestamp(i++, theTimestamp);
 
-	    if ( connection instanceof AceQLConnection && ((AceQLConnection)connection).isProfessionalEdition()) {
+	    boolean professionalEdition = EditionUtil.isProfessionalEdition(connection);
+	    if (professionalEdition) {
 		// The transfer will be done in streaming both on the client
 		// and on the Server: we can upload/download very big files.
 		InputStream in = new FileInputStream(imageFile);
@@ -154,7 +155,8 @@ public class BlobExample {
 
 		// Get BLOB from remote server and store it on disk:
 
-		if ( connection instanceof AceQLConnection && ((AceQLConnection)connection).isProfessionalEdition()) {
+		boolean professionalEdition = EditionUtil.isProfessionalEdition(connection);
+		if (professionalEdition) {
 		    try (InputStream in = rs.getBinaryStream("jpeg_image")) {
 			Files.copy(in, imageFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 		    }
