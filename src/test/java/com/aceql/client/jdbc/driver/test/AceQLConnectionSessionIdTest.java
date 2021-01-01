@@ -27,6 +27,7 @@ import java.sql.Statement;
 import java.util.Date;
 
 import com.aceql.client.jdbc.driver.AceQLConnection;
+import com.aceql.client.jdbc.driver.AceQLConnectionWrapper;
 import com.aceql.client.jdbc.driver.AceQLException;
 
 /**
@@ -56,7 +57,7 @@ public class AceQLConnectionSessionIdTest {
 	String sessionId = getSessionIdFromApiLogin();
 
 	// Get a real Connection instance that points to remote AceQL server
-	Connection connection = new AceQLConnection(serverUrl, database, username, sessionId, null, null, null);
+	Connection connection = AceQLConnectionWrapper.AceQLConnectionBuilder(serverUrl, database, username, sessionId, null, null, null);
 
 	((AceQLConnection) connection).setTraceOn(true);
 	//((AceQLConnection) connection).setGzipResult(true);

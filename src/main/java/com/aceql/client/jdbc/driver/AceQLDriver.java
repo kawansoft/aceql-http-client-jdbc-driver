@@ -18,6 +18,7 @@
  */
 package com.aceql.client.jdbc.driver;
 
+import java.net.PasswordAuthentication;
 import java.net.Proxy;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -160,8 +161,7 @@ final public class AceQLDriver implements java.sql.Driver {
 	int connectTimeout = DriverUtil.getConnectTimeout(info);
 	int readTimeout = DriverUtil.getReadTimeout(info);
 
-	int port = -1;
-	Proxy proxy = DriverUtil.buildProxy(proxyType, proxyHostname, proxyPort, port);
+	Proxy proxy = DriverUtil.buildProxy(proxyType, proxyHostname, proxyPort);
 
 	debug("aceqlUrl: " + aceqlUrl);
 	debug("Proxy   : " + proxy);
@@ -169,8 +169,13 @@ final public class AceQLDriver implements java.sql.Driver {
 	Map<String, String> requestProperties = new HashMap<>();
 	AceQLConnectionOptions aceQLConnectionOptions = new AceQLConnectionOptions(connectTimeout, readTimeout, gzipResult, EditionType.Community, ResultSetMetaDataPolicy.off, requestProperties);
 
-	AceQLConnection connection = DriverUtil.buildConnection(aceqlUrl, username, password, database, proxyUsername,
-		proxyPassword, proxy, aceQLConnectionOptions);
+        PasswordAuthentication passwordAuthentication = null;
+        if (proxy != null && proxyUsername != null) {
+            passwordAuthentication = new PasswordAuthentication(proxyUsername, proxyPassword.toCharArray());
+        }
+
+        AceQLConnection connection = AceQLConnectionWrapper.AceQLConnectionBuilder(url, database, username, password.toCharArray(), proxy,
+        	passwordAuthentication, aceQLConnectionOptions);
 	return connection;
 
     }

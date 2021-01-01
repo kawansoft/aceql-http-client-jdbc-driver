@@ -114,6 +114,4 @@ public class AceQLConnectionOptions {
 		+ ", gzipResult=" + gzipResult + ", editionType=" + editionType + ", resultSetMetaDataPolicy="
 		+ resultSetMetaDataPolicy + ", requestProperties=" + requestProperties + "]";
     }
-
-
 }

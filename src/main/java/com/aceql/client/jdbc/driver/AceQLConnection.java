@@ -197,31 +197,6 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     /** The Connections Advanced Options */
     private AceQLConnectionOptions aceQLConnectionOptions;
 
-
-//    /**
-//     * Adds a general request property to the the underlying {@link URLConnection}
-//     * specified by a key-value pair. This method will not overwrite existing values
-//     * associated with the same key.
-//     *
-//     * @param key   the keyword by which the request is known (e.g.,
-//     *              "{@code Accept}").
-//     * @param value the value associated with it.
-//     * @throws IllegalStateException if already connected
-//     * @throws NullPointerException  if key is null
-//     */
-//    static void addRequestProperty(String key, String value) {
-//	AceQLHttpApi.addRequestProperty(key, value);
-//    }
-//
-//    /**
-//     * Resets the request properties. The previously added request properties with
-//     * {@link AceQLConnection#addRequestProperty(String, String)} will be
-//     * suppressed.
-//     */
-//    public static void resetRequestProperties() {
-//	AceQLHttpApi.resetRequestProperties();
-//    }
-
     /**
      * Login on the AceQL server and connect to a database.
      *
@@ -237,15 +212,17 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      * @param aceQLConnectionOptions Advanced Options.
      * @throws SQLException if any I/O error occurs
      */
-    public AceQLConnection(String serverUrl, String database, String username, char[] password, Proxy proxy,
-	    PasswordAuthentication passwordAuthentication, AceQLConnectionOptions aceQLConnectionOptions) throws SQLException {
+    AceQLConnection(String serverUrl, String database, String username, char[] password, Proxy proxy,
+	    PasswordAuthentication passwordAuthentication, AceQLConnectionOptions aceQLConnectionOptions)
+	    throws SQLException {
 
 	try {
 	    Objects.requireNonNull(serverUrl, "serverUrl can not be null!");
 	    Objects.requireNonNull(database, "database can not be null!");
 	    Objects.requireNonNull(username, "username can not be null!");
 	    Objects.requireNonNull(password, "password can not be null!");
-	    this.aceQLConnectionOptions = Objects.requireNonNull(aceQLConnectionOptions, "aceQLConnectionOptions can not be null!");
+	    this.aceQLConnectionOptions = Objects.requireNonNull(aceQLConnectionOptions,
+		    "aceQLConnectionOptions can not be null!");
 
 	    aceQLHttpApi = new AceQLHttpApi(serverUrl, database, username, password, null, proxy,
 		    passwordAuthentication, aceQLConnectionOptions);
@@ -274,8 +251,9 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      * @param aceQLConnectionOptions Advanced Options.
      * @throws SQLException if any I/O error occurs
      */
-    public AceQLConnection(String serverUrl, String database, String username, String sessionId, Proxy proxy,
-	    PasswordAuthentication passwordAuthentication, AceQLConnectionOptions aceQLConnectionOptions) throws SQLException {
+    AceQLConnection(String serverUrl, String database, String username, String sessionId, Proxy proxy,
+	    PasswordAuthentication passwordAuthentication, AceQLConnectionOptions aceQLConnectionOptions)
+	    throws SQLException {
 
 	try {
 	    Objects.requireNonNull(serverUrl, "serverUrl can not be null!");
@@ -283,7 +261,8 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	    Objects.requireNonNull(username, "username can not be null!");
 	    Objects.requireNonNull(sessionId, "sessionId can not be null!");
 	    Objects.requireNonNull(aceQLConnectionOptions, "aceQLConnectionOptions can not be null!");
-	    this.aceQLConnectionOptions = Objects.requireNonNull(aceQLConnectionOptions, "aceQLConnectionOptions can not be null!");
+	    this.aceQLConnectionOptions = Objects.requireNonNull(aceQLConnectionOptions,
+		    "aceQLConnectionOptions can not be null!");
 
 	    aceQLHttpApi = new AceQLHttpApi(serverUrl, database, username, null, sessionId, proxy,
 		    passwordAuthentication, aceQLConnectionOptions);
@@ -295,7 +274,6 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	}
 
     }
-
 
     /**
      * Private constructor for Clone
@@ -960,7 +938,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      * @return the aceQLConnectionOptions
      */
     public AceQLConnectionOptions getAceQLConnectionOptions() {
-        return aceQLConnectionOptions;
+	return aceQLConnectionOptions;
     }
 
 }

@@ -25,7 +25,7 @@ import java.net.Proxy;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import com.aceql.client.jdbc.driver.AceQLConnection;
+import com.aceql.client.jdbc.driver.AceQLConnectionWrapper;
 
 /**
  * Simple AceQLConncetion Creators.
@@ -102,7 +102,7 @@ public class ConnectionBuilder {
 	    Proxy proxy = myProxyInfo.getProxy();
 	    PasswordAuthentication passwordAuthentication = new PasswordAuthentication(myProxyInfo.getProxyUsername(),
 		    myProxyInfo.getProxyPassword());
-	    connection = new AceQLConnection(serverUrl, database, username, password, proxy, passwordAuthentication, null);
+	    connection = AceQLConnectionWrapper.AceQLConnectionBuilder(serverUrl, database, username, password, proxy, passwordAuthentication, null);
 	}
 	return connection;
     }

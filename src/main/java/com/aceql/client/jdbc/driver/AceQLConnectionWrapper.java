@@ -18,27 +18,39 @@
  */
 package com.aceql.client.jdbc.driver;
 
+import java.net.PasswordAuthentication;
+import java.net.Proxy;
+import java.sql.SQLException;
 import java.util.Objects;
 
 import com.aceql.client.jdbc.driver.http.AceQLHttpApi;
 
 /**
  * A wrapper to AceQLConnection in order for hidden retrieve of underlying
- * AceQLHttpApi
+ * AceQLHttpApi. This is an internal class that should not be used.
  *
  * @author Nicolas de Pomereu
  *
  */
 public class AceQLConnectionWrapper {
 
-
-
     /** The AceQLConnection instance */
     private AceQLConnection aceQLConnection = null;
 
     public AceQLConnectionWrapper(AceQLConnection aceQLConnection) {
 	this.aceQLConnection = Objects.requireNonNull(aceQLConnection, "aceQLConnection cannot ne null!");
+    }
 
+    public static AceQLConnection AceQLConnectionBuilder(String serverUrl, String database, String username, char[] password, Proxy proxy,
+	    PasswordAuthentication passwordAuthentication, AceQLConnectionOptions aceQLConnectionOptions) throws SQLException {
+	AceQLConnection aceQLConnection = new AceQLConnection(serverUrl, database, username, password, proxy, passwordAuthentication, aceQLConnectionOptions);
+	return aceQLConnection;
+    }
+
+    public static AceQLConnection AceQLConnectionBuilder(String serverUrl, String database, String username, String sessionId, Proxy proxy,
+	    PasswordAuthentication passwordAuthentication, AceQLConnectionOptions aceQLConnectionOptions) throws SQLException {
+	AceQLConnection aceQLConnection = new AceQLConnection(serverUrl, database, username, sessionId, proxy, passwordAuthentication, aceQLConnectionOptions);
+	return aceQLConnection;
     }
 
     /**
