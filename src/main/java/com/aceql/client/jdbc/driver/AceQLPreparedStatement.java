@@ -18,12 +18,9 @@
  */
 package com.aceql.client.jdbc.driver;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
@@ -33,6 +30,7 @@ import java.net.URL;
 import java.sql.Array;
 import java.sql.Blob;
 import java.sql.Clob;
+import java.sql.Connection;
 import java.sql.Date;
 import java.sql.NClob;
 import java.sql.ParameterMetaData;
@@ -400,8 +398,8 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
 		@SuppressWarnings("unused")
 		Object obj = simpleClassCaller.callMehod("update", params, values);
 	    } catch (ClassNotFoundException e) {
-		throw new UnsupportedOperationException(Tag.PRODUCT + " "
-			+ "Connection.prepareCall() call " + Tag.REQUIRES_ACEQL_JDBC_DRIVER_PROFESSIONAL_EDITION);
+		throw new UnsupportedOperationException(Tag.PRODUCT + " " + "Connection.prepareCall() call "
+			+ Tag.REQUIRES_ACEQL_JDBC_DRIVER_PROFESSIONAL_EDITION);
 	    } catch (Exception e) {
 		throw new SQLException(e);
 	    }
@@ -753,34 +751,22 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
      */
     @Override
     public void setBlob(int parameterIndex, Blob x) throws SQLException {
-	if (x instanceof AceQLBlob) {
-	    AceQLBlob blob = (AceQLBlob) x;
-	    File file = blob.getFile();
 
-	    if (file == null) {
-		throw new SQLException(Tag.PRODUCT + " " + "The underlying file of the Blob is null.");
-	    }
+	Connection connection = super.getConnection();
+	boolean professionalEdition = false;
+	if (connection instanceof AceQLConnection) {
+	    professionalEdition  = ((AceQLConnection) connection).isProfessionalEdition();
+	}
 
-	    if (!file.exists()) {
-		throw new SQLException(Tag.PRODUCT + " " + "The underlying file of the Blob does not exist: " + file);
-	    }
-
-	    InputStream in = null;
-	    try {
-		in = new BufferedInputStream(new FileInputStream(file));
-	    } catch (IOException ioe) {
-		throw new SQLException(Tag.PRODUCT + " " + "Can not process the Blob file " + file + ". IOException raised: " + ioe.getMessage());
-	    }
-
+	if (professionalEdition) {
+	    AceQLBlobUtil aceQLBlobUtil = new AceQLBlobUtil(x);
+	    InputStream in = aceQLBlobUtil.getInputStreamFromBlob();
 	    setBinaryStream(parameterIndex, in);
-
-	} else {
-	    if (x == null) {
-		setBinaryStream(parameterIndex, null);
-	    } else {
-		InputStream in = x.getBinaryStream();
-		setBinaryStream(parameterIndex, in);
-	    }
+	}
+	else {
+	    AceQLBlobUtil aceQLBlobUtil = new AceQLBlobUtil(x);
+	    byte [] bytes = aceQLBlobUtil.getBytesFromBlob();
+	    setBytes(parameterIndex, bytes);
 	}
     }
 

@@ -13,7 +13,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.sql.Blob;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+
+import org.apache.commons.lang3.ArrayUtils;
 
 import com.aceql.client.jdbc.driver.util.framework.FrameworkFileUtil;
 import com.aceql.client.jdbc.driver.util.framework.Tag;
@@ -79,14 +83,23 @@ public class AceQLBlob implements Blob {
 
     @Override
     public byte[] getBytes(long pos, int length) throws SQLException {
-	if (pos != 1) {
-	    throw new SQLException(Tag.PRODUCT + " \"pos\" value can be 1 only.");
-	}
-	if (length != 0) {
-	    throw new SQLException(Tag.PRODUCT + " \"length\" value can be 0 only (meaning all bytes are returned).");
+	return getbytesStatic(pos, length, bytes);
+    }
+
+    /**
+     * @param pos
+     * @param length
+     * @return
+     */
+    public static byte[] getbytesStatic(long pos, int length, byte [] bytes) {
+	List<Byte>bytesList = new ArrayList<>();
+	for (int i = (int)pos - 1; i < length; i++) {
+	    bytesList.add(bytes[i]);
 	}
 
-	return bytes;
+	Byte [] bytesToReturnArray = bytesList.toArray(new Byte[bytesList.size()]);
+	byte[] bytesToReturn = ArrayUtils.toPrimitive(bytesToReturnArray);
+	return bytesToReturn;
     }
 
     @Override
