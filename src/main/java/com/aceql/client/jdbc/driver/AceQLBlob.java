@@ -132,7 +132,7 @@ public class AceQLBlob implements Blob {
     public OutputStream setBinaryStream(long pos) throws SQLException {
 
 	if (editionType.equals(EditionType.Community)) {
-	    throw new UnsupportedOperationException(Tag.PRODUCT +  " " + "Blob.setBinaryStream(long) call requires AceQL JDBC Driver Professional Edition.");
+	    throw new UnsupportedOperationException(Tag.PRODUCT +  " " + "Blob.setBinaryStream(long) call " + Tag.REQUIRES_ACEQL_JDBC_DRIVER_PROFESSIONAL_EDITION);
 	}
 
 	if (pos != 1) {

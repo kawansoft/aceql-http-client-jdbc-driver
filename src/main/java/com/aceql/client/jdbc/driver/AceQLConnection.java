@@ -433,7 +433,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	    return (DatabaseMetaData) obj;
 	} catch (ClassNotFoundException e) {
 	    throw new UnsupportedOperationException(Tag.PRODUCT + " "
-		    + "Connection.getMetaData() call requires AceQL JDBC Driver Professional Edition.");
+		    + "Connection.getMetaData() call " + Tag.REQUIRES_ACEQL_JDBC_DRIVER_PROFESSIONAL_EDITION);
 	} catch (Exception e) {
 	    throw new SQLException(e);
 	}
@@ -752,7 +752,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	    return (CallableStatement) obj;
 	} catch (ClassNotFoundException e) {
 	    throw new UnsupportedOperationException(Tag.PRODUCT + " "
-		    + "Connection.prepareCall() call requires AceQL JDBC Driver Professional Edition.");
+		    + "Connection.prepareCall() call " + Tag.REQUIRES_ACEQL_JDBC_DRIVER_PROFESSIONAL_EDITION);
 	} catch (Exception e) {
 	    throw new SQLException(e);
 	}

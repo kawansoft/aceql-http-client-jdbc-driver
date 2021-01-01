@@ -303,7 +303,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	    Object obj = simpleClassCaller.callMehod("getInputStream", params, values);
 	    return (InputStream) obj;
 	} catch (ClassNotFoundException e) {
-	    throw new UnsupportedOperationException(Tag.PRODUCT +  " " + "ResultSet.getBinaryStream(int) & getBinaryStream(Sgring) calls requires AceQL JDBC Driver Professional Edition.");
+	    throw new UnsupportedOperationException(Tag.PRODUCT +  " " + "ResultSet.getBinaryStream(int) or getBinaryStream(Sgring) call " + Tag.REQUIRES_ACEQL_JDBC_DRIVER_PROFESSIONAL_EDITION);
 	}
 	catch (Exception e) {
 	    throw new SQLException(e);
@@ -431,7 +431,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	    Object obj = simpleClassCaller.callMehod("getMetaData", params, values);
 	    return (ResultSetMetaData) obj;
 	} catch (ClassNotFoundException e) {
-	    throw new UnsupportedOperationException(Tag.PRODUCT +  " " + "ResultSet.getMetaData() call requires AceQL JDBC Driver Professional Edition.");
+	    throw new UnsupportedOperationException(Tag.PRODUCT +  " " + "ResultSet.getMetaData() call " + Tag.REQUIRES_ACEQL_JDBC_DRIVER_PROFESSIONAL_EDITION);
 	}
 	catch (Exception e) {
 	    throw new SQLException(e);
@@ -847,7 +847,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	    Object obj = simpleClassCaller.callMehod("getArray", params, values);
 	    return (Array) obj;
 	} catch (ClassNotFoundException e) {
-	    throw new UnsupportedOperationException(Tag.PRODUCT +  " " + "ResultSet.getArray() call requires AceQL JDBC Driver Professional Edition.");
+	    throw new UnsupportedOperationException(Tag.PRODUCT +  " " + "ResultSet.getArray() call " + Tag.REQUIRES_ACEQL_JDBC_DRIVER_PROFESSIONAL_EDITION);
 	}
 	catch (Exception e) {
 	    throw new SQLException(e);

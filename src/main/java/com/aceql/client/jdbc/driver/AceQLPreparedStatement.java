@@ -401,7 +401,7 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
 		Object obj = simpleClassCaller.callMehod("update", params, values);
 	    } catch (ClassNotFoundException e) {
 		throw new UnsupportedOperationException(Tag.PRODUCT + " "
-			+ "Connection.prepareCall() call requires AceQL JDBC Driver Professional Edition.");
+			+ "Connection.prepareCall() call " + Tag.REQUIRES_ACEQL_JDBC_DRIVER_PROFESSIONAL_EDITION);
 	    } catch (Exception e) {
 		throw new SQLException(e);
 	    }
