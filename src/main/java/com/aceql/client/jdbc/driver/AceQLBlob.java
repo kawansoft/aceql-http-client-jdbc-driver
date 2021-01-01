@@ -30,7 +30,7 @@ import com.aceql.client.jdbc.driver.util.framework.Tag;
  * @author Nicolas de Pomereu
  *
  */
-public class AceQLBlob implements Blob {
+class AceQLBlob implements Blob {
 
     private InputStream inputStream;
     private byte[] bytes;

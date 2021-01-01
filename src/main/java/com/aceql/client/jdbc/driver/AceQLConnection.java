@@ -232,19 +232,6 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	AceQLHttpApi.setReadTimeout(readTimeout);
     }
 
-    /**
-     * Login on the AceQL server and connect to a database.
-     *
-     * @param serverUrl the URL of the AceQL server. Example:
-     *                  http://localhost:9090/aceql
-     * @param database  the server database to connect to.
-     * @param username  the login
-     * @param password  the password
-     * @throws SQLException if any I/O error occurs
-     */
-    public AceQLConnection(String serverUrl, String database, String username, char[] password) throws SQLException {
-	this(serverUrl, database, username, password, null, null);
-    }
 
     /**
      * Adds a general request property to the the underlying {@link URLConnection}
@@ -328,21 +315,6 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      */
     public void setResultSetMetaDataPolicy(ResultSetMetaDataPolicy resultSetMetaDataPolicy) {
 	this.aceQLHttpApi.setResultSetMetaDataPolicy(resultSetMetaDataPolicy);
-    }
-
-    /**
-     * Connect to a database using an AceQL existing Session ID instead of a
-     * password.
-     *
-     * @param serverUrl the URL of the AceQL server. Example:
-     *                  http://localhost:9090/aceql
-     * @param database  the server database to connect to
-     * @param username  the login
-     * @param sessionId the existing AceQL Session ID
-     * @throws SQLException if any I/O error occurs
-     */
-    public AceQLConnection(String serverUrl, String database, String username, String sessionId) throws SQLException {
-	this(serverUrl, database, username, sessionId, null, null);
     }
 
     /**

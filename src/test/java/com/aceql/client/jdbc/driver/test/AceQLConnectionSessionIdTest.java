@@ -56,7 +56,7 @@ public class AceQLConnectionSessionIdTest {
 	String sessionId = getSessionIdFromApiLogin();
 
 	// Get a real Connection instance that points to remote AceQL server
-	Connection connection = new AceQLConnection(serverUrl, database, username, sessionId);
+	Connection connection = new AceQLConnection(serverUrl, database, username, sessionId, null, null);
 
 	((AceQLConnection) connection).setTraceOn(true);
 	((AceQLConnection) connection).setGzipResult(true);
