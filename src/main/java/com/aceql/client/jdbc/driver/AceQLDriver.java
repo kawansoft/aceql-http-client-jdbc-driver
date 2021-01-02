@@ -32,8 +32,6 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Logger;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.aceql.client.jdbc.driver.metadata.ResultSetMetaDataPolicy;
 import com.aceql.client.jdbc.driver.util.framework.FrameworkDebug;
 import com.aceql.client.jdbc.driver.util.framework.JdbcUrlHeader;
@@ -67,7 +65,8 @@ import com.aceql.client.jdbc.driver.util.framework.JdbcUrlHeader;
  * connection is established to a resource. If the timeout expires before there
  * is data available for read, a java.net.SocketTimeoutException israised. A
  * timeout of zero is interpreted as an infinite timeout.
- * <li><b>gzipResult</b>: Boolean to say if the ResultSet is Gzipped before download. Defaults to <code>true</code>.</li>
+ * <li><b>gzipResult</b>: Boolean to say if the ResultSet is Gzipped before
+ * download. Defaults to <code>true</code>.</li>
  * </ul>
  * <p>
  *
@@ -102,8 +101,8 @@ final public class AceQLDriver implements java.sql.Driver {
      * <P>
      * The <code>java.util.Properties</code> argument can be used to pass arbitrary
      * string tag/value pairs as connection arguments. At least "user", "password"
-     * and "database" properties should be included in the <code>Properties</code> object,
-     * or either passed through the URL parameter.
+     * and "database" properties should be included in the <code>Properties</code>
+     * object, or either passed through the URL parameter.
      *
      * @param url  the URL of the database to which to connect
      * @param info a list of arbitrary string tag/value pairs as connection
@@ -114,7 +113,7 @@ final public class AceQLDriver implements java.sql.Driver {
      * @exception SQLException if a database access error occurs
      */
     @Override
-    public Connection connect(final String url, Properties info) throws SQLException {
+    public Connection connect(String url, Properties info) throws SQLException {
 
 	if (url == null) {
 	    throw new SQLException("url not set. Please provide an url.");
@@ -124,15 +123,13 @@ final public class AceQLDriver implements java.sql.Driver {
 	    return null;
 	}
 
-	String aceqlUrl = url;
 	// Properties may be passed in url
 	if (url.contains("?")) {
-	    aceqlUrl = DriverUtil.buildPropertiesFromUrlParams(url, info);
+	    info = DriverUtil.addPropertiesFromUrl(url, info);
 	}
 
-	if (aceqlUrl.startsWith(JdbcUrlHeader.JDBC_URL_HEADER)) {
-	    aceqlUrl = StringUtils.substringAfter(aceqlUrl, JdbcUrlHeader.JDBC_URL_HEADER);
-	}
+	// Remove "aceql:jdbc" prefix & all parameters
+	url = DriverUtil.trimUrl(url);
 
 	String username = info.getProperty("user");
 	String password = info.getProperty("password");
@@ -163,20 +160,20 @@ final public class AceQLDriver implements java.sql.Driver {
 
 	Proxy proxy = DriverUtil.buildProxy(proxyType, proxyHostname, proxyPort);
 
-	debug("aceqlUrl: " + aceqlUrl);
-	debug("Proxy   : " + proxy);
+	debug("url  : " + url);
+	debug("Proxy: " + proxy);
 
 	Map<String, String> requestProperties = new HashMap<>();
-	AceQLConnectionOptions aceQLConnectionOptions = AceQLConnectionWrapper.optionsBuilder(connectTimeout, readTimeout,
+	ConnectionOptions connectionOptions = AceQLConnectionWrapper.connectionOptionsBuilder(connectTimeout, readTimeout,
 		gzipResult, EditionType.Community, ResultSetMetaDataPolicy.off, requestProperties);
 
-        PasswordAuthentication passwordAuthentication = null;
-        if (proxy != null && proxyUsername != null) {
-            passwordAuthentication = new PasswordAuthentication(proxyUsername, proxyPassword.toCharArray());
-        }
+	PasswordAuthentication passwordAuthentication = null;
+	if (proxy != null && proxyUsername != null) {
+	    passwordAuthentication = new PasswordAuthentication(proxyUsername, proxyPassword.toCharArray());
+	}
 
-        AceQLConnection connection = AceQLConnectionWrapper.AceQLConnectionBuilder(url, database, username, password.toCharArray(), proxy,
-        	passwordAuthentication, aceQLConnectionOptions);
+	AceQLConnection connection = AceQLConnectionWrapper.aceQLConnectionBuilder(url, database, username,
+		password.toCharArray(), proxy, passwordAuthentication, connectionOptions);
 	return connection;
     }
 

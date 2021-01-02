@@ -23,7 +23,7 @@ import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 
-import com.aceql.client.jdbc.driver.AceQLConnectionOptions;
+import com.aceql.client.jdbc.driver.ConnectionOptions;
 import com.aceql.client.jdbc.driver.util.framework.Tag;
 
 /**
@@ -46,7 +46,7 @@ public class HttpManager {
     private int connectTimeout;
     private int readTimeout;
 
-    private AceQLConnectionOptions aceQLConnectionOptions;
+    private ConnectionOptions connectionOptions;
 
     public static final int MEDIUMB_BLOB_LENGTH_MB = 16;
     public static final int MEDIUM_BLOB_LENGTH = MEDIUMB_BLOB_LENGTH_MB * 1024 * 1024;
@@ -57,15 +57,15 @@ public class HttpManager {
      * @param passwordAuthentication
      * @param connectTimeout
      * @param readTimeout
-     * @param aceQLConnectionOptions TODO
+     * @param connectionOptions TODO
      */
     public HttpManager(Proxy proxy, PasswordAuthentication passwordAuthentication, int connectTimeout,
-	    int readTimeout, AceQLConnectionOptions aceQLConnectionOptions) {
+	    int readTimeout, ConnectionOptions connectionOptions) {
 	this.proxy = proxy;
 	this.passwordAuthentication = passwordAuthentication;
 	this.connectTimeout = connectTimeout;
 	this.readTimeout = readTimeout;
-	this.aceQLConnectionOptions = aceQLConnectionOptions;
+	this.connectionOptions = connectionOptions;
 
 	setProxyCredentials();
     }
@@ -168,7 +168,7 @@ public class HttpManager {
 	conn.setReadTimeout(readTimeout);
 	conn.setRequestMethod("GET");
 	conn.setDoOutput(true);
-	AceQLHttpApi.addUserRequestProperties(conn, aceQLConnectionOptions);
+	AceQLHttpApi.addUserRequestProperties(conn, connectionOptions);
 
 	trace();
 	trace("Executing request " + url);
@@ -231,7 +231,7 @@ public class HttpManager {
 	conn.setReadTimeout(readTimeout);
 	conn.setRequestMethod("POST");
 	conn.setDoOutput(true);
-	AceQLHttpApi.addUserRequestProperties(conn, aceQLConnectionOptions);
+	AceQLHttpApi.addUserRequestProperties(conn, connectionOptions);
 
 	TimeoutConnector timeoutConnector = new TimeoutConnector(conn, connectTimeout);
 

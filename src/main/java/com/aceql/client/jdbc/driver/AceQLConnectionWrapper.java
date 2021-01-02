@@ -43,15 +43,15 @@ public class AceQLConnectionWrapper {
 	this.aceQLConnection = Objects.requireNonNull(aceQLConnection, "aceQLConnection cannot ne null!");
     }
 
-    public static AceQLConnection AceQLConnectionBuilder(String serverUrl, String database, String username, char[] password, Proxy proxy,
-	    PasswordAuthentication passwordAuthentication, AceQLConnectionOptions aceQLConnectionOptions) throws SQLException {
-	AceQLConnection aceQLConnection = new AceQLConnection(serverUrl, database, username, password, proxy, passwordAuthentication, aceQLConnectionOptions);
+    public static AceQLConnection aceQLConnectionBuilder(String serverUrl, String database, String username, char[] password, Proxy proxy,
+	    PasswordAuthentication passwordAuthentication, ConnectionOptions connectionOptions) throws SQLException {
+	AceQLConnection aceQLConnection = new AceQLConnection(serverUrl, database, username, password, proxy, passwordAuthentication, connectionOptions);
 	return aceQLConnection;
     }
 
-    public static AceQLConnection AceQLConnectionBuilder(String serverUrl, String database, String username, String sessionId, Proxy proxy,
-	    PasswordAuthentication passwordAuthentication, AceQLConnectionOptions aceQLConnectionOptions) throws SQLException {
-	AceQLConnection aceQLConnection = new AceQLConnection(serverUrl, database, username, sessionId, proxy, passwordAuthentication, aceQLConnectionOptions);
+    public static AceQLConnection aceQLConnectionBuilder(String serverUrl, String database, String username, String sessionId, Proxy proxy,
+	    PasswordAuthentication passwordAuthentication, ConnectionOptions connectionOptions) throws SQLException {
+	AceQLConnection aceQLConnection = new AceQLConnection(serverUrl, database, username, sessionId, proxy, passwordAuthentication, connectionOptions);
 	return aceQLConnection;
     }
 
@@ -65,11 +65,11 @@ public class AceQLConnectionWrapper {
 	return aceQLHttpApi;
     }
 
-    public static AceQLConnectionOptions optionsBuilder(int connectTimeout, int readTimeout, boolean gzipResult,
+    public static ConnectionOptions connectionOptionsBuilder(int connectTimeout, int readTimeout, boolean gzipResult,
 	    EditionType editionType, ResultSetMetaDataPolicy resultSetMetaDataPolicy,
 	    Map<String, String> requestProperties) {
-	AceQLConnectionOptions aceQLConnectionOptions = new AceQLConnectionOptions(connectTimeout, readTimeout,
+	ConnectionOptions connectionOptions = new ConnectionOptions(connectTimeout, readTimeout,
 		gzipResult, editionType, resultSetMetaDataPolicy, requestProperties);
-	return aceQLConnectionOptions;
+	return connectionOptions;
     }
 }

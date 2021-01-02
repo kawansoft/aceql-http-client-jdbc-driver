@@ -37,6 +37,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
 
 import com.aceql.client.jdbc.driver.util.framework.FrameworkDebug;
+import com.aceql.client.jdbc.driver.util.framework.JdbcUrlHeader;
 
 /**
  *
@@ -45,7 +46,7 @@ import com.aceql.client.jdbc.driver.util.framework.FrameworkDebug;
  * @author Nicolas de Pomereu
  *
  */
-class DriverUtil {
+public class DriverUtil {
 
     /** The debug flag */
     private static boolean DEBUG = FrameworkDebug.isSet(DriverUtil.class);
@@ -61,26 +62,61 @@ class DriverUtil {
 
     }
 
+//    /**
+//     * Extract all parameters form the query.
+//     *
+//     * @param url
+//     * @param info
+//     * @return
+//     */
+//    public static String buildPropertiesFromUrlParams(final String url, Properties info) {
+//
+//	String aceqlUrl;
+//	String query = StringUtils.substringAfter(url, "?");
+//	Map<String, String> mapProps = DriverUtil.getQueryMap(query);
+//
+//	Set<String> set = mapProps.keySet();
+//	for (String propName : set) {
+//	    info.setProperty(propName, mapProps.get(propName));
+//	}
+//
+//	aceqlUrl = StringUtils.substringBefore(url, "?");
+//	return aceqlUrl;
+//    }
+
     /**
-     * Extract all parameters form the query.
-     *
+     * Add the properties defined as parameters in the url
      * @param url
-     * @param info2
-     * @return
+     * @param info
+     * @return the updated Properties
      */
-    public static String buildPropertiesFromUrlParams(final String url, Properties info2) {
-	String aceqlUrl;
+    public static Properties addPropertiesFromUrl(String url, Properties info) {
 	String query = StringUtils.substringAfter(url, "?");
 	Map<String, String> mapProps = DriverUtil.getQueryMap(query);
 
 	Set<String> set = mapProps.keySet();
 	for (String propName : set) {
-	    info2.setProperty(propName, mapProps.get(propName));
+	    info.setProperty(propName, mapProps.get(propName));
 	}
-
-	aceqlUrl = StringUtils.substringBefore(url, "?");
-	return aceqlUrl;
+	return info;
     }
+
+
+    /**
+     * 1) Remove all after first ?
+     * 2) Remove "jdbc:aceql:" prefix
+     * @param url
+     * @return the trimmed url without parameters & without jdbc:aceql:" prefix
+     */
+    public static  String trimUrl(String url) {
+        if (url.startsWith(JdbcUrlHeader.JDBC_URL_HEADER)) {
+            url = StringUtils.substringAfter(url, JdbcUrlHeader.JDBC_URL_HEADER);
+        }
+
+        url = StringUtils.substringBefore(url, "?");
+        return url;
+    }
+
 
     /**
      * Return true if the passed string is an URL with HTTP(S) protocol
@@ -260,18 +296,18 @@ class DriverUtil {
      * @param proxyUsername
      * @param proxyPassword
      * @param proxy
-     * @param aceQLConnectionOptions TODO
+     * @param connectionOptions TODO
      * @return
      * @throws SQLException
      */
     public static AceQLConnection buildConnection(final String url, String username, String password, String database,
-            String proxyUsername, String proxyPassword, Proxy proxy, AceQLConnectionOptions aceQLConnectionOptions) throws SQLException {
+            String proxyUsername, String proxyPassword, Proxy proxy, ConnectionOptions connectionOptions) throws SQLException {
 
         Objects.requireNonNull(url, "url cannot be null!");
         Objects.requireNonNull(username, "username cannot be null!");
         Objects.requireNonNull(password, "password cannot be null!");
         Objects.requireNonNull(database, "database cannot be null!");
-        Objects.requireNonNull(aceQLConnectionOptions, "aceQLConnectionOptions cannot be null!");
+        Objects.requireNonNull(connectionOptions, "aceQLConnectionOptions cannot be null!");
 
         PasswordAuthentication passwordAuthentication = null;
 
@@ -279,8 +315,8 @@ class DriverUtil {
             passwordAuthentication = new PasswordAuthentication(proxyUsername, proxyPassword.toCharArray());
         }
 
-        AceQLConnection connection = AceQLConnectionWrapper.AceQLConnectionBuilder(url, database, username, password.toCharArray(), proxy,
-        	passwordAuthentication, aceQLConnectionOptions);
+        AceQLConnection connection = AceQLConnectionWrapper.aceQLConnectionBuilder(url, database, username, password.toCharArray(), proxy,
+        	passwordAuthentication, connectionOptions);
         return connection;
     }
 

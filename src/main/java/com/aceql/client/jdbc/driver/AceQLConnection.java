@@ -195,7 +195,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     private boolean closed = false;
 
     /** The Connections Advanced Options */
-    private AceQLConnectionOptions aceQLConnectionOptions;
+    private ConnectionOptions connectionOptions;
 
     /**
      * Login on the AceQL server and connect to a database.
@@ -209,11 +209,11 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      * @param passwordAuthentication the username and password holder to use for
      *                               authenticated proxy. Null if no proxy or if
      *                               proxy does not require authentication.
-     * @param aceQLConnectionOptions Advanced Options.
+     * @param connectionOptions Advanced Options.
      * @throws SQLException if any I/O error occurs
      */
     AceQLConnection(String serverUrl, String database, String username, char[] password, Proxy proxy,
-	    PasswordAuthentication passwordAuthentication, AceQLConnectionOptions aceQLConnectionOptions)
+	    PasswordAuthentication passwordAuthentication, ConnectionOptions connectionOptions)
 	    throws SQLException {
 
 	try {
@@ -221,11 +221,11 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	    Objects.requireNonNull(database, "database can not be null!");
 	    Objects.requireNonNull(username, "username can not be null!");
 	    Objects.requireNonNull(password, "password can not be null!");
-	    this.aceQLConnectionOptions = Objects.requireNonNull(aceQLConnectionOptions,
-		    "aceQLConnectionOptions can not be null!");
+	    this.connectionOptions = Objects.requireNonNull(connectionOptions,
+		    "connectionOptions can not be null!");
 
 	    aceQLHttpApi = new AceQLHttpApi(serverUrl, database, username, password, null, proxy,
-		    passwordAuthentication, aceQLConnectionOptions);
+		    passwordAuthentication, connectionOptions);
 
 	} catch (AceQLException aceQlException) {
 	    throw aceQlException;
@@ -248,11 +248,11 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      * @param passwordAuthentication the username and password holder to use for
      *                               authenticated proxy. Null if no proxy or if
      *                               proxy does not require authentication.
-     * @param aceQLConnectionOptions Advanced Options.
+     * @param connectionOptions Advanced Options.
      * @throws SQLException if any I/O error occurs
      */
     AceQLConnection(String serverUrl, String database, String username, String sessionId, Proxy proxy,
-	    PasswordAuthentication passwordAuthentication, AceQLConnectionOptions aceQLConnectionOptions)
+	    PasswordAuthentication passwordAuthentication, ConnectionOptions connectionOptions)
 	    throws SQLException {
 
 	try {
@@ -260,12 +260,12 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	    Objects.requireNonNull(database, "database can not be null!");
 	    Objects.requireNonNull(username, "username can not be null!");
 	    Objects.requireNonNull(sessionId, "sessionId can not be null!");
-	    Objects.requireNonNull(aceQLConnectionOptions, "aceQLConnectionOptions can not be null!");
-	    this.aceQLConnectionOptions = Objects.requireNonNull(aceQLConnectionOptions,
-		    "aceQLConnectionOptions can not be null!");
+	    Objects.requireNonNull(connectionOptions, "connectionOptions can not be null!");
+	    this.connectionOptions = Objects.requireNonNull(connectionOptions,
+		    "connectionOptions can not be null!");
 
 	    aceQLHttpApi = new AceQLHttpApi(serverUrl, database, username, null, sessionId, proxy,
-		    passwordAuthentication, aceQLConnectionOptions);
+		    passwordAuthentication, connectionOptions);
 
 	} catch (AceQLException aceQlException) {
 	    throw aceQlException;
@@ -294,7 +294,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	if (isClosed()) {
 	    throw new SQLException(Tag.PRODUCT + " Can not created Blob because Connection is closed.");
 	}
-	AceQLBlob blob = new AceQLBlob(aceQLConnectionOptions.getEditionType());
+	AceQLBlob blob = new AceQLBlob(connectionOptions.getEditionType());
 	return blob;
     }
 
@@ -677,7 +677,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      */
     public String getClientVersion() {
 
-	if (aceQLConnectionOptions.getEditionType().equals(EditionType.Community)) {
+	if (connectionOptions.getEditionType().equals(EditionType.Community)) {
 	    return com.aceql.client.jdbc.driver.version.Version.getVersion();
 	}
 
@@ -935,10 +935,10 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     }
 
     /**
-     * @return the aceQLConnectionOptions
+     * @return the connectionOptions
      */
-    public AceQLConnectionOptions getAceQLConnectionOptions() {
-	return aceQLConnectionOptions;
+    public ConnectionOptions getAceQLConnectionOptions() {
+	return connectionOptions;
     }
 
 }

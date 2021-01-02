@@ -26,15 +26,15 @@ import java.util.Map;
 import com.aceql.client.jdbc.driver.metadata.ResultSetMetaDataPolicy;
 
 /**
- * Allows to get all the major options passed when creating a {@code Connection}.
- * <br>
- * For security reason, AceQL server url, database name and authentication info
- * are not retrieved.
+ * Allows to get all the major options passed when creating an SQL
+ * {@code Connection} to the remote AceQL Server. <br>
+ * For security reason, AceQL server's url, database name and authentication
+ * info are not retrieved.
  *
  * @author Nicolas de Pomereu
  *
  */
-public class AceQLConnectionOptions {
+public class ConnectionOptions {
 
     private int connectTimeout = 0;
     private int readTimeout = 0;
@@ -53,7 +53,7 @@ public class AceQLConnectionOptions {
      * @param resultSetMetaDataPolicy
      * @param requestProperties
      */
-    AceQLConnectionOptions(int connectTimeout, int readTimeout, boolean gzipResult, EditionType editionType,
+    ConnectionOptions(int connectTimeout, int readTimeout, boolean gzipResult, EditionType editionType,
 	    ResultSetMetaDataPolicy resultSetMetaDataPolicy, Map<String, String> requestProperties) {
 	this.connectTimeout = connectTimeout;
 	this.readTimeout = readTimeout;
@@ -91,7 +91,6 @@ public class AceQLConnectionOptions {
 
     /**
      * Gets a boolean that say if the {@code ResultSet} is gzipped before download.
-     *
      * @return {@code true} if the {@code ResultSet} is gzipped before download,
      *         else {@code false}
      */
@@ -110,9 +109,10 @@ public class AceQLConnectionOptions {
 
     /**
      * Gets the {@link ResultSetMetaDataPolicy}. Defines the ResultSet MetaData
-     * policy. Says if the ResultSet MetaData is to be downloaded along with the
-     * ResultSet. This option is meaningless for the AceQL JDBCDriver Community
-     * Edition.
+     * policy. Says if the {@code ResultSet} {@code MetaData} is to be downloaded
+     * along with the {@code ResultSet}. <br>
+     * <br>
+     * This option is used only for the AceQL JDBCDriver Professional Edition.
      *
      * @return the ResultSet MetaData policy
      */
@@ -122,7 +122,9 @@ public class AceQLConnectionOptions {
 
     /**
      * Gets all the request properties that are set to the underlying
-     * {@code HttpURLConnection} for each http call.
+     * {@code HttpURLConnection} for each http call. <br>
+     * <br>
+     * This option is used only for the AceQL JDBCDriver Professional Edition.
      *
      * @return the request properties that are set to the underlying
      *         {@code HttpURLConnection} for each http call.
@@ -133,8 +135,8 @@ public class AceQLConnectionOptions {
 
     @Override
     public String toString() {
-	return "AceQLConnectionOptions [connectTimeout=" + connectTimeout + ", readTimeout=" + readTimeout
-		+ ", gzipResult=" + gzipResult + ", editionType=" + editionType + ", resultSetMetaDataPolicy="
-		+ resultSetMetaDataPolicy + ", requestProperties=" + requestProperties + "]";
+	return "ConnectionOptions [connectTimeout=" + connectTimeout + ", readTimeout=" + readTimeout + ", gzipResult="
+		+ gzipResult + ", editionType=" + editionType + ", resultSetMetaDataPolicy=" + resultSetMetaDataPolicy
+		+ ", requestProperties=" + requestProperties + "]";
     }
 }

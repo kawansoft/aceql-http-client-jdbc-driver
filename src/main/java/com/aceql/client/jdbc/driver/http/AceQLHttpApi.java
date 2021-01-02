@@ -32,7 +32,7 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.aceql.client.jdbc.driver.AceQLConnectionOptions;
+import com.aceql.client.jdbc.driver.ConnectionOptions;
 import com.aceql.client.jdbc.driver.AceQLException;
 import com.aceql.client.jdbc.driver.metadata.ResultSetMetaDataPolicy;
 import com.aceql.client.jdbc.driver.metadata.dto.JdbcDatabaseMetaDataDto;
@@ -80,7 +80,7 @@ public class AceQLHttpApi {
     /* The HttpManager */
     private HttpManager httpManager;
 
-    private AceQLConnectionOptions aceQLConnectionOptions;
+    private ConnectionOptions connectionOptions;
 
     /**
      * Login on the AceQL server and connect to a database
@@ -95,11 +95,11 @@ public class AceQLHttpApi {
      * @param passwordAuthentication the username and password holder to use for
      *                               authenticated proxy. Null if no proxy or if
      *                               proxy
-     * @param aceQLConnectionOptions TODO
+     * @param connectionOptions TODO
      * @throws AceQLException if any Exception occurs
      */
     public AceQLHttpApi(String serverUrl, String database, String username, char[] password, String sessionId,
-	    Proxy proxy, PasswordAuthentication passwordAuthentication, AceQLConnectionOptions aceQLConnectionOptions) throws AceQLException {
+	    Proxy proxy, PasswordAuthentication passwordAuthentication, ConnectionOptions connectionOptions) throws AceQLException {
 
 	try {
 
@@ -110,12 +110,12 @@ public class AceQLHttpApi {
 	    this.serverUrl = Objects.requireNonNull(serverUrl, "serverUrl can not be null!");
 	    this.username = Objects.requireNonNull(username, "username can not be null!");
 	    this.database = Objects.requireNonNull(database, "database can not be null!");
-	    this.aceQLConnectionOptions = Objects.requireNonNull(aceQLConnectionOptions, "aceQLConnectionOptions can not be null!");
+	    this.connectionOptions = Objects.requireNonNull(connectionOptions, "connectionOptions can not be null!");
 
 	    this.password = password;
 	    this.sessionId = sessionId;
 
-	    httpManager = new HttpManager(proxy, passwordAuthentication, aceQLConnectionOptions.getConnectTimeout(), aceQLConnectionOptions.getReadTimeout(), aceQLConnectionOptions);
+	    httpManager = new HttpManager(proxy, passwordAuthentication, connectionOptions.getConnectTimeout(), connectionOptions.getReadTimeout(), connectionOptions);
 
 	    UserLoginStore userLoginStore = new UserLoginStore(serverUrl, username, database);
 
@@ -185,10 +185,10 @@ public class AceQLHttpApi {
 
 
     /**
-     * @return the aceQLConnectionOptions
+     * @return the connectionOptions
      */
-    public AceQLConnectionOptions getAceQLConnectionOptions() {
-        return aceQLConnectionOptions;
+    public ConnectionOptions getAceQLConnectionOptions() {
+        return connectionOptions;
     }
 
 
@@ -323,7 +323,7 @@ public class AceQLHttpApi {
 	AceQLHttpApi aceQLHttpApi;
 	try {
 	    aceQLHttpApi = new AceQLHttpApi(serverUrl, database, username, password, sessionId, httpManager.getProxy(),
-		    httpManager.getPasswordAuthentication(), aceQLConnectionOptions);
+		    httpManager.getPasswordAuthentication(), connectionOptions);
 	} catch (SQLException e) {
 	    throw new IllegalStateException(e);
 	}
@@ -733,7 +733,7 @@ public class AceQLHttpApi {
 	    parametersMap.put("sql", sql);
 	    parametersMap.put("prepared_statement", "" + isPreparedStatement);
 	    parametersMap.put("stored_procedure", "" + isStoredProcedure);
-	    parametersMap.put("gzip_result", "" + aceQLConnectionOptions.isGzipResult());
+	    parametersMap.put("gzip_result", "" + connectionOptions.isGzipResult());
 	    parametersMap.put("fill_result_set_meta_data", "" + fillResultSetMetaData);
 	    parametersMap.put("pretty_printing", "" + prettyPrinting);
 	    parametersMap.put("max_rows", "" + maxRows);
@@ -975,8 +975,8 @@ public class AceQLHttpApi {
      * Add all the request properties asked by the client.
      * @param conn	the current URL Connection
      */
-    public static void addUserRequestProperties(HttpURLConnection conn, AceQLConnectionOptions aceQLConnectionOptions) {
-        Map<String, String> map =  aceQLConnectionOptions.getRequestProperties();
+    public static void addUserRequestProperties(HttpURLConnection conn, ConnectionOptions connectionOptions) {
+        Map<String, String> map =  connectionOptions.getRequestProperties();
         for (String key : map.keySet()) {
             conn.addRequestProperty(key, map.get(key));
         }

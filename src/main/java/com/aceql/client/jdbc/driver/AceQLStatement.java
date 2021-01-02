@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -32,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
 import com.aceql.client.jdbc.driver.abstracts.AbstractStatement;
@@ -46,6 +48,7 @@ import com.aceql.client.jdbc.driver.util.json.StreamResultAnalyzer;
  */
 class AceQLStatement extends AbstractStatement implements Statement {
 
+    public static boolean DEBUG_DUMP_FILE;
     private static boolean DEBUG = false;
 
     // Can be private, not used in daughter AceQLPreparedStatement
@@ -75,10 +78,12 @@ class AceQLStatement extends AbstractStatement implements Statement {
 	this.aceQLHttpApi = aceQLConnection.aceQLHttpApi;
     }
 
-
     /*
      * (non-Javadoc)
-     * @see com.aceql.client.jdbc.driver.abstracts.AbstractStatement#execute(java.lang.String)
+     *
+     * @see
+     * com.aceql.client.jdbc.driver.abstracts.AbstractStatement#execute(java.lang.
+     * String)
      */
     @Override
     public boolean execute(String sql) throws SQLException {
@@ -96,7 +101,8 @@ class AceQLStatement extends AbstractStatement implements Statement {
 	    boolean isPreparedStatement = false;
 	    Map<String, String> statementParameters = null;
 
-	    try (InputStream in = aceQLHttpApi.execute(sql, isPreparedStatement, statementParameters, maxRows); OutputStream out = new BufferedOutputStream(new FileOutputStream(file));) {
+	    try (InputStream in = aceQLHttpApi.execute(sql, isPreparedStatement, statementParameters, maxRows);
+		    OutputStream out = new BufferedOutputStream(new FileOutputStream(file));) {
 
 		if (in != null) {
 		    IOUtils.copy(in, out);
@@ -116,12 +122,10 @@ class AceQLStatement extends AbstractStatement implements Statement {
 	    debug("statement.isResultSet: " + isResultSet);
 	    debug("statement.rowCount   : " + rowCount);
 
-	    if (isResultSet)
-	    {
+	    if (isResultSet) {
 		aceQLResultSet = new AceQLResultSet(file, this, rowCount);
 		return true;
-	    }
-	    else {
+	    } else {
 		// NO ! update count must be -1, as we have no more updates...
 		this.updateCount = rowCount;
 		return false;
@@ -136,6 +140,7 @@ class AceQLStatement extends AbstractStatement implements Statement {
 
     /*
      * (non-Javadoc)
+     *
      * @see com.aceql.client.jdbc.driver.abstracts.AbstractStatement#getResultSet()
      */
     @Override
@@ -143,10 +148,11 @@ class AceQLStatement extends AbstractStatement implements Statement {
 	return this.aceQLResultSet;
     }
 
-
     /*
      * (non-Javadoc)
-     * @see com.aceql.client.jdbc.driver.abstracts.AbstractStatement#getUpdateCount()
+     *
+     * @see
+     * com.aceql.client.jdbc.driver.abstracts.AbstractStatement#getUpdateCount()
      */
     @Override
     public int getUpdateCount() throws SQLException {
@@ -158,7 +164,8 @@ class AceQLStatement extends AbstractStatement implements Statement {
     /*
      * (non-Javadoc)
      *
-     * @see com.aceql.client.jdbc.driver.abstracts.AbstractStatement#executeUpdate(java.
+     * @see
+     * com.aceql.client.jdbc.driver.abstracts.AbstractStatement#executeUpdate(java.
      * lang.String)
      */
     @Override
@@ -173,7 +180,8 @@ class AceQLStatement extends AbstractStatement implements Statement {
     /*
      * (non-Javadoc)
      *
-     * @see com.aceql.client.jdbc.driver.abstracts.AbstractStatement#executeQuery(java.
+     * @see
+     * com.aceql.client.jdbc.driver.abstracts.AbstractStatement#executeQuery(java.
      * lang.String)
      */
     @Override
@@ -182,6 +190,7 @@ class AceQLStatement extends AbstractStatement implements Statement {
 	try {
 
 	    File file = buildtResultSetFile();
+
 	    this.localResultSetFiles.add(file);
 
 	    aceQLHttpApi.trace("file: " + file);
@@ -192,12 +201,19 @@ class AceQLStatement extends AbstractStatement implements Statement {
 	    Map<String, String> statementParameters = null;
 
 	    try (InputStream in = aceQLHttpApi.executeQuery(sql, isPreparedStatement, isStoredProcedure,
-		    statementParameters, maxRows); OutputStream out = new BufferedOutputStream(new FileOutputStream(file));) {
+		    statementParameters, maxRows);
+		    OutputStream out = new BufferedOutputStream(new FileOutputStream(file));) {
 
 		if (in != null) {
 		    InputStream inFinal = AceQLStatementUtil.getFinalInputStream(in, aceQLHttpApi.getAceQLConnectionOptions().isGzipResult());
 		    IOUtils.copy(inFinal, out);
 		}
+	    }
+
+	    if (DEBUG_DUMP_FILE) {
+		System.out.println("STATEMENT_FILE_BEGIN");
+		System.out.println(FileUtils.readFileToString(file, Charset.defaultCharset()));
+		System.out.println("STATEMENT_FILE_END");
 	    }
 
 	    StreamResultAnalyzer streamResultAnalyzer = new StreamResultAnalyzer(file, aceQLHttpApi.getHttpStatusCode(),
@@ -247,18 +263,19 @@ class AceQLStatement extends AbstractStatement implements Statement {
 	return file;
     }
 
-
     /*
      * (non-Javadoc)
+     *
      * @see com.aceql.client.jdbc.driver.abstracts.AbstractStatement#getMaxRows()
      */
     @Override
     public int getMaxRows() throws SQLException {
-	return this.maxRows ;
+	return this.maxRows;
     }
 
     /*
      * (non-Javadoc)
+     *
      * @see com.aceql.client.jdbc.driver.abstracts.AbstractStatement#setMaxRows(int)
      */
     @Override
@@ -268,15 +285,18 @@ class AceQLStatement extends AbstractStatement implements Statement {
 
     /*
      * (non-Javadoc)
-     * @see com.aceql.client.jdbc.driver.abstracts.AbstractStatement#getMoreResults()
+     *
+     * @see
+     * com.aceql.client.jdbc.driver.abstracts.AbstractStatement#getMoreResults()
      */
     @Override
     public boolean getMoreResults() throws SQLException {
 	return false;
     }
 
-
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see com.aceql.client.jdbc.driver.abstracts.AbstractStatement#getWarnings()
      */
     @Override
@@ -284,8 +304,9 @@ class AceQLStatement extends AbstractStatement implements Statement {
 	return null;
     }
 
-
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see com.aceql.client.jdbc.driver.abstracts.AbstractStatement#getFetchSize()
      */
     @Override
@@ -293,15 +314,20 @@ class AceQLStatement extends AbstractStatement implements Statement {
 	return this.fetchSise;
     }
 
-    /* (non-Javadoc)
-     * @see com.aceql.client.jdbc.driver.abstracts.AbstractStatement#setFetchSize(int)
+    /*
+     * (non-Javadoc)
+     *
+     * @see
+     * com.aceql.client.jdbc.driver.abstracts.AbstractStatement#setFetchSize(int)
      */
     @Override
     public void setFetchSize(int rows) throws SQLException {
 	this.fetchSise = rows;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see com.aceql.client.jdbc.driver.abstracts.AbstractStatement#cancel()
      */
     @Override
@@ -309,7 +335,9 @@ class AceQLStatement extends AbstractStatement implements Statement {
 	// Do nothing for now. Future usage.
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see com.aceql.client.jdbc.driver.abstracts.AbstractStatement#clearWarnings()
      */
     @Override
@@ -317,7 +345,9 @@ class AceQLStatement extends AbstractStatement implements Statement {
 	// Do nothing for now. Future usage.
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see com.aceql.client.jdbc.driver.abstracts.AbstractStatement#clearBatch()
      */
     @Override
@@ -325,23 +355,28 @@ class AceQLStatement extends AbstractStatement implements Statement {
 	// Do nothing for now. Future usage.
     }
 
-    /* (non-Javadoc)
-     * @see com.aceql.client.jdbc.driver.abstracts.AbstractStatement#getFetchDirection()
+    /*
+     * (non-Javadoc)
+     *
+     * @see
+     * com.aceql.client.jdbc.driver.abstracts.AbstractStatement#getFetchDirection()
      */
     @Override
     public int getFetchDirection() throws SQLException {
 	return ResultSet.FETCH_FORWARD;
     }
 
-
-    /* (non-Javadoc)
-     * @see com.aceql.client.jdbc.driver.abstracts.AbstractStatement#setFetchDirection(int)
+    /*
+     * (non-Javadoc)
+     *
+     * @see
+     * com.aceql.client.jdbc.driver.abstracts.AbstractStatement#setFetchDirection(
+     * int)
      */
     @Override
     public void setFetchDirection(int direction) throws SQLException {
 	// Do nothing
     }
-
 
     private void debug(String s) {
 	if (DEBUG) {

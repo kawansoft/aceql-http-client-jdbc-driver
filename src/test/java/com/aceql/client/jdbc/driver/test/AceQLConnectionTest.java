@@ -79,7 +79,6 @@ public class AceQLConnectionTest {
 	boolean doInsertOnRegions = false;
 
 	((AceQLConnection) connection).setTraceOn(true);
-	//((AceQLConnection) connection).setGzipResult(true);
 
 	System.out.println();
 
@@ -90,8 +89,6 @@ public class AceQLConnectionTest {
 	System.out.println("aceQLConnection.isReadOnly()    : " + connection.isReadOnly());
 	System.out.println("aceQLConnection.getHoldability(): " + connection.getHoldability());
 	System.out.println("aceQLConnection.getTransactionIsolation() : " + connection.getTransactionIsolation());
-
-	//((AceQLConnection) connection).setGzipResult(true);
 
 	System.out.println("aceQLConnection.getTransactionIsolation() : " + connection.getTransactionIsolation());
 

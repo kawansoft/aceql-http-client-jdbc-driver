@@ -27,6 +27,7 @@ import java.io.Reader;
 import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.sql.Array;
 import java.sql.Blob;
 import java.sql.Clob;
@@ -48,6 +49,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
 import com.aceql.client.jdbc.driver.abstracts.AbstractConnection;
@@ -543,6 +545,13 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
 		    InputStream inFinal = AceQLStatementUtil.getFinalInputStream(in, aceQLHttpApi.getAceQLConnectionOptions().isGzipResult());
 		    IOUtils.copy(inFinal, out);
 		}
+	    }
+
+	    //HACK
+	    if (DEBUG_DUMP_FILE) {
+		System.out.println("STATEMENT_FILE_BEGIN");
+		System.out.println(FileUtils.readFileToString(file, Charset.defaultCharset()));
+		System.out.println("STATEMENT_FILE_END");
 	    }
 
 	    int httpStatusCode = aceQLHttpApi.getHttpStatusCode();
