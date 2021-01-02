@@ -74,7 +74,6 @@ public class BlobUploader {
 		Objects.requireNonNull(inputStream, "inputStream cannot be null!");
 	    }
 
-
 	    URL theURL = new URL(url + "blob_upload");
 
 	    aceQLHttpApi.trace("request : " + theURL);

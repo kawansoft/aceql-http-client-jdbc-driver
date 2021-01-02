@@ -136,12 +136,14 @@ final public class AceQLDriver implements java.sql.Driver {
 	boolean gzipResult = DriverUtil.getGzipResult(info);
 	int connectTimeout = DriverUtil.getConnectTimeout(info);
 	int readTimeout = DriverUtil.getReadTimeout(info);
-
 	Proxy proxy = DriverUtil.buildProxy(proxyType, proxyHostname, proxyPort);
 
 	Map<String, String> requestProperties = new HashMap<>();
 	ConnectionOptions connectionOptions = AceQLConnectionWrapper.connectionOptionsBuilder(connectTimeout, readTimeout,
 		gzipResult, EditionType.Community, ResultSetMetaDataPolicy.off, requestProperties);
+
+	debug("info             : " + info);
+	debug("connectionOptions: " + connectionOptions);
 
 	PasswordAuthentication passwordAuthentication = null;
 	if (proxy != null && proxyUsername != null) {

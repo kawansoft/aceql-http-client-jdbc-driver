@@ -684,7 +684,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	else {
 	    try {
 		SimpleClassCaller simpleClassCaller = new SimpleClassCaller(
-			"com.aceql.client.jdbc.driver.pro.version.ProVersion");
+			"com.aceql.client.pro.jdbc.driver.version.ProVersion");
 
 		List<Class<?>> params = new ArrayList<>();
 		List<Object> values = new ArrayList<>();

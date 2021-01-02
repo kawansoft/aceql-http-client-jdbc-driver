@@ -122,9 +122,6 @@ class MultipartUtility {
 	writer.flush();
 	// outputStream.flush();
 
-	// InputStream inputStream = new BufferedInputStream(
-	// new FileInputStream(uploadFile));
-
 	uploadUsingInputStream(inputStream);
 
     }
@@ -161,9 +158,9 @@ class MultipartUtility {
 	     * outputStream.write(buffer, 0, bytesRead); }
 	     */
 
-	    debug("totalLength: " + totalLength);
-	    debug("progress   : " + progress);
-	    debug("cancelled  : " + cancelled);
+	    debug("USING STREAM totalLength: " + totalLength);
+	    debug("USING STREAM progress   : " + progress);
+	    debug("USING STREAM cancelled  : " + cancelled);
 
 	    // Case no progress/cancelled/totaLenth set: direct copy
 	    if (totalLength <= 0 || progress == null || cancelled == null) {
@@ -186,7 +183,7 @@ class MultipartUtility {
 		    // Update the progress value for progress
 		    // indicator
 		    progress.set(Math.min(99, cpt));
-		    debug("progress   : " + progress);
+		    debug("progress: " + progress);
 		}
 
 		// If progress indicator says that user has cancelled the

@@ -32,8 +32,8 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.aceql.client.jdbc.driver.ConnectionOptions;
 import com.aceql.client.jdbc.driver.AceQLException;
+import com.aceql.client.jdbc.driver.ConnectionOptions;
 import com.aceql.client.jdbc.driver.metadata.ResultSetMetaDataPolicy;
 import com.aceql.client.jdbc.driver.metadata.dto.JdbcDatabaseMetaDataDto;
 import com.aceql.client.jdbc.driver.metadata.dto.TableDto;

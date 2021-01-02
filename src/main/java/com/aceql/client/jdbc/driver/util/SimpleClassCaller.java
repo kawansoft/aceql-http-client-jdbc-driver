@@ -18,7 +18,7 @@ import java.util.Objects;
 public class SimpleClassCaller {
 
     private String className;
-    public static final String DRIVER_PRO_REFLECTION_PACKAGE = "com.aceql.client.jdbc.driver.pro.reflection";
+    public static final String DRIVER_PRO_REFLECTION_PACKAGE = "com.aceql.client.pro.jdbc.driver.reflection";
 
     /**
      * Constructor.

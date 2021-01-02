@@ -447,8 +447,6 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
 
 	    BlobUploader blobUploader = new BlobUploader(aceQLHttpApi);
 	    blobUploader.blobUpload(blobId, in, totalLength);
-
-	    // aceQLHttpApi.blobUpload(blobId, in, totalLength);
 	}
 
 	boolean isPreparedStatement = true;
@@ -547,7 +545,6 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
 		}
 	    }
 
-	    //HACK
 	    if (DEBUG_DUMP_FILE) {
 		System.out.println("STATEMENT_FILE_BEGIN");
 		System.out.println(FileUtils.readFileToString(file, Charset.defaultCharset()));
