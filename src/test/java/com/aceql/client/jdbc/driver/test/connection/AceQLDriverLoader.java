@@ -9,6 +9,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
+import com.aceql.client.jdbc.driver.AceQLDriver;
+
 /**
  * @author Nicolas de Pomereu
  *
@@ -34,6 +36,8 @@ public class AceQLDriverLoader {
     public static Connection getConnection(String url, String database, String user, String password)
 	    throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException,
 	    IllegalAccessException, IllegalArgumentException, InvocationTargetException, SQLException {
+
+	DriverManager.registerDriver(new AceQLDriver());
 
 	String driverClassName = "com.aceql.client.jdbc.driver.AceQLDriver";
 	@SuppressWarnings("unused")

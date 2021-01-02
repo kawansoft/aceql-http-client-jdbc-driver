@@ -21,7 +21,6 @@ package com.aceql.client.jdbc.driver;
 import java.net.PasswordAuthentication;
 import java.net.Proxy;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.DriverPropertyInfo;
 import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
@@ -78,15 +77,6 @@ final public class AceQLDriver implements java.sql.Driver {
 
     /** The debug flag */
     private static boolean DEBUG = FrameworkDebug.isSet(AceQLDriver.class);
-
-    static {
-	try {
-	    DriverManager.registerDriver(new AceQLDriver());
-	} catch (SQLException e) {
-	    e.printStackTrace();
-	    throw new IllegalStateException("Can not register AceQL JDBC Driver: " + e.getMessage());
-	}
-    }
 
     /**
      * Attempts to make a database connection to the given URL.
