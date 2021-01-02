@@ -14,7 +14,7 @@ public class EditionUtil {
 	}
 
 	AceQLConnection aceQLConnection = (AceQLConnection) connection;
-	return aceQLConnection.getAceQLConnectionOptions().getEditionType().equals(EditionType.Community);
+	return aceQLConnection.getConnectionOptions().getEditionType().equals(EditionType.Community);
     }
 
     public static boolean isProfessionalEdition(Connection connection) {
@@ -23,6 +23,6 @@ public class EditionUtil {
 	}
 
 	AceQLConnection aceQLConnection = (AceQLConnection) connection;
-	return aceQLConnection.getAceQLConnectionOptions().getEditionType().equals(EditionType.Professional);
+	return aceQLConnection.getConnectionOptions().getEditionType().equals(EditionType.Professional);
     }
 }

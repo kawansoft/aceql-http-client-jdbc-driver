@@ -935,9 +935,10 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     }
 
     /**
-     * @return the connectionOptions
+     * Gets all the options added to the current AceQL {@code Connection}
+     * @return the options added to the current AceQL {@code Connection}
      */
-    public ConnectionOptions getAceQLConnectionOptions() {
+    public ConnectionOptions getConnectionOptions() {
 	return connectionOptions;
     }
 
