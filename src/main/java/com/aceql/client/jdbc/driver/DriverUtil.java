@@ -320,4 +320,25 @@ public class DriverUtil {
         return connection;
     }
 
+    /**
+     * Check taht required values are not null.
+     * @param username
+     * @param password
+     * @param database
+     * @throws SQLException
+     */
+    public static void checkNonNullValues(String username, String password, String database) throws SQLException {
+        if (username == null) {
+            throw new SQLException("user not set. Please provide a user.");
+        }
+    
+        if (password == null) {
+            throw new SQLException("password not set. Please provide a password.");
+        }
+    
+        if (database == null) {
+            throw new SQLException("database not set. Please provide a database.");
+        }
+    }
+
 }

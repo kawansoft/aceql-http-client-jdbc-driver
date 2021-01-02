@@ -124,18 +124,7 @@ final public class AceQLDriver implements java.sql.Driver {
 	String username = info.getProperty("user");
 	String password = info.getProperty("password");
 	String database = info.getProperty("database");
-
-	if (username == null) {
-	    throw new SQLException("user not set. Please provide a user.");
-	}
-
-	if (password == null) {
-	    throw new SQLException("password not set. Please provide a password.");
-	}
-
-	if (database == null) {
-	    throw new SQLException("database not set. Please provide a database.");
-	}
+	DriverUtil.checkNonNullValues(username, password, database);
 
 	// Add proxy lookup
 	String proxyType = info.getProperty("proxyType");
@@ -149,9 +138,6 @@ final public class AceQLDriver implements java.sql.Driver {
 	int readTimeout = DriverUtil.getReadTimeout(info);
 
 	Proxy proxy = DriverUtil.buildProxy(proxyType, proxyHostname, proxyPort);
-
-	debug("url  : " + url);
-	debug("Proxy: " + proxy);
 
 	Map<String, String> requestProperties = new HashMap<>();
 	ConnectionOptions connectionOptions = AceQLConnectionWrapper.connectionOptionsBuilder(connectTimeout, readTimeout,
