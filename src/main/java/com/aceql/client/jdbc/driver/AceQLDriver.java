@@ -162,14 +162,14 @@ final public class AceQLDriver implements java.sql.Driver {
      * <br>
      * <br>
      * The AceQL driver requires an URL which is an http url in the format: <br>
-     * {@code jdbc:aceql:http(s)://<server-name:port>/<<AceQL Manager servlet call name>}
+     * {@code jdbc:aceql:http(s)://<server-name:port>/<AceQL Manager servlet call name>}
      * <br>
      * <br>
      * Example: <br>
-     * {@code jdbc:aceql:https://www.aceql.com:9443/aceql} <br>
+     * {@code jdbc:aceql:https://www.acme.com:9443/aceql} <br>
      * <br>
      * Note that the {@code "jdbc:aceql:"} prefix is optional and thus an URL such
-     * as {@code https://www.aceql.com:9443/ServerSqlManager} is accepted
+     * as {@code https://www.aceql.com:9443/aceql} is accepted
      *
      * @param url the URL of the database
      * @return <code>true</code> if this driver understands the given URL;

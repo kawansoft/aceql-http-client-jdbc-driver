@@ -24,5 +24,5 @@ package com.aceql.client.jdbc.driver.version;
 
 public class VersionValues {
     public static final String VERSION = "v6.0";
-    public static final String DATE = "02-Jan-2021";
+    public static final String DATE = "04-Jan-2021";
 }

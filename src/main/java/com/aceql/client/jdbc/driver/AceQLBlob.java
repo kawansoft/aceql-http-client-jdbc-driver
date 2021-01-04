@@ -72,6 +72,7 @@ class AceQLBlob implements Blob {
 	this.editionType = Objects.requireNonNull(editionType, "editionType cannot be null!");
     }
 
+
     @Override
     public long length() throws SQLException {
 	if (editionType.equals(EditionType.Professional)) {

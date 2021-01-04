@@ -108,13 +108,13 @@ public class ConnectionOptions {
     }
 
     /**
-     * Gets the {@link ResultSetMetaDataPolicy}. Defines the ResultSet MetaData
+     * Gets the {@link ResultSetMetaDataPolicy}. Defines the {@code ResultSet} {@code MetaData
      * policy. Says if the {@code ResultSet} {@code MetaData} is to be downloaded
      * along with the {@code ResultSet}. <br>
      * <br>
-     * This option is used only for the AceQL JDBCDriver Professional Edition.
+     * This option is only used with the AceQL JDBC Driver Professional Edition.
      *
-     * @return the ResultSet MetaData policy
+     * @return the {@code ResultSet}  {@code MetaData policy
      */
     public ResultSetMetaDataPolicy getResultSetMetaDataPolicy() {
 	return resultSetMetaDataPolicy;
@@ -124,7 +124,7 @@ public class ConnectionOptions {
      * Gets all the request properties that are set to the underlying
      * {@code HttpURLConnection} for each http call. <br>
      * <br>
-     * This option is used only for the AceQL JDBCDriver Professional Edition.
+     * This option is only used with the AceQL JDBC Driver Professional Edition.
      *
      * @return the request properties that are set to the underlying
      *         {@code HttpURLConnection} for each http call.
