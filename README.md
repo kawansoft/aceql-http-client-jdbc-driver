@@ -619,7 +619,7 @@ JdbcDatabaseMetaData jdbcDatabaseMetaData = remoteDatabaseMetaData.getJdbcDataba
 
 ## Getting Details of Tables and Columns
 
-See the [javadoc](https://www.aceql.com/rest/soft_java_client/5.1/javadoc/com/aceql/client/metadata/package-summary.html) of the `com.aceql.client.jdbc.driver.metadata` package: 
+See the [javadoc](https://www.aceql.com/rest/soft_java_client/5.1/javadoc/com/aceql/client/metadata/package-summary.html) of the `com.aceql.jdbc.commons.main.metadata` package: 
 
 ```java
 System.out.println("Get the table names:");

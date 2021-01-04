@@ -9,8 +9,8 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import com.aceql.client.jdbc.driver.AceQLException;
 import com.aceql.client.jdbc.driver.test.connection.FourDbConnections;
+import com.aceql.jdbc.commons.AceQLException;
 
 /**
  * Class to test all 4 DBs with AceQLConnectionTest

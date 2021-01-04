@@ -18,8 +18,8 @@
  */
 package com.aceql.client.jdbc.driver.test.connection.raw;
 
-import com.aceql.client.jdbc.driver.util.AceQLTypes;
-import com.aceql.client.jdbc.driver.util.json.PrepStatementParametersBuilder;
+import com.aceql.jdbc.commons.main.util.AceQLTypes;
+import com.aceql.jdbc.commons.main.util.json.PrepStatementParametersBuilder;
 
 /**
  * @author Nicolas de Pomereu

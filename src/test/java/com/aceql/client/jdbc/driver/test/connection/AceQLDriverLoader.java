@@ -9,7 +9,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
-import com.aceql.client.jdbc.driver.AceQLDriver;
+import com.aceql.jdbc.driver.free.AceQLDriver;
 
 /**
  * @author Nicolas de Pomereu
@@ -39,7 +39,7 @@ public class AceQLDriverLoader {
 
 	DriverManager.registerDriver(new AceQLDriver());
 
-	String driverClassName = "com.aceql.client.jdbc.driver.AceQLDriver";
+	String driverClassName = "com.aceql.jdbc.driver.free.AceQLDriver";
 	@SuppressWarnings("unused")
 	Class<?> c = Class.forName(driverClassName);
 	//Constructor<?> constructor = c.getConstructor();

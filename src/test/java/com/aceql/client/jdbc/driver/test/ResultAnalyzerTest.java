@@ -24,8 +24,8 @@ import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 
-import com.aceql.client.jdbc.driver.http.ResultAnalyzer;
 import com.aceql.client.jdbc.driver.test.connection.ConnectionParms;
+import com.aceql.jdbc.commons.main.http.ResultAnalyzer;
 
 /**
  * @author Nicolas de Pomereu

@@ -26,7 +26,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
-import com.aceql.client.jdbc.driver.AceQLConnection;
+import com.aceql.jdbc.commons.AceQLConnection;
 
 /**
  *

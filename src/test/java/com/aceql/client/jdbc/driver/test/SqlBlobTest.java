@@ -36,8 +36,8 @@ import java.sql.SQLException;
 
 import org.apache.commons.io.FileUtils;
 
-import com.aceql.client.jdbc.driver.AceQLConnection;
-import com.aceql.client.jdbc.driver.EditionType;
+import com.aceql.jdbc.commons.AceQLConnection;
+import com.aceql.jdbc.commons.EditionType;
 
 /**
  * Blob Test. Allows to insert a Blob, and read back the file.

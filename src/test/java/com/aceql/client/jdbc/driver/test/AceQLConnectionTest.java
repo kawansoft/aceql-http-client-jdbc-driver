@@ -26,11 +26,11 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.aceql.client.jdbc.driver.AceQLConnection;
-import com.aceql.client.jdbc.driver.AceQLException;
 import com.aceql.client.jdbc.driver.test.connection.ConnectionBuilder;
 import com.aceql.client.jdbc.driver.test.connection.ConnectionParms;
 import com.aceql.client.jdbc.driver.test.util.Sha1;
+import com.aceql.jdbc.commons.AceQLConnection;
+import com.aceql.jdbc.commons.AceQLException;
 
 /**
  *

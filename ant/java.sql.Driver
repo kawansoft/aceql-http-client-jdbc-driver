@@ -1,1 +1,1 @@
-com.aceql.client.jdbc.driver.AceQLDriver
+com.aceql.jdbc.commons.AceQLDriver

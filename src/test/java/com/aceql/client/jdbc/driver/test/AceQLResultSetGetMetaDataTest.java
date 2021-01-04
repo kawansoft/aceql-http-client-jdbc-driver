@@ -28,9 +28,9 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.Date;
 
-import com.aceql.client.jdbc.driver.AceQLConnection;
-import com.aceql.client.jdbc.driver.AceQLException;
 import com.aceql.client.jdbc.driver.test.connection.ConnectionBuilder;
+import com.aceql.jdbc.commons.AceQLConnection;
+import com.aceql.jdbc.commons.AceQLException;
 
 /**
  *
