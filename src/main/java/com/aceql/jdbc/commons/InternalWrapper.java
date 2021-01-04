@@ -29,8 +29,8 @@ import com.aceql.jdbc.commons.main.http.AceQLHttpApi;
 import com.aceql.jdbc.commons.main.metadata.ResultSetMetaDataPolicy;
 
 /**
- * A internal wrapper for Java package protected  calls.
- * This is an internal class that should not be used nor called by the users of the AeQL JDBC Driver APIs
+ * A internal wrapper for Java package protected calls.
+ * This is an internal class that should not be used nor called by the users of the AceQL JDBC Driver APIs
  *
  * @author Nicolas de Pomereu
  *

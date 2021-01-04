@@ -27,12 +27,23 @@ import com.aceql.jdbc.commons.main.metadata.ResultSetMetaDataPolicy;
 
 /**
  * Allows to get all the major options passed when creating an SQL
- * {@code Connection} to the remote AceQL Server. <br>
- * For security reason, AceQL server's url, database name and authentication
- * info are not retrieved.
+ * {@code Connection} to the remote AceQL Server. For security reason, AceQL
+ * server's url, database name and authentication info are not retrieved. <br>
+ * <br>
+ * A {@code ConnectionOptions} instance is retrieved with the
+ * {@link AceQLConnection#getConnectionOptions()} call:
  *
+ * <pre>
+ * <code>// Cast the current Connection to get an AceQLConnection object
+ * AceQLConnection aceqlConnection = (AceQLConnection) connection;
+ * ConnectionOptions connectionOptions = aceqlConnection.getConnectionOptions();
+ * System.out.println(connectionOptions);
+ * // Etc.
+ * </code>
+ * </pre>
+ *
+ * @since 6.0
  * @author Nicolas de Pomereu
- *
  */
 public class ConnectionOptions {
 
@@ -91,6 +102,7 @@ public class ConnectionOptions {
 
     /**
      * Gets a boolean that say if the {@code ResultSet} is gzipped before download.
+     *
      * @return {@code true} if the {@code ResultSet} is gzipped before download,
      *         else {@code false}
      */
@@ -108,13 +120,13 @@ public class ConnectionOptions {
     }
 
     /**
-     * Gets the {@link ResultSetMetaDataPolicy}. Defines the {@code ResultSet} {@code MetaData
-     * policy. Says if the {@code ResultSet} {@code MetaData} is to be downloaded
-     * along with the {@code ResultSet}. <br>
+     * Gets the {@link ResultSetMetaDataPolicy}. Defines the {@code ResultSet}
+     * {@code MetaData policy. Says if the {@code ResultSet} {@code MetaData} is to
+     * be downloaded along with the {@code ResultSet}. <br>
      * <br>
      * This option is only used with the AceQL JDBC Driver Professional Edition.
      *
-     * @return the {@code ResultSet}  {@code MetaData policy
+     * @return the {@code ResultSet} {@code MetaData policy
      */
     public ResultSetMetaDataPolicy getResultSetMetaDataPolicy() {
 	return resultSetMetaDataPolicy;
