@@ -131,12 +131,11 @@ import com.aceql.jdbc.commons.main.util.framework.Tag;
  * </blockquote> The following dedicated <code>AceQLConnection</code> methods
  * are specific to the software and may be accessed with a cast:
  * <ul>
+ * <li>{@link #getClientVersion()}</li>
+ * <li>{@link #getServerVersion()}</li>
+ * <li>{@link #getConnectionOptions()}</li>
  * <li>{@link #getCancelled()}</li>
  * <li>{@link #setCancelled(AtomicBoolean)}</li>
- * <li>{@link #getResultSetMetaDataPolicy()}</li>
- * <li>{@link #setResultSetMetaDataPolicy(EditionType)}</li>
- * <li>{@link #isGzipResult()}</li>
- * <li>{@link #setGzipResult(boolean)}</li>
  * <li>{@link #getProgress()}</li>
  * <li>{@link #setProgress(AtomicInteger)}</li>
  * </ul>
@@ -212,20 +211,18 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      * @param passwordAuthentication the username and password holder to use for
      *                               authenticated proxy. Null if no proxy or if
      *                               proxy does not require authentication.
-     * @param connectionOptions Advanced Options.
+     * @param connectionOptions      Advanced Options.
      * @throws SQLException if any I/O error occurs
      */
     AceQLConnection(String serverUrl, String database, String username, char[] password, Proxy proxy,
-	    PasswordAuthentication passwordAuthentication, ConnectionOptions connectionOptions)
-	    throws SQLException {
+	    PasswordAuthentication passwordAuthentication, ConnectionOptions connectionOptions) throws SQLException {
 
 	try {
 	    Objects.requireNonNull(serverUrl, "serverUrl can not be null!");
 	    Objects.requireNonNull(database, "database can not be null!");
 	    Objects.requireNonNull(username, "username can not be null!");
 	    Objects.requireNonNull(password, "password can not be null!");
-	    this.connectionOptions = Objects.requireNonNull(connectionOptions,
-		    "connectionOptions can not be null!");
+	    this.connectionOptions = Objects.requireNonNull(connectionOptions, "connectionOptions can not be null!");
 
 	    aceQLHttpApi = new AceQLHttpApi(serverUrl, database, username, password, null, proxy,
 		    passwordAuthentication, connectionOptions);
@@ -251,12 +248,11 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      * @param passwordAuthentication the username and password holder to use for
      *                               authenticated proxy. Null if no proxy or if
      *                               proxy does not require authentication.
-     * @param connectionOptions Advanced Options.
+     * @param connectionOptions      Advanced Options.
      * @throws SQLException if any I/O error occurs
      */
     AceQLConnection(String serverUrl, String database, String username, String sessionId, Proxy proxy,
-	    PasswordAuthentication passwordAuthentication, ConnectionOptions connectionOptions)
-	    throws SQLException {
+	    PasswordAuthentication passwordAuthentication, ConnectionOptions connectionOptions) throws SQLException {
 
 	try {
 	    Objects.requireNonNull(serverUrl, "serverUrl can not be null!");
@@ -264,8 +260,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	    Objects.requireNonNull(username, "username can not be null!");
 	    Objects.requireNonNull(sessionId, "sessionId can not be null!");
 	    Objects.requireNonNull(connectionOptions, "connectionOptions can not be null!");
-	    this.connectionOptions = Objects.requireNonNull(connectionOptions,
-		    "connectionOptions can not be null!");
+	    this.connectionOptions = Objects.requireNonNull(connectionOptions, "connectionOptions can not be null!");
 
 	    aceQLHttpApi = new AceQLHttpApi(serverUrl, database, username, null, sessionId, proxy,
 		    passwordAuthentication, connectionOptions);
@@ -780,8 +775,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     /*
      * (non-Javadoc)
      *
-     * @see
-     * com.aceql.jdbc.commons.main.abstracts.AbstractConnection#clearWarnings()
+     * @see com.aceql.jdbc.commons.main.abstracts.AbstractConnection#clearWarnings()
      */
     @Override
     public void clearWarnings() throws SQLException {
@@ -801,8 +795,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     /*
      * (non-Javadoc)
      *
-     * @see
-     * com.aceql.jdbc.commons.main.abstracts.AbstractConnection#getClientInfo()
+     * @see com.aceql.jdbc.commons.main.abstracts.AbstractConnection#getClientInfo()
      */
     @Override
     public Properties getClientInfo() throws SQLException {
@@ -918,8 +911,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     /*
      * (non-Javadoc)
      *
-     * @see
-     * com.aceql.jdbc.commons.main.abstracts.AbstractConnection#setSchema(java.
+     * @see com.aceql.jdbc.commons.main.abstracts.AbstractConnection#setSchema(java.
      * lang. String)
      */
     @Override
@@ -939,6 +931,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 
     /**
      * Gets all the options added to this current AceQL {@code Connection}
+     *
      * @return the options added to this current AceQL {@code Connection}
      */
     public ConnectionOptions getConnectionOptions() {

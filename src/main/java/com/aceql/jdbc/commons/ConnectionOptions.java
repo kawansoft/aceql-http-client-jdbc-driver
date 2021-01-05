@@ -121,12 +121,12 @@ public class ConnectionOptions {
 
     /**
      * Gets the {@link ResultSetMetaDataPolicy}. Defines the {@code ResultSet}
-     * {@code MetaData policy. Says if the {@code ResultSet} {@code MetaData} is to
+     * MetaData policy. Says if the {@code ResultSet} {@code MetaData} is to
      * be downloaded along with the {@code ResultSet}. <br>
      * <br>
      * This option is only used with the AceQL JDBC Driver Professional Edition.
      *
-     * @return the {@code ResultSet} {@code MetaData policy
+     * @return the {@code ResultSet} MetaData policy
      */
     public ResultSetMetaDataPolicy getResultSetMetaDataPolicy() {
 	return resultSetMetaDataPolicy;

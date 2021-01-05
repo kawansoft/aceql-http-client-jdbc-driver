@@ -32,9 +32,9 @@ import java.util.Properties;
 import java.util.logging.Logger;
 
 import com.aceql.jdbc.commons.AceQLConnection;
-import com.aceql.jdbc.commons.InternalWrapper;
 import com.aceql.jdbc.commons.ConnectionOptions;
 import com.aceql.jdbc.commons.EditionType;
+import com.aceql.jdbc.commons.InternalWrapper;
 import com.aceql.jdbc.commons.driver.util.DriverPropertyInfoBuilder;
 import com.aceql.jdbc.commons.driver.util.DriverUtil;
 import com.aceql.jdbc.commons.main.metadata.ResultSetMetaDataPolicy;
@@ -43,7 +43,7 @@ import com.aceql.jdbc.commons.main.util.framework.JdbcUrlHeader;
 
 /**
  *
- * The <a href=http://www.aceql.com>Driver</a> class in order to access remote
+ * The <a href=http://www.aceql.com>AceQL</a> JDBC Driver class in order to access remote
  * SQL databases through HTTP from Android or Java desktop programs.<br>
  * <br>
  * <b>user</b>, <b>password</b> and <b>database</b> are the only required

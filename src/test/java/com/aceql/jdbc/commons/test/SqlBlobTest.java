@@ -47,7 +47,7 @@ import com.aceql.jdbc.commons.EditionType;
  */
 public class SqlBlobTest {
 
-    public static boolean USE_BLOB_NATIVE_SYNTAX = false;
+    public static boolean USE_BLOB_NATIVE_SYNTAX = true;
 
     private Connection connection;
     private PrintStream out;
