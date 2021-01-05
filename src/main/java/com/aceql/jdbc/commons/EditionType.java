@@ -13,7 +13,7 @@ package com.aceql.jdbc.commons;
 public enum EditionType {
 
     /**
-     *  Community Edition. Open source license & Free software.
+     *  Community Edition. Open source license (Free software).
      */
     Community,
 

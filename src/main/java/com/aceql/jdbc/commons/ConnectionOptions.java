@@ -34,12 +34,12 @@ import com.aceql.jdbc.commons.main.metadata.ResultSetMetaDataPolicy;
  * {@link AceQLConnection#getConnectionOptions()} call:
  *
  * <pre>
- * <code>// Cast the current Connection to get an AceQLConnection object
+ * // Casts the current Connection to get an AceQLConnection object
  * AceQLConnection aceqlConnection = (AceQLConnection) connection;
  * ConnectionOptions connectionOptions = aceqlConnection.getConnectionOptions();
- * System.out.println(connectionOptions);
+ * System.out.println("connectTimeout: " + connectionOptions.getConnectTimeout());
+ * System.out.println("All Options   : " + connectionOptions);
  * // Etc.
- * </code>
  * </pre>
  *
  * @since 6.0
