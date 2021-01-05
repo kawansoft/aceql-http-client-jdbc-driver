@@ -16,13 +16,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.aceql.jdbc.commons.main.version;
+package com.aceql.jdbc.commons.test.connection.raw;
+
+import com.aceql.jdbc.commons.main.util.AceQLTypes;
+import com.aceql.jdbc.commons.main.util.json.PrepStatementParametersBuilder;
 
 /**
- * Contains the package Version info
+ * @author Nicolas de Pomereu
+ *
  */
+public class PrepStatementParametersBuilderExample {
 
-public class VersionValues {
-    public static final String VERSION = "v6.0";
-    public static final String DATE = "05-Jan-2021";
+    /**
+     * @param args
+     */
+    public static void main(String[] args) throws Exception{
+        PrepStatementParametersBuilder builder = new PrepStatementParametersBuilder();
+        int j = 1;
+        builder.setInParameter(j++, AceQLTypes.VARCHAR, "Jim");
+        builder.setInParameter(j++, AceQLTypes.INTEGER, 1 + "");
+        System.out.println(builder.getHttpFormattedStatementParameters());
+
+
+    }
+
 }
