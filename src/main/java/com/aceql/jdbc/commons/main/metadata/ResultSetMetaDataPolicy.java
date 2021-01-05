@@ -8,19 +8,22 @@ import com.aceql.jdbc.commons.AceQLConnection;
 /**
  * Defines the policy for {@code ResultSetMetaData} access:
  * <ul>
- * <li>on: ResulSetMetaData will be always accessible, because downloaded along
- * with ResultSet for each SELECT.</li>
- * <li>off: {@code ResulSetMetaData} will not be accessible because not
- * downloaded along with {@code ResultSet} for each {@code SELECT} call. This
- * may be changed with a
- * {@link AceQLConnection#setResultSetMetaDataPolicy(EditionType)}
- * call.</li>
+ * <li>on: {@link ResulSetMetaData} will be always accessible, because
+ * downloaded along with ResultSet for each {@code SELECT}. This will allow to use
+ * {@code ResultSet#getMetaData()} calls, but {@code SELECT} calls will be a bit
+ * slower.</li>
+ * <li>off: {@code ResulSetMetaData} will always be null because not downloaded
+ * along with {@code ResultSet} for each {@code SELECT} call. Thus, {@code SELECT} calls
+ * will be faster.</li>
  * </ul>
  * <p>
- * Default value for a new AceQLConnection is off. If the AceQL Driver is used, the default value
+ * Set the ResulSetMetaData Driver property to "on" or "off" to choose your
+ * preferred behavior. Default value for a new {@link AceQLConnection} is
  * {@code EditionType.on}.
- *
- * @since 5.0
+ * <br>
+ * <br>
+ * Please note that this option is used only with AceQL JDBC Driver Professional Edition.
+ * @since 6.0
  * @author Nicolas de Pomereu
  *
  */
@@ -28,15 +31,13 @@ public enum ResultSetMetaDataPolicy {
 
     /**
      * {@code ResulSetMetaData} will be always accessible, because downloaded along
-     * with {@code ResultSet}.
+     * with {@code ResultSet} on each {@code SELECT} call.
      */
     on,
 
     /**
-     * {@code ResulSetMetaData} will not be accessible because not downloaded along
-     * with {@code ResultSet}. This may be changed with a
-     * {@link AceQLConnection#setResultSetMetaDataPolicy(EditionType)}
-     * call.
+     * {@code ResulSetMetaData} will always be null because not downloaded along
+     * with {@code ResultSet} on each {@code SELECT} call.
      */
     off
 }
