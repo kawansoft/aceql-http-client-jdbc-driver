@@ -920,4 +920,10 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	return connectionOptions;
     }
 
+    @Override
+    public String toString() {
+	return "AceQLConnection [getClientVersion()=" + getClientVersion() + ", getConnectionOptions()="
+		+ getConnectionOptions() + "]";
+    }
+
 }
