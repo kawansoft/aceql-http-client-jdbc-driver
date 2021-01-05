@@ -709,24 +709,6 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     }
 
     /**
-     * Says if trace is on
-     *
-     * @return true if trace is on
-     */
-    public boolean isTraceOn() {
-	return aceQLHttpApi.isTraceOn();
-    }
-
-    /**
-     * Sets the trace on/off
-     *
-     * @param traceOn if true, trace will be on
-     */
-    public void setTraceOn(boolean traceOn) {
-	aceQLHttpApi.setTraceOn(traceOn);
-    }
-
-    /**
      * Returns the cancelled value set by the progress indicator
      *
      * @return the cancelled value set by the progress indicator

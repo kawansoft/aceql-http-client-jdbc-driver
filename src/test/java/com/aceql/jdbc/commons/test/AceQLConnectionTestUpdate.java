@@ -57,8 +57,6 @@ public class AceQLConnectionTestUpdate {
 	connection.setAutoCommit(true);
 
 	if (connection instanceof AceQLConnection) {
-	    ((AceQLConnection) connection).setTraceOn(true);
-	    //((AceQLConnection) connection).setGzipResult(true);
 	    System.out.println();
 	    System.out.println(
 		    "aceQLConnection.getServerVersion(): " + ((AceQLConnection) connection).getServerVersion());

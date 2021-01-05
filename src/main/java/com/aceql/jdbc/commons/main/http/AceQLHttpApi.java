@@ -53,9 +53,8 @@ import com.aceql.jdbc.commons.main.version.VersionValues;
  */
 public class AceQLHttpApi {
 
-    public static boolean DEBUG = false;
-
-    private boolean TRACE_ON = false;
+    public static boolean TRACE_ON;
+    public static boolean DEBUG;
 
     // private values
     private String serverUrl;
@@ -69,7 +68,10 @@ public class AceQLHttpApi {
 
     private String url = null;
 
-    /** If true, ResultSetMetaData will be downloaded along with ResultSet in Json result */
+    /**
+     * If true, ResultSetMetaData will be downloaded along with ResultSet in Json
+     * result
+     */
     private boolean fillResultSetMetaData = true;
 
     private ResultSetMetaDataPolicy resultSetMetaDataPolicy = ResultSetMetaDataPolicy.off;
@@ -95,11 +97,12 @@ public class AceQLHttpApi {
      * @param passwordAuthentication the username and password holder to use for
      *                               authenticated proxy. Null if no proxy or if
      *                               proxy
-     * @param connectionOptions TODO
+     * @param connectionOptions      TODO
      * @throws AceQLException if any Exception occurs
      */
     public AceQLHttpApi(String serverUrl, String database, String username, char[] password, String sessionId,
-	    Proxy proxy, PasswordAuthentication passwordAuthentication, ConnectionOptions connectionOptions) throws AceQLException {
+	    Proxy proxy, PasswordAuthentication passwordAuthentication, ConnectionOptions connectionOptions)
+	    throws AceQLException {
 
 	try {
 
@@ -115,7 +118,8 @@ public class AceQLHttpApi {
 	    this.password = password;
 	    this.sessionId = sessionId;
 
-	    httpManager = new HttpManager(proxy, passwordAuthentication, connectionOptions.getConnectTimeout(), connectionOptions.getReadTimeout(), connectionOptions);
+	    httpManager = new HttpManager(proxy, passwordAuthentication, connectionOptions.getConnectTimeout(),
+		    connectionOptions.getReadTimeout(), connectionOptions);
 
 	    UserLoginStore userLoginStore = new UserLoginStore(serverUrl, username, database);
 
@@ -183,64 +187,66 @@ public class AceQLHttpApi {
 
     }
 
-
     /**
      * @return the connectionOptions
      */
     public ConnectionOptions getAceQLConnectionOptions() {
-        return connectionOptions;
+	return connectionOptions;
     }
 
-
     /**
-     * Returns {@code true} if the server will fill the {@code ResultSetMetaData} along with the {@code ResultSet} when a SELECT is done.
-     * @return {@code true} if the server will fill the {@code ResultSetMetaData} along with the {@code ResultSet} when a SELECT is done.
+     * Returns {@code true} if the server will fill the {@code ResultSetMetaData}
+     * along with the {@code ResultSet} when a SELECT is done.
+     *
+     * @return {@code true} if the server will fill the {@code ResultSetMetaData}
+     *         along with the {@code ResultSet} when a SELECT is done.
      */
-     public boolean isFillResultSetMetaData() {
-         return fillResultSetMetaData;
-     }
-
+    public boolean isFillResultSetMetaData() {
+	return fillResultSetMetaData;
+    }
 
     /**
-     * Sets fillResultSetMetaData. if {@code true}, the server will fill the {@code ResultSetMetaData} along with the {@code ResultSet} when a SELECT is done.
+     * Sets fillResultSetMetaData. if {@code true}, the server will fill the
+     * {@code ResultSetMetaData} along with the {@code ResultSet} when a SELECT is
+     * done.
+     *
      * @param fillResultSetMetaData the fillResultSetMetaData to set
      */
     public void setFillResultSetMetaData(boolean fillResultSetMetaData) {
-        this.fillResultSetMetaData = fillResultSetMetaData;
+	this.fillResultSetMetaData = fillResultSetMetaData;
     }
 
     /**
      * Sets the {@code EditionType} to use.
-     * @param resultSetMetaDataPolicy the  {@code EditionType} to use
+     *
+     * @param resultSetMetaDataPolicy the {@code EditionType} to use
      */
     public void setResultSetMetaDataPolicy(ResultSetMetaDataPolicy resultSetMetaDataPolicy) {
 	this.resultSetMetaDataPolicy = resultSetMetaDataPolicy;
 
 	if (resultSetMetaDataPolicy.equals(ResultSetMetaDataPolicy.on)) {
 	    this.fillResultSetMetaData = true;
-	}
-	else if (resultSetMetaDataPolicy.equals(ResultSetMetaDataPolicy.off)) {
+	} else if (resultSetMetaDataPolicy.equals(ResultSetMetaDataPolicy.off)) {
 	    this.fillResultSetMetaData = false;
 	}
     }
 
     /**
      * Returns the {@code EditionType} in use.
+     *
      * @return the {@code EditionType} in use.
      */
     public ResultSetMetaDataPolicy getResultSetMetaDataPolicy() {
-        return resultSetMetaDataPolicy;
+	return resultSetMetaDataPolicy;
     }
 
     public void trace() {
-	if (TRACE_ON) {
-	    System.out.println();
-	}
+	trace("");
     }
 
     public void trace(String s) {
 	if (TRACE_ON) {
-	    System.out.println(s);
+	    System.out.println();
 	}
     }
 
@@ -330,36 +336,19 @@ public class AceQLHttpApi {
 	return aceQLHttpApi;
     }
 
-    /**
-     * Says if trace is on
-     *
-     * @return true if trace is on
-     */
-    public boolean isTraceOn() {
-	return TRACE_ON;
-    }
-
-    /**
-     * Sets the trace on/off
-     *
-     * @param TRACE_ON if true, trace will be on
-     */
-    public void setTraceOn(boolean traceOn) {
-	TRACE_ON = traceOn;
-    }
 
     /**
      * @return the url
      */
     public String getUrl() {
-        return url;
+	return url;
     }
 
     /**
      * @return the httpManager
      */
     public HttpManager getHttpManager() {
-        return httpManager;
+	return httpManager;
     }
 
     /**
@@ -419,14 +408,16 @@ public class AceQLHttpApi {
     }
 
     /**
-     * Calls /close API
+     * Calls /close AceQL HTTP API on server side. Will close the remote JDBC
+     * {@code Connection} with {@code Connection.close()}.
      */
     public void close() throws AceQLException {
 	callApiNoResult("close", null);
     }
 
     /**
-     * Calls /logout API
+     * Calls /logout AceQL HTTP API on server side. Will close all the opened JDBC
+     * Connections on server side for the database in use.
      *
      * @throws AceQLException if any Exception occurs
      */
@@ -551,7 +542,8 @@ public class AceQLHttpApi {
     }
 
     /**
-     *  Calls /get_catalog API
+     * Calls /get_catalog API
+     *
      * @return
      */
     public String getCatalog() throws AceQLException {
@@ -560,14 +552,14 @@ public class AceQLHttpApi {
     }
 
     /**
-     *  Calls /get_schema API
+     * Calls /get_schema API
+     *
      * @return
      */
     public String getSchema() throws AceQLException {
 	String result = callApiWithResult("get_schema", null);
 	return result;
     }
-
 
     /**
      * Calls /execute API
@@ -579,12 +571,13 @@ public class AceQLHttpApi {
      *                            statement, else a simple statement
      * @param statementParameters the statement parameters in JSON format. Maybe
      *                            null for simple statement call.
-     * @param maxRows as set by Statement.setMaxRows(int)
+     * @param maxRows             as set by Statement.setMaxRows(int)
      * @return the input stream containing either an error, or the result set in
      *         JSON format. See user documentation.
      * @throws AceQLException if any Exception occurs
      */
-    public InputStream execute(String sql, boolean isPreparedStatement, Map<String, String> statementParameters, int maxRows) throws AceQLException {
+    public InputStream execute(String sql, boolean isPreparedStatement, Map<String, String> statementParameters,
+	    int maxRows) throws AceQLException {
 
 	try {
 	    if (sql == null) {
@@ -623,8 +616,6 @@ public class AceQLHttpApi {
 	}
 
     }
-
-
 
     /**
      * Calls /execute_update API
@@ -702,7 +693,6 @@ public class AceQLHttpApi {
 
     }
 
-
     /**
      * Calls /execute_query API
      *
@@ -714,7 +704,7 @@ public class AceQLHttpApi {
      * @param isStoredProcedure   true if the call is a stored procedure
      * @param statementParameters the statement parameters in JSON format. Maybe
      *                            null for simple statement call.
-     * @param maxRows as set by Statement.setMaxRows(int)
+     * @param maxRows             as set by Statement.setMaxRows(int)
      * @return the input stream containing either an error, or the result set in
      *         JSON format. See user documentation.
      * @throws AceQLException if any Exception occurs
@@ -799,7 +789,7 @@ public class AceQLHttpApi {
     }
 
     public void blobUpload(String blobId, List<Byte> bytes, long totalLength) throws AceQLException {
-	byte [] byteArray = new byte [bytes.size()];
+	byte[] byteArray = new byte[bytes.size()];
 	for (int i = 0; i < bytes.size(); i++) {
 	    byteArray[i] = bytes.get(i);
 	}
@@ -815,95 +805,99 @@ public class AceQLHttpApi {
      * @param inputStream the local Blob/Clob local file input stream
      * @throws AceQLException if any Exception occurs
      */
-    /** <pre><code>
-    public void blobUpload(String blobId, InputStream inputStream, long totalLength) throws AceQLException {
+    /**
+     * <pre>
+     * <code>
+     public void blobUpload(String blobId, InputStream inputStream, long totalLength) throws AceQLException {
 
-	try {
-	    if (blobId == null) {
-		Objects.requireNonNull(blobId, "blobId cannot be null!");
-	    }
+    try {
+        if (blobId == null) {
+    	Objects.requireNonNull(blobId, "blobId cannot be null!");
+        }
 
-	    if (inputStream == null) {
-		Objects.requireNonNull(inputStream, "inputStream cannot be null!");
-	    }
+        if (inputStream == null) {
+    	Objects.requireNonNull(inputStream, "inputStream cannot be null!");
+        }
 
-	    URL theURL = new URL(url + "blob_upload");
+        URL theURL = new URL(url + "blob_upload");
 
-	    trace("request : " + theURL);
-	    HttpURLConnection conn = null;
+        trace("request : " + theURL);
+        HttpURLConnection conn = null;
 
-	    if (httpManager.getProxy() == null) {
-		conn = (HttpURLConnection) theURL.openConnection();
-	    } else {
-		conn = (HttpURLConnection) theURL.openConnection(httpManager.getProxy());
-	    }
+        if (httpManager.getProxy() == null) {
+    	conn = (HttpURLConnection) theURL.openConnection();
+        } else {
+    	conn = (HttpURLConnection) theURL.openConnection(httpManager.getProxy());
+        }
 
-	    conn.setRequestProperty("Accept-Charset", "UTF-8");
-	    conn.setRequestMethod("POST");
-	    conn.setReadTimeout(readTimeout);
-	    conn.setDoOutput(true);
-	    addUserRequestProperties(conn);
+        conn.setRequestProperty("Accept-Charset", "UTF-8");
+        conn.setRequestMethod("POST");
+        conn.setReadTimeout(readTimeout);
+        conn.setDoOutput(true);
+        addUserRequestProperties(conn);
 
-	    final MultipartUtility http = new MultipartUtility(theURL, conn, connectTimeout, progress, cancelled,
-		    totalLength);
+        final MultipartUtility http = new MultipartUtility(theURL, conn, connectTimeout, progress, cancelled,
+    	    totalLength);
 
-	    Map<String, String> parameters = new HashMap<String, String>();
-	    parameters.put("blob_id", blobId);
+        Map<String, String> parameters = new HashMap<String, String>();
+        parameters.put("blob_id", blobId);
 
-	    for (Map.Entry<String, String> entry : parameters.entrySet()) {
-		// trace(entry.getKey() + "/" + entry.getValue());
-		http.addFormField(entry.getKey(), entry.getValue());
-	    }
+        for (Map.Entry<String, String> entry : parameters.entrySet()) {
+    	// trace(entry.getKey() + "/" + entry.getValue());
+    	http.addFormField(entry.getKey(), entry.getValue());
+        }
 
-	    // Server needs a unique file name to store the blob
-	    String fileName = UUID.randomUUID().toString() + ".blob";
+        // Server needs a unique file name to store the blob
+        String fileName = UUID.randomUUID().toString() + ".blob";
 
-	    http.addFilePart("file", inputStream, fileName);
-	    http.finish();
+        http.addFilePart("file", inputStream, fileName);
+        http.finish();
 
-	    conn = http.getConnection();
+        conn = http.getConnection();
 
-	    // Analyze the error after request execution
-	    int httpStatusCode = conn.getResponseCode();
-	    String httpStatusMessage = conn.getResponseMessage();
+        // Analyze the error after request execution
+        int httpStatusCode = conn.getResponseCode();
+        String httpStatusMessage = conn.getResponseMessage();
 
-	    trace("blob_id          : " + blobId);
-	    trace("httpStatusCode   : " + httpStatusCode);
-	    trace("httpStatusMessage: " + httpStatusMessage);
+        trace("blob_id          : " + blobId);
+        trace("httpStatusCode   : " + httpStatusCode);
+        trace("httpStatusMessage: " + httpStatusMessage);
 
-	    InputStream inConn = null;
+        InputStream inConn = null;
 
-	    String result;
+        String result;
 
-	    if (httpStatusCode == HttpURLConnection.HTTP_OK) {
-		inConn = conn.getInputStream();
-	    } else {
-		inConn = conn.getErrorStream();
-	    }
+        if (httpStatusCode == HttpURLConnection.HTTP_OK) {
+    	inConn = conn.getInputStream();
+        } else {
+    	inConn = conn.getErrorStream();
+        }
 
-	    result = null;
+        result = null;
 
-	    if (inConn != null) {
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		IOUtils.copy(inConn, out);
-		result = out.toString("UTF-8");
-	    }
+        if (inConn != null) {
+    	ByteArrayOutputStream out = new ByteArrayOutputStream();
+    	IOUtils.copy(inConn, out);
+    	result = out.toString("UTF-8");
+        }
 
-	    ResultAnalyzer resultAnalyzer = new ResultAnalyzer(result, httpStatusCode, httpStatusMessage);
-	    if (!resultAnalyzer.isStatusOk()) {
-		throw new AceQLException(resultAnalyzer.getErrorMessage(), resultAnalyzer.getErrorType(), null,
-			resultAnalyzer.getStackTrace(), httpStatusCode);
-	    }
+        ResultAnalyzer resultAnalyzer = new ResultAnalyzer(result, httpStatusCode, httpStatusMessage);
+        if (!resultAnalyzer.isStatusOk()) {
+    	throw new AceQLException(resultAnalyzer.getErrorMessage(), resultAnalyzer.getErrorType(), null,
+    		resultAnalyzer.getStackTrace(), httpStatusCode);
+        }
 
-	} catch (Exception e) {
-	    if (e instanceof AceQLException) {
-		throw (AceQLException) e;
-	    } else {
-		throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
-	    }
-	}
+    } catch (Exception e) {
+        if (e instanceof AceQLException) {
+    	throw (AceQLException) e;
+        } else {
+    	throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
+        }
     }
-    </code></pre> */
+     }
+     </code>
+     * </pre>
+     */
 
     /**
      * Calls /get_blob_length API
@@ -921,11 +915,11 @@ public class AceQLHttpApi {
      * Calls /blob_download API
      *
      * @param blobId the Blob/Clob Id
-     * @return the bytes array containing either an error, or the result set in
-     *         JSON format. See user documentation.
+     * @return the bytes array containing either an error, or the result set in JSON
+     *         format. See user documentation.
      * @throws AceQLException if any Exception occurs
      */
-    public byte [] blobDownloadGetBytes(String blobId) throws AceQLException {
+    public byte[] blobDownloadGetBytes(String blobId) throws AceQLException {
 	AceQLBlobApi aceQLBlobApi = new AceQLBlobApi(httpManager, url);
 	return aceQLBlobApi.blobDownloadGetBytes(blobId);
     }
@@ -934,7 +928,6 @@ public class AceQLHttpApi {
 	AceQLMetadataApi aceQLMetadataApi = new AceQLMetadataApi(httpManager, url);
 	return aceQLMetadataApi.dbSchemaDownload(format, tableName);
     }
-
 
     public JdbcDatabaseMetaDataDto getDbMetadata() throws AceQLException {
 	AceQLMetadataApi aceQLMetadataApi = new AceQLMetadataApi(httpManager, url);
@@ -951,7 +944,7 @@ public class AceQLHttpApi {
 	return aceQLMetadataApi.getTable(tableName);
     }
 
-    public InputStream callDatabaseMetaDataMethod(String jsonDatabaseMetaDataMethodCallDTO)  throws AceQLException {
+    public InputStream callDatabaseMetaDataMethod(String jsonDatabaseMetaDataMethodCallDTO) throws AceQLException {
 	AceQLMetadataApi aceQLMetadataApi = new AceQLMetadataApi(httpManager, url);
 	return aceQLMetadataApi.callDatabaseMetaDataMethod(jsonDatabaseMetaDataMethodCallDTO);
     }
@@ -968,20 +961,19 @@ public class AceQLHttpApi {
     }
 
     public boolean isPrettyPrinting() {
-        return prettyPrinting;
+	return prettyPrinting;
     }
 
     /**
      * Add all the request properties asked by the client.
-     * @param conn	the current URL Connection
+     *
+     * @param conn the current URL Connection
      */
     public static void addUserRequestProperties(HttpURLConnection conn, ConnectionOptions connectionOptions) {
-        Map<String, String> map =  connectionOptions.getRequestProperties();
-        for (String key : map.keySet()) {
-            conn.addRequestProperty(key, map.get(key));
-        }
+	Map<String, String> map = connectionOptions.getRequestProperties();
+	for (String key : map.keySet()) {
+	    conn.addRequestProperty(key, map.get(key));
+	}
     }
-
-
 
 }

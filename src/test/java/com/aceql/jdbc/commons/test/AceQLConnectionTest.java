@@ -78,8 +78,6 @@ public class AceQLConnectionTest {
 	boolean doSelectOnRegions = false;
 	boolean doInsertOnRegions = false;
 
-	((AceQLConnection) connection).setTraceOn(true);
-
 	System.out.println();
 
 	System.out.println("aceQLConnection.getServerVersion(): " + ((AceQLConnection) connection).getServerVersion());

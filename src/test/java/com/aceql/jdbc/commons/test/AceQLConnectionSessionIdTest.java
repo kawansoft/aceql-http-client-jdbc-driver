@@ -27,8 +27,8 @@ import java.sql.Statement;
 import java.util.Date;
 
 import com.aceql.jdbc.commons.AceQLConnection;
-import com.aceql.jdbc.commons.InternalWrapper;
 import com.aceql.jdbc.commons.AceQLException;
+import com.aceql.jdbc.commons.InternalWrapper;
 
 /**
  * @author Nicolas de Pomereu
@@ -58,9 +58,6 @@ public class AceQLConnectionSessionIdTest {
 
 	// Get a real Connection instance that points to remote AceQL server
 	Connection connection = InternalWrapper.connectionBuilder(serverUrl, database, username, sessionId, null, null, null);
-
-	((AceQLConnection) connection).setTraceOn(true);
-	//((AceQLConnection) connection).setGzipResult(true);
 
 	System.out.println();
 	String sql = null;

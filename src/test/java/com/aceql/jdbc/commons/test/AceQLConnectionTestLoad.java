@@ -56,9 +56,6 @@ public class AceQLConnectionTestLoad {
 	// Get a real Connection instance that points to remote AceQL server
 	Connection connection = ConnectionBuilder.createOnConfig();
 
-	((AceQLConnection) connection).setTraceOn(true);
-	//((AceQLConnection) connection).setGzipResult(true);
-
 	System.out.println();
 	System.out.println("aceQLConnection.getServerVersion(): " + ((AceQLConnection) connection).getServerVersion());
 	System.out.println("aceQLConnection.getClientVersion(): " + ((AceQLConnection) connection).getClientVersion());

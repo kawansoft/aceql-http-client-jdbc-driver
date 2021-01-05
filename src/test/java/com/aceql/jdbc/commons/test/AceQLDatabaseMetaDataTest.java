@@ -66,9 +66,6 @@ public class AceQLDatabaseMetaDataTest {
 
 	connection = ConnectionBuilder.createOnConfig();
 
-	((AceQLConnection) connection).setTraceOn(false);
-	//((AceQLConnection) connection).setFillResultSetMetaData(true);
-
 	System.out.println(new Date() + " Begin");
 
 	System.out.println("aceQLConnection.getServerVersion(): " + ((AceQLConnection) connection).getServerVersion());
