@@ -27,7 +27,7 @@
         <jar jarfile="${dist.dir}/${aceql-http-client-jdbc-driver}" 
          basedir="${bin.dir}"
          includes="**/*.class, **/META-INF/services/"
-         excludes="**com/aceql/client/jdbc/driver/test**"/>           
+         excludes="**com/aceql/jdbc/commons/test**"/>           
     </target>   
 
 	<!-- Copy client jar to sibling test projects -->
