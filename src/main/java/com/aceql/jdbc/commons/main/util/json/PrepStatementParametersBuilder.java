@@ -1,6 +1,6 @@
 /*
- * This file is part of AceQL Client SDK.
- * AceQL Client SDK: Remote JDBC access over HTTP with AceQL HTTP.
+ * This file is part of AceQL JDBC Driver.
+ * AceQL JDBC Driver: Remote JDBC access over HTTP with AceQL HTTP.
  * Copyright (C) 2021,  KawanSoft SAS
  * (http://www.kawansoft.com). All rights reserved.
  *
