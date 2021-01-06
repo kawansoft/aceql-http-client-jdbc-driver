@@ -121,7 +121,7 @@ import com.aceql.jdbc.commons.main.util.framework.Tag;
  * preparedStatement.close();
  * rs.close();
  * </pre>
- * Note that Blobs can be inserted or select without using a {@code java.sql.Blob} instance.
+ * Note that Blobs can be updated or read without using a {@link java.sql.Blob} instance.
  * <br>
  * <br>
  * {@code INSERT/UPDATE} can be done using:
