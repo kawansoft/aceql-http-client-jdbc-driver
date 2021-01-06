@@ -120,7 +120,6 @@ import com.aceql.jdbc.commons.main.util.framework.JdbcUrlHeader;
  * // Attempts to establish a connection to the remote database:
  * Connection connection = DriverManager.getConnection(url, new Properties());
  * </pre>
- *
  * The {@code Connection} returned is now ready to be used as a regular or classic
  * {@link java.sql.Connection}:
  *
