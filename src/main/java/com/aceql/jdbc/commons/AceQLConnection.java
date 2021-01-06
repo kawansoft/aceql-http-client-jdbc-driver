@@ -94,13 +94,16 @@ import com.aceql.jdbc.commons.main.util.framework.Tag;
  * </blockquote> The following dedicated <code>AceQLConnection</code> methods
  * are specific to the software and may be accessed with a cast:
  * <ul>
- * <li>{@link #getClientVersion()}</li>
- * <li>{@link #getServerVersion()}</li>
- * <li>{@link #getConnectionOptions()}</li>
- * <li>{@link #getCancelled()}</li>
- * <li>{@link #setCancelled(AtomicBoolean)}</li>
- * <li>{@link #getProgress()}</li>
- * <li>{@link #setProgress(AtomicInteger)}</li>
+ * <li>{@link #getClientVersion()}: Gets the AceQL JDBC version info.</li>
+ * <li>{@link #getServerVersion()}: Gets the AceQL HTTP Server version
+ * info.</li>
+ * <li>{@link #getConnectionOptions()}: Gets major options/Properties passed
+ * when calling {@link DriverManager#getConnection(String, Properties)}.</li>
+ * <li>{@link #setCancelled(AtomicBoolean)}: Allows to pass a sharable progress
+ * value. See below.</li>
+ * <li>{@link #setProgress(AtomicInteger)}: Allows to pass a sharable canceled
+ * variable that will be used by the progress indicator to notify this instance
+ * that the end user has cancelled the current Blob/Clob upload or download</li>
  * </ul>
  * <p>
  * <br>
@@ -135,7 +138,7 @@ import com.aceql.jdbc.commons.main.util.framework.Tag;
  * // - progress value will be updated by the AceQLConnection and
  * // retrieved by progress monitors to increment the progress.
  * // - cancelled value will be updated to true if user cancels the
- * // task and AceQLConnection will interrupt the blob(s) transfer.
+ * // task and AceQLConnection will interrupt the Blob(s) transfer.
  *
  * ((AceQLConnection) connection).setProgress(progress);
  * ((AceQLConnection) connection).setCancelled(cancelled);
@@ -146,9 +149,8 @@ import com.aceql.jdbc.commons.main.util.framework.Tag;
  * </blockquote> See the source code of <a href=
  * "https://www.aceql.com/rest/soft_java_client/6.0/src/SqlProgressMonitorDemo.java"
  * >SqlProgressMonitorDemo.java</a> that demonstrates the use of atomic
- * variables when inserting a Blob.
- * <br>
- * See also {@link AceQLBlob} that decsribes alternate ways of using Blobs.
+ * variables when inserting a Blob. <br>
+ * See also {@link AceQLBlob} that describes alternate ways of using Blobs.
  *
  * @author Nicolas de Pomereu
  *
@@ -683,20 +685,6 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     }
 
     /**
-     * Sets the sharable canceled variable that will be used by the progress
-     * indicator to notify this instance that the user has cancelled the current
-     * Blob/Clob upload or download.
-     *
-     * @param cancelled the Sharable canceled variable that will be used by the
-     *                  progress indicator to notify this instance that the end user
-     *                  has cancelled the current Blob/Clob upload or download
-     *
-     */
-    public void setCancelled(AtomicBoolean cancelled) {
-	aceQLHttpApi.setCancelled(cancelled);
-    }
-
-    /**
      * Returns the sharable progress variable that will store Blob/Clob upload or
      * download progress between 0 and 100
      *
@@ -706,6 +694,20 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      */
     public AtomicInteger getProgress() {
 	return aceQLHttpApi.getProgress();
+    }
+
+    /**
+     * Sets the sharable canceled variable that will be used by the progress
+     * indicator to notify this instance that the user has cancelled the current
+     * Blob/Clob upload or download.
+     *
+     * @param cancelled the sharable canceled variable that will be used by the
+     *                  progress indicator to notify this instance that the end user
+     *                  has cancelled the current Blob/Clob upload or download
+     *
+     */
+    public void setCancelled(AtomicBoolean cancelled) {
+	aceQLHttpApi.setCancelled(cancelled);
     }
 
     /**
