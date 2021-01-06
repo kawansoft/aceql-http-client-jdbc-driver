@@ -129,6 +129,7 @@ import com.aceql.jdbc.commons.main.util.framework.Tag;
  * <li>{@link PreparedStatement#setBytes(int, byte[])} for the Community Edition.</li>
  * <li>{@link PreparedStatement#setBinaryStream(int, InputStream)} for the Professional Edition.</li>
  * </ul>
+ * <br>
  * {@code SELECT} can be done using:
  * <ul>
  * <li>{@link ResultSet#getBytes(int)} or {@link ResultSet#getBytes(String)} for the Community Edition.</li>
