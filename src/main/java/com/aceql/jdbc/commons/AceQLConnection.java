@@ -83,7 +83,7 @@ import com.aceql.jdbc.commons.main.util.framework.Tag;
  * <li>{@code com.aceql.jdbc.driver.pro.AceQLDriverPro} for the Professional
  * Edition.</li>
  * </ul>
- *
+ * <p>
  * All thrown exceptions are of type {@link AceQLException}. Use
  * {@link SQLException#getCause()} to get the original wrapped Exception.<br>
  * <br>
@@ -123,8 +123,10 @@ import com.aceql.jdbc.commons.main.util.framework.Tag;
  * and by the Progress Monitor used for the Progress Bar. The values are to be
  * initialized and passed to {@code AceQLConnection} before the JDBC actions
  * with the setters: <br>
- * {@link AceQLConnection#setProgress(AtomicInteger)} <br>
- * {@link AceQLConnection#setCancelled(AtomicBoolean)}
+ * <ul>
+ * <li>{@link AceQLConnection#setProgress(AtomicInteger)} </li>
+ * <li>{@link AceQLConnection#setCancelled(AtomicBoolean)} </li>
+ * </ul>
  * <p>
  *
  * Example: <blockquote>
