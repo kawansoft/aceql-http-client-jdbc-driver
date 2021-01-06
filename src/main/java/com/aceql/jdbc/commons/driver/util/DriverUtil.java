@@ -89,13 +89,19 @@ public class DriverUtil {
 //    }
 
     /**
-     * Add the properties defined as parameters in the url
+     * Add the properties defined as parameters in the URL
      *
-     * @param url
-     * @param info
+     * @param url  the URL of the database to which to connect
+     * @param info a list of arbitrary string tag/value pairs as connection
+     *             arguments. At least a "user" and "password" property should be
+     *             included.
      * @return the updated Properties
      */
     public static Properties addPropertiesFromUrl(String url, Properties info) {
+
+	if (! url.contains("?")) {
+	    return info;
+	}
 
 	if (info == null) {
 	    info = new Properties();
@@ -112,7 +118,8 @@ public class DriverUtil {
     }
 
     /**
-     * 1) Remove all after first ? 2) Remove "jdbc:aceql:" prefix
+     * 1) Remove all after first ?
+     * 2) Remove "jdbc:aceql:" prefix
      *
      * @param url
      * @return the trimmed url without parameters & without jdbc:aceql:" prefix

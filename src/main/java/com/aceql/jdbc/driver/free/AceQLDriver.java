@@ -181,9 +181,8 @@ final public class AceQLDriver implements java.sql.Driver {
 	}
 
 	// Properties may be passed in url
-	if (url.contains("?")) {
-	    info = DriverUtil.addPropertiesFromUrl(url, info);
-	}
+	// Properties may be passed in URL
+	info = DriverUtil.addPropertiesFromUrl(url, info);
 
 	// Remove "aceql:jdbc" prefix & all parameters
 	url = DriverUtil.trimUrl(url);
