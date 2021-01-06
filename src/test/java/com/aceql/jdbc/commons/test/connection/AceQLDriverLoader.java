@@ -39,11 +39,8 @@ public class AceQLDriverLoader {
 
 	DriverManager.registerDriver(new AceQLDriver());
 
-	String driverClassName = "com.aceql.jdbc.driver.free.AceQLDriver";
-	@SuppressWarnings("unused")
-	Class<?> c = Class.forName(driverClassName);
-	//Constructor<?> constructor = c.getConstructor();
-	//constructor.newInstance();
+	String driverClassName = com.aceql.jdbc.driver.free.AceQLDriver.class.getName();
+	Class.forName(driverClassName);
 
 	Properties info = new Properties();
 	info.put("user", user);

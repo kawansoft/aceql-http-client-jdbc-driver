@@ -43,8 +43,9 @@ import com.aceql.jdbc.commons.main.util.framework.JdbcUrlHeader;
 
 /**
  *
- * The <a href=http://www.aceql.com>AceQL</a> JDBC Driver class in order to access remote
- * SQL databases through HTTP from Android or Java desktop programs.<br>
+ * The <a href=http://www.aceql.com>AceQL</a> JDBC Driver class in order to
+ * access remote SQL databases through HTTP from Android or Java desktop
+ * programs.<br>
  * <br>
  * <b>user</b>, <b>password</b> and <b>database</b> are the only required
  * properties. <br>
@@ -75,6 +76,66 @@ import com.aceql.jdbc.commons.main.util.framework.JdbcUrlHeader;
  * </ul>
  * <p>
  *
+ * Usage of the AceQL Driver is straightforward:
+ *
+ * <pre>
+ * // Define URL of the path to the AceQL Manager Servlet
+ * // We will use a secure SSL/TLS session. All uploads/downloads of SQL
+ * // commands & data will be encrypted.
+ * String url = "https://www.acme.org:9443/aceql";
+ *
+ * // The login info for strong authentication on server side.
+ * // These are *not* the username/password of the remote JDBC Driver,
+ * // but are the auth info checked by remote server
+ * // UserAuthenticator.login(username, password) method.
+ * String database = "my_database";
+ * String user = "my_username";
+ * String password = "my_password";
+ *
+ * // Register and Load the Driver
+ * DriverManager.registerDriver(new AceQLDriver());
+ * String driverClassName = com.aceql.jdbc.driver.free.AceQLDriver.class.getName();
+ * Class.forName(driverClassName);
+ *
+ * // Attempts to establish a connection to the remote database:
+ * Properties info = new Properties();
+ * info.put("user", user);
+ * info.put("password", password);
+ * info.put("database", database);
+ * Connection connection = DriverManager.getConnection(url, info);
+ * </pre>
+ * <p>
+ * An alternate way of passing connection info is to add them as request
+ * parameters to the URL:
+ * <pre>
+ * // Define URL of the path to the AceQL Manager Servlet, will all properties
+ * // passed as request parameters
+ * String url = "http://localhost:9090/aceql?user=user1&password=password1&database=sampledb";
+ *
+ * // Register and Load the Driver
+ * DriverManager.registerDriver(new AceQLDriver());
+ * String driverClassName = com.aceql.jdbc.driver.free.AceQLDriver.class.getName();
+ * Class.forName(driverClassName);
+ *
+ * // Attempts to establish a connection to the remote database:
+ * Connection connection = DriverManager.getConnection(url, new Properties());
+ * </pre>
+ *
+ * The {@code Connection} returned is now ready to be used as a regular or classic
+ * {@link java.sql.Connection}:
+ *
+ * <pre>
+ * String sql = "select * from customer where customer_id >= 1 order by customer_id";
+ * Statement statement = connection.createStatement();
+ * statement.execute(sql);
+ *
+ * ResultSet rs = statement.getResultSet();
+ * // Etc.
+ * </pre>
+ * The built {@code Connection} is an instance of {@code AceQLConnection} that
+ * contains some specific method. <br>
+ * See {@link AceQLConnection} for more info. <br>
+ * <br>
  * @since 6.0
  * @author Nicolas de Pomereu
  */
@@ -156,8 +217,8 @@ final public class AceQLDriver implements java.sql.Driver {
 	    passwordAuthentication = new PasswordAuthentication(proxyUsername, proxyPassword.toCharArray());
 	}
 
-	AceQLConnection connection = InternalWrapper.connectionBuilder(url, database, username,
-		password.toCharArray(), proxy, passwordAuthentication, connectionOptions);
+	AceQLConnection connection = InternalWrapper.connectionBuilder(url, database, username, password.toCharArray(),
+		proxy, passwordAuthentication, connectionOptions);
 	return connection;
     }
 

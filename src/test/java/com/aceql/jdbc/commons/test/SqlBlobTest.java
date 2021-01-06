@@ -34,8 +34,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import org.apache.commons.io.FileUtils;
-
 import com.aceql.jdbc.commons.AceQLConnection;
 import com.aceql.jdbc.commons.EditionType;
 
@@ -84,7 +82,7 @@ public class SqlBlobTest {
 		out.println("BLOB UPLOAD USING DRIVER PRO AND BLOB NATIVE SYNTAX!");
 		Blob blob = connection.createBlob();
 		OutputStream out = blob.setBinaryStream(1);
-		FileUtils.copyFile(file, out);
+		Files.copy(file.toPath(), out);
 		preparedStatement.setBlob(j++, blob);
 	    } else {
 		Blob blob = connection.createBlob();

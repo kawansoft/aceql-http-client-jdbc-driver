@@ -27,6 +27,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.sql.Blob;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,9 +40,100 @@ import com.aceql.jdbc.commons.main.util.framework.FrameworkFileUtil;
 import com.aceql.jdbc.commons.main.util.framework.Tag;
 
 /**
- * Blob implementation. <br>
+ * Blob implementation. Allows to use {@link java.sql.Blob} objects for Blobs
+ * uploading {@code (INSERT/UPDATE)} and downloading {@code (SELECT)}.<br>
  * <br>
+ * {@code INSERT} example:
  *
+ * <pre>
+ * File file = new File("/my/file/path");
+ *
+ * String sql = "insert into orderlog values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+ * PreparedStatement preparedStatement = connection.prepareStatement(sql);
+ *
+ * int i = 1;
+ * preparedStatement.setInt(i++, customerId);
+ * // Etc.
+ *
+ * // Create the Blob instance using the current Connection:
+ * Blob blob = connection.createBlob();
+ *
+ * // Free / Community Edition syntax using a byte array:
+ * byte[] bytes = Files.readAllBytes(file.toPath());
+ * blob.setBytes(1, bytes);
+ * preparedStatement.setBlob(i++, blob);
+ *
+ * // Professional Edition syntax using a stream:
+ * OutputStream out = blob.setBinaryStream(1);
+ * Files.copy(file.toPath(), out);
+ * preparedStatement.setBlob(i++, blob);
+ *
+ * // Etc.
+ * preparedStatement.executeUpdate();
+ * preparedStatement.close();
+ * </pre>
+ *
+ * {@code SELECT} example for the Community Edition:
+ *
+ * <pre>
+ * String sql = "select jpeg_image from orderlog where customer_id = ? and item_id = ?";
+ * PreparedStatement preparedStatement = connection.prepareStatement(sql);
+ * preparedStatement.setInt(1, 1);
+ * preparedStatement.setInt(2, 1);
+ *
+ * ResultSet rs = preparedStatement.executeQuery();
+ *
+ * if (rs.next()) {
+ *     Blob blob = rs.getBlob(1);
+ *
+ *     // Community Edition: Get the Blob bytes in memory and store them into a file
+ *     byte[] bytes = blob.getBytes(1, (int) blob.length());
+ *
+ *     File file = new File("/my/file/path");
+ *     try (InputStream in = new ByteArrayInputStream(bytes);) {
+ * 	Files.copy(in, file.toPath());
+ *     }
+ * }
+ * preparedStatement.close();
+ * rs.close();
+ * </pre>
+ *
+ * {@code SELECT} example for the Professional Edition:
+ *
+ * <pre>
+ * String sql = "select jpeg_image from orderlog where customer_id = ? and item_id = ?";
+ * PreparedStatement preparedStatement = connection.prepareStatement(sql);
+ * preparedStatement.setInt(1, 1);
+ * preparedStatement.setInt(2, 1);
+ *
+ * ResultSet rs = preparedStatement.executeQuery();
+ *
+ * if (rs.next()) {
+ *     Blob blob = rs.getBlob(1);
+ *
+ *     File file = new File("/my/file/path");
+ *     // Professional Edition: Get the stream from the Blob and copy into a file
+ *     try (InputStream in = blob.getBinaryStream()) {
+ * 	Files.copy(in, file.toPath());
+ *     }
+ * }
+ *
+ * preparedStatement.close();
+ * rs.close();
+ * </pre>
+ * Note that Blobs can be inserted or select without using a {@code java.sql.Blob} instance.
+ * <br>
+ * <br>
+ * {@code INSERT/UPDATE} can be done using:
+ * <ul>
+ * <li>{@link PreparedStatement#setBytes(int, byte[])} for the Community Edition.</li>
+ * <li>{@link PreparedStatement#setBinaryStream(int, InputStream)} for the Professional Edition.</li>
+ * </ul>
+ * {@code SELECT} can be done using:
+ * <ul>
+ * <li>{@link ResultSet#getBytes(int)} or {@link ResultSet#getBytes(String)} for the Community Edition.</li>
+ * <li>{@link ResultSet#getBinaryStream(int)} or {@link ResultSet#getBinaryStream(String)} for the Professional Edition.</li>
+ * </ul>
  * @since 6.0
  * @author Nicolas de Pomereu
  *
@@ -55,8 +148,8 @@ public class AceQLBlob implements Blob {
     private OutputStream outputStream;
 
     /**
-     * Protected constructor to be used only for upload by {@code Connection#createBlob()}.
-     * {@code AceQLConnection.createBlob()}
+     * Protected constructor to be used only for upload by
+     * {@code Connection#createBlob()}. {@code AceQLConnection.createBlob()}
      */
     AceQLBlob(EditionType editionType) {
 	this.editionType = Objects.requireNonNull(editionType, "editionType cannot be null!");
@@ -87,7 +180,6 @@ public class AceQLBlob implements Blob {
 	this.editionType = Objects.requireNonNull(editionType, "editionType cannot be null!");
     }
 
-
     @Override
     public long length() throws SQLException {
 	if (editionType.equals(EditionType.Professional)) {
@@ -116,11 +208,17 @@ public class AceQLBlob implements Blob {
 	}
     }
 
+    /**
+     * This method is not yet implemented in the AceQL JDBC Driver.
+     */
     @Override
     public long position(byte[] pattern, long start) throws SQLException {
 	throw new UnsupportedOperationException(Tag.METHOD_NOT_YET_IMPLEMENTED);
     }
 
+    /**
+     * This method is not yet implemented in the AceQL JDBC Driver.
+     */
     @Override
     public long position(Blob pattern, long start) throws SQLException {
 	throw new UnsupportedOperationException(Tag.METHOD_NOT_YET_IMPLEMENTED);
@@ -136,6 +234,9 @@ public class AceQLBlob implements Blob {
 	return bytes == null ? 0 : bytes.length;
     }
 
+    /**
+     * This method is not yet implemented in the AceQL JDBC Driver.
+     */
     @Override
     public int setBytes(long pos, byte[] bytes, int offset, int len) throws SQLException {
 	throw new UnsupportedOperationException(Tag.METHOD_NOT_YET_IMPLEMENTED);
@@ -149,7 +250,8 @@ public class AceQLBlob implements Blob {
 	}
 
 	if (editionType.equals(EditionType.Community)) {
-	    throw new UnsupportedOperationException(Tag.PRODUCT +  " " + "Blob.setBinaryStream(long) call " + Tag.REQUIRES_ACEQL_JDBC_DRIVER_PROFESSIONAL_EDITION);
+	    throw new UnsupportedOperationException(Tag.PRODUCT + " " + "Blob.setBinaryStream(long) call "
+		    + Tag.REQUIRES_ACEQL_JDBC_DRIVER_PROFESSIONAL_EDITION);
 	}
 
 	if (file == null) {
@@ -164,6 +266,9 @@ public class AceQLBlob implements Blob {
 	}
     }
 
+    /**
+     * This method is not yet implemented in the AceQL JDBC Driver.
+     */
     @Override
     public void truncate(long len) throws SQLException {
 	throw new UnsupportedOperationException(Tag.METHOD_NOT_YET_IMPLEMENTED);
@@ -199,7 +304,7 @@ public class AceQLBlob implements Blob {
      * @return the file associated with the {@code OutputStream} created by
      *         {@link AceQLBlob#setBinaryStream(long)}.
      */
-    File getFile()  {
+    File getFile() {
 	try {
 	    outputStream.close();
 	} catch (IOException e) {
@@ -210,27 +315,28 @@ public class AceQLBlob implements Blob {
 	return file;
     }
 
-    private static File createBlobFile() {
-	File file = new File(FrameworkFileUtil.getKawansoftTempDir() + File.separator + "blob-file-for-server-"
-		+ FrameworkFileUtil.getUniqueId() + ".txt");
-	return file;
-    }
-
     /**
      * getBytes wrapper, for easy external tests.
+     *
      * @param pos
      * @param length
      * @return
      */
-    static byte[] getbytesStatic(long pos, int length, byte [] bytes) {
-	List<Byte>bytesList = new ArrayList<>();
-	for (int i = (int)pos - 1; i < length; i++) {
+    static byte[] getbytesStatic(long pos, int length, byte[] bytes) {
+	List<Byte> bytesList = new ArrayList<>();
+	for (int i = (int) pos - 1; i < length; i++) {
 	    bytesList.add(bytes[i]);
 	}
 
-	Byte [] bytesToReturnArray = bytesList.toArray(new Byte[bytesList.size()]);
+	Byte[] bytesToReturnArray = bytesList.toArray(new Byte[bytesList.size()]);
 	byte[] bytesToReturn = ArrayUtils.toPrimitive(bytesToReturnArray);
 	return bytesToReturn;
+    }
+
+    private static File createBlobFile() {
+	File file = new File(FrameworkFileUtil.getKawansoftTempDir() + File.separator + "blob-file-for-server-"
+		+ FrameworkFileUtil.getUniqueId() + ".txt");
+	return file;
     }
 
 }

@@ -67,66 +67,29 @@ import com.aceql.jdbc.commons.main.util.framework.Tag;
  * </li>
  * </ul>
  * <p>
- * Supplementary specific methods that are not of instance of Connection are
- * also added.
- *
+ * Supplementary specific methods that are not of instance of
+ * {@code java.sql.Connection} interface are also added. <br>
  * After getting the <code>AceQLConnection</code> with
  * {@link DriverManager#getConnection(String, Properties)} just use it like a
  * regular <code>Connection</code> to execute your
  * <code>PreparedStatement</code> and <code>Statement</code>, and to navigate
  * through your <code>ResultSet</code>.
  * <p>
+ * Check the user documentation or the Javadoc of your AceQL JDBC Driver Edition
+ * for more info:
+ * <ul>
+ * <li>{@link com.aceql.jdbc.driver.free.AceQLDriver} for the Community
+ * Edition.</li>
+ * <li>{@code com.aceql.jdbc.driver.pro.AceQLDriverPro} for the Professional
+ * Edition.</li>
+ * </ul>
+ *
  * All thrown exceptions are of type {@link AceQLException}. Use
  * {@link SQLException#getCause()} to get the original wrapped Exception.<br>
  * <br>
  * The AceQL error_type value is available via the
  * {@code AceQLException#getErrorCode()} and the remote_stack value as a string
- * is available with {@link AceQLException#getRemoteStackTrace()}
- * <p>
- * Example: <blockquote>
- *
- * <pre>
- * // Define URL of the path to the AceQL Manager Servlet
- * // We will use a secure SSL/TLS session. All uploads/downloads of SQL
- * // commands &amp; data will be encrypted.
- * String url = &quot;https://www.acme.org:9443/aceql&quot;;
- *
- * // The login info for strong authentication on server side.
- * // These are *not* the username/password of the remote JDBC Driver,
- * // but are the auth info checked by remote server
- * // {@code DatabaseConfigurator.login(username, password)} method.
- * String database = &quot;mydatabase&quot;;
- * String username = &quot;MyUsername&quot;;
- * String password = &quot;MyPassword&quot;;
- *
- * // Attempts to establish a connection to the remote database:
- * Properties info = new Properties();
- * info.put("user", user);
- * info.put("password", password);
- * info.put("database", database);
- *
- * String driverClassName = "com.aceql.jdbc.driver.free";
- * Class&lt;?&gt; c = Class.forName(driverClassName);
- * Connection connection = DriverManager.getConnection(url, info);
- *
- * // We can now use our remote JDBC Connection as a regular JDBC
- * // Connection for our queries and updates:
- * String sql = &quot;SELECT CUSTOMER_ID, FNAME, LNAME FROM CUSTOMER &quot; + &quot;WHERE CUSTOMER_ID = ?&quot;;
- * PreparedStatement prepStatement = connection.prepareStatement(sql);
- * prepStatement.setInt(1, 1);
- *
- * ResultSet rs = prepStatement.executeQuery();
- * while (rs.next()) {
- *     String customerId = rs.getString(&quot;customer_id&quot;);
- *     String fname = rs.getString(&quot;fname&quot;);
- *     String lname = rs.getString(&quot;lname&quot;);
- *
- *     System.out.println(&quot;customer_id: &quot; + customerId);
- *     System.out.println(&quot;fname      : &quot; + fname);
- *     System.out.println(&quot;lname      : &quot; + lname);
- *     // Etc.
- * }
- * </pre>
+ * is available with {@link AceQLException#getRemoteStackTrace()}.
  *
  * </blockquote> The following dedicated <code>AceQLConnection</code> methods
  * are specific to the software and may be accessed with a cast:
@@ -184,6 +147,8 @@ import com.aceql.jdbc.commons.main.util.framework.Tag;
  * "https://www.aceql.com/rest/soft_java_client/6.0/src/SqlProgressMonitorDemo.java"
  * >SqlProgressMonitorDemo.java</a> that demonstrates the use of atomic
  * variables when inserting a Blob.
+ * <br>
+ * See also {@link AceQLBlob} that decsribes alternate ways of using Blobs.
  *
  * @author Nicolas de Pomereu
  *
