@@ -32,7 +32,7 @@ import com.aceql.jdbc.commons.main.metadata.ResultSetMetaDataPolicy;
  * <br>
  * A {@code ConnectionOptions} instance is retrieved with the
  * {@link AceQLConnection#getConnectionOptions()} call:
- *
+ * <p>
  * <pre>
  * // Casts the current Connection to get an AceQLConnection object
  * AceQLConnection aceqlConnection = (AceQLConnection) connection;
