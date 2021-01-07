@@ -50,6 +50,7 @@ import com.aceql.jdbc.commons.main.metadata.RemoteDatabaseMetaData;
 import com.aceql.jdbc.commons.main.util.AceQLConnectionUtil;
 import com.aceql.jdbc.commons.main.util.SimpleClassCaller;
 import com.aceql.jdbc.commons.main.util.framework.Tag;
+import com.aceql.jdbc.driver.free.AceQLDriver;
 
 /**
  * Provides a <code>Connection</code> implementation that enable to use a
@@ -61,8 +62,8 @@ import com.aceql.jdbc.commons.main.util.framework.Tag;
  * This <code>Connection</code> implementation supports:
  * <ul>
  * <li>Main JDBC data formats.</li>
- * <li><code>Blob/Clob</code> updates.</li>
- * <li><code>Blob/Clob</code> reads.</li>
+ * <li><code>Blob</code> updates.</li>
+ * <li><code>Blob</code> reads.</li>
  * <li>Transaction through <code>commit</code> and <code>rollback</code> orders.
  * </li>
  * </ul>
@@ -78,9 +79,9 @@ import com.aceql.jdbc.commons.main.util.framework.Tag;
  * Check the user documentation or the Javadoc of your AceQL JDBC Driver Edition
  * for more info:
  * <ul>
- * <li>{@link com.aceql.jdbc.driver.free.AceQLDriver} for the Community
+ * <li>{@link AceQLDriver} for the Community
  * Edition.</li>
- * <li>{@code com.aceql.jdbc.driver.pro.AceQLDriverPro} for the Professional
+ * <li>{@code AceQLDriverPro} for the Professional
  * Edition.</li>
  * </ul>
  * <p>
@@ -152,7 +153,8 @@ import com.aceql.jdbc.commons.main.util.framework.Tag;
  * "https://www.aceql.com/rest/soft_java_client/6.0/src/SqlProgressMonitorDemo.java"
  * >SqlProgressMonitorDemo.java</a> that demonstrates the use of atomic
  * variables when inserting a Blob. <br>
- * See also {@link AceQLBlob} that describes alternate ways of using Blobs.
+ * <br>
+ * See also {@link AceQLBlob} that describes how to use Blobs.
  *
  * @author Nicolas de Pomereu
  *
