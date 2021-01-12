@@ -77,13 +77,13 @@ public class SqlBlobExample {
 	preparedStatement.setDate(j++, new java.sql.Date(System.currentTimeMillis()));
 	preparedStatement.setTimestamp(j++, new java.sql.Timestamp(System.currentTimeMillis()));
 
+	Blob blob = connection.createBlob();
+
 	if (isDriverPro(connection)) {
-	    Blob blob = connection.createBlob();
 	    OutputStream out = blob.setBinaryStream(1);
 	    Files.copy(file.toPath(), out);
 	    preparedStatement.setBlob(j++, blob);
 	} else {
-	    Blob blob = connection.createBlob();
 	    byte[] bytes = Files.readAllBytes(file.toPath());
 	    blob.setBytes(1, bytes);
 	    preparedStatement.setBlob(j++, blob);
@@ -93,6 +93,7 @@ public class SqlBlobExample {
 	preparedStatement.setInt(j++, itemId * 1000);
 
 	preparedStatement.executeUpdate();
+	blob.free();
 	preparedStatement.close();
     }
 

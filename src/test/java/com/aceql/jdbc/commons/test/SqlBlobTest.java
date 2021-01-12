@@ -77,15 +77,16 @@ public class SqlBlobTest {
 	preparedStatement.setDate(j++, new java.sql.Date(System.currentTimeMillis()));
 	preparedStatement.setTimestamp(j++, new java.sql.Timestamp(System.currentTimeMillis()));
 
+	Blob blob = null;
 	if (USE_BLOB_NATIVE_SYNTAX) {
 	    if (isDriverPro(connection)) {
 		out.println("BLOB UPLOAD USING DRIVER PRO AND BLOB NATIVE SYNTAX!");
-		Blob blob = connection.createBlob();
+		blob = connection.createBlob();
 		OutputStream out = blob.setBinaryStream(1);
 		Files.copy(file.toPath(), out);
 		preparedStatement.setBlob(j++, blob);
 	    } else {
-		Blob blob = connection.createBlob();
+		blob = connection.createBlob();
 		byte[] bytes = Files.readAllBytes(file.toPath());
 		blob.setBytes(1, bytes);
 		preparedStatement.setBlob(j++, blob);
@@ -105,6 +106,9 @@ public class SqlBlobTest {
 	preparedStatement.setInt(j++, itemId * 1000);
 
 	preparedStatement.executeUpdate();
+	if (blob != null) {
+	    blob.free();
+	}
 	preparedStatement.close();
     }
 
