@@ -37,10 +37,16 @@ public class SqlSelectTest {
     }
 
     public void selectOnTableNotExists() throws SQLException {
-	String sql = "select * from not_exist_table";
-	Statement statement = connection.createStatement();
-	statement.executeQuery(sql);
-	statement.close();
+	Statement statement = null;
+
+	try {
+	    String sql = "select * from not_exist_table";
+	    statement = connection.createStatement();
+	    statement.executeQuery(sql);
+	} finally {
+	    statement.close();
+	}
+
     }
 
     public void selectCustomerExecute() throws SQLException {
@@ -48,7 +54,7 @@ public class SqlSelectTest {
 	Statement statement = connection.createStatement();
 	statement.execute(sql);
 
-	ResultSet rs =statement.getResultSet();
+	ResultSet rs = statement.getResultSet();
 
 	while (rs.next()) {
 	    out.println();
@@ -61,7 +67,7 @@ public class SqlSelectTest {
 	rs.close();
     }
 
-    public  void selectCustomerStatement() throws SQLException {
+    public void selectCustomerStatement() throws SQLException {
 	String sql = "select * from customer where customer_id >= 1 order by customer_id limit 1";
 	Statement preparedStatement = connection.createStatement();
 	ResultSet rs = preparedStatement.executeQuery(sql);
