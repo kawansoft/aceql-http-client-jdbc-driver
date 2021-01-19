@@ -42,8 +42,8 @@ import org.apache.commons.io.FileUtils;
 
 import com.aceql.jdbc.commons.AceQLBlob;
 import com.aceql.jdbc.commons.AceQLConnection;
-import com.aceql.jdbc.commons.InternalWrapper;
 import com.aceql.jdbc.commons.EditionType;
+import com.aceql.jdbc.commons.InternalWrapper;
 import com.aceql.jdbc.commons.main.abstracts.AbstractResultSet;
 import com.aceql.jdbc.commons.main.http.AceQLHttpApi;
 import com.aceql.jdbc.commons.main.http.HttpManager;
@@ -63,7 +63,7 @@ import com.aceql.jdbc.commons.main.util.json.RowParser;
  */
 public class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
 
-    public boolean DEBUG = false;
+    public boolean DEBUG;
 
     /** A File containing the result set returned by an /execute_query call */
     public File jsonFile;

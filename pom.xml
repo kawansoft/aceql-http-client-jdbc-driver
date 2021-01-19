@@ -65,11 +65,11 @@
         </roles>
     </developer>        
   </developers> 
-  <name>AceQL HTTP Client SDK</name>
+  <name>AceQL HTTP Client JDBC Driver Free</name>
   <url>http://www.aceql.com</url>
   <scm>
-  	<url>https://github.com/kawansoft/aceql-http-client-sdk</url>
-  	<developerConnection>https://github.com/kawansoft/aceql-http-client-sdk</developerConnection>
+  	<url>https://github.com/kawansoft/aceql-http-client-jdbc-driver</url>
+  	<developerConnection>https://github.com/kawansoft/aceql-http-client-jdbc-driver</developerConnection>
   </scm>
   <inceptionYear>2017</inceptionYear>
   <description>The AceQL Java Client JDBC Driver allows to wrap the AceQL HTTP APIs and eliminate the tedious works of handling communications errors and parsing JSON results.
