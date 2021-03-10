@@ -403,7 +403,7 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
 		@SuppressWarnings("unused")
 		Object obj = simpleClassCaller.callMehod("update", params, values);
 	    } catch (ClassNotFoundException e) {
-		throw new UnsupportedOperationException(Tag.PRODUCT + " " + "Connection.prepareCall() call "
+		throw new UnsupportedOperationException(Tag.PRODUCT + " " + "PreparedStatement.setBinaryStream() call "
 			+ Tag.REQUIRES_ACEQL_JDBC_DRIVER_PROFESSIONAL_EDITION);
 	    } catch (Exception e) {
 		throw new SQLException(e);
