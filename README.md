@@ -12,37 +12,37 @@
 <img src="https://www.aceql.com/favicon.png" alt="AceQ HTTP Icon"/>
 
    * [Fundamentals](#fundamentals)
-      * [Technical operating environment](#technical-operating-environment)
-      * [License](#license)
-      * [AceQL Server side compatibility](#aceql-server-side-compatibility)
-      * [SDK instead of JDBC Driver](#sdk-instead-of-jdbc-driver)
-      * [AceQL Java Client SDK installation](#aceql-java-client-sdk-installation)
-         * [Maven](#maven)
-         * [Single Jar](#single-jar)
-         * [Android Project settings](#android-project-settings)
-      * [Data transport](#data-transport)
-         * [Transport format](#transport-format)
-         * [Content streaming and memory management](#content-streaming-and-memory-management)
-      * [Best practices for fast response time](#best-practices-for-fast-response-time)
+     * [Technical operating environment](#technical-operating-environment)
+     * [License](#license)
+     * [AceQL Server side compatibility](#aceql-server-side-compatibility)
+     * [SDK instead of JDBC Driver](#sdk-instead-of-jdbc-driver)
+     * [AceQL Java Client SDK installation](#aceql-java-client-sdk-installation)
+       * [Maven](#maven)
+       * [Single Jar](#single-jar)
+       * [Android Project settings](#android-project-settings)
+     * [Data transport](#data-transport)
+       * [Transport format](#transport-format)
+       * [Content streaming and memory management](#content-streaming-and-memory-management)
+     * [Best practices for fast response time](#best-practices-for-fast-response-time)
    * [Using the AceQL Java Client SDK](#using-the-aceql-java-client-sdk)
-      * [Connection creation](#connection-creation)
-      * [Using a Proxy](#using-a-proxy)
-      * [Handling Exceptions](#handling-exceptions)
-         * [The error type](#the-error-type)
-         * [Most common AceQL Server messages](#most-common-aceql-server-messages)
-         * [HTTP Status Codes](#http-status-codes)
-      * [Data types](#data-types)
-      * [SQL Transactions and Connections modifiers](#sql-transactions-and-connections-modifiers)
-      * [BLOB management](#blob-management)
-         * [BLOB creation](#blob-creation)
-         * [BLOB reading](#blob-reading)
-         * [Using Progress Bars with Blobs](#using-progress-bars-with-blobs)
-      * [HTTP session options](#http-session-options)
-      * [Using outer authentication without a password  and with an AceQL Session ID](#using-outer-authentication-without-a-password--and-with-an-aceql-session-id)
+     * [Connection creation](#connection-creation)
+     * [Using a Proxy](#using-a-proxy)
+     * [Handling Exceptions](#handling-exceptions)
+       * [The error type](#the-error-type)
+       * [Most common AceQL Server messages](#most-common-aceql-server-messages)
+       * [HTTP Status Codes](#http-status-codes)
+     * [Data types](#data-types)
+     * [SQL Transactions and Connections modifiers](#sql-transactions-and-connections-modifiers)
+     * [BLOB management](#blob-management)
+       * [BLOB creation](#blob-creation)
+       * [BLOB reading](#blob-reading)
+       * [Using Progress Bars with Blobs](#using-progress-bars-with-blobs)
+     * [HTTP session options](#http-session-options)
+     * [Using outer authentication without a password  and with an AceQL Session ID](#using-outer-authentication-without-a-password--and-with-an-aceql-session-id)
    * [Using the Metadata Query API](#using-the-metadata-query-api)
-      * [Downloading database schema into a file](#downloading-database-schema-into-a-file)
-      * [Accessing remote database main properties](#accessing-remote-database-main-properties)
-      * [Getting Details of Tables and Columns](#getting-details-of-tables-and-columns)
+     * [Downloading database schema into a file](#downloading-database-schema-into-a-file)
+     * [Accessing remote database main properties](#accessing-remote-database-main-properties)
+     * [Getting Details of Tables and Columns](#getting-details-of-tables-and-columns)
    * [Limitations](#limitations)
 
 
@@ -97,6 +97,7 @@ Note that we will soon release a real JDBC Driver. Please contact us at [contact
     <version>6.0</version>
 </dependency>
 ```
+
 ### Single Jar 
 
 For non Maven users: a single jar with all dependencies is available on the [download page](https://www.aceql.com/aceql-download-page.html).
@@ -178,6 +179,7 @@ The  `Connection` to the remote database is created using AceQL’s [AceQLConnec
   Connection connection = new AceQLConnection(url, database, username,
       password);
 ```
+
 From now on, you can use the connection to execute updates and queries on the remote database, using standard and unmodified JDBC calls. 
 
 ## Using a Proxy
@@ -211,11 +213,11 @@ Except for `NullPointerException`, exceptions thrown are always an instance of [
 
 The `AceQLException` contains 5 pieces of information :
 
-| Info             | Description                              |
-| ---------------- | ---------------------------------------- |
-| Reason           | The error message. Retrieved with `getMessage()`. |
-| Error Type       | See below for description. Retrieved with `getErrorCode()`. |
-| Cause            | The `Throwable` cause, if any. Retrieved with `getCause()`. |
+| Info             | Description                                                  |
+| ---------------- | ------------------------------------------------------------ |
+| Reason           | The error message. Retrieved with `getMessage()`.            |
+| Error Type       | See below for description. Retrieved with `getErrorCode()`.  |
+| Cause            | The `Throwable` cause, if any. Retrieved with `getCause()`.  |
 | Http Status Code | See below for description. Retrieved with `getHttpStatusCode(`). |
 | Server Exception | The Exception Stack Trace thrown on the server  side, if any.  <br />Retrieved with `getRemoteStackTrace()`. |
 
@@ -223,8 +225,8 @@ The `AceQLException` contains 5 pieces of information :
 
 The error type allows users to get the type of error and where the error occurred. It is retrieved with `AceQLException.getErrorCode()`:
 
-| Error Type  Value | Description                              |
-| ----------------- | ---------------------------------------- |
+| Error Type  Value | Description                                                  |
+| ----------------- | ------------------------------------------------------------ |
 | 0                 | The error occurred locally on the client  side.  See `getHttpStatusCode()` for more info.  Typical cases: no Internet connection, proxy  authentication required. |
 | 1                 | The error is due to a JDBC Exception.  It was raised by the remote JDBC Driver and  is rerouted by AceQL as is.  The JDBC error message is accessible via `getMessage()`  Typical case: an error in the SQL statement.   Examples: wrong table or column name. |
 | 2                 | The error was raised by the AceQL Server.  It means that the AceQL Server expected a  value or parameter that was not sent by the client side.  Typical cases: misspelling in URL parameter,  missing required request parameters,   JDBC Connection expiration, etc.  The detailed error message is accessible via `getMessage()`.   See below for the most common AceQL Server  error messages. |
@@ -262,8 +264,8 @@ When an error occurs:
 - If the error type is > 0, the HTTP Status Code can take one the following values returned by server side:
 
 
-| HTTP  Status  Code          | Description                              |
-| --------------------------- | ---------------------------------------- |
+| HTTP  Status  Code          | Description                                                  |
+| --------------------------- | ------------------------------------------------------------ |
 | 400 (BAD REQUEST)           | Missing element in URL path.<br>Missing request parameters.<br>All JDBC errors raised by the remote JDBC Driver. |
 | 401 (UNAUTHORIZED)          | Invalid username or password in connect.<br />Invalid session_id.<br />The AceQL Server forbade the execution of the SQL statement for  security reasons. |
 | 404 (NOT_FOUND)             | BLOB directory does not exist on server.<br />BLOB file not found on server. |
@@ -604,6 +606,7 @@ Downloading a schema into a Java `File` is done through the method. See the `Rem
 File file = new File("db_schema.out.html");
 remoteDatabaseMetaData.dbSchemaDownload(file);
 ```
+
 See an example of the built HTML schema:  [db_schema.out.html](https://www.aceql.com/rest/soft_java_client/5.1/src/db_schema.out.html)
 
 ## Accessing remote database main properties
@@ -638,6 +641,7 @@ for (String tableName : tableNames) {
     System.out.println("Imported Keys: " + table.getImportedforeignKeys());
 }
 ```
+
 # Limitations 
 
 The following JDBC features are not supported nor implemented in this version: 
