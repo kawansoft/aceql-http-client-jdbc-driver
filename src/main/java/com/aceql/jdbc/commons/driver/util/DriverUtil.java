@@ -156,11 +156,20 @@ public class DriverUtil {
      * @return
      */
     public static boolean getGzipResult(Properties info) {
-	String compressionStr = info.getProperty("gzipResult");
-	if (compressionStr == null) {
-	    compressionStr = "true";
+	Object compressionObj = info.getProperty("gzipResult");
+	if (compressionObj == null) {
+	    return true;
 	}
-	boolean compression = Boolean.parseBoolean(compressionStr);
+	
+	boolean compression = false;
+	
+	if (compressionObj instanceof Boolean) {
+	    compression = (Boolean) compressionObj; 
+	}
+	else if (compressionObj instanceof String) {
+	    compression = Boolean.parseBoolean(compressionObj.toString());
+	}
+
 	return compression;
     }
 
@@ -168,21 +177,34 @@ public class DriverUtil {
      * get the read timeout.
      *
      * @param info
-     * @return the read timeout
+     * @return the connect timeout
      * @throws SQLException
      */
     public static int getReadTimeout(Properties info) throws SQLException {
-	String readTimeoutStr = info.getProperty("readTimeout");
-	if (readTimeoutStr == null || readTimeoutStr.isEmpty()) {
-	    readTimeoutStr = "0";
+	
+	Object readTimeoutObj = info.getProperty("readTimeout");
+	
+	if (readTimeoutObj == null) {
+	    return 0;
 	}
-
+	
 	int readTimeout = 0;
-	try {
-	    readTimeout = Integer.parseInt(readTimeoutStr);
-	} catch (NumberFormatException e) {
-	    throw new SQLException("Invalid readTimeout. Not numeric: " + readTimeoutStr);
+	
+	if (readTimeoutObj instanceof Integer) {
+	    readTimeout = (Integer) readTimeoutObj; 
 	}
+	else if (readTimeoutObj instanceof String) {
+	    try {
+		String proxyPortStr = readTimeoutObj.toString();
+		readTimeout = Integer.parseInt(proxyPortStr);
+	    } catch (NumberFormatException e) {
+		throw new SQLException(Tag.PRODUCT + " Invalid readTimeout, is not numeric: " + readTimeoutObj.toString());
+	    }
+	}
+	else {
+	    throw new SQLException(Tag.PRODUCT + " Invalid readTimeout. Must be a String or Integer value: " + readTimeoutObj.toString());
+	}
+	
 	return readTimeout;
     }
 
@@ -194,17 +216,30 @@ public class DriverUtil {
      * @throws SQLException
      */
     public static int getConnectTimeout(Properties info) throws SQLException {
-	String connectTimeoutStr = info.getProperty("connectTimeout");
-	if (connectTimeoutStr == null || connectTimeoutStr.isEmpty()) {
-	    connectTimeoutStr = "0";
+	
+	Object connectTimeoutObj = info.getProperty("connectTimeout");
+	
+	if (connectTimeoutObj == null) {
+	    return 0;
 	}
-
+	
 	int connectTimeout = 0;
-	try {
-	    connectTimeout = Integer.parseInt(connectTimeoutStr);
-	} catch (NumberFormatException e) {
-	    throw new SQLException("Invalid connectTimeout. Not numeric: " + connectTimeoutStr);
+	
+	if (connectTimeoutObj instanceof Integer) {
+	    connectTimeout = (Integer) connectTimeoutObj; 
 	}
+	else if (connectTimeoutObj instanceof String) {
+	    try {
+		String proxyPortStr = connectTimeoutObj.toString();
+		connectTimeout = Integer.parseInt(proxyPortStr);
+	    } catch (NumberFormatException e) {
+		throw new SQLException(Tag.PRODUCT + " Invalid connectTimeout, is not numeric: " + connectTimeoutObj.toString());
+	    }
+	}
+	else {
+	    throw new SQLException(Tag.PRODUCT + " Invalid connectTimeout. Must be a String or Integer value: " + connectTimeoutObj.toString());
+	}
+	
 	return connectTimeout;
     }
 
@@ -280,7 +315,7 @@ public class DriverUtil {
      * @return	the created Proxy instance
      * @throws SQLException
      */
-    public static Proxy buildProxy(String proxyType, String proxyHostname, String proxyPort) throws SQLException {
+    public static Proxy buildProxy(String proxyType, String proxyHostname, Object proxyPort) throws SQLException {
 
 	if (proxyType == null) {
 	    proxyType = Type.HTTP.toString();
@@ -294,15 +329,28 @@ public class DriverUtil {
 	int port = -1;
 	Proxy proxy = null;
 
-	try {
-	    port = Integer.parseInt(proxyPort);
-	} catch (NumberFormatException e) {
-	    throw new SQLException(Tag.PRODUCT + " Invalid proxy port. Port is not numeric: " + proxyPort);
+	if (proxyPort == null) {
+	    throw new SQLException(Tag.PRODUCT + " proxyPort can not be null!");
+	}
+	
+	if (proxyPort instanceof Integer) {
+	    port = (Integer) proxyPort; 
+	}
+	else if (proxyPort instanceof String) {
+	    try {
+		String proxyPortStr = proxyPort.toString();
+		port = Integer.parseInt(proxyPortStr);
+	    } catch (NumberFormatException e) {
+		throw new SQLException(Tag.PRODUCT + " Invalid proxy port. Port is not numeric: " + proxyPort);
+	    }
+	}
+	else {
+	    throw new SQLException(Tag.PRODUCT + " proxyPort must be a String or Integer value: " + proxyPort.toString());
 	}
 
 	if (!proxyType.equals(Type.HTTP.toString()) && !proxyType.equals(Type.SOCKS.toString())) {
 	    throw new SQLException(Tag.PRODUCT + " Invalid proxyType. Must be: " + Type.HTTP.toString() + " or "
-		    + Type.SOCKS.toString() + ". Is:" + proxyType);
+		    + Type.SOCKS.toString() + ". Is: " + proxyType);
 	}
 
 	proxy = new Proxy(Type.valueOf(proxyType), new InetSocketAddress(proxyHostname, port));

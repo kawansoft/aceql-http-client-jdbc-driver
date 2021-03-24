@@ -94,11 +94,17 @@ public class SampleCommunityDriverLoader {
 	info.put("database", database);
 	
 	MyProxyInfo myProxyInfo = new MyProxyInfo();
-	String proxyUsername = myProxyInfo.getProxyUsername();
-	char [] proxyPassword = myProxyInfo.getProxyPassword();
+	char [] proxyPasswordCharArray = myProxyInfo.getProxyPassword();
 
-	info.put("proxyHostname", "localhost");
-	info.put("proxyPort", "8081");
+	String proxyType = "HTsTP";
+	String proxyHostname = "localhost";
+	String proxyPort = "8081";
+	String proxyUsername = myProxyInfo.getProxyUsername();
+	String proxyPassword = new String(proxyPasswordCharArray);
+	
+	info.put("proxyType", proxyType);
+	info.put("proxyHostname", proxyHostname);
+	info.put("proxyPort", proxyPort);
 	info.put("proxyUsername", proxyUsername);
 	info.put("proxyPassword", new String(proxyPassword));
 	
