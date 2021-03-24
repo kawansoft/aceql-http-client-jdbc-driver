@@ -96,7 +96,7 @@ public class SampleCommunityDriverLoader {
 	MyProxyInfo myProxyInfo = new MyProxyInfo();
 	char [] proxyPasswordCharArray = myProxyInfo.getProxyPassword();
 
-	String proxyType = "HTsTP";
+	String proxyType = "HTTP";
 	String proxyHostname = "localhost";
 	String proxyPort = "8081";
 	String proxyUsername = myProxyInfo.getProxyUsername();
