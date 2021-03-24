@@ -274,10 +274,10 @@ public class DriverUtil {
     /**
      * Builds the Proxy instance.
      * 
-     * @param proxyType     defaults to HTTP if null
-     * @param proxyHostname required. If not set, no proxy will be defined
-     * @param proxyPort     the proxy port, must be a numeric value
-     * @return
+     * @param proxyType     defaults to HTTP if null.
+     * @param proxyHostname required. If not set, no Proxy will be defined (method will return null)
+     * @param proxyPort     the Proxy port, must be a numeric value
+     * @return	the created Proxy instance
      * @throws SQLException
      */
     public static Proxy buildProxy(String proxyType, String proxyHostname, String proxyPort) throws SQLException {

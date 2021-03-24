@@ -58,7 +58,7 @@ import com.aceql.jdbc.commons.main.util.framework.Tag;
  * <li><b>database</b>: name of remote database as defined in the server
  * {@code aceql-server.properties} file.</li>
  * <li><b>proxyType</b>: java.net.Proxy Type to use: HTTP or SOCKS. Defaults to
- * HTTP.</li>
+ * HTTP. Value is used only if proxyHostname is set.</li>
  * <li><b>proxyHostname</b>: java.net.Proxy hostname to use.</li>
  * <li><b>proxyPort</b>: java.net.Proxy Port to use.</li>
  * <li><b>proxyUsername</b>: Proxy credential username.</li>
