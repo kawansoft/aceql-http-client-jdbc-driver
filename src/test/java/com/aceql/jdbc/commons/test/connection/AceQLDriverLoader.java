@@ -37,16 +37,16 @@ public class AceQLDriverLoader {
 	    throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException,
 	    IllegalAccessException, IllegalArgumentException, InvocationTargetException, SQLException {
 
+	// Register Driver
 	DriverManager.registerDriver(new AceQLDriver());
-
-	String driverClassName = com.aceql.jdbc.driver.free.AceQLDriver.class.getName();
-	Class.forName(driverClassName);
+	Class.forName(AceQLDriver.class.getName());
 
 	Properties info = new Properties();
 	info.put("user", user);
 	info.put("password", password);
 	info.put("database", database);
 
+	// Open a connection
 	Connection connection = DriverManager.getConnection(url, info);
 	return connection;
     }
