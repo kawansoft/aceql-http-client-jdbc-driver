@@ -40,6 +40,7 @@ import com.aceql.jdbc.commons.driver.util.DriverUtil;
 import com.aceql.jdbc.commons.main.metadata.ResultSetMetaDataPolicy;
 import com.aceql.jdbc.commons.main.util.framework.FrameworkDebug;
 import com.aceql.jdbc.commons.main.util.framework.JdbcUrlHeader;
+import com.aceql.jdbc.commons.main.util.framework.Tag;
 
 /**
  *
@@ -197,7 +198,7 @@ final public class AceQLDriver implements java.sql.Driver {
 	String proxyPort = info.getProperty("proxyPort");
 	String proxyUsername = info.getProperty("proxyUsername");
 	String proxyPassword = info.getProperty("proxyPassword");
-
+	
 	boolean gzipResult = DriverUtil.getGzipResult(info);
 	int connectTimeout = DriverUtil.getConnectTimeout(info);
 	int readTimeout = DriverUtil.getReadTimeout(info);
@@ -212,6 +213,9 @@ final public class AceQLDriver implements java.sql.Driver {
 
 	PasswordAuthentication passwordAuthentication = null;
 	if (proxy != null && proxyUsername != null) {
+	    if (proxyPassword == null) {
+		throw new SQLException(Tag.PRODUCT + " Defining an authenticated proxy: proxyPassword cannot be null!");
+	    }
 	    passwordAuthentication = new PasswordAuthentication(proxyUsername, proxyPassword.toCharArray());
 	}
 

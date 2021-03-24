@@ -3,6 +3,7 @@
  */
 package com.aceql.jdbc.commons.test.util;
 
+import java.net.Proxy.Type;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -28,11 +29,13 @@ public class Test {
      */
     public static void main(String[] args) throws Exception {
 
-	long heapSize = Runtime.getRuntime().totalMemory();
-	System.out.println(new Date() + " heapSize: " + heapSize + " " + 255328256 / (1024 * 1024));
-
+	System.out.println(Type.HTTP.toString());
+	
 	boolean doIt = false;
 	if (! doIt) return;
+	
+	long heapSize = Runtime.getRuntime().totalMemory();
+	System.out.println(new Date() + " heapSize: " + heapSize + " " + 255328256 / (1024 * 1024));
 
 	System.out.println(new Date() + " Begin...");
 	Connection connection = ConnectionBuilder.getPostgreSqlConnection();

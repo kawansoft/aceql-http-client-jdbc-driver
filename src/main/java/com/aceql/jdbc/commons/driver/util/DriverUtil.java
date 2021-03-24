@@ -66,27 +66,28 @@ public class DriverUtil {
 
     }
 
-//    /**
-//     * Extract all parameters form the query.
-//     *
-//     * @param url
-//     * @param info
-//     * @return
-//     */
-//    public static String buildPropertiesFromUrlParams(final String url, Properties info) {
-//
-//	String aceqlUrl;
-//	String query = StringUtils.substringAfter(url, "?");
-//	Map<String, String> mapProps = DriverUtil.getQueryMap(query);
-//
-//	Set<String> set = mapProps.keySet();
-//	for (String propName : set) {
-//	    info.setProperty(propName, mapProps.get(propName));
-//	}
-//
-//	aceqlUrl = StringUtils.substringBefore(url, "?");
-//	return aceqlUrl;
-//    }
+    // /**
+    // * Extract all parameters form the query.
+    // *
+    // * @param url
+    // * @param info
+    // * @return
+    // */
+    // public static String buildPropertiesFromUrlParams(final String url,
+    // Properties info) {
+    //
+    // String aceqlUrl;
+    // String query = StringUtils.substringAfter(url, "?");
+    // Map<String, String> mapProps = DriverUtil.getQueryMap(query);
+    //
+    // Set<String> set = mapProps.keySet();
+    // for (String propName : set) {
+    // info.setProperty(propName, mapProps.get(propName));
+    // }
+    //
+    // aceqlUrl = StringUtils.substringBefore(url, "?");
+    // return aceqlUrl;
+    // }
 
     /**
      * Add the properties defined as parameters in the URL
@@ -99,7 +100,7 @@ public class DriverUtil {
      */
     public static Properties addPropertiesFromUrl(String url, Properties info) {
 
-	if (! url.contains("?")) {
+	if (!url.contains("?")) {
 	    return info;
 	}
 
@@ -118,8 +119,7 @@ public class DriverUtil {
     }
 
     /**
-     * 1) Remove all after first ?
-     * 2) Remove "jdbc:aceql:" prefix
+     * 1) Remove all after first ? 2) Remove "jdbc:aceql:" prefix
      *
      * @param url
      * @return the trimmed url without parameters & without jdbc:aceql:" prefix
@@ -272,29 +272,41 @@ public class DriverUtil {
     }
 
     /**
-     * @param proxyType
-     * @param proxyHostname
-     * @param proxyPort
+     * Builds the Proxy instance.
+     * 
+     * @param proxyType     defaults to HTTP if null
+     * @param proxyHostname required. If not set, no proxy will be defined
+     * @param proxyPort     the proxy port, must be a numeric value
      * @return
      * @throws SQLException
      */
     public static Proxy buildProxy(String proxyType, String proxyHostname, String proxyPort) throws SQLException {
 
+	if (proxyType == null) {
+	    proxyType = Type.HTTP.toString();
+	}
+
+	// If no host name ==> No Proxy to created
+	if (proxyHostname == null) {
+	    return null;
+	}
+
 	int port = -1;
 	Proxy proxy = null;
-	if (proxyHostname != null) {
-	    try {
-		port = Integer.parseInt(proxyPort);
-	    } catch (NumberFormatException e) {
-		throw new SQLException("Invalid proxy port. Port is not numeric: " + proxyPort);
-	    }
 
-	    if (proxyType == null) {
-		proxyType = "HTTP";
-	    }
-
-	    proxy = new Proxy(Type.valueOf(proxyType), new InetSocketAddress(proxyHostname, port));
+	try {
+	    port = Integer.parseInt(proxyPort);
+	} catch (NumberFormatException e) {
+	    throw new SQLException(Tag.PRODUCT + " Invalid proxy port. Port is not numeric: " + proxyPort);
 	}
+
+	if (!proxyType.equals(Type.HTTP.toString()) && !proxyType.equals(Type.SOCKS.toString())) {
+	    throw new SQLException(Tag.PRODUCT + " Invalid proxyType. Must be: " + Type.HTTP.toString() + " or "
+		    + Type.SOCKS.toString() + ". Is:" + proxyType);
+	}
+
+	proxy = new Proxy(Type.valueOf(proxyType), new InetSocketAddress(proxyHostname, port));
+
 	return proxy;
     }
 
@@ -343,7 +355,7 @@ public class DriverUtil {
      */
     public static void checkNonNullValues(String username, String password, String database) throws SQLException {
 	if (username == null) {
-	    throw new SQLException(Tag.PRODUCT +  " user not set. Please provide a user.");
+	    throw new SQLException(Tag.PRODUCT + " user not set. Please provide a user.");
 	}
 
 	if (password == null) {
