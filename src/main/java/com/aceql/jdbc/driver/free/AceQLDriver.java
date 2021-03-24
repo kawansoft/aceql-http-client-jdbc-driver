@@ -195,7 +195,7 @@ final public class AceQLDriver implements java.sql.Driver {
 	// Add proxy lookup
 	String proxyType = info.getProperty("proxyType");
 	String proxyHostname = info.getProperty("proxyHostname");
-	Object proxyPort = info.getProperty("proxyPort"); // Can be String or Integer
+	String proxyPort = info.getProperty("proxyPort"); // Can be String or Integer
 	String proxyUsername = info.getProperty("proxyUsername");
 	String proxyPassword = info.getProperty("proxyPassword");
 	
