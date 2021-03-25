@@ -284,13 +284,14 @@ public class DriverUtil {
      */
     public static Proxy buildProxy(String proxyType, String proxyHostname, String proxyPort) throws SQLException {
 
-	if (proxyType == null) {
-	    proxyType = Type.HTTP.toString();
+	// If proxyType is null, empty od DIRECT ==> no proxy in use.
+	if (proxyType == null  || proxyType.isEmpty() || proxyType.equals(Type.DIRECT.toString())) {
+	    proxyType = Type.DIRECT.toString();
+	    return null;
 	}
 
-	// If no host name ==> No Proxy to created
 	if (proxyHostname == null) {
-	    return null;
+	    throw new SQLException(Tag.PRODUCT + " proxyHostname mus be set if proxyType is not DIRECT.");
 	}
 
 	int port = -1;
@@ -309,7 +310,7 @@ public class DriverUtil {
 
 	if (!proxyType.equals(Type.HTTP.toString()) && !proxyType.equals(Type.SOCKS.toString())) {
 	    throw new SQLException(Tag.PRODUCT + " Invalid proxyType. Must be: " + Type.HTTP.toString() + " or "
-		    + Type.SOCKS.toString() + ". Is: " + proxyType);
+		    + Type.SOCKS.toString() + ". proxyType ss: " + proxyType);
 	}
 
 	proxy = new Proxy(Type.valueOf(proxyType), new InetSocketAddress(proxyHostname, port));
