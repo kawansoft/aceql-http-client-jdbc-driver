@@ -65,13 +65,13 @@ import com.aceql.jdbc.commons.main.util.framework.Tag;
  * <li><b>proxyPassword</b>: Proxy credential password.</li>
  * <li><b>connectTimeout</b>: Timeout value, in milliseconds, to be used when
  * opening a communications link to the remote server. If the timeout expires
- * before the connection can be established, a java.net.SocketTimeoutExceptionis
- * raised. A timeout of zero is interpreted as an infinite timeout.</li>
+ * before the connection can be established, a java.net.SocketTimeoutException is
+ * raised. A timeout of zero is interpreted as an infinite timeout. Defaults to 0.</li>
  * <li><b>readTimeout</b>: Read timeout to a specified timeout, in milliseconds.
  * A non-zero value specifies the timeout when reading from Input stream when a
  * connection is established to a resource. If the timeout expires before there
- * is data available for read, a java.net.SocketTimeoutException israised. A
- * timeout of zero is interpreted as an infinite timeout.
+ * is data available for read, a java.net.SocketTimeoutException is raised. A
+ * timeout of zero is interpreted as an infinite timeout. Defaults to 0.
  * <li><b>gzipResult</b>: Boolean to say if the ResultSet is Gzipped before
  * download. Defaults to <code>true</code>.</li>
  * </ul>
