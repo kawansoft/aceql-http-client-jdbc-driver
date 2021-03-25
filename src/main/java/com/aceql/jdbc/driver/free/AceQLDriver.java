@@ -57,8 +57,8 @@ import com.aceql.jdbc.commons.main.util.framework.Tag;
  * <li><b>password</b>: password to use when authenticating.</li>
  * <li><b>database</b>: name of remote database as defined in the server
  * {@code aceql-server.properties} file.</li>
- * <li><b>proxyType</b>: java.net.Proxy Type to use: HTTP or SOCKS. Defaults to
- * HTTP. Value is used only if proxyHostname is set.</li>
+ * <li><b>proxyType</b>: java.net.Proxy Type to use: DIRECT, HTTP or SOCKS.
+ * Defaults to DIRECT.</li>
  * <li><b>proxyHostname</b>: java.net.Proxy hostname to use.</li>
  * <li><b>proxyPort</b>: java.net.Proxy Port to use.</li>
  * <li><b>proxyUsername</b>: Proxy credential username.</li>
@@ -213,6 +213,7 @@ final public class AceQLDriver implements java.sql.Driver {
 
 	PasswordAuthentication passwordAuthentication = null;
 	if (proxy != null && proxyUsername != null) {
+	    // Password cannot be null
 	    if (proxyPassword == null) {
 		throw new SQLException(Tag.PRODUCT + " Defining an authenticated proxy: proxyPassword cannot be null!");
 	    }
