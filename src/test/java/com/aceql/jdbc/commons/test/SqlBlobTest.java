@@ -153,11 +153,8 @@ public class SqlBlobTest {
 
 		    if (blob != null) {
 			byte[] bytes = blob.getBytes(1, (int)blob.length());
-			ByteArrayInputStream arrayInputStream = new ByteArrayInputStream(bytes);
-
-			try (InputStream in = arrayInputStream;) {
-			    Files.copy(in, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
-			}
+			InputStream in = new ByteArrayInputStream(bytes);
+			Files.copy(in, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
 		    }
 		}
 	    } else {
@@ -168,11 +165,8 @@ public class SqlBlobTest {
 		    }
 		} else {
 		    byte[] bytes = rs.getBytes(i++);
-		    ByteArrayInputStream arrayInputStream = new ByteArrayInputStream(bytes);
-
-		    try (InputStream in = arrayInputStream;) {
-			Files.copy(in, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
-		    }
+		    InputStream in = new ByteArrayInputStream(bytes);
+		    Files.copy(in, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
 		}
 	    }
 

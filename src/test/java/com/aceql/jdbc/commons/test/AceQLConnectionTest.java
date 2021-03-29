@@ -91,7 +91,9 @@ public class AceQLConnectionTest {
 	System.out.println("aceQLConnection.getTransactionIsolation() : " + connection.getTransactionIsolation());
 
 	connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
-	connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+	
+	//HACK
+	//connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
 
 	connection.setHoldability(ResultSet.HOLD_CURSORS_OVER_COMMIT);
 	connection.setHoldability(ResultSet.CLOSE_CURSORS_AT_COMMIT);
