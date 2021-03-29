@@ -30,7 +30,10 @@ public class AceQLException extends SQLException {
 
     private static final long serialVersionUID = 1L;
 
+    /** Status Code */
     private int httpStatusCode;
+    
+    /** The remote stack traced, throwed by Java on server side */
     private String remoteStackTrace;
 
     /**

@@ -44,7 +44,7 @@ import com.aceql.jdbc.commons.main.util.framework.Tag;
  * uploading {@code (INSERT/UPDATE)} and downloading {@code (SELECT)}.<br>
  * <br>
  * <b>{@code INSERT} example:</b>
-  * <p>
+ * <br/>
  * <pre>
  * File file = new File("/my/file/path");
  *
@@ -74,7 +74,7 @@ import com.aceql.jdbc.commons.main.util.framework.Tag;
  * </pre>
  *
  * <b>{@code SELECT} example for the Community Edition:</b>
- * <p>
+ * <br>/
  * <pre>
  * String sql = "select jpeg_image from orderlog where customer_id = ? and item_id = ?";
  * PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -99,7 +99,7 @@ import com.aceql.jdbc.commons.main.util.framework.Tag;
  * </pre>
  *
  * <b>{@code SELECT} example for the Professional Edition:</b>
- * <p>
+ * <br/>
  * <pre>
  * String sql = "select jpeg_image from orderlog where customer_id = ? and item_id = ?";
  * PreparedStatement preparedStatement = connection.prepareStatement(sql);
