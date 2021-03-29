@@ -32,15 +32,15 @@ import com.aceql.jdbc.commons.main.metadata.ResultSetMetaDataPolicy;
  * <br>
  * A {@code ConnectionOptions} instance is retrieved with the
  * {@link AceQLConnection#getConnectionOptions()} call:
- * <p>
- * <pre>
+ * <br/>
+ * <pre><code>
  * // Casts the current Connection to get an AceQLConnection object
  * AceQLConnection aceqlConnection = (AceQLConnection) connection;
  * ConnectionOptions connectionOptions = aceqlConnection.getConnectionOptions();
  * System.out.println("connectTimeout: " + connectionOptions.getConnectTimeout());
  * System.out.println("All Options   : " + connectionOptions);
  * // Etc.
- * </pre>
+ * </code></pre>
  *
  * @since 6.0
  * @author Nicolas de Pomereu

@@ -82,7 +82,7 @@ import com.aceql.jdbc.commons.main.util.framework.Tag;
  * <pre>
  * // Define URL of the path to the AceQL Manager Servlet
  * // We will use a secure SSL/TLS session. All uploads/downloads of SQL
- * // commands & data will be encrypted.
+ * // commands and data will be encrypted.
  * String url = "https://www.acme.org:9443/aceql";
  *
  * // The login info for strong authentication on server side.

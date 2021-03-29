@@ -92,7 +92,7 @@ import com.aceql.jdbc.driver.free.AceQLDriver;
  * {@code AceQLException#getErrorCode()} and the remote_stack value as a string
  * is available with {@link AceQLException#getRemoteStackTrace()}.
  *
- * </blockquote> The following dedicated <code>AceQLConnection</code> methods
+ * The following dedicated <code>AceQLConnection</code> methods
  * are specific to the software and may be accessed with a cast:
  * <ul>
  * <li>{@link #getClientVersion()}: Gets the AceQL JDBC version info.</li>
@@ -323,6 +323,10 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	}
     }
 
+    /**
+     * Calls /logout AceQL HTTP API on server side. Will close all the opened JDBC
+     * Connections on server side for the database in use.
+     */
     public void logout() {
 	this.closed = true;
 	try {
