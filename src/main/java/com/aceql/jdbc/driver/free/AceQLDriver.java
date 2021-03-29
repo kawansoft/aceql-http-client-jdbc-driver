@@ -109,7 +109,7 @@ import com.aceql.jdbc.commons.main.util.framework.Tag;
  * An alternate way of passing connection info is to add them as request
  * parameters to the URL:
  * <pre>
- * // Define URL of the path to the AceQL Manager Servlet, will all properties
+ * // Define URL of the path to the AceQL Manager Servlet, with all properties
  * // passed as request parameters
  * String url = "http://localhost:9090/aceql?user=user1&amp;password=password1&amp;database=sampledb";
  *
