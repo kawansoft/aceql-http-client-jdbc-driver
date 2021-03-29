@@ -47,13 +47,12 @@ public class MyRemoteConnection {
     Connection connection = null;
 
     /**
-     * Remote Connection Quick Start client example. Loads the AceQL Client JDBC Driver and 
-     * Creates a Connection to a remote database.
+     * Remote Connection Quick Start client example. Loads the AceQL Client JDBC
+     * Driver and Creates a Connection to a remote database.
      *
      * @return the Connection to the remote database
-     * @throws SQLException
-     *             if a database access error occurs
-     * @throws ClassNotFoundException 
+     * @throws SQLException           if a database access error occurs
+     * @throws ClassNotFoundException
      */
 
     public static Connection remoteConnectionBuilder() throws SQLException, ClassNotFoundException {
@@ -86,8 +85,7 @@ public class MyRemoteConnection {
     /**
      * Constructor
      *
-     * @param connection
-     *            the AwakeConnection to use for this session
+     * @param connection the AwakeConnection to use for this session
      */
     private MyRemoteConnection(Connection connection) {
 	this.connection = connection;
@@ -96,15 +94,12 @@ public class MyRemoteConnection {
     /**
      * Example of 2 INSERT in the same transaction.
      *
-     * @param customerId
-     *            the Customer Id
-     * @param itemId
-     *            the Item Id
+     * @param customerId the Customer Id
+     * @param itemId     the Item Id
      *
      * @throws SQLException
      */
-    public void insertCustomerAndOrderLog(int customerId, int itemId)
-	    throws SQLException {
+    public void insertCustomerAndOrderLog(int customerId, int itemId) throws SQLException {
 
 	connection.setAutoCommit(false);
 
@@ -165,18 +160,15 @@ public class MyRemoteConnection {
     /**
      * Example of 2 SELECT
      *
-     * @param customerId
-     *            the Customer Id
+     * @param customerId the Customer Id
      * @parma itemId the Item Id
      *
      * @throws SQLException
      */
-    public void selectCustomerAndOrderLog(int customerId, int itemId)
-	    throws SQLException {
+    public void selectCustomerAndOrderLog(int customerId, int itemId) throws SQLException {
 
 	// Display the created Customer:
-	String sql = "SELECT CUSTOMER_ID, FNAME, LNAME FROM CUSTOMER "
-		+ " WHERE CUSTOMER_ID = ?";
+	String sql = "SELECT CUSTOMER_ID, FNAME, LNAME FROM CUSTOMER " + " WHERE CUSTOMER_ID = ?";
 	PreparedStatement prepStatement = connection.prepareStatement(sql);
 	prepStatement.setInt(1, customerId);
 
@@ -218,8 +210,7 @@ public class MyRemoteConnection {
 	    Date datePlaced = rs.getDate("date_placed");
 	    Timestamp dateShipped = rs.getTimestamp("date_shipped");
 	    // byte[] jpeg_image = rs.getBytes("jpeg_image");
-	    boolean is_delivered = (rs.getInt("is_delivered") == 1) ? true
-		    : false; // (a < b) ? a : b;
+	    boolean is_delivered = (rs.getInt("is_delivered") == 1) ? true : false; // (a < b) ? a : b;
 	    int quantity = rs.getInt("quantity");
 
 	    System.out.println("customer_id : " + customerId2);
@@ -228,7 +219,7 @@ public class MyRemoteConnection {
 	    System.out.println("item_cost   : " + itemCost);
 	    System.out.println("date_placed : " + datePlaced);
 	    System.out.println("date_shipped: " + dateShipped);
-	    // System.out.println("jpeg_image  : " + jpeg_image);
+	    // System.out.println("jpeg_image : " + jpeg_image);
 	    System.out.println("is_delivered: " + is_delivered);
 	    System.out.println("quantity    : " + quantity);
 
@@ -271,8 +262,7 @@ public class MyRemoteConnection {
     /**
      * Main
      *
-     * @param args
-     *            not used
+     * @param args not used
      */
     public static void main(String[] args) throws Exception {
 
@@ -280,8 +270,7 @@ public class MyRemoteConnection {
 	int itemId = 1;
 
 	Connection connection = MyRemoteConnection.remoteConnectionBuilder();
-	MyRemoteConnection myRemoteConnection = new MyRemoteConnection(
-		connection);
+	MyRemoteConnection myRemoteConnection = new MyRemoteConnection(connection);
 
 	System.out.println("deleting customer...");
 	// Delete previous instances, so thaat user can recall class
