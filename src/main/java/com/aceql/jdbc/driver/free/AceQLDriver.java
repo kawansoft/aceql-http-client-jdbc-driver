@@ -111,7 +111,7 @@ import com.aceql.jdbc.commons.main.util.framework.Tag;
  * <pre>
  * // Define URL of the path to the AceQL Manager Servlet, will all properties
  * // passed as request parameters
- * String url = "http://localhost:9090/aceql?user=user1&password=password1&database=sampledb";
+ * String url = "http://localhost:9090/aceql?user=user1&amp;password=password1&amp;database=sampledb";
  *
  * // Register and Load the Driver
  * DriverManager.registerDriver(new AceQLDriver());
