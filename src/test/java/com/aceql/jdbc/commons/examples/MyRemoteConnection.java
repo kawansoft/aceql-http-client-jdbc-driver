@@ -47,8 +47,8 @@ public class MyRemoteConnection {
     Connection connection = null;
 
     /**
-     * Remote Connection Quick Start client example. Creates a Connection to a
-     * remote database.
+     * Remote Connection Quick Start client example. Loads the AceQL Client JDBC Driver and 
+     * Creates a Connection to a remote database.
      *
      * @return the Connection to the remote database
      * @throws SQLException
@@ -71,7 +71,6 @@ public class MyRemoteConnection {
 	String password = "MySecret";
 
 	// Attempts to establish a connection to the remote database:
-	// Register Driver
 	DriverManager.registerDriver(new AceQLDriver());
 	Class.forName(AceQLDriver.class.getName());
 
@@ -80,7 +79,6 @@ public class MyRemoteConnection {
 	info.put("password", password);
 	info.put("database", database);
 
-	    // Open a connection
 	Connection connection = DriverManager.getConnection(url, info);
 	return connection;
     }
