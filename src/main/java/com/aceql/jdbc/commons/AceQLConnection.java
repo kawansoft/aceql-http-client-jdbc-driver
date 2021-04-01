@@ -107,6 +107,12 @@ import com.aceql.jdbc.driver.free.AceQLDriver;
  * that the end user has cancelled the current Blob/Clob upload or download</li>
  * </ul>
  * <p>
+ * More info about the current AceQLConnection are accessible through the {@link ConnectionOptions}:
+ * <blockquote><code>
+ * // Casts the current Connection to get an AceQLConnection object
+ * AceQLConnection aceqlConnection = (AceQLConnection) connection;
+ * ConnectionOptions connectionOptions = aceqlConnection.getConnectionOptions();
+ * </code></blockquote>
  * <br>
  * All long Blobs update/reading that need to be run on a separated thread may
  * be followed in Swing using a <code>JProgressBar</code>,
