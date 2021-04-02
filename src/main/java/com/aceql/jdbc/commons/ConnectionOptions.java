@@ -124,7 +124,7 @@ public class ConnectionOptions {
      * Metadata policy. Says if the {@code ResultSet} Metadata is to
      * be downloaded along with the {@code ResultSet}. <br>
      * <br>
-     * This option is only used with the AceQL JDBC Driver Professional Edition.
+     * This option is only used with the Professional Edition.
      *
      * @return the {@code ResultSet} Metadata policy
      */
@@ -136,7 +136,7 @@ public class ConnectionOptions {
      * Gets all the request properties that are set to the underlying
      * {@code HttpURLConnection} for each http call. <br>
      * <br>
-     * This option is only used with the AceQL JDBC Driver Professional Edition.
+     * This option is only used with the Professional Edition.
      *
      * @return the request properties that are set to the underlying
      *         {@code HttpURLConnection} for each http call.
