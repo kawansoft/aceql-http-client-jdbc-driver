@@ -39,9 +39,7 @@ public class SampleCommunityDriverLoader {
     private static void standardCall() throws SQLException, ClassNotFoundException {
 	// The URL of the AceQL Server servlet
 	// Port number is the port number used to start the Web Server:
-	String url = "https://www.acme.com:9443/aceql";
-
-	url = "http://localhost:9090/aceql";
+	String url = "http://localhost:9090/aceql";
 
 	// The remote database to use:
 	String database = "sampledb";
@@ -72,9 +70,7 @@ public class SampleCommunityDriverLoader {
     private static void proxyCall() throws SQLException, ClassNotFoundException, IOException {
 	// The URL of the AceQL Server servlet
 	// Port number is the port number used to start the Web Server:
-	String url = "https://www.acme.com:9443/aceql";
-
-	url = "http://www.runsafester.net:8081/aceql";
+	String url = "http://www.runsafester.net:8081/aceql";
 
 	// The remote database to use:
 	String database = "sampledb";
