@@ -847,9 +847,9 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     }
 
     /**
-     * Gets all the info of this {@code AceQLConnection} instance
+     * Gets all info of this {@code AceQLConnection} instance
      *
-     * @return all the info of this {@code AceQLConnection} instance
+     * @return all info of this {@code AceQLConnection} instance
      */
     public ConnectionInfo getConnectionInfo() {
 	return connectionInfo;
