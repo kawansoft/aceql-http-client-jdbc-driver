@@ -120,7 +120,7 @@ public class ConnectionInfo {
     /**
      * Gets the main authentication info against the AceQL server
      * 
-     * @return the main authentication info
+     * @return the main authentication info 
      */
     public PasswordAuthentication getAuthentication() {
 	return authentication;
@@ -136,18 +136,18 @@ public class ConnectionInfo {
     }
 
     /**
-     * Gets the Proxy in use. Returns null if no Proxy is in use.
+     * Gets the {@code Proxy} in use. Returns null if no {@code Proxy} is in use.
      * 
-     * @return the Proxy in use.
+     * @return the {@code Proxy} in use.
      */
     public Proxy getProxy() {
 	return proxy;
     }
 
     /**
-     * Gets the Proxy username & password. Returns null if no Proxy is in use.
+     * Gets the {@code Proxy} username and password. Returns null if no {@code Proxy} is in use.
      * 
-     * @return the Proxy username & password.
+     * @return the {@code Proxy} username and password.
      */
     public PasswordAuthentication getProxyAuthentication() {
 	return proxyAuthentication;
