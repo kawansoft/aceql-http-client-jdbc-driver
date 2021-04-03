@@ -41,7 +41,7 @@ public class HttpManager {
     /** Proxy to use with HttpUrlConnection */
     private Proxy proxy;
     /** For authenticated proxy */
-    private PasswordAuthentication passwordAuthentication;
+    private PasswordAuthentication proxyAuthentication;
 
     private int connectTimeout;
     private int readTimeout;
@@ -51,21 +51,18 @@ public class HttpManager {
     public static final int MEDIUMB_BLOB_LENGTH_MB = 16;
     public static final int MEDIUM_BLOB_LENGTH = MEDIUMB_BLOB_LENGTH_MB * 1024 * 1024;
 
+    
     /**
-     * Constructor.
-     * @param proxy
-     * @param passwordAuthentication
-     * @param connectTimeout
-     * @param readTimeout
-     * @param connectionInfo TODO
+     * Constructor
+     * @param connectionInfo
      */
-    public HttpManager(Proxy proxy, PasswordAuthentication passwordAuthentication, int connectTimeout,
-	    int readTimeout, ConnectionInfo connectionInfo) {
-	this.proxy = proxy;
-	this.passwordAuthentication = passwordAuthentication;
-	this.connectTimeout = connectTimeout;
-	this.readTimeout = readTimeout;
+    public HttpManager(ConnectionInfo connectionInfo) {
 	this.connectionInfo = connectionInfo;
+	
+	this.proxy = connectionInfo.getProxy();
+	this.proxyAuthentication = connectionInfo.getProxyAuthentication();
+	this.connectTimeout = connectionInfo.getConnectTimeout();
+	this.readTimeout = connectionInfo.getReadTimeout();
 
 	setProxyCredentials();
     }
@@ -107,9 +104,9 @@ public class HttpManager {
 	}
 
 	// Sets the credential for authentication
-	if (passwordAuthentication != null) {
-	    final String proxyAuthUsername = passwordAuthentication.getUserName();
-	    final char[] proxyPassword = passwordAuthentication.getPassword();
+	if (proxyAuthentication != null) {
+	    final String proxyAuthUsername = proxyAuthentication.getUserName();
+	    final char[] proxyPassword = proxyAuthentication.getPassword();
 
 	    Authenticator authenticator = new Authenticator() {
 
@@ -119,7 +116,7 @@ public class HttpManager {
 		}
 	    };
 
-	    trace("passwordAuthentication: " + proxyAuthUsername + " " + new String(proxyPassword));
+	    trace("proxyAuthentication: " + proxyAuthUsername + " " + new String(proxyPassword));
 	    Authenticator.setDefault(authenticator);
 	}
 
@@ -336,7 +333,7 @@ public class HttpManager {
     }
 
     public PasswordAuthentication getPasswordAuthentication() {
-        return passwordAuthentication;
+        return proxyAuthentication;
     }
 
     /**

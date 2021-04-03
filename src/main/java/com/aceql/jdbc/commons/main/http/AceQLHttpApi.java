@@ -21,8 +21,6 @@ package com.aceql.jdbc.commons.main.http;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.net.PasswordAuthentication;
-import java.net.Proxy;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -86,6 +84,95 @@ public class AceQLHttpApi {
 
     /**
      * Login on the AceQL server and connect to a database
+     * 
+     * @param connectionInfo	all info necessaty for creating the Connection.
+     * @throws AceQLException if any Exception occurs
+     */
+    public AceQLHttpApi(ConnectionInfo connectionInfo) throws SQLException {
+	try {
+
+	    this.connectionInfo = Objects.requireNonNull(connectionInfo, "connectionInfo can not be null!");
+	    
+	    this.serverUrl = Objects.requireNonNull(connectionInfo.getUrl(), "serverUrl can not be null!");
+	    this.username = Objects.requireNonNull(connectionInfo.getAuthentication().getUserName(), "username can not be null!");
+	    this.database = Objects.requireNonNull(connectionInfo.getDatabase(), "database can not be null!");
+
+	    if (! connectionInfo.isPasswordSessionId()) {
+		password = connectionInfo.getAuthentication().getPassword();
+	    }
+	    else {
+		this.sessionId = new String(connectionInfo.getAuthentication().getPassword());
+	    }
+	    
+	    httpManager = new HttpManager(connectionInfo);
+
+	    UserLoginStore userLoginStore = new UserLoginStore(serverUrl, username, database);
+
+	    if (sessionId != null) {
+		userLoginStore.setSessionId(sessionId);
+	    }
+
+	    if (userLoginStore.isAlreadyLogged()) {
+		trace("Get a new connection with get_connection");
+		sessionId = userLoginStore.getSessionId();
+
+		String theUrl = serverUrl + "/session/" + sessionId + "/get_connection";
+		String result = httpManager.callWithGet(theUrl);
+
+		trace("result: " + result);
+
+		ResultAnalyzer resultAnalyzer = new ResultAnalyzer(result, httpManager.getHttpStatusCode(),
+			httpManager.getHttpStatusMessage());
+
+		if (!resultAnalyzer.isStatusOk()) {
+		    throw new AceQLException(resultAnalyzer.getErrorMessage(), resultAnalyzer.getErrorType(), null,
+			    resultAnalyzer.getStackTrace(), httpManager.getHttpStatusCode());
+		}
+
+		String connectionId = resultAnalyzer.getValue("connection_id");
+		trace("Ok. New Connection created: " + connectionId);
+
+		this.url = serverUrl + "/session/" + sessionId + "/connection/" + connectionId + "/";
+
+	    } else {
+		String url = serverUrl + "/database/" + database + "/username/" + username + "/login";
+
+		Map<String, String> parameters = new HashMap<String, String>();
+		parameters.put("password", new String(password));
+		parameters.put("client_version", VersionValues.VERSION);
+
+		String result = httpManager.callWithPostReturnString(new URL(url), parameters);
+
+		trace("result: " + result);
+
+		ResultAnalyzer resultAnalyzer = new ResultAnalyzer(result, httpManager.getHttpStatusCode(),
+			httpManager.getHttpStatusMessage());
+
+		if (!resultAnalyzer.isStatusOk()) {
+		    throw new AceQLException(resultAnalyzer.getErrorMessage(), resultAnalyzer.getErrorType(), null,
+			    resultAnalyzer.getStackTrace(), httpManager.getHttpStatusCode());
+		}
+
+		trace("Ok. Connected! ");
+		sessionId = resultAnalyzer.getValue("session_id");
+		String connectionId = resultAnalyzer.getValue("connection_id");
+		trace("sessionId   : " + sessionId);
+		trace("connectionId: " + connectionId);
+
+		this.url = serverUrl + "/session/" + sessionId + "/connection/" + connectionId + "/";
+
+		userLoginStore.setSessionId(sessionId);
+	    }
+
+	} catch (AceQLException aceQlException) {
+	    throw aceQlException;
+	} catch (Exception e) {
+	    throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
+	}
+    }
+    
+    /**
+     * Login on the AceQL server and connect to a database
      *
      * @param serverUrl              the url of the AceQL server. Example:
      *                               http://localhost:9090/aceql
@@ -100,6 +187,7 @@ public class AceQLHttpApi {
      * @param connectionInfo      TODO
      * @throws AceQLException if any Exception occurs
      */
+    /**<pre><code>
     public AceQLHttpApi(String serverUrl, String database, String username, char[] password, String sessionId,
 	    Proxy proxy, PasswordAuthentication passwordAuthentication, ConnectionInfo connectionInfo)
 	    throws AceQLException {
@@ -186,6 +274,9 @@ public class AceQLHttpApi {
 	}
 
     }
+    </code></pre>
+    */
+
 
     /**
      * @return the connectionInfo
@@ -328,8 +419,7 @@ public class AceQLHttpApi {
     public AceQLHttpApi clone() {
 	AceQLHttpApi aceQLHttpApi;
 	try {
-	    aceQLHttpApi = new AceQLHttpApi(serverUrl, database, username, password, sessionId, httpManager.getProxy(),
-		    httpManager.getPasswordAuthentication(), connectionInfo);
+	    aceQLHttpApi = new AceQLHttpApi(connectionInfo);
 	} catch (SQLException e) {
 	    throw new IllegalStateException(e);
 	}

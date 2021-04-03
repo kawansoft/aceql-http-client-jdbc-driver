@@ -184,17 +184,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	    Objects.requireNonNull(connectionInfo.getDatabase(), "database can not be null!");
 	    Objects.requireNonNull(connectionInfo.getAuthentication(), "authentication can not be null!");
 
-	    if (!connectionInfo.isPasswordSessionId()) {
-		aceQLHttpApi = new AceQLHttpApi(connectionInfo.getUrl(), connectionInfo.getDatabase(),
-			connectionInfo.getAuthentication().getUserName(),
-			connectionInfo.getAuthentication().getPassword(), null, connectionInfo.getProxy(),
-			connectionInfo.getProxyAuthentication(), connectionInfo);
-	    } else {
-		String sessionId = new String(connectionInfo.getAuthentication().getPassword());
-		aceQLHttpApi = new AceQLHttpApi(connectionInfo.getUrl(), connectionInfo.getDatabase(),
-			connectionInfo.getAuthentication().getUserName(), null, sessionId, connectionInfo.getProxy(),
-			connectionInfo.getProxyAuthentication(), connectionInfo);
-	    }
+	    aceQLHttpApi = new AceQLHttpApi(connectionInfo);
 
 	} catch (AceQLException aceQlException) {
 	    throw aceQlException;
