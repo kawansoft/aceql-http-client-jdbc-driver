@@ -20,8 +20,6 @@ package com.aceql.jdbc.commons;
 
 import java.io.Closeable;
 import java.net.HttpURLConnection;
-import java.net.PasswordAuthentication;
-import java.net.Proxy;
 import java.sql.Blob;
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -175,17 +173,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 
     /**
      * Login on the AceQL server and connect to a database.
-     *
-     * @param serverUrl              the URL of the AceQL server. Example:
-     *                               http://localhost:9090/aceql
-     * @param database               the server database to connect to.
-     * @param username               the login
-     * @param password               the password
-     * @param proxy                  the proxy to use. null if none.
-     * @param passwordAuthentication the username and password holder to use for
-     *                               authenticated proxy. Null if no proxy or if
-     *                               proxy does not require authentication.
-     * @param connectionInfo         Advanced Options.
+     * @param connectionInfo         Connection Info required for login.
      * @throws SQLException if any I/O error occurs
      */
     AceQLConnection(ConnectionInfo connectionInfo) throws SQLException {
@@ -196,7 +184,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	    Objects.requireNonNull(connectionInfo.getDatabase(), "database can not be null!");
 	    Objects.requireNonNull(connectionInfo.getAuthentication(), "authentication can not be null!");
 
-	    if (!connectionInfo.isPasswordIsSessionId()) {
+	    if (!connectionInfo.isPasswordSessionId()) {
 		aceQLHttpApi = new AceQLHttpApi(connectionInfo.getUrl(), connectionInfo.getDatabase(),
 			connectionInfo.getAuthentication().getUserName(),
 			connectionInfo.getAuthentication().getPassword(), null, connectionInfo.getProxy(),
@@ -204,84 +192,9 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	    } else {
 		String sessionId = new String(connectionInfo.getAuthentication().getPassword());
 		aceQLHttpApi = new AceQLHttpApi(connectionInfo.getUrl(), connectionInfo.getDatabase(),
-			connectionInfo.getAuthentication().getUserName(),
-			null, sessionId, connectionInfo.getProxy(),
+			connectionInfo.getAuthentication().getUserName(), null, sessionId, connectionInfo.getProxy(),
 			connectionInfo.getProxyAuthentication(), connectionInfo);
 	    }
-
-	} catch (AceQLException aceQlException) {
-	    throw aceQlException;
-	} catch (Exception e) {
-	    throw new AceQLException(e.getMessage(), 0, e, null, HttpURLConnection.HTTP_OK);
-	}
-
-    }
-
-    /**
-     * Login on the AceQL server and connect to a database.
-     *
-     * @param serverUrl              the URL of the AceQL server. Example:
-     *                               http://localhost:9090/aceql
-     * @param database               the server database to connect to.
-     * @param username               the login
-     * @param password               the password
-     * @param proxy                  the proxy to use. null if none.
-     * @param passwordAuthentication the username and password holder to use for
-     *                               authenticated proxy. Null if no proxy or if
-     *                               proxy does not require authentication.
-     * @param connectionInfo         Advanced Options.
-     * @throws SQLException if any I/O error occurs
-     */
-    AceQLConnection(String serverUrl, String database, String username, char[] password, Proxy proxy,
-	    PasswordAuthentication passwordAuthentication, ConnectionInfo connectionInfo) throws SQLException {
-
-	try {
-	    Objects.requireNonNull(serverUrl, "serverUrl can not be null!");
-	    Objects.requireNonNull(database, "database can not be null!");
-	    Objects.requireNonNull(username, "username can not be null!");
-	    Objects.requireNonNull(password, "password can not be null!");
-	    this.connectionInfo = Objects.requireNonNull(connectionInfo, "connectionInfo can not be null!");
-
-	    aceQLHttpApi = new AceQLHttpApi(serverUrl, database, username, password, null, proxy,
-		    passwordAuthentication, connectionInfo);
-
-	} catch (AceQLException aceQlException) {
-	    throw aceQlException;
-	} catch (Exception e) {
-	    throw new AceQLException(e.getMessage(), 0, e, null, HttpURLConnection.HTTP_OK);
-	}
-
-    }
-
-    /**
-     * Connect to a database using an AceQL existing Session ID instead of a
-     * password.
-     *
-     * @param serverUrl              the URL of the AceQL server. Example:
-     *                               http://localhost:9090/aceql
-     * @param database               the server database to connect to
-     * @param username               the login
-     * @param sessionId              the existing AceQL Session ID
-     * @param proxy                  the proxy to use. null if none.
-     * @param passwordAuthentication the username and password holder to use for
-     *                               authenticated proxy. Null if no proxy or if
-     *                               proxy does not require authentication.
-     * @param connectionInfo         Advanced Options.
-     * @throws SQLException if any I/O error occurs
-     */
-    AceQLConnection(String serverUrl, String database, String username, String sessionId, Proxy proxy,
-	    PasswordAuthentication passwordAuthentication, ConnectionInfo connectionInfo) throws SQLException {
-
-	try {
-	    Objects.requireNonNull(serverUrl, "serverUrl can not be null!");
-	    Objects.requireNonNull(database, "database can not be null!");
-	    Objects.requireNonNull(username, "username can not be null!");
-	    Objects.requireNonNull(sessionId, "sessionId can not be null!");
-	    Objects.requireNonNull(connectionInfo, "connectionInfo can not be null!");
-	    this.connectionInfo = Objects.requireNonNull(connectionInfo, "connectionInfo can not be null!");
-
-	    aceQLHttpApi = new AceQLHttpApi(serverUrl, database, username, null, sessionId, proxy,
-		    passwordAuthentication, connectionInfo);
 
 	} catch (AceQLException aceQlException) {
 	    throw aceQlException;

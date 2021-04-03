@@ -65,7 +65,21 @@ public class ConnectionInfo {
     private ResultSetMetaDataPolicy resultSetMetaDataPolicy = ResultSetMetaDataPolicy.off;
     private Map<String, String> requestProperties = new HashMap<>();
 
-
+    /**
+     * Package protected constructor, Driver users can not instantiate the class.
+     * @param url
+     * @param database
+     * @param authentication
+     * @param passwordIsSessionId
+     * @param proxy
+     * @param proxyAuthentication
+     * @param connectTimeout
+     * @param readTimeout
+     * @param gzipResult
+     * @param editionType
+     * @param resultSetMetaDataPolicy
+     * @param requestProperties
+     */
     ConnectionInfo(String url, String database, PasswordAuthentication authentication,
 	    boolean passwordIsSessionId, Proxy proxy, PasswordAuthentication proxyAuthentication, int connectTimeout,
 	    int readTimeout, boolean gzipResult, EditionType editionType,
@@ -117,7 +131,7 @@ public class ConnectionInfo {
      * Says if the password is an AceQL Session ID. Applies only to Professional Edition.
      * @return {@code true} if the password is an AceQL Session ID, else {@code false}
      */
-    public boolean isPasswordIsSessionId() {
+    public boolean isPasswordSessionId() {
         return passwordIsSessionId;
     }
 
@@ -213,10 +227,11 @@ public class ConnectionInfo {
     @Override
     public String toString() {
 	return "ConnectionInfo [url=" + url + ", database=" + database + ", authentication=" + authentication
-		+ ", proxy=" + proxy + ", proxyAuthentication=" + proxyAuthentication + ", connectTimeout="
-		+ connectTimeout + ", readTimeout=" + readTimeout + ", gzipResult=" + gzipResult + ", editionType="
-		+ editionType + ", resultSetMetaDataPolicy=" + resultSetMetaDataPolicy + ", requestProperties="
-		+ requestProperties + "]";
+		+ ", passwordIsSessionId=" + passwordIsSessionId + ", proxy=" + proxy + ", proxyAuthentication="
+		+ proxyAuthentication + ", connectTimeout=" + connectTimeout + ", readTimeout=" + readTimeout
+		+ ", gzipResult=" + gzipResult + ", editionType=" + editionType + ", resultSetMetaDataPolicy="
+		+ resultSetMetaDataPolicy + ", requestProperties=" + requestProperties + "]";
     }
 
+   
 }
