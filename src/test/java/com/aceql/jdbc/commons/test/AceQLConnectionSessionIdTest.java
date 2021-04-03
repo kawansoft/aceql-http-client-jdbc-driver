@@ -18,17 +18,13 @@
  */
 package com.aceql.jdbc.commons.test;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
 
 import com.aceql.jdbc.commons.AceQLConnection;
-import com.aceql.jdbc.commons.AceQLException;
-import com.aceql.jdbc.commons.InternalWrapper;
+import com.aceql.jdbc.commons.test.connection.AceQLDriverLoader;
 
 /**
  * @author Nicolas de Pomereu
@@ -47,7 +43,7 @@ public class AceQLConnectionSessionIdTest {
 	}
     }
 
-    private static void doIt() throws SQLException, AceQLException, FileNotFoundException, IOException {
+    private static void doIt() throws Exception {
 
 	String serverUrlLocalhostEmbedded = "http://localhost:9090/aceql";
 
@@ -57,7 +53,7 @@ public class AceQLConnectionSessionIdTest {
 	String sessionId = getSessionIdFromApiLogin();
 
 	// Get a real Connection instance that points to remote AceQL server
-	Connection connection = InternalWrapper.connectionBuilder(serverUrl, database, username, sessionId, null, null, null);
+	Connection connection = AceQLDriverLoader.getConnection(serverUrl, database, username, sessionId);
 
 	System.out.println();
 	String sql = null;

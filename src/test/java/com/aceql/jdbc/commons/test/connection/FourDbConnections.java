@@ -30,22 +30,22 @@ public class FourDbConnections {
     }
 
     public static Connection getPostgreSQLConnection() throws Exception {
-	Connection connection = AceQLDriverLoader.getConnection(serverUrl, databasePostgreSQL, username, password);
+	Connection connection = AceQLDriverLoader.getConnection(serverUrl, databasePostgreSQL, username, password.toCharArray());
 	return connection;
     }
 
     public static Connection getMySQLConnection() throws Exception {
-	Connection connection = AceQLDriverLoader.getConnection(serverUrl, databaseMySQL, username, password);
+	Connection connection = AceQLDriverLoader.getConnection(serverUrl, databaseMySQL, username, password.toCharArray());
 	return connection;
     }
 
     public static Connection getSqlServerConnection() throws Exception {
-	Connection connection = AceQLDriverLoader.getConnection(serverUrl, databaseSqlServer, username, password);
+	Connection connection = AceQLDriverLoader.getConnection(serverUrl, databaseSqlServer, username, password.toCharArray());
 	return connection;
     }
 
     public static Connection getOracleConnection() throws Exception {
-	Connection connection = AceQLDriverLoader.getConnection(serverUrl, databaseOracle, username, password);
+	Connection connection = AceQLDriverLoader.getConnection(serverUrl, databaseOracle, username, password.toCharArray());
 	return connection;
     }
 

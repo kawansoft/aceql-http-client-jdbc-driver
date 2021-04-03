@@ -20,12 +20,13 @@
 package com.aceql.jdbc.commons.test.connection;
 
 import java.io.IOException;
-import java.net.PasswordAuthentication;
 import java.net.Proxy;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 
-import com.aceql.jdbc.commons.InternalWrapper;
+import com.aceql.jdbc.driver.free.AceQLDriver;
 
 /**
  * Simple AceQLConncetion Creators.
@@ -45,6 +46,7 @@ public class ConnectionBuilder {
      * @return
      * @throws SQLException
      * @throws IOException
+     * @throws ClassNotFoundException 
      */
     public static Connection createOnConfig() throws SQLException, IOException {
 	// Local use
@@ -92,17 +94,33 @@ public class ConnectionBuilder {
 	    // connection = new AceQLConnection(serverUrl, database, username, password);
 
 	    try {
-		connection = AceQLDriverLoader.getConnection(serverUrl, database, username, new String(password));
+		connection = AceQLDriverLoader.getConnection(serverUrl, database, username, password);
 	    } catch (Exception e) {
 		throw new SQLException(e);
 	    }
 
 	} else {
-	    MyProxyInfo myProxyInfo = new MyProxyInfo();
-	    Proxy proxy = myProxyInfo.getProxy();
-	    PasswordAuthentication passwordAuthentication = new PasswordAuthentication(myProxyInfo.getProxyUsername(),
-		    myProxyInfo.getProxyPassword());
-	    connection = InternalWrapper.connectionBuilder(serverUrl, database, username, password, proxy, passwordAuthentication, null);
+	    try {
+		MyProxyInfo myProxyInfo = new MyProxyInfo();
+		Proxy proxy = myProxyInfo.getProxy();
+
+		// Register Driver
+		DriverManager.registerDriver(new AceQLDriver());
+		Class.forName(AceQLDriver.class.getName());
+
+		Properties info = new Properties();
+		info.put("user", username);
+		info.put("password", password);
+		info.put("database", database);
+		info.put("proxyType", proxy.type().toString());
+		info.put("proxyUsername", myProxyInfo.getProxyUsername());
+		info.put("proxyPassword", new String(myProxyInfo.getProxyPassword()));
+		
+		// Open a connection
+		connection = DriverManager.getConnection(serverUrl, info);
+	    } catch (Exception e) {
+		throw new SQLException(e);
+	    }
 	}
 	return connection;
     }

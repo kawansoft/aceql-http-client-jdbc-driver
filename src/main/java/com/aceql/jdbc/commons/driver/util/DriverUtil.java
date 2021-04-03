@@ -20,7 +20,6 @@ package com.aceql.jdbc.commons.driver.util;
 
 import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
-import java.net.PasswordAuthentication;
 import java.net.Proxy;
 import java.net.Proxy.Type;
 import java.net.URL;
@@ -36,9 +35,6 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.aceql.jdbc.commons.AceQLConnection;
-import com.aceql.jdbc.commons.ConnectionOptions;
-import com.aceql.jdbc.commons.InternalWrapper;
 import com.aceql.jdbc.commons.main.util.framework.FrameworkDebug;
 import com.aceql.jdbc.commons.main.util.framework.JdbcUrlHeader;
 import com.aceql.jdbc.commons.main.util.framework.Tag;
@@ -318,43 +314,9 @@ public class DriverUtil {
 	return proxy;
     }
 
+    
     /**
-     * Builds the AceQLConnection Connection
-     *
-     * @param url
-     * @param username
-     * @param password
-     * @param database
-     * @param proxyUsername
-     * @param proxyPassword
-     * @param proxy
-     * @param connectionOptions TODO
-     * @return
-     * @throws SQLException
-     */
-    public static AceQLConnection buildConnection(final String url, String username, String password, String database,
-	    String proxyUsername, String proxyPassword, Proxy proxy, ConnectionOptions connectionOptions)
-	    throws SQLException {
-
-	Objects.requireNonNull(url, "url cannot be null!");
-	Objects.requireNonNull(username, "username cannot be null!");
-	Objects.requireNonNull(password, "password cannot be null!");
-	Objects.requireNonNull(database, "database cannot be null!");
-	Objects.requireNonNull(connectionOptions, "aceQLConnectionOptions cannot be null!");
-
-	PasswordAuthentication passwordAuthentication = null;
-
-	if (proxy != null && proxyUsername != null) {
-	    passwordAuthentication = new PasswordAuthentication(proxyUsername, proxyPassword.toCharArray());
-	}
-
-	AceQLConnection connection = InternalWrapper.connectionBuilder(url, database, username, password.toCharArray(),
-		proxy, passwordAuthentication, connectionOptions);
-	return connection;
-    }
-
-    /**
-     * Check taht required values are not null.
+     * Check that required values are not null.
      *
      * @param username
      * @param password

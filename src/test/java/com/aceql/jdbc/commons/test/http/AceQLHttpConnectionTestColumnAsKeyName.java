@@ -67,7 +67,7 @@ public class AceQLHttpConnectionTestColumnAsKeyName {
 
 	if (connection == null) {
 	    connection = AceQLDriverLoader.getConnection(serverUrl, dbname, username,
-		    password);
+		    password.toCharArray());
 	}
 	return connection;
     }

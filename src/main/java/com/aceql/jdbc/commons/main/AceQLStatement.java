@@ -198,7 +198,7 @@ public class AceQLStatement extends AbstractStatement implements Statement {
 	    this.localResultSetFiles.add(file);
 
 	    aceQLHttpApi.trace("file: " + file);
-	    aceQLHttpApi.trace("gzipResult: " + aceQLHttpApi.getAceQLConnectionOptions().isGzipResult());
+	    aceQLHttpApi.trace("gzipResult: " + aceQLHttpApi.getAceQLConnectionInfo().isGzipResult());
 
 	    boolean isPreparedStatement = false;
 	    boolean isStoredProcedure = false;
@@ -209,7 +209,7 @@ public class AceQLStatement extends AbstractStatement implements Statement {
 		    OutputStream out = new BufferedOutputStream(new FileOutputStream(file));) {
 
 		if (in != null) {
-		    InputStream inFinal = AceQLStatementUtil.getFinalInputStream(in, aceQLHttpApi.getAceQLConnectionOptions().isGzipResult());
+		    InputStream inFinal = AceQLStatementUtil.getFinalInputStream(in, aceQLHttpApi.getAceQLConnectionInfo().isGzipResult());
 		    IOUtils.copy(inFinal, out);
 		}
 	    }

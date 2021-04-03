@@ -23,7 +23,7 @@ import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 
-import com.aceql.jdbc.commons.ConnectionOptions;
+import com.aceql.jdbc.commons.ConnectionInfo;
 import com.aceql.jdbc.commons.main.util.framework.Tag;
 
 /**
@@ -46,7 +46,7 @@ public class HttpManager {
     private int connectTimeout;
     private int readTimeout;
 
-    private ConnectionOptions connectionOptions;
+    private ConnectionInfo connectionInfo;
 
     public static final int MEDIUMB_BLOB_LENGTH_MB = 16;
     public static final int MEDIUM_BLOB_LENGTH = MEDIUMB_BLOB_LENGTH_MB * 1024 * 1024;
@@ -57,15 +57,15 @@ public class HttpManager {
      * @param passwordAuthentication
      * @param connectTimeout
      * @param readTimeout
-     * @param connectionOptions TODO
+     * @param connectionInfo TODO
      */
     public HttpManager(Proxy proxy, PasswordAuthentication passwordAuthentication, int connectTimeout,
-	    int readTimeout, ConnectionOptions connectionOptions) {
+	    int readTimeout, ConnectionInfo connectionInfo) {
 	this.proxy = proxy;
 	this.passwordAuthentication = passwordAuthentication;
 	this.connectTimeout = connectTimeout;
 	this.readTimeout = readTimeout;
-	this.connectionOptions = connectionOptions;
+	this.connectionInfo = connectionInfo;
 
 	setProxyCredentials();
     }
@@ -168,7 +168,7 @@ public class HttpManager {
 	conn.setReadTimeout(readTimeout);
 	conn.setRequestMethod("GET");
 	conn.setDoOutput(true);
-	AceQLHttpApi.addUserRequestProperties(conn, connectionOptions);
+	AceQLHttpApi.addUserRequestProperties(conn, connectionInfo);
 
 	trace();
 	trace("Executing request " + url);
@@ -231,7 +231,7 @@ public class HttpManager {
 	conn.setReadTimeout(readTimeout);
 	conn.setRequestMethod("POST");
 	conn.setDoOutput(true);
-	AceQLHttpApi.addUserRequestProperties(conn, connectionOptions);
+	AceQLHttpApi.addUserRequestProperties(conn, connectionInfo);
 
 	TimeoutConnector timeoutConnector = new TimeoutConnector(conn, connectTimeout);
 

@@ -61,7 +61,7 @@ public class SqlBlobTest {
 	}
 
 	AceQLConnection aceQLConnection = (AceQLConnection) connection;
-	return aceQLConnection.getConnectionOptions().getEditionType().equals(EditionType.Professional);
+	return aceQLConnection.getConnectionInfo().getEditionType().equals(EditionType.Professional);
     }
 
     public void blobUpload(int customerId, int itemId, File file) throws SQLException, IOException {

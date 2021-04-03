@@ -525,7 +525,7 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
 	    this.localResultSetFiles.add(file);
 
 	    aceQLHttpApi.trace("file: " + file);
-	    aceQLHttpApi.trace("gzipResult: " + aceQLHttpApi.getAceQLConnectionOptions().isGzipResult());
+	    aceQLHttpApi.trace("gzipResult: " + aceQLHttpApi.getAceQLConnectionInfo().isGzipResult());
 
 	    boolean isPreparedStatement = true;
 	    Map<String, String> statementParameters = builder.getHttpFormattedStatementParameters();
@@ -543,7 +543,7 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
 		    // Do not use resource try {} ==> We don't want to create an
 		    // empty file
 
-		    InputStream inFinal = AceQLStatementUtil.getFinalInputStream(in, aceQLHttpApi.getAceQLConnectionOptions().isGzipResult());
+		    InputStream inFinal = AceQLStatementUtil.getFinalInputStream(in, aceQLHttpApi.getAceQLConnectionInfo().isGzipResult());
 		    IOUtils.copy(inFinal, out);
 		}
 	    }

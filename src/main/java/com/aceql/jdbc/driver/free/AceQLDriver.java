@@ -32,7 +32,7 @@ import java.util.Properties;
 import java.util.logging.Logger;
 
 import com.aceql.jdbc.commons.AceQLConnection;
-import com.aceql.jdbc.commons.ConnectionOptions;
+import com.aceql.jdbc.commons.ConnectionInfo;
 import com.aceql.jdbc.commons.EditionType;
 import com.aceql.jdbc.commons.InternalWrapper;
 import com.aceql.jdbc.commons.driver.util.DriverPropertyInfoBuilder;
@@ -65,8 +65,9 @@ import com.aceql.jdbc.commons.main.util.framework.Tag;
  * <li><b>proxyPassword</b>: Proxy credential password.</li>
  * <li><b>connectTimeout</b>: Timeout value, in milliseconds, to be used when
  * opening a communications link to the remote server. If the timeout expires
- * before the connection can be established, a java.net.SocketTimeoutException is
- * raised. A timeout of zero is interpreted as an infinite timeout. Defaults to 0.</li>
+ * before the connection can be established, a java.net.SocketTimeoutException
+ * is raised. A timeout of zero is interpreted as an infinite timeout. Defaults
+ * to 0.</li>
  * <li><b>readTimeout</b>: Read timeout to a specified timeout, in milliseconds.
  * A non-zero value specifies the timeout when reading from Input stream when a
  * connection is established to a resource. If the timeout expires before there
@@ -108,6 +109,7 @@ import com.aceql.jdbc.commons.main.util.framework.Tag;
  * <p>
  * An alternate way of passing connection info is to add them as request
  * parameters to the URL:
+ * 
  * <pre>
  * // Define URL of the path to the AceQL Manager Servlet, with all properties
  * // passed as request parameters
@@ -121,8 +123,9 @@ import com.aceql.jdbc.commons.main.util.framework.Tag;
  * // Attempts to establish a connection to the remote database:
  * Connection connection = DriverManager.getConnection(url, new Properties());
  * </pre>
- * The {@code Connection} returned is now ready to be used as a regular or classic
- * {@link java.sql.Connection}:
+ * 
+ * The {@code Connection} returned is now ready to be used as a regular or
+ * classic {@link java.sql.Connection}:
  *
  * <pre>
  * String sql = "select * from customer where customer_id >= 1 order by customer_id";
@@ -132,10 +135,12 @@ import com.aceql.jdbc.commons.main.util.framework.Tag;
  * ResultSet rs = statement.getResultSet();
  * // Etc.
  * </pre>
+ * 
  * The built {@code Connection} is an instance of {@code AceQLConnection} that
  * contains some specific method. <br>
  * See {@link AceQLConnection} for more info. <br>
  * <br>
+ * 
  * @since 6.0
  * @author Nicolas de Pomereu
  */
@@ -198,30 +203,34 @@ final public class AceQLDriver implements java.sql.Driver {
 	String proxyPort = info.getProperty("proxyPort"); // Can be String or Integer
 	String proxyUsername = info.getProperty("proxyUsername");
 	String proxyPassword = info.getProperty("proxyPassword");
-	
+
 	boolean gzipResult = DriverUtil.getGzipResult(info);
 	int connectTimeout = DriverUtil.getConnectTimeout(info);
 	int readTimeout = DriverUtil.getReadTimeout(info);
 	Proxy proxy = DriverUtil.buildProxy(proxyType, proxyHostname, proxyPort);
 
-	Map<String, String> requestProperties = new HashMap<>();
-	ConnectionOptions connectionOptions = InternalWrapper.connectionOptionsBuilder(connectTimeout, readTimeout,
-		gzipResult, EditionType.Community, ResultSetMetaDataPolicy.off, requestProperties);
+	PasswordAuthentication authentication = new PasswordAuthentication(username, password.toCharArray());
 
-	debug("info             : " + info);
-	debug("connectionOptions: " + connectionOptions);
-
-	PasswordAuthentication passwordAuthentication = null;
+	PasswordAuthentication proxyAuthentication = null;
 	if (proxy != null && proxyUsername != null) {
 	    // Password cannot be null
 	    if (proxyPassword == null) {
 		throw new SQLException(Tag.PRODUCT + " Defining an authenticated proxy: proxyPassword cannot be null!");
 	    }
-	    passwordAuthentication = new PasswordAuthentication(proxyUsername, proxyPassword.toCharArray());
+	    proxyAuthentication = new PasswordAuthentication(proxyUsername, proxyPassword.toCharArray());
 	}
 
-	AceQLConnection connection = InternalWrapper.connectionBuilder(url, database, username, password.toCharArray(),
-		proxy, passwordAuthentication, connectionOptions);
+	boolean passwordIsSessionId = false; // Not used in Community Edition
+	Map<String, String> requestProperties = new HashMap<>(); // Not set in Community Edition
+	
+	ConnectionInfo connectionInfo = InternalWrapper.connectionInfoBuilder(url, database, authentication, passwordIsSessionId,
+		proxy, proxyAuthentication, connectTimeout, readTimeout, gzipResult,
+		EditionType.Community, ResultSetMetaDataPolicy.off, requestProperties);
+
+	debug("info          : " + info);
+	debug("connectionInfo: " + connectionInfo);
+
+	AceQLConnection connection = InternalWrapper.connectionBuilder(connectionInfo);
 	return connection;
     }
 

@@ -72,7 +72,7 @@ public class AceConnectionTestFirewall {
 	String username = "user1";
 	String password = "password1";
 
-	Connection connection = AceQLDriverLoader.getConnection(serverUrl, database, username, password);
+	Connection connection = AceQLDriverLoader.getConnection(serverUrl, database, username, password.toCharArray());
 	return connection;
     }
 

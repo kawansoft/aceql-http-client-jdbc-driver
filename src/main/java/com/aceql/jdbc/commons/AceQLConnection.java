@@ -79,10 +79,8 @@ import com.aceql.jdbc.driver.free.AceQLDriver;
  * Check the user documentation or the Javadoc of your AceQL JDBC Driver Edition
  * for more info:
  * <ul>
- * <li>{@link AceQLDriver} for the Community
- * Edition.</li>
- * <li>{@code AceQLDriverPro} for the Professional
- * Edition.</li>
+ * <li>{@link AceQLDriver} for the Community Edition.</li>
+ * <li>{@code AceQLDriverPro} for the Professional Edition.</li>
  * </ul>
  * <p>
  * All thrown exceptions are of type {@link AceQLException}. Use
@@ -92,14 +90,14 @@ import com.aceql.jdbc.driver.free.AceQLDriver;
  * {@code AceQLException#getErrorCode()} and the remote_stack value as a string
  * is available with {@link AceQLException#getRemoteStackTrace()}.
  *
- * The following dedicated <code>AceQLConnection</code> methods
- * are specific to the software and may be accessed with a cast:
+ * The following dedicated <code>AceQLConnection</code> methods are specific to
+ * the software and may be accessed with a cast:
  * <ul>
  * <li>{@link #getClientVersion()}: Gets the AceQL JDBC version info.</li>
  * <li>{@link #getServerVersion()}: Gets the AceQL HTTP Server version
  * info.</li>
- * <li>{@link #getConnectionOptions()}: Gets major options/Properties passed
- * when calling {@link DriverManager#getConnection(String, Properties)}.</li>
+ * <li>{@link #getConnectionInfo()}: Gets major options/Properties passed when
+ * calling {@link DriverManager#getConnection(String, Properties)}.</li>
  * <li>{@link #setCancelled(AtomicBoolean)}: Allows to pass a sharable progress
  * value. See below.</li>
  * <li>{@link #setProgress(AtomicInteger)}: Allows to pass a sharable canceled
@@ -107,13 +105,12 @@ import com.aceql.jdbc.driver.free.AceQLDriver;
  * that the end user has cancelled the current Blob/Clob upload or download</li>
  * </ul>
  * <p>
- * More info about the current AceQLConnection are accessible through the {@link ConnectionOptions}:
- * <blockquote><code>
+ * More info about the current AceQLConnection are accessible through the
+ * {@link ConnectionInfo}: <blockquote><code>
  * // Casts the current Connection to get an AceQLConnection object
  * AceQLConnection aceqlConnection = (AceQLConnection) connection;
- * ConnectionOptions connectionOptions = aceqlConnection.getConnectionOptions();
- * </code></blockquote>
- * <br>
+ * ConnectionInfo connectionInfo = aceqlConnection.getConnectionInfo();
+ * </code></blockquote> <br>
  * All long Blobs update/reading that need to be run on a separated thread may
  * be followed in Swing using a <code>JProgressBar</code>,
  * <code>ProgressMonitor</code> or Android using a {@code ProgressDialog}
@@ -131,8 +128,8 @@ import com.aceql.jdbc.driver.free.AceQLDriver;
  * initialized and passed to {@code AceQLConnection} before the JDBC actions
  * with the setters: <br>
  * <ul>
- * <li>{@link AceQLConnection#setProgress(AtomicInteger)} </li>
- * <li>{@link AceQLConnection#setCancelled(AtomicBoolean)} </li>
+ * <li>{@link AceQLConnection#setProgress(AtomicInteger)}</li>
+ * <li>{@link AceQLConnection#setCancelled(AtomicBoolean)}</li>
  * </ul>
  * <p>
  *
@@ -174,7 +171,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     private boolean closed = false;
 
     /** The Connections Advanced Options */
-    private ConnectionOptions connectionOptions;
+    private ConnectionInfo connectionInfo;
 
     /**
      * Login on the AceQL server and connect to a database.
@@ -188,21 +185,65 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      * @param passwordAuthentication the username and password holder to use for
      *                               authenticated proxy. Null if no proxy or if
      *                               proxy does not require authentication.
-     * @param connectionOptions      Advanced Options.
+     * @param connectionInfo         Advanced Options.
+     * @throws SQLException if any I/O error occurs
+     */
+    AceQLConnection(ConnectionInfo connectionInfo) throws SQLException {
+
+	try {
+	    this.connectionInfo = Objects.requireNonNull(connectionInfo, "connectionInfo can not be null!");
+	    Objects.requireNonNull(connectionInfo.getUrl(), "url can not be null!");
+	    Objects.requireNonNull(connectionInfo.getDatabase(), "database can not be null!");
+	    Objects.requireNonNull(connectionInfo.getAuthentication(), "authentication can not be null!");
+
+	    if (!connectionInfo.isPasswordIsSessionId()) {
+		aceQLHttpApi = new AceQLHttpApi(connectionInfo.getUrl(), connectionInfo.getDatabase(),
+			connectionInfo.getAuthentication().getUserName(),
+			connectionInfo.getAuthentication().getPassword(), null, connectionInfo.getProxy(),
+			connectionInfo.getProxyAuthentication(), connectionInfo);
+	    } else {
+		String sessionId = new String(connectionInfo.getAuthentication().getPassword());
+		aceQLHttpApi = new AceQLHttpApi(connectionInfo.getUrl(), connectionInfo.getDatabase(),
+			connectionInfo.getAuthentication().getUserName(),
+			null, sessionId, connectionInfo.getProxy(),
+			connectionInfo.getProxyAuthentication(), connectionInfo);
+	    }
+
+	} catch (AceQLException aceQlException) {
+	    throw aceQlException;
+	} catch (Exception e) {
+	    throw new AceQLException(e.getMessage(), 0, e, null, HttpURLConnection.HTTP_OK);
+	}
+
+    }
+
+    /**
+     * Login on the AceQL server and connect to a database.
+     *
+     * @param serverUrl              the URL of the AceQL server. Example:
+     *                               http://localhost:9090/aceql
+     * @param database               the server database to connect to.
+     * @param username               the login
+     * @param password               the password
+     * @param proxy                  the proxy to use. null if none.
+     * @param passwordAuthentication the username and password holder to use for
+     *                               authenticated proxy. Null if no proxy or if
+     *                               proxy does not require authentication.
+     * @param connectionInfo         Advanced Options.
      * @throws SQLException if any I/O error occurs
      */
     AceQLConnection(String serverUrl, String database, String username, char[] password, Proxy proxy,
-	    PasswordAuthentication passwordAuthentication, ConnectionOptions connectionOptions) throws SQLException {
+	    PasswordAuthentication passwordAuthentication, ConnectionInfo connectionInfo) throws SQLException {
 
 	try {
 	    Objects.requireNonNull(serverUrl, "serverUrl can not be null!");
 	    Objects.requireNonNull(database, "database can not be null!");
 	    Objects.requireNonNull(username, "username can not be null!");
 	    Objects.requireNonNull(password, "password can not be null!");
-	    this.connectionOptions = Objects.requireNonNull(connectionOptions, "connectionOptions can not be null!");
+	    this.connectionInfo = Objects.requireNonNull(connectionInfo, "connectionInfo can not be null!");
 
 	    aceQLHttpApi = new AceQLHttpApi(serverUrl, database, username, password, null, proxy,
-		    passwordAuthentication, connectionOptions);
+		    passwordAuthentication, connectionInfo);
 
 	} catch (AceQLException aceQlException) {
 	    throw aceQlException;
@@ -225,22 +266,22 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      * @param passwordAuthentication the username and password holder to use for
      *                               authenticated proxy. Null if no proxy or if
      *                               proxy does not require authentication.
-     * @param connectionOptions      Advanced Options.
+     * @param connectionInfo         Advanced Options.
      * @throws SQLException if any I/O error occurs
      */
     AceQLConnection(String serverUrl, String database, String username, String sessionId, Proxy proxy,
-	    PasswordAuthentication passwordAuthentication, ConnectionOptions connectionOptions) throws SQLException {
+	    PasswordAuthentication passwordAuthentication, ConnectionInfo connectionInfo) throws SQLException {
 
 	try {
 	    Objects.requireNonNull(serverUrl, "serverUrl can not be null!");
 	    Objects.requireNonNull(database, "database can not be null!");
 	    Objects.requireNonNull(username, "username can not be null!");
 	    Objects.requireNonNull(sessionId, "sessionId can not be null!");
-	    Objects.requireNonNull(connectionOptions, "connectionOptions can not be null!");
-	    this.connectionOptions = Objects.requireNonNull(connectionOptions, "connectionOptions can not be null!");
+	    Objects.requireNonNull(connectionInfo, "connectionInfo can not be null!");
+	    this.connectionInfo = Objects.requireNonNull(connectionInfo, "connectionInfo can not be null!");
 
 	    aceQLHttpApi = new AceQLHttpApi(serverUrl, database, username, null, sessionId, proxy,
-		    passwordAuthentication, connectionOptions);
+		    passwordAuthentication, connectionInfo);
 
 	} catch (AceQLException aceQlException) {
 	    throw aceQlException;
@@ -269,7 +310,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	if (isClosed()) {
 	    throw new SQLException(Tag.PRODUCT + " Can not created Blob because Connection is closed.");
 	}
-	AceQLBlob blob = new AceQLBlob(connectionOptions.getEditionType());
+	AceQLBlob blob = new AceQLBlob(connectionInfo.getEditionType());
 	return blob;
     }
 
@@ -656,7 +697,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      */
     public String getClientVersion() {
 
-	if (connectionOptions.getEditionType().equals(EditionType.Community)) {
+	if (connectionInfo.getEditionType().equals(EditionType.Community)) {
 	    return com.aceql.jdbc.commons.main.version.Version.getVersion();
 	}
 
@@ -893,18 +934,18 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     }
 
     /**
-     * Gets all the options added to this current AceQL {@code Connection}
+     * Gets all the info of this {@code AceQLConnection} instance
      *
-     * @return the options added to this current AceQL {@code Connection}
+     * @return all the info of this {@code AceQLConnection} instance
      */
-    public ConnectionOptions getConnectionOptions() {
-	return connectionOptions;
+    public ConnectionInfo getConnectionInfo() {
+	return connectionInfo;
     }
 
     @Override
     public String toString() {
-	return "AceQLConnection [getClientVersion()=" + getClientVersion() + ", getConnectionOptions()="
-		+ getConnectionOptions() + "]";
+	return "AceQLConnection [getClientVersion()=" + getClientVersion() + ", getConnectionInfo()="
+		+ getConnectionInfo() + "]";
     }
 
 }

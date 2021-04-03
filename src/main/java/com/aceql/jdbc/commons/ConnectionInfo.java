@@ -19,6 +19,8 @@
 
 package com.aceql.jdbc.commons;
 
+import java.net.PasswordAuthentication;
+import java.net.Proxy;
 import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,26 +28,35 @@ import java.util.Map;
 import com.aceql.jdbc.commons.main.metadata.ResultSetMetaDataPolicy;
 
 /**
- * Allows to get all the major options passed when creating an SQL
- * {@code Connection} to the remote AceQL Server. For security reason, AceQL
- * server's url, database name and authentication info are not retrieved. <br>
+ * Allows to get all the info set and passed when creating an SQL
+ * {@code Connection} to the remote AceQL Server.
  * <br>
- * A {@code ConnectionOptions} instance is retrieved with the
- * {@link AceQLConnection#getConnectionOptions()} call:
- * <br/>
- * <pre><code>
+ * A {@code ConnectionInfo} instance is retrieved with the
+ * {@link AceQLConnection#getConnectionInfo()} call: <br/>
+ * 
+ * <pre>
+ * <code>
  * // Casts the current Connection to get an AceQLConnection object
  * AceQLConnection aceqlConnection = (AceQLConnection) connection;
- * ConnectionOptions connectionOptions = aceqlConnection.getConnectionOptions();
- * System.out.println("connectTimeout: " + connectionOptions.getConnectTimeout());
- * System.out.println("All Options   : " + connectionOptions);
+ * 
+ * ConnectionInfo connectionInfo = aceqlConnection.getConnectionInfo();
+ * System.out.println("connectTimeout: " + connectionInfo.getConnectTimeout());
+ * System.out.println("All Info      : " + connectionInfo);
  * // Etc.
- * </code></pre>
+ * </code>
+ * </pre>
  *
  * @since 6.0
  * @author Nicolas de Pomereu
  */
-public class ConnectionOptions {
+public class ConnectionInfo {
+
+    private String url;
+    private String database;
+    private PasswordAuthentication authentication;
+    private boolean passwordIsSessionId;
+    private Proxy proxy;
+    private PasswordAuthentication proxyAuthentication;
 
     private int connectTimeout = 0;
     private int readTimeout = 0;
@@ -54,24 +65,78 @@ public class ConnectionOptions {
     private ResultSetMetaDataPolicy resultSetMetaDataPolicy = ResultSetMetaDataPolicy.off;
     private Map<String, String> requestProperties = new HashMap<>();
 
-    /**
-     * Package protected, users must not access instance.
-     *
-     * @param connectTimeout
-     * @param readTimeout
-     * @param gzipResult
-     * @param editionType
-     * @param resultSetMetaDataPolicy
-     * @param requestProperties
-     */
-    ConnectionOptions(int connectTimeout, int readTimeout, boolean gzipResult, EditionType editionType,
+
+    ConnectionInfo(String url, String database, PasswordAuthentication authentication,
+	    boolean passwordIsSessionId, Proxy proxy, PasswordAuthentication proxyAuthentication, int connectTimeout,
+	    int readTimeout, boolean gzipResult, EditionType editionType,
 	    ResultSetMetaDataPolicy resultSetMetaDataPolicy, Map<String, String> requestProperties) {
+	super();
+	this.url = url;
+	this.database = database;
+	this.authentication = authentication;
+	this.passwordIsSessionId = passwordIsSessionId;
+	this.proxy = proxy;
+	this.proxyAuthentication = proxyAuthentication;
 	this.connectTimeout = connectTimeout;
 	this.readTimeout = readTimeout;
 	this.gzipResult = gzipResult;
 	this.editionType = editionType;
 	this.resultSetMetaDataPolicy = resultSetMetaDataPolicy;
 	this.requestProperties = requestProperties;
+    }
+
+    /**
+     * Gets the URL of the remote database
+     * 
+     * @return the URL of the remote database
+     */
+    public String getUrl() {
+	return url;
+    }
+
+    /**
+     * Gets the remote database name
+     * 
+     * @return the remote database name
+     */
+    public String getDatabase() {
+	return database;
+    }
+
+    /**
+     * Gets the main authentication info against the AceQL server
+     * 
+     * @return the main authentication info
+     */
+    public PasswordAuthentication getAuthentication() {
+	return authentication;
+    }
+
+    
+    /**
+     * Says if the password is an AceQL Session ID. Applies only to Professional Edition.
+     * @return {@code true} if the password is an AceQL Session ID, else {@code false}
+     */
+    public boolean isPasswordIsSessionId() {
+        return passwordIsSessionId;
+    }
+
+    /**
+     * Gets the Proxy in use. Returns null if no Proxy is in use.
+     * 
+     * @return the Proxy in use.
+     */
+    public Proxy getProxy() {
+	return proxy;
+    }
+
+    /**
+     * Gets the Proxy username & password. Returns null if no Proxy is in use.
+     * 
+     * @return the Proxy username & password.
+     */
+    public PasswordAuthentication getProxyAuthentication() {
+	return proxyAuthentication;
     }
 
     /**
@@ -121,8 +186,8 @@ public class ConnectionOptions {
 
     /**
      * Gets the {@link ResultSetMetaDataPolicy}. Defines the {@code ResultSet}
-     * Metadata policy. Says if the {@code ResultSet} Metadata is to
-     * be downloaded along with the {@code ResultSet}. <br>
+     * Metadata policy. Says if the {@code ResultSet} Metadata is to be downloaded
+     * along with the {@code ResultSet}. <br>
      * <br>
      * This option is only used with the Professional Edition.
      *
@@ -147,8 +212,11 @@ public class ConnectionOptions {
 
     @Override
     public String toString() {
-	return "ConnectionOptions [connectTimeout=" + connectTimeout + ", readTimeout=" + readTimeout + ", gzipResult="
-		+ gzipResult + ", editionType=" + editionType + ", resultSetMetaDataPolicy=" + resultSetMetaDataPolicy
-		+ ", requestProperties=" + requestProperties + "]";
+	return "ConnectionInfo [url=" + url + ", database=" + database + ", authentication=" + authentication
+		+ ", proxy=" + proxy + ", proxyAuthentication=" + proxyAuthentication + ", connectTimeout="
+		+ connectTimeout + ", readTimeout=" + readTimeout + ", gzipResult=" + gzipResult + ", editionType="
+		+ editionType + ", resultSetMetaDataPolicy=" + resultSetMetaDataPolicy + ", requestProperties="
+		+ requestProperties + "]";
     }
+
 }

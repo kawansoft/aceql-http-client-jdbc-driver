@@ -29,25 +29,19 @@ import com.aceql.jdbc.commons.main.http.AceQLHttpApi;
 import com.aceql.jdbc.commons.main.metadata.ResultSetMetaDataPolicy;
 
 /**
- * A internal wrapper for Java package protected calls.
- * <br>This is an internal undocumented class that should not be used nor called by the users of the AceQL JDBC Driver APIs
+ * A internal wrapper for Java package protected calls. <br>
+ * This is an internal undocumented class that should not be used nor called by
+ * the users of the AceQL JDBC Driver APIs
  *
  * @author Nicolas de Pomereu
  *
  */
 public class InternalWrapper {
 
-    public static AceQLConnection connectionBuilder(String serverUrl, String database, String username, char[] password, Proxy proxy,
-	    PasswordAuthentication passwordAuthentication, ConnectionOptions connectionOptions) throws SQLException {
-	AceQLConnection aceQLConnection = new AceQLConnection(serverUrl, database, username, password, proxy, passwordAuthentication, connectionOptions);
-	return aceQLConnection;
+    public static AceQLConnection connectionBuilder(ConnectionInfo connectionInfo) throws SQLException {
+	return new AceQLConnection(connectionInfo);
     }
-
-    public static AceQLConnection connectionBuilder(String serverUrl, String database, String username, String sessionId, Proxy proxy,
-	    PasswordAuthentication passwordAuthentication, ConnectionOptions connectionOptions) throws SQLException {
-	AceQLConnection aceQLConnection = new AceQLConnection(serverUrl, database, username, sessionId, proxy, passwordAuthentication, connectionOptions);
-	return aceQLConnection;
-    }
+   
 
     public static AceQLBlob blobBuilder(byte[] bytes, EditionType editionType) {
 	return new AceQLBlob(bytes, editionType);
@@ -67,11 +61,16 @@ public class InternalWrapper {
 	return aceQLHttpApi;
     }
 
-    public static ConnectionOptions connectionOptionsBuilder(int connectTimeout, int readTimeout, boolean gzipResult,
+    public static ConnectionInfo connectionInfoBuilder(String url, String database,
+	    PasswordAuthentication authentication, boolean passwordIsSessionId, Proxy proxy,
+	    PasswordAuthentication proxyAuthentication, int connectTimeout, int readTimeout, boolean gzipResult,
 	    EditionType editionType, ResultSetMetaDataPolicy resultSetMetaDataPolicy,
 	    Map<String, String> requestProperties) {
-	ConnectionOptions connectionOptions = new ConnectionOptions(connectTimeout, readTimeout,
-		gzipResult, editionType, resultSetMetaDataPolicy, requestProperties);
-	return connectionOptions;
+	ConnectionInfo connectionInfo = new ConnectionInfo(url, database, authentication, passwordIsSessionId, proxy,
+		proxyAuthentication, connectTimeout, readTimeout, gzipResult, editionType, resultSetMetaDataPolicy,
+		requestProperties);
+	return connectionInfo;
     }
+
+
 }

@@ -28,7 +28,7 @@ public class Test {
      * @param args
      */
     public static void main(String[] args) throws Exception {
-
+	
 	System.out.println(Type.HTTP.toString());
 	
 	boolean doIt = false;
