@@ -84,7 +84,6 @@ public class ConnectionInfo {
 	    boolean passwordIsSessionId, Proxy proxy, PasswordAuthentication proxyAuthentication, int connectTimeout,
 	    int readTimeout, boolean gzipResult, EditionType editionType,
 	    ResultSetMetaDataPolicy resultSetMetaDataPolicy, Map<String, String> requestProperties) {
-	super();
 	this.url = url;
 	this.database = database;
 	this.authentication = authentication;
