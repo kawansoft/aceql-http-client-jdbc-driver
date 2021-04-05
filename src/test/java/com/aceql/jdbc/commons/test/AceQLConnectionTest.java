@@ -78,11 +78,14 @@ public class AceQLConnectionTest {
 	boolean doSelectOnRegions = false;
 	boolean doInsertOnRegions = false;
 
-	System.out.println();
 
 	System.out.println("aceQLConnection.getServerVersion(): " + ((AceQLConnection) connection).getServerVersion());
 	System.out.println("aceQLConnection.getClientVersion(): " + ((AceQLConnection) connection).getClientVersion());
+	System.out.println();
 
+	System.out.println("aceQLConnection.getConnectionInfo(): " + ((AceQLConnection) connection).getConnectionInfo());
+	
+	System.out.println();
 	System.out.println("aceQLConnection.getAutoCommit() : " + connection.getAutoCommit());
 	System.out.println("aceQLConnection.isReadOnly()    : " + connection.isReadOnly());
 	System.out.println("aceQLConnection.getHoldability(): " + connection.getHoldability());

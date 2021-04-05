@@ -225,9 +225,13 @@ public class ConnectionInfo {
 
     @Override
     public String toString() {
-	return "ConnectionInfo [url=" + url + ", database=" + database + ", authentication=" + authentication
+	
+	String username = authentication.getUserName();
+	String proxyUsername = proxyAuthentication != null ? proxyAuthentication.getUserName():null;
+	
+	return "ConnectionInfo [url=" + url + ", database=" + database + ", authentication=" + username
 		+ ", passwordIsSessionId=" + passwordIsSessionId + ", proxy=" + proxy + ", proxyAuthentication="
-		+ proxyAuthentication + ", connectTimeout=" + connectTimeout + ", readTimeout=" + readTimeout
+		+ proxyUsername + ", connectTimeout=" + connectTimeout + ", readTimeout=" + readTimeout
 		+ ", gzipResult=" + gzipResult + ", editionType=" + editionType + ", resultSetMetaDataPolicy="
 		+ resultSetMetaDataPolicy + ", requestProperties=" + requestProperties + "]";
     }
