@@ -171,112 +171,6 @@ public class AceQLHttpApi {
 	}
     }
     
-    /**
-     * Login on the AceQL server and connect to a database
-     *
-     * @param serverUrl              the url of the AceQL server. Example:
-     *                               http://localhost:9090/aceql
-     * @param database               the server database to connect to.
-     * @param username               the login
-     * @param password               the password
-     * @param sessionId              the session ID, if no password authentication
-     * @param proxy                  the proxy to use. null if none.
-     * @param passwordAuthentication the username and password holder to use for
-     *                               authenticated proxy. Null if no proxy or if
-     *                               proxy
-     * @param connectionInfo      TODO
-     * @throws AceQLException if any Exception occurs
-     */
-    /**<pre><code>
-    public AceQLHttpApi(String serverUrl, String database, String username, char[] password, String sessionId,
-	    Proxy proxy, PasswordAuthentication passwordAuthentication, ConnectionInfo connectionInfo)
-	    throws AceQLException {
-
-	try {
-
-	    if (password == null && sessionId == null) {
-		throw new IllegalArgumentException("password and sessionId are both null!");
-	    }
-
-	    this.serverUrl = Objects.requireNonNull(serverUrl, "serverUrl can not be null!");
-	    this.username = Objects.requireNonNull(username, "username can not be null!");
-	    this.database = Objects.requireNonNull(database, "database can not be null!");
-	    this.connectionInfo = Objects.requireNonNull(connectionInfo, "connectionInfo can not be null!");
-
-	    this.password = password;
-	    this.sessionId = sessionId;
-
-	    httpManager = new HttpManager(proxy, passwordAuthentication, connectionInfo.getConnectTimeout(),
-		    connectionInfo.getReadTimeout(), connectionInfo);
-
-	    UserLoginStore userLoginStore = new UserLoginStore(serverUrl, username, database);
-
-	    if (sessionId != null) {
-		userLoginStore.setSessionId(sessionId);
-	    }
-
-	    if (userLoginStore.isAlreadyLogged()) {
-		trace("Get a new connection with get_connection");
-		sessionId = userLoginStore.getSessionId();
-
-		String theUrl = serverUrl + "/session/" + sessionId + "/get_connection";
-		String result = httpManager.callWithGet(theUrl);
-
-		trace("result: " + result);
-
-		ResultAnalyzer resultAnalyzer = new ResultAnalyzer(result, httpManager.getHttpStatusCode(),
-			httpManager.getHttpStatusMessage());
-
-		if (!resultAnalyzer.isStatusOk()) {
-		    throw new AceQLException(resultAnalyzer.getErrorMessage(), resultAnalyzer.getErrorType(), null,
-			    resultAnalyzer.getStackTrace(), httpManager.getHttpStatusCode());
-		}
-
-		String connectionId = resultAnalyzer.getValue("connection_id");
-		trace("Ok. New Connection created: " + connectionId);
-
-		this.url = serverUrl + "/session/" + sessionId + "/connection/" + connectionId + "/";
-
-	    } else {
-		String url = serverUrl + "/database/" + database + "/username/" + username + "/login";
-
-		Map<String, String> parameters = new HashMap<String, String>();
-		parameters.put("password", new String(password));
-		parameters.put("client_version", VersionValues.VERSION);
-
-		String result = httpManager.callWithPostReturnString(new URL(url), parameters);
-
-		trace("result: " + result);
-
-		ResultAnalyzer resultAnalyzer = new ResultAnalyzer(result, httpManager.getHttpStatusCode(),
-			httpManager.getHttpStatusMessage());
-
-		if (!resultAnalyzer.isStatusOk()) {
-		    throw new AceQLException(resultAnalyzer.getErrorMessage(), resultAnalyzer.getErrorType(), null,
-			    resultAnalyzer.getStackTrace(), httpManager.getHttpStatusCode());
-		}
-
-		trace("Ok. Connected! ");
-		sessionId = resultAnalyzer.getValue("session_id");
-		String connectionId = resultAnalyzer.getValue("connection_id");
-		trace("sessionId   : " + sessionId);
-		trace("connectionId: " + connectionId);
-
-		this.url = serverUrl + "/session/" + sessionId + "/connection/" + connectionId + "/";
-
-		userLoginStore.setSessionId(sessionId);
-	    }
-
-	} catch (AceQLException aceQlException) {
-	    throw aceQlException;
-	} catch (Exception e) {
-	    throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
-	}
-
-    }
-    </code></pre>
-    */
-
 
     /**
      * @return the connectionInfo
@@ -697,12 +591,9 @@ public class AceQLHttpApi {
 	    InputStream in = httpManager.callWithPost(theUrl, parametersMap);
 	    return in;
 
-	} catch (Exception e) {
-	    if (e instanceof AceQLException) {
-		throw (AceQLException) e;
-	    } else {
-		throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
-	    }
+	} 
+	catch (Exception e) {
+	    throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
 	}
 
     }

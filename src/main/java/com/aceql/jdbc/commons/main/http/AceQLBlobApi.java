@@ -78,13 +78,10 @@ public class AceQLBlobApi {
 	    String lengthStr = resultAnalyzer.getValue("length");
 	    long length = Long.parseLong(lengthStr);
 	    return length;
-
+	} catch (AceQLException e) {
+	    throw e;
 	} catch (Exception e) {
-	    if (e instanceof AceQLException) {
-		throw (AceQLException) e;
-	    } else {
-		throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
-	    }
+	    throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
 	}
     }
 

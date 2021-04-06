@@ -27,9 +27,9 @@ public class BlobUploader {
     private AtomicBoolean cancelled;
     private AtomicInteger progress;
 
-
     /**
      * Constructor.
+     * 
      * @param aceQLHttpApi
      */
     public BlobUploader(AceQLHttpApi aceQLHttpApi) {
@@ -46,6 +46,7 @@ public class BlobUploader {
 
     /**
      * Calls /blob_upload API using a byte array.
+     * 
      * @param blobId
      * @param byteArray
      * @param length
@@ -142,15 +143,11 @@ public class BlobUploader {
 			resultAnalyzer.getStackTrace(), httpStatusCode);
 	    }
 
+	} catch (AceQLException e) {
+	    throw e;
 	} catch (Exception e) {
-	    if (e instanceof AceQLException) {
-		throw (AceQLException) e;
-	    } else {
-		throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
-	    }
+	    throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
 	}
     }
-
-
 
 }

@@ -127,11 +127,11 @@ public class AceQLConnectionUtil {
 	return rawServerVersion.compareToIgnoreCase(META_DATA_CALLS_MIN_SERVER_VERSION) >= 0 ;
     }
 
-    private static String extractRawServerVersion(String version) {
+    private static String extractRawServerVersion(final String version) {
 	Objects.requireNonNull(version, "version cannot be null!");
-	version = StringUtils.substringBetween(version, " v", "-");
-	version = version.trim();
-	return version;
+	String newVersion = StringUtils.substringBetween(version, " v", "-");
+	newVersion = version.trim();
+	return newVersion;
     }
 
 }

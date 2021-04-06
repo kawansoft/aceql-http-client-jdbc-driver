@@ -95,12 +95,12 @@ public class AceQLMetadataApi {
 	    JdbcDatabaseMetaDataDto jdbcDatabaseMetaDataDto = GsonWsUtil.fromJson(result,
 		    JdbcDatabaseMetaDataDto.class);
 	    return jdbcDatabaseMetaDataDto;
-	} catch (Exception e) {
-	    if (e instanceof AceQLException) {
-		throw (AceQLException) e;
-	    } else {
-		throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
-	    }
+	} 
+	catch (AceQLException e) {
+	    throw e;
+	}
+	catch (Exception e) {
+	    throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
 	}
     }
 
