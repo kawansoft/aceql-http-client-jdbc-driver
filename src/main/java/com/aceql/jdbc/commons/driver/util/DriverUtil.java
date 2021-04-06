@@ -100,18 +100,20 @@ public class DriverUtil {
 	    return info;
 	}
 
-	if (info == null) {
-	    info = new Properties();
+	Properties newInfo = new Properties();
+	
+	if (info != null) {
+	    newInfo.putAll(info);
 	}
-
+	
 	String query = StringUtils.substringAfter(url, "?");
 	Map<String, String> mapProps = DriverUtil.getQueryMap(query);
 
 	Set<String> set = mapProps.keySet();
 	for (String propName : set) {
-	    info.setProperty(propName, mapProps.get(propName));
+	    newInfo.setProperty(propName, mapProps.get(propName));
 	}
-	return info;
+	return newInfo;
     }
 
     /**
@@ -120,12 +122,14 @@ public class DriverUtil {
      * @param url
      * @return the trimmed url without parameters & without jdbc:aceql:" prefix
      */
-    public static String trimUrl(String url) {
-	if (url.startsWith(JdbcUrlHeader.JDBC_URL_HEADER)) {
-	    url = StringUtils.substringAfter(url, JdbcUrlHeader.JDBC_URL_HEADER);
+    public static String trimUrl(final String url) {
+	
+	String newUrl = url;
+	if (newUrl.startsWith(JdbcUrlHeader.JDBC_URL_HEADER)) {
+	    newUrl = StringUtils.substringAfter(newUrl, JdbcUrlHeader.JDBC_URL_HEADER);
 	}
 
-	url = StringUtils.substringBefore(url, "?");
+	newUrl = StringUtils.substringBefore(newUrl, "?");
 	return url;
     }
 
@@ -278,11 +282,10 @@ public class DriverUtil {
      * @return	the created Proxy instance
      * @throws SQLException
      */
-    public static Proxy buildProxy(String proxyType, String proxyHostname, String proxyPort) throws SQLException {
+    public static Proxy buildProxy(final String proxyType, final String  proxyHostname, final String proxyPort) throws SQLException {
 
 	// If proxyType is null, empty od DIRECT ==> no proxy in use.
 	if (proxyType == null  || proxyType.isEmpty() || proxyType.equals(Type.DIRECT.toString())) {
-	    proxyType = Type.DIRECT.toString();
 	    return null;
 	}
 

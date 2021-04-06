@@ -48,6 +48,7 @@ import com.aceql.jdbc.commons.main.metadata.RemoteDatabaseMetaData;
 import com.aceql.jdbc.commons.main.util.AceQLConnectionUtil;
 import com.aceql.jdbc.commons.main.util.SimpleClassCaller;
 import com.aceql.jdbc.commons.main.util.framework.Tag;
+import com.aceql.jdbc.commons.main.version.Version;
 import com.aceql.jdbc.driver.free.AceQLDriver;
 
 /**
@@ -601,7 +602,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     public String getClientVersion() {
 
 	if (connectionInfo.getEditionType().equals(EditionType.Community)) {
-	    return com.aceql.jdbc.commons.main.version.Version.getVersion();
+	    return Version.getVersion();
 	}
 
 	else {
@@ -616,7 +617,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 		String clientVersion = (String) obj;
 		return clientVersion;
 	    } catch (Exception e) {
-		throw new RuntimeException(e);
+		throw new IllegalArgumentException(e);
 	    }
 	}
 
