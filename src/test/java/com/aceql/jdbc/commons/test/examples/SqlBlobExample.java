@@ -24,7 +24,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.PrintStream;
 import java.nio.file.Files;
 import java.sql.Blob;
 import java.sql.Connection;
@@ -41,7 +40,6 @@ import com.aceql.jdbc.commons.EditionType;
  * @author Nicolas de Pomereu
  *
  */
-@SuppressWarnings("unused")
 public class SqlBlobExample {
 
     public static boolean USE_BLOB_NATIVE_SYNTAX = true;

@@ -48,7 +48,7 @@ public class DriverExample {
 
 	// Register and Load the Driver
 	DriverManager.registerDriver(new AceQLDriver());
-	String driverClassName = com.aceql.jdbc.driver.free.AceQLDriver.class.getName();
+	String driverClassName = AceQLDriver.class.getName();
 	Class.forName(driverClassName);
 
 	// Attempts to establish a connection to the remote database:

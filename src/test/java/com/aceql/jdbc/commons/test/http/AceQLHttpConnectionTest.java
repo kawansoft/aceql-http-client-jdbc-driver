@@ -68,25 +68,25 @@ public class AceQLHttpConnectionTest {
 
     }
 
-    @Test
-    public void testFailedQuery() {
-	String sql = "select * from not_exist_table";
-	try {
-
-	    Statement statement = getConnection().createStatement();
-	    ResultSet rs = statement.executeQuery(sql);
-
-	    boolean hasRows = false;
-	    if (rs.next()) {
-		hasRows = true;
-	    }
-
-	    assert (!hasRows);
-	} catch (final Exception e) {
-	    // fail(e.getMessage());
-	    assert (e instanceof AceQLException);
-	}
-    }
+//    @Test
+//    public void testFailedQuery() {
+//	String sql = "select * from not_exist_table";
+//	try {
+//
+//	    Statement statement = getConnection().createStatement();
+//	    ResultSet rs = statement.executeQuery(sql);
+//
+//	    boolean hasRows = false;
+//	    if (rs.next()) {
+//		hasRows = true;
+//	    }
+//
+//	    assert (!hasRows);
+//	} catch (final Exception e) {
+//	    // fail(e.getMessage());
+//	    assert (e instanceof AceQLException);
+//	}
+//    }
 
     @Test
     public void testAutoCommit() {
