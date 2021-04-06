@@ -96,7 +96,7 @@ import com.aceql.jdbc.commons.main.util.framework.Tag;
  *
  * // Register and Load the Driver
  * DriverManager.registerDriver(new AceQLDriver());
- * String driverClassName = com.aceql.jdbc.driver.free.AceQLDriver.class.getName();
+ * String driverClassName = AceQLDriver.class.getName();
  * Class.forName(driverClassName);
  *
  * // Attempts to establish a connection to the remote database:
@@ -175,7 +175,7 @@ final public class AceQLDriver implements java.sql.Driver {
      * @exception SQLException if a database access error occurs
      */
     @Override
-    public Connection connect(String url, Properties info) throws SQLException {
+    public Connection connect(String url, final Properties info) throws SQLException {
 
 	if (url == null) {
 	    throw new SQLException("url not set. Please provide an url.");
@@ -185,28 +185,27 @@ final public class AceQLDriver implements java.sql.Driver {
 	    return null;
 	}
 
-	// Properties may be passed in url
 	// Properties may be passed in URL
-	info = DriverUtil.addPropertiesFromUrl(url, info);
+	Properties infoNew = DriverUtil.addPropertiesFromUrl(url, info);
 
 	// Remove "aceql:jdbc" prefix & all parameters
 	url = DriverUtil.trimUrl(url);
 
-	String username = info.getProperty("user");
-	String password = info.getProperty("password");
-	String database = info.getProperty("database");
+	String username = infoNew.getProperty("user");
+	String password = infoNew.getProperty("password");
+	String database = infoNew.getProperty("database");
 	DriverUtil.checkNonNullValues(username, password, database);
 
 	// Add proxy lookup
-	String proxyType = info.getProperty("proxyType");
-	String proxyHostname = info.getProperty("proxyHostname");
-	String proxyPort = info.getProperty("proxyPort"); // Can be String or Integer
-	String proxyUsername = info.getProperty("proxyUsername");
-	String proxyPassword = info.getProperty("proxyPassword");
+	String proxyType = infoNew.getProperty("proxyType");
+	String proxyHostname = infoNew.getProperty("proxyHostname");
+	String proxyPort = infoNew.getProperty("proxyPort"); // Can be String or Integer
+	String proxyUsername = infoNew.getProperty("proxyUsername");
+	String proxyPassword = infoNew.getProperty("proxyPassword");
 
-	boolean gzipResult = DriverUtil.getGzipResult(info);
-	int connectTimeout = DriverUtil.getConnectTimeout(info);
-	int readTimeout = DriverUtil.getReadTimeout(info);
+	boolean gzipResult = DriverUtil.getGzipResult(infoNew);
+	int connectTimeout = DriverUtil.getConnectTimeout(infoNew);
+	int readTimeout = DriverUtil.getReadTimeout(infoNew);
 	Proxy proxy = DriverUtil.buildProxy(proxyType, proxyHostname, proxyPort);
 
 	PasswordAuthentication authentication = new PasswordAuthentication(username, password.toCharArray());
@@ -227,7 +226,7 @@ final public class AceQLDriver implements java.sql.Driver {
 		proxy, proxyAuthentication, connectTimeout, readTimeout, gzipResult,
 		EditionType.Community, ResultSetMetaDataPolicy.off, requestProperties);
 
-	debug("info          : " + info);
+	debug("infoNew       : " + infoNew);
 	debug("connectionInfo: " + connectionInfo);
 
 	AceQLConnection connection = InternalWrapper.connectionBuilder(connectionInfo);
