@@ -74,7 +74,7 @@ import com.aceql.jdbc.commons.main.util.framework.Tag;
  * </pre>
  *
  * <b>{@code SELECT} example for the Community Edition:</b>
- * <br>/
+ * <br/>
  * <pre>
  * String sql = "select jpeg_image from orderlog where customer_id = ? and item_id = ?";
  * PreparedStatement preparedStatement = connection.prepareStatement(sql);
