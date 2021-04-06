@@ -48,12 +48,6 @@ public class SqlBlobExample {
 
     private Connection connection;
 
-    private PrintStream out;
-
-    public SqlBlobExample(Connection connection, PrintStream out) {
-	this.connection = connection;
-	this.out = out;
-    }
 
     private boolean isDriverPro(Connection connection) {
 	if (!(connection instanceof AceQLConnection)) {

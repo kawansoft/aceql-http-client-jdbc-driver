@@ -13,6 +13,7 @@ import com.aceql.jdbc.commons.AceQLException;
 
 /**
  * API for Blob download & get length.
+ * 
  * @author Nicolas de Pomereu
  *
  */
@@ -93,7 +94,7 @@ public class AceQLBlobApi {
      *         JSON format. See user documentation.
      * @throws AceQLException if any Exception occurs
      */
-    public byte [] blobDownloadGetBytes(String blobId) throws AceQLException {
+    public byte[] blobDownloadGetBytes(String blobId) throws AceQLException {
 
 	try {
 
@@ -107,7 +108,7 @@ public class AceQLBlobApi {
 	    parameters.put("blob_id", blobId);
 
 	    URL theUrl = new URL(url + action);
-	    byte [] bytes= httpManager.callWithPostReturnBytes(theUrl, parameters);
+	    byte[] bytes = httpManager.callWithPostReturnBytes(theUrl, parameters);
 
 	    // if (httpStatusCode != HttpURLConnection.HTTP_OK) {
 	    // throw new AceQLException("HTTP_FAILURE" + " " + httpStatusCode
@@ -118,11 +119,7 @@ public class AceQLBlobApi {
 	    return bytes;
 
 	} catch (Exception e) {
-	    if (e instanceof AceQLException) {
-		throw (AceQLException) e;
-	    } else {
-		throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
-	    }
+	    throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
 	}
     }
 
@@ -161,11 +158,7 @@ public class AceQLBlobApi {
 	    return in;
 
 	} catch (Exception e) {
-	    if (e instanceof AceQLException) {
-		throw (AceQLException) e;
-	    } else {
-		throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
-	    }
+	    throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
 	}
     }
 }

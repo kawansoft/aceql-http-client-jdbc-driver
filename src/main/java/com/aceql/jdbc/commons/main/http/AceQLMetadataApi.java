@@ -125,12 +125,12 @@ public class AceQLMetadataApi {
 	    // If result is OK, it's a DTO
 	    TableNamesDto tableNamesDto = GsonWsUtil.fromJson(result, TableNamesDto.class);
 	    return tableNamesDto;
-	} catch (Exception e) {
-	    if (e instanceof AceQLException) {
-		throw (AceQLException) e;
-	    } else {
-		throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
-	    }
+	} 
+	catch (AceQLException e) {
+	    throw e;
+	}
+	catch (Exception e) {
+	    throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
 	}
     }
 
@@ -153,12 +153,12 @@ public class AceQLMetadataApi {
 	    // If result is OK, it's a DTO
 	    TableDto tableDto = GsonWsUtil.fromJson(result, TableDto.class);
 	    return tableDto;
-	} catch (Exception e) {
-	    if (e instanceof AceQLException) {
-		throw (AceQLException) e;
-	    } else {
-		throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
-	    }
+	} 
+	catch (AceQLException e) {
+	    throw e;
+	}
+	catch (Exception e) {
+	    throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
 	}
     }
 

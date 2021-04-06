@@ -282,7 +282,6 @@ public class DriverUtil {
 
 	// If proxyType is null, empty od DIRECT ==> no proxy in use.
 	if (proxyType == null  || proxyType.isEmpty() || proxyType.equals(Type.DIRECT.toString())) {
-	    proxyType = Type.DIRECT.toString();
 	    return null;
 	}
 
@@ -298,8 +297,7 @@ public class DriverUtil {
 	}
 
 	try {
-	    String proxyPortStr = proxyPort.toString();
-	    port = Integer.parseInt(proxyPortStr);
+	    port = Integer.parseInt(proxyPort);
 	} catch (NumberFormatException e) {
 	    throw new SQLException(Tag.PRODUCT + " Invalid proxy port. Port is not numeric: " + proxyPort);
 	}

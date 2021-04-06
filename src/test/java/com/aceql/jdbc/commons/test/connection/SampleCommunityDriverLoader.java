@@ -61,7 +61,7 @@ public class SampleCommunityDriverLoader {
 	Connection connection = DriverManager.getConnection(url, info);
 
 	if (connection == null) {
-	    throw new NullPointerException("connection is null");
+	    throw new SQLException("connection is null!");
 	}
 
 	System.out.println("Connection Created!");
@@ -102,12 +102,12 @@ public class SampleCommunityDriverLoader {
 	info.put("proxyHostname", proxyHostname);
 	info.put("proxyPort", proxyPort);
 	info.put("proxyUsername", proxyUsername);
-	info.put("proxyPassword", new String(proxyPassword));
+	info.put("proxyPassword", proxyPassword);
 	
 	Connection connection = DriverManager.getConnection(url, info);
 
 	if (connection == null) {
-	    throw new NullPointerException("connection is null");
+	    throw new SQLException("connection is null!");
 	}
 
 	System.out.println("Connection Created!");

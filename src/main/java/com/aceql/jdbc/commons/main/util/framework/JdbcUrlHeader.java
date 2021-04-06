@@ -65,14 +65,14 @@ public class JdbcUrlHeader {
      *            the JDBC URL with maybe or not "jdbc:aceql:" header
      * @return the url with "jdbc:aceql:" headers
      */
-    public static String prefixUrlWithJdbcProductName(String url) {
+    public static String prefixUrlWithJdbcProductName(final String url) {
 
 	if (url == null) {
 	    throw new IllegalArgumentException("url is null!");
 	}
 
 	if (!url.startsWith(JDBC_URL_HEADER)) {
-	    url = JDBC_URL_HEADER + url;
+	    return JDBC_URL_HEADER + url;
 	}
 
 	return url;

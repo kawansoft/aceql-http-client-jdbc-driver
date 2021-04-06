@@ -85,25 +85,25 @@ public class AceQLHttpApi {
     /**
      * Login on the AceQL server and connect to a database
      * 
-     * @param connectionInfo	all info necessaty for creating the Connection.
+     * @param connectionInfo all info necessaty for creating the Connection.
      * @throws AceQLException if any Exception occurs
      */
     public AceQLHttpApi(ConnectionInfo connectionInfo) throws SQLException {
 	try {
 
 	    this.connectionInfo = Objects.requireNonNull(connectionInfo, "connectionInfo can not be null!");
-	    
+
 	    this.serverUrl = Objects.requireNonNull(connectionInfo.getUrl(), "serverUrl can not be null!");
-	    this.username = Objects.requireNonNull(connectionInfo.getAuthentication().getUserName(), "username can not be null!");
+	    this.username = Objects.requireNonNull(connectionInfo.getAuthentication().getUserName(),
+		    "username can not be null!");
 	    this.database = Objects.requireNonNull(connectionInfo.getDatabase(), "database can not be null!");
 
-	    if (! connectionInfo.isPasswordSessionId()) {
+	    if (!connectionInfo.isPasswordSessionId()) {
 		password = connectionInfo.getAuthentication().getPassword();
-	    }
-	    else {
+	    } else {
 		this.sessionId = new String(connectionInfo.getAuthentication().getPassword());
 	    }
-	    
+
 	    httpManager = new HttpManager(connectionInfo);
 
 	    UserLoginStore userLoginStore = new UserLoginStore(serverUrl, username, database);
@@ -170,7 +170,6 @@ public class AceQLHttpApi {
 	    throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
 	}
     }
-    
 
     /**
      * @return the connectionInfo
@@ -319,7 +318,6 @@ public class AceQLHttpApi {
 	}
 	return aceQLHttpApi;
     }
-
 
     /**
      * @return the url
@@ -591,8 +589,7 @@ public class AceQLHttpApi {
 	    InputStream in = httpManager.callWithPost(theUrl, parametersMap);
 	    return in;
 
-	} 
-	catch (Exception e) {
+	} catch (Exception e) {
 	    throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
 	}
 
@@ -722,11 +719,7 @@ public class AceQLHttpApi {
 	    return in;
 
 	} catch (Exception e) {
-	    if (e instanceof AceQLException) {
-		throw (AceQLException) e;
-	    } else {
-		throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
-	    }
+	    throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
 	}
 
     }
@@ -790,84 +783,84 @@ public class AceQLHttpApi {
      * <pre>
      * <code>
      public void blobUpload(String blobId, InputStream inputStream, long totalLength) throws AceQLException {
-
+    
     try {
         if (blobId == null) {
     	Objects.requireNonNull(blobId, "blobId cannot be null!");
         }
-
+    
         if (inputStream == null) {
     	Objects.requireNonNull(inputStream, "inputStream cannot be null!");
         }
-
+    
         URL theURL = new URL(url + "blob_upload");
-
+    
         trace("request : " + theURL);
         HttpURLConnection conn = null;
-
+    
         if (httpManager.getProxy() == null) {
     	conn = (HttpURLConnection) theURL.openConnection();
         } else {
     	conn = (HttpURLConnection) theURL.openConnection(httpManager.getProxy());
         }
-
+    
         conn.setRequestProperty("Accept-Charset", "UTF-8");
         conn.setRequestMethod("POST");
         conn.setReadTimeout(readTimeout);
         conn.setDoOutput(true);
         addUserRequestProperties(conn);
-
+    
         final MultipartUtility http = new MultipartUtility(theURL, conn, connectTimeout, progress, cancelled,
     	    totalLength);
-
+    
         Map<String, String> parameters = new HashMap<String, String>();
         parameters.put("blob_id", blobId);
-
+    
         for (Map.Entry<String, String> entry : parameters.entrySet()) {
     	// trace(entry.getKey() + "/" + entry.getValue());
     	http.addFormField(entry.getKey(), entry.getValue());
         }
-
+    
         // Server needs a unique file name to store the blob
         String fileName = UUID.randomUUID().toString() + ".blob";
-
+    
         http.addFilePart("file", inputStream, fileName);
         http.finish();
-
+    
         conn = http.getConnection();
-
+    
         // Analyze the error after request execution
         int httpStatusCode = conn.getResponseCode();
         String httpStatusMessage = conn.getResponseMessage();
-
+    
         trace("blob_id          : " + blobId);
         trace("httpStatusCode   : " + httpStatusCode);
         trace("httpStatusMessage: " + httpStatusMessage);
-
+    
         InputStream inConn = null;
-
+    
         String result;
-
+    
         if (httpStatusCode == HttpURLConnection.HTTP_OK) {
     	inConn = conn.getInputStream();
         } else {
     	inConn = conn.getErrorStream();
         }
-
+    
         result = null;
-
+    
         if (inConn != null) {
     	ByteArrayOutputStream out = new ByteArrayOutputStream();
     	IOUtils.copy(inConn, out);
     	result = out.toString("UTF-8");
         }
-
+    
         ResultAnalyzer resultAnalyzer = new ResultAnalyzer(result, httpStatusCode, httpStatusMessage);
         if (!resultAnalyzer.isStatusOk()) {
     	throw new AceQLException(resultAnalyzer.getErrorMessage(), resultAnalyzer.getErrorType(), null,
     		resultAnalyzer.getStackTrace(), httpStatusCode);
         }
-
+    
     } catch (Exception e) {
         if (e instanceof AceQLException) {
     	throw (AceQLException) e;
