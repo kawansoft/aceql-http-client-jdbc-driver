@@ -62,29 +62,6 @@ public class DriverUtil {
 
     }
 
-    // /**
-    // * Extract all parameters form the query.
-    // *
-    // * @param url
-    // * @param info
-    // * @return
-    // */
-    // public static String buildPropertiesFromUrlParams(final String url,
-    // Properties info) {
-    //
-    // String aceqlUrl;
-    // String query = StringUtils.substringAfter(url, "?");
-    // Map<String, String> mapProps = DriverUtil.getQueryMap(query);
-    //
-    // Set<String> set = mapProps.keySet();
-    // for (String propName : set) {
-    // info.setProperty(propName, mapProps.get(propName));
-    // }
-    //
-    // aceqlUrl = StringUtils.substringBefore(url, "?");
-    // return aceqlUrl;
-    // }
-
     /**
      * Add the properties defined as parameters in the URL
      *
@@ -94,24 +71,26 @@ public class DriverUtil {
      *             included.
      * @return the updated Properties
      */
-    public static Properties addPropertiesFromUrl(String url, Properties info) {
+    public static Properties addPropertiesFromUrl(final String url, final Properties info) {
 
 	if (!url.contains("?")) {
 	    return info;
 	}
 
-	if (info == null) {
-	    info = new Properties();
+	Properties newInfo = new Properties();
+	
+	if (info != null) {
+	    newInfo.putAll(info);
 	}
-
+	
 	String query = StringUtils.substringAfter(url, "?");
 	Map<String, String> mapProps = DriverUtil.getQueryMap(query);
 
 	Set<String> set = mapProps.keySet();
 	for (String propName : set) {
-	    info.setProperty(propName, mapProps.get(propName));
+	    newInfo.setProperty(propName, mapProps.get(propName));
 	}
-	return info;
+	return newInfo;
     }
 
     /**
@@ -120,13 +99,15 @@ public class DriverUtil {
      * @param url
      * @return the trimmed url without parameters & without jdbc:aceql:" prefix
      */
-    public static String trimUrl(String url) {
-	if (url.startsWith(JdbcUrlHeader.JDBC_URL_HEADER)) {
-	    url = StringUtils.substringAfter(url, JdbcUrlHeader.JDBC_URL_HEADER);
+    public static String trimUrl(final String url) {
+	
+	String newUrl = url;
+	if (newUrl.startsWith(JdbcUrlHeader.JDBC_URL_HEADER)) {
+	    newUrl = StringUtils.substringAfter(newUrl, JdbcUrlHeader.JDBC_URL_HEADER);
 	}
 
-	url = StringUtils.substringBefore(url, "?");
-	return url;
+	newUrl = StringUtils.substringBefore(newUrl, "?");
+	return newUrl;
     }
 
     /**

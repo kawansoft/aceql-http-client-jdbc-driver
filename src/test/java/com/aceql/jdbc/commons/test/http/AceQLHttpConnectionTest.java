@@ -30,13 +30,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 
 import com.aceql.jdbc.commons.AceQLConnection;
-import com.aceql.jdbc.commons.AceQLException;
 import com.aceql.jdbc.commons.test.connection.ConnectionBuilder;
 import com.aceql.jdbc.commons.test.connection.ConnectionParms;
 
