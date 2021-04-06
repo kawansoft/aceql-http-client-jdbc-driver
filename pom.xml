@@ -72,7 +72,7 @@
   	<developerConnection>https://github.com/kawansoft/aceql-http-client-jdbc-driver</developerConnection>
   </scm>
   <inceptionYear>2017</inceptionYear>
-  <description>The AceQL Java Client JDBC Driver allows to wrap the AceQL HTTP APIs and eliminate the tedious works of handling communications errors and parsing JSON results.
+  <description>The AceQL Java Client JDBC Driver allows to wrap the AceQL HTTP APIs and eliminates the tedious works of handling communications errors and parsing JSON results.
 
 Android and Java Desktop application developers can access remote SQL databases and/or SQL databases in the cloud by simply including standard JDBC calls in their code, just like they would for a local database.</description>
     <properties>
