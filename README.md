@@ -409,11 +409,10 @@ Trivial or unrelated code is skipped with `//...` comments and `null` values are
 	preparedStatement.executeUpdate();
 ```
 
-<<<<<<< HEAD
 ### BLOB reading 
 
 BLOB reading is supported through `ResultSet.getBinaryStream()`:
-=======
+
 ```java
     // BLOB Creation 
 	// 2) Syntax with PreparedStatement.setBlob
@@ -429,8 +428,6 @@ BLOB reading is supported through `ResultSet.getBinaryStream()`:
 	preparedStatement.executeUpdate();
 ```
 #### BLOB reading with standard syntax
->>>>>>> refs/heads/6.0
-
 ```java
 	// BLOB Reading
 	// 1) Syntax with ResultSet.getBytes
