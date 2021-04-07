@@ -93,7 +93,7 @@ The AceQL Client JDBC Driver comes in two Editions:
 | Edition Name         | Description                                                  | License                                                      |
 | -------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | Community Edition    | The software is free and fully open source with a liberal license. | [Apache 2.0 License](https://www.apache.org/licenses/LICENSE-2.0) |
-| Professional Edition | The software may be [tried for free](https://www.aceql.com/trial.html) or bought on our [online shop](https://sowl.co/VxAsp). License is per year and per developer - There are no runtime fees. | [Commercial License](http://www.aceql.com/rest/soft_java_client/6.0/legal/license.rtf) |
+| Professional Edition | The software may be [tried for free](https://www.aceql.com/trial.html) or bought on our [online shop](https://sowl.co/VxAsp). License is per year and per developer - There are no runtime fees. | [Commercial License](https://www.aceql.com/rest/soft_java_client/6.0/legal/license.rtf) |
 
 ### Differences between the Community Edition & the Professional Edition
 
@@ -109,7 +109,7 @@ This comparison matrix describes the differences between the two Editions:
 | <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;MS SQL Server | <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;MS SQL Server |
 | <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Oracle Database | <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Oracle Database |
 | <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Community  Support | <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Community  Support |
-| <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;[BLOB](https://docs.oracle.com/javase/tutorial/jdbc/basics/blob.html) Type - Size up to 4GB | [BLOB]() type - *Size limited to 16MB*                       |
+| <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;[BLOB](https://docs.oracle.com/javase/tutorial/jdbc/basics/blob.html) Type - Size up to 4GB | BLOB type - *Size limited to 16MB*                           |
 | <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;IBM DB2 Database | <img src="https://www.aceql.com/images/delete_20.png" alt="check!"/> |
 | <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;[Array](https://docs.oracle.com/en/java/javase/11/docs/api/java.sql/java/sql/Array.html) Type | <img src="https://www.aceql.com/images/delete_20.png" alt="check!"/> |
 | <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;[Stored Procedures](https://docs.oracle.com/javase/tutorial/jdbc/basics/storedprocedures.html) | <img src="https://www.aceql.com/images/delete_20.png" alt="check!"/> |
@@ -414,50 +414,50 @@ preparedStatement.executeUpdate();
 BLOB reading is supported through `ResultSet.getBinaryStream()`:
 
 ```java
-// BLOB Creation 
-// 2) Syntax with PreparedStatement.setBlob
-String sql = "insert into orderlog values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-File file = createMyBlobFile();
-PreparedStatement preparedStatement = connection.prepareStatement(sql);
-//...
-Blob blob = connection.createBlob();
-byte[] bytes = Files.readAllBytes(file.toPath());
-blob.setBytes(1, bytes);
-preparedStatement.setBlob(parameterIndex, blob);
-//...
-preparedStatement.executeUpdate();
+    // BLOB Creation 
+    // 2) Syntax with PreparedStatement.setBlob
+    String sql = "insert into orderlog values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    File file = createMyBlobFile();
+    PreparedStatement preparedStatement = connection.prepareStatement(sql);
+    //...
+    Blob blob = connection.createBlob();
+    byte[] bytes = Files.readAllBytes(file.toPath());
+    blob.setBytes(1, bytes);
+    preparedStatement.setBlob(parameterIndex, blob);
+    //...
+    preparedStatement.executeUpdate();
 ```
 #### BLOB reading with standard syntax
 ```java
-// BLOB Reading
-// 1) Syntax with ResultSet.getBytes
-String sql = "select * from orderlog where customer_id = ? and item_id = ?";
-PreparedStatement preparedStatement = connection.prepareStatement(sql);
-//...
-ResultSet rs = preparedStatement.executeQuery();
-if (rs.next()) {
+    // BLOB Reading
+    // 1) Syntax with ResultSet.getBytes
+    String sql = "select * from orderlog where customer_id = ? and item_id = ?";
+    PreparedStatement preparedStatement = connection.prepareStatement(sql);
     //...
-    File file = myAppCreateBlobFile();
-    byte[] bytes = rs.getBytes(columnIndex);
-    InputStream in = new ByteArrayInputStream(bytes);
-    Files.copy(in, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
-}
+    ResultSet rs = preparedStatement.executeQuery();
+    if (rs.next()) {
+        //...
+        File file = myAppCreateBlobFile();
+        byte[] bytes = rs.getBytes(columnIndex);
+        InputStream in = new ByteArrayInputStream(bytes);
+        Files.copy(in, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+    }
 ```
 ```java
-// BLOB Reading
-// 2) Syntax with ResultSet.getBlob
-String sql = "select * from orderlog where customer_id = ? and item_id = ?";
-PreparedStatement preparedStatement = connection.prepareStatement(sql);
-//...
-ResultSet rs = preparedStatement.executeQuery();
-if (rs.next()) {
+    // BLOB Reading
+    // 2) Syntax with ResultSet.getBlob
+    String sql = "select * from orderlog where customer_id = ? and item_id = ?";
+    PreparedStatement preparedStatement = connection.prepareStatement(sql);
     //...
-    File file = myAppCreateBlobFile();
-    Blob blob = rs.getBlob(columnIndex);
-    byte[] bytes = blob.getBytes(1, (int)blob.length());
-    InputStream in = new ByteArrayInputStream(bytes);
-    Files.copy(in, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
-}
+    ResultSet rs = preparedStatement.executeQuery();
+    if (rs.next()) {
+        //...
+        File file = myAppCreateBlobFile();
+        Blob blob = rs.getBlob(columnIndex);
+        byte[] bytes = blob.getBytes(1, (int)blob.length());
+        InputStream in = new ByteArrayInputStream(bytes);
+        Files.copy(in, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+    }
 ```
 ### Advanced syntax with streaming techniques (Professional Edition)
 
@@ -466,65 +466,65 @@ The advanced syntax allows keeping memory consumption low on server side while u
 #### BLOB creation with stream syntax
 
 ```java
-// BLOB Creation 
-// 1) Stream syntax with PreparedStatement.setBytes
-String sql = "insert into orderlog values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-File file = myAppCreateBlobFile();
-PreparedStatement preparedStatement = connection.prepareStatement(sql);
-//...
-InputStream in = new FileInputStream(file); // Stream will be closed by the Driver
-preparedStatement.setBinaryStream(parameterIndex, in, file.length());
-//...
-preparedStatement.executeUpdate();
+    // BLOB Creation 
+    // 1) Stream syntax with PreparedStatement.setBytes
+    String sql = "insert into orderlog values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    File file = myAppCreateBlobFile();
+    PreparedStatement preparedStatement = connection.prepareStatement(sql);
+    //...
+    InputStream in = new FileInputStream(file); // Stream will be closed by the Driver
+    preparedStatement.setBinaryStream(parameterIndex, in, file.length());
+    //...
+    preparedStatement.executeUpdate();
 ```
 
 ```java
-// BLOB Creation
-// 2) Stream syntax with PreparedStatement.setBlob
-String sql = "insert into orderlog values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-File file = myAppCreateBlobFile();
-PreparedStatement preparedStatement = connection.prepareStatement(sql);
-//...
-Blob blob = connection.createBlob();
-OutputStream out = blob.setBinaryStream(1);
-Files.copy(file.toPath(), out);
-preparedStatement.setBlob(parameterIndex, blob);
-//...
-preparedStatement.executeUpdate();
+    // BLOB Creation
+    // 2) Stream syntax with PreparedStatement.setBlob
+    String sql = "insert into orderlog values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    File file = myAppCreateBlobFile();
+    PreparedStatement preparedStatement = connection.prepareStatement(sql);
+    //...
+    Blob blob = connection.createBlob();
+    OutputStream out = blob.setBinaryStream(1);
+    Files.copy(file.toPath(), out);
+    preparedStatement.setBlob(parameterIndex, blob);
+    //...
+    preparedStatement.executeUpdate();
 ```
 
 #### BLOB reading with stream syntax
 
 ```java
-// BLOB Reading
-// 1) Stream syntax with ResultSet.getBinaryStream
-String sql = "select * from orderlog where customer_id = ? and item_id = ?";
-PreparedStatement preparedStatement = connection.prepareStatement(sql);
-//...
-ResultSet rs = preparedStatement.executeQuery();
-if (rs.next()) {
+    // BLOB Reading
+    // 1) Stream syntax with ResultSet.getBinaryStream
+    String sql = "select * from orderlog where customer_id = ? and item_id = ?";
+    PreparedStatement preparedStatement = connection.prepareStatement(sql);
     //...
-    File file = myAppCreateBlobFile();
-    try (InputStream in = rs.getBinaryStream(columnIndex);) {
-        Files.copy(in, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+    ResultSet rs = preparedStatement.executeQuery();
+    if (rs.next()) {
+        //...
+        File file = myAppCreateBlobFile();
+        try (InputStream in = rs.getBinaryStream(columnIndex);) {
+            Files.copy(in, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        }
     }
-}
 ```
 ```java
-// BLOB Reading
-// 2) Stream syntax with ResultSet.getBlob
-String sql = "select * from orderlog where customer_id = ? and item_id = ?";
-PreparedStatement preparedStatement = connection.prepareStatement(sql);
-//...
-ResultSet rs = preparedStatement.executeQuery();
-if (rs.next()) {
+    // BLOB Reading
+    // 2) Stream syntax with ResultSet.getBlob
+    String sql = "select * from orderlog where customer_id = ? and item_id = ?";
+    PreparedStatement preparedStatement = connection.prepareStatement(sql);
     //...
-    File file = myAppCreateBlobFile();
-    Blob blob = rs.getBlob(columnIndex);
-    try (InputStream in = blob.getBinaryStream()) {
-        Files.copy(in, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+    ResultSet rs = preparedStatement.executeQuery();
+    if (rs.next()) {
+        //...
+        File file = myAppCreateBlobFile();
+        Blob blob = rs.getBlob(columnIndex);
+        try (InputStream in = blob.getBinaryStream()) {
+            Files.copy(in, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        }
     }
-}
 ```
 #### Using Progress Bars with Blobs
 
@@ -539,7 +539,7 @@ The atomic variables values will be shared by AceQL download/upload processes an
 
 The values are to be initialized and passed to `AceQLConnection` before the JDBC actions with the static setters:
 
-- [AceQLConnection.setProgress(AtomicInteger progress)](https://www.aceql.com/rest/soft_java_client/6.0/javadoc/com/aceql/jdbc/commons/AceQLConnection.html)
+- [AceQLConnection.setProgress(AtomicInteger progress)](https://www.aceql.com/rest/soft_java_client/6.0/javadoc/com/aceql/jdbc/commons/AceQLConnection.html#setProgress(java.util.concurrent.atomic.AtomicInteger))
 - [AceQLConnection.setCancelled(AtomicBoolean cancelled)](https://www.aceql.com/rest/soft_java_client/6.0/javadoc/com/aceql/jdbc/commons/AceQLConnection.html#setCancelled(java.util.concurrent.atomic.AtomicBoolean))
 
 
