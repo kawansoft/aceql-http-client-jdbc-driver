@@ -689,8 +689,8 @@ It also allows wrapping remote tables, columns, indexes, etc. into easy to use p
 First step is to get an instance of `RemoteDatabaseMetaData`:
 
 ```java
-RemoteDatabaseMetaData remoteDatabaseMetaData = 
-    ((AceQLConnection) connection).getRemoteDatabaseMetaData();
+    RemoteDatabaseMetaData remoteDatabaseMetaData = 
+        ((AceQLConnection) connection).getRemoteDatabaseMetaData();
 ```
 
 ### Downloading database schema into a file
@@ -698,8 +698,8 @@ RemoteDatabaseMetaData remoteDatabaseMetaData =
 Downloading a schema into a Java `File` is done through the method. See the `RemoteDatabaseMetaData` [javadoc](https://www.aceql.com/rest/soft_java_client/6.0/javadoc/com/aceql/jdbc/commons/main/metadata/RemoteDatabaseMetaData.html).
 
 ```java
-File file = new File("db_schema.out.html");
-remoteDatabaseMetaData.dbSchemaDownload(file);
+    File file = new File("db_schema.out.html");
+    remoteDatabaseMetaData.dbSchemaDownload(file);
 ```
 
 See an example of the built HTML schema:  [db_schema.out.html](https://www.aceql.com/rest/soft_java_client/6.0/src/db_schema.out.html)
@@ -820,9 +820,9 @@ These snapshots show usage of a remote AceQL Connection in DbVisualizer:
 If your application never calls `ResultSet.getMetaData()`, it's better to disallow the default behavior by passing the `resultSetMetaDataPolicy` property set to `off` value:
 
 ```java
-// Do not download the metadata along with ResultSet content:
-info.put("resultSetMetaDataPolicy ", "off"); 
-Connection connection = DriverManager.getConnection(url, info);
+    // Do not download the metadata along with ResultSet content:
+    info.put("resultSetMetaDataPolicy ", "off"); 
+    Connection connection = DriverManager.getConnection(url, info);
 ```
 
 ## Using outer authentication without a password and with an AceQL Session ID (Professional Edition)
@@ -834,15 +834,15 @@ In this case, you may use directly the native HTTP [login](https://github.com/ka
 The `session_id` value will be passed to the dedicated `sessionId` property:
 
 ```java
-	Properties info = new Properties();
-	info.put("user", user);
-	info.put("database", database);
-	info.put("licenseKeyFolder", "c:\\myFolder"); 
-    
-	String sessionId = getMySessionIdFromApiLogin();
-	info.put("sessionId", sessionId); 
-    
-	Connection connection = DriverManager.getConnection(url, info);
+    Properties info = new Properties();
+    info.put("user", user);
+    info.put("database", database);
+    info.put("licenseKeyFolder", "c:\\myFolder"); 
+
+    String sessionId = getMySessionIdFromApiLogin();
+    info.put("sessionId", sessionId); 
+
+    Connection connection = DriverManager.getConnection(url, info);
 ```
 
 ## Passing request headers for validation on server side (Professional Edition)
