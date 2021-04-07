@@ -65,7 +65,7 @@
 
 This document describes how to use the AceQL Client JDBC Driver and gives some details about how it operates with the server side.
 
-The AceQL Client JDBC Driver allows users to wrap the [AceQL HTTP APIs](https://github.com/kawansoft/aceql-http/blob/master/aceql-http-6.2-user-guide-api.md) and eliminate the tedious work of handling communication errors and parsing JSON results.
+The AceQL Client JDBC Driver allows users to wrap the [AceQL HTTP APIs](https://github.com/kawansoft/aceql-http/blob/master/aceql-http-6.4-user-guide-api.md) and eliminate the tedious work of handling communication errors and parsing JSON results.
 
 Android and Java Desktop application developers can access remote SQL databases and/or SQL databases in the cloud, simply by including standard JDBC calls in their code, just like they would for a local database.
 
@@ -301,7 +301,7 @@ Sample code:
 
 ## Handling Exceptions
 
-Except for `NullPointerException`, exceptions thrown are always an instance of [AceQLException](https://www.aceql.com/rest/soft_java_client/6.0/javadoc/com/aceql/client/jdbc/AceQLException.html).
+Except for `NullPointerException`, exceptions thrown are always an instance of [AceQLException.](https://www.aceql.com/rest/soft_java_client/6.0/javadoc/com/aceql/jdbc/commons/AceQLConnection.html)
 
 The `AceQLException` contains 5 pieces of information :
 
@@ -539,9 +539,8 @@ The atomic variables values will be shared by AceQL download/upload processes an
 
 The values are to be initialized and passed to `AceQLConnection` before the JDBC actions with the static setters:
 
-- [AceQLConnection.setProgress(AtomicInteger progress)](https://www.aceql.com/rest/soft_java_client/6.0/javadoc/com/aceql/client/jdbc/AceQLConnection.html#setProgress(java.util.concurrent.atomic.AtomicInteger))
-
-- [AceQLConnection.setCancelled(AtomicBoolean cancelled)](https://www.aceql.com/rest/soft_java_client/6.0/javadoc/com/aceql/client/jdbc/AceQLConnection.html#setCancelled(java.util.concurrent.atomic.AtomicBoolean))
+- [AceQLConnection.setProgress(AtomicInteger progress)](https://www.aceql.com/rest/soft_java_client/6.0/javadoc/com/aceql/jdbc/commons/AceQLConnection.html)
+- [AceQLConnection.setCancelled(AtomicBoolean cancelled)](https://www.aceql.com/rest/soft_java_client/6.0/javadoc/com/aceql/jdbc/commons/AceQLConnection.html#setCancelled(java.util.concurrent.atomic.AtomicBoolean))
 
 
 Values will then be updated and read:
@@ -696,7 +695,7 @@ RemoteDatabaseMetaData remoteDatabaseMetaData =
 
 ### Downloading database schema into a file
 
-Downloading a schema into a Java `File` is done through the method. See the `RemoteDatabaseMetaData` [javadoc](https://www.aceql.com/rest/soft_java_client/6.0/javadoc/com/aceql/client/metadata/RemoteDatabaseMetaData.html): 
+Downloading a schema into a Java `File` is done through the method. See the `RemoteDatabaseMetaData` [javadoc](https://www.aceql.com/rest/soft_java_client/6.0/javadoc/com/aceql/jdbc/commons/main/metadata/RemoteDatabaseMetaData.html).
 
 ```java
 File file = new File("db_schema.out.html");
@@ -707,7 +706,7 @@ See an example of the built HTML schema:  [db_schema.out.html](https://www.aceql
 
 ### Accessing remote database main properties
 
-The [JdbcDatabaseMetaData](https://www.aceql.com/rest/soft_java_client/6.0/javadoc/com/aceql/client/metadata/JdbcDatabaseMetaData.html) class wraps instance the main value retrieved by a remote JDBC call to `Connection.getMetaData`(): 
+The [JdbcDatabaseMetaData](https://www.aceql.com/rest/soft_java_client/6.0/javadoc/com/aceql/jdbc/commons/main/metadata/JdbcDatabaseMetaData.html) class wraps instance the main value retrieved by a remote JDBC call to `Connection.getMetaData`(): 
 
 ```java
 JdbcDatabaseMetaData jdbcDatabaseMetaData = remoteDatabaseMetaData.getJdbcDatabaseMetaData();
@@ -718,7 +717,7 @@ JdbcDatabaseMetaData jdbcDatabaseMetaData = remoteDatabaseMetaData.getJdbcDataba
 
 ### Getting Details of Tables and Columns
 
-See the [javadoc](https://www.aceql.com/rest/soft_java_client/6.0/javadoc/com/aceql/client/metadata/package-summary.html) of the `com.aceql.jdbc.commons.main.metadata` package: 
+See the [javadoc](https://www.aceql.com/rest/soft_java_client/6.0/javadoc/com/aceql/jdbc/commons/main/metadata/package-summary.html) of the `com.aceql.jdbc.commons.main.metadata` package: 
 
 ```java
     System.out.println("Get the table names:");
