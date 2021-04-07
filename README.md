@@ -397,16 +397,16 @@ Trivial or unrelated code is skipped with `//...` comments and `null` values are
 #### BLOB creation with standard syntax
 
 ```java
-	// BLOB Creation 
-	// 1) Syntax with PreparedStatement.setBytes
-    String sql = "insert into orderlog values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    File file = createMyBlobFile();
-	PreparedStatement preparedStatement = connection.prepareStatement(sql);
-	//...
-	byte[] bytes = Files.readAllBytes(file.toPath());
-	preparedStatement.setBytes(parameterIndex, bytes);
-    //...
-	preparedStatement.executeUpdate();
+// BLOB Creation 
+// 1) Syntax with PreparedStatement.setBytes
+String sql = "insert into orderlog values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+File file = createMyBlobFile();
+PreparedStatement preparedStatement = connection.prepareStatement(sql);
+//...
+byte[] bytes = Files.readAllBytes(file.toPath());
+preparedStatement.setBytes(parameterIndex, bytes);
+//...
+preparedStatement.executeUpdate();
 ```
 
 ### BLOB reading 
@@ -414,50 +414,50 @@ Trivial or unrelated code is skipped with `//...` comments and `null` values are
 BLOB reading is supported through `ResultSet.getBinaryStream()`:
 
 ```java
-    // BLOB Creation 
-	// 2) Syntax with PreparedStatement.setBlob
-    String sql = "insert into orderlog values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    File file = createMyBlobFile();
-	PreparedStatement preparedStatement = connection.prepareStatement(sql);
-    //...
-    Blob blob = connection.createBlob();
-    byte[] bytes = Files.readAllBytes(file.toPath());
-    blob.setBytes(1, bytes);
-    preparedStatement.setBlob(parameterIndex, blob);
-    //...
-	preparedStatement.executeUpdate();
+// BLOB Creation 
+// 2) Syntax with PreparedStatement.setBlob
+String sql = "insert into orderlog values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+File file = createMyBlobFile();
+PreparedStatement preparedStatement = connection.prepareStatement(sql);
+//...
+Blob blob = connection.createBlob();
+byte[] bytes = Files.readAllBytes(file.toPath());
+blob.setBytes(1, bytes);
+preparedStatement.setBlob(parameterIndex, blob);
+//...
+preparedStatement.executeUpdate();
 ```
 #### BLOB reading with standard syntax
 ```java
-	// BLOB Reading
-	// 1) Syntax with ResultSet.getBytes
-	String sql = "select * from orderlog where customer_id = ? and item_id = ?";
-	PreparedStatement preparedStatement = connection.prepareStatement(sql);
-	//...
-	ResultSet rs = preparedStatement.executeQuery();
-	if (rs.next()) {
-        //...
-        File file = myAppCreateBlobFile();
-		byte[] bytes = rs.getBytes(columnIndex);
-		InputStream in = new ByteArrayInputStream(bytes);
-		Files.copy(in, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
-    }
+// BLOB Reading
+// 1) Syntax with ResultSet.getBytes
+String sql = "select * from orderlog where customer_id = ? and item_id = ?";
+PreparedStatement preparedStatement = connection.prepareStatement(sql);
+//...
+ResultSet rs = preparedStatement.executeQuery();
+if (rs.next()) {
+    //...
+    File file = myAppCreateBlobFile();
+    byte[] bytes = rs.getBytes(columnIndex);
+    InputStream in = new ByteArrayInputStream(bytes);
+    Files.copy(in, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+}
 ```
 ```java
-    // BLOB Reading
-    // 2) Syntax with ResultSet.getBlob
-	String sql = "select * from orderlog where customer_id = ? and item_id = ?";
-	PreparedStatement preparedStatement = connection.prepareStatement(sql);
+// BLOB Reading
+// 2) Syntax with ResultSet.getBlob
+String sql = "select * from orderlog where customer_id = ? and item_id = ?";
+PreparedStatement preparedStatement = connection.prepareStatement(sql);
+//...
+ResultSet rs = preparedStatement.executeQuery();
+if (rs.next()) {
     //...
-    ResultSet rs = preparedStatement.executeQuery();
-    if (rs.next()) {
-        //...
-        File file = myAppCreateBlobFile();
-        Blob blob = rs.getBlob(columnIndex);
-        byte[] bytes = blob.getBytes(1, (int)blob.length());
-        InputStream in = new ByteArrayInputStream(bytes);
-		Files.copy(in, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
-    }
+    File file = myAppCreateBlobFile();
+    Blob blob = rs.getBlob(columnIndex);
+    byte[] bytes = blob.getBytes(1, (int)blob.length());
+    InputStream in = new ByteArrayInputStream(bytes);
+    Files.copy(in, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+}
 ```
 ### Advanced syntax with streaming techniques (Professional Edition)
 
@@ -466,65 +466,65 @@ The advanced syntax allows keeping memory consumption low on server side while u
 #### BLOB creation with stream syntax
 
 ```java
-	// BLOB Creation 
-	// 1) Stream syntax with PreparedStatement.setBytes
-    String sql = "insert into orderlog values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    File file = myAppCreateBlobFile();
-	PreparedStatement preparedStatement = connection.prepareStatement(sql);
-	//...
-	InputStream in = new FileInputStream(file); // Stream will be closed by the Driver
-	preparedStatement.setBinaryStream(parameterIndex, in, file.length());
-    //...
-	preparedStatement.executeUpdate();
+// BLOB Creation 
+// 1) Stream syntax with PreparedStatement.setBytes
+String sql = "insert into orderlog values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+File file = myAppCreateBlobFile();
+PreparedStatement preparedStatement = connection.prepareStatement(sql);
+//...
+InputStream in = new FileInputStream(file); // Stream will be closed by the Driver
+preparedStatement.setBinaryStream(parameterIndex, in, file.length());
+//...
+preparedStatement.executeUpdate();
 ```
 
 ```java
-   	// BLOB Creation
-	// 2) Stream syntax with PreparedStatement.setBlob
-    String sql = "insert into orderlog values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    File file = myAppCreateBlobFile();
-	PreparedStatement preparedStatement = connection.prepareStatement(sql);
-    //...
-    Blob blob = connection.createBlob();
-    OutputStream out = blob.setBinaryStream(1);
-    Files.copy(file.toPath(), out);
-    preparedStatement.setBlob(parameterIndex, blob);
-    //...
-	preparedStatement.executeUpdate();
+// BLOB Creation
+// 2) Stream syntax with PreparedStatement.setBlob
+String sql = "insert into orderlog values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+File file = myAppCreateBlobFile();
+PreparedStatement preparedStatement = connection.prepareStatement(sql);
+//...
+Blob blob = connection.createBlob();
+OutputStream out = blob.setBinaryStream(1);
+Files.copy(file.toPath(), out);
+preparedStatement.setBlob(parameterIndex, blob);
+//...
+preparedStatement.executeUpdate();
 ```
 
 #### BLOB reading with stream syntax
 
 ```java
-    // BLOB Reading
-    // 1) Stream syntax with ResultSet.getBinaryStream
-	String sql = "select * from orderlog where customer_id = ? and item_id = ?";
-    PreparedStatement preparedStatement = connection.prepareStatement(sql);
+// BLOB Reading
+// 1) Stream syntax with ResultSet.getBinaryStream
+String sql = "select * from orderlog where customer_id = ? and item_id = ?";
+PreparedStatement preparedStatement = connection.prepareStatement(sql);
+//...
+ResultSet rs = preparedStatement.executeQuery();
+if (rs.next()) {
     //...
-    ResultSet rs = preparedStatement.executeQuery();
-    if (rs.next()) {
-        //...
-        File file = myAppCreateBlobFile();
-		try (InputStream in = rs.getBinaryStream(columnIndex);) {
-			Files.copy(in, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
-		}
+    File file = myAppCreateBlobFile();
+    try (InputStream in = rs.getBinaryStream(columnIndex);) {
+        Files.copy(in, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
     }
+}
 ```
 ```java
-    // BLOB Reading
-    // 2) Stream syntax with ResultSet.getBlob
-	String sql = "select * from orderlog where customer_id = ? and item_id = ?";
-    PreparedStatement preparedStatement = connection.prepareStatement(sql);
+// BLOB Reading
+// 2) Stream syntax with ResultSet.getBlob
+String sql = "select * from orderlog where customer_id = ? and item_id = ?";
+PreparedStatement preparedStatement = connection.prepareStatement(sql);
+//...
+ResultSet rs = preparedStatement.executeQuery();
+if (rs.next()) {
     //...
-    ResultSet rs = preparedStatement.executeQuery();
-    if (rs.next()) {
-        //...
-        File file = myAppCreateBlobFile();
-        Blob blob = rs.getBlob(columnIndex);
-        try (InputStream in = blob.getBinaryStream()) {
-        	Files.copy(in, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
-        }
+    File file = myAppCreateBlobFile();
+    Blob blob = rs.getBlob(columnIndex);
+    try (InputStream in = blob.getBinaryStream()) {
+        Files.copy(in, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
     }
+}
 ```
 #### Using Progress Bars with Blobs
 
