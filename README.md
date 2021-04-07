@@ -7,25 +7,32 @@
 
 # AceQL HTTP 
 
-## Java Client SDK v5.1 - November 2020, 11
+## AceQL Client JDBC Driver v6.0 - User Guide
+
+## April 6, 2021
 
 <img src="https://www.aceql.com/favicon.png" alt="AceQ HTTP Icon"/>
 
    * [Fundamentals](#fundamentals)
       * [Technical operating environment](#technical-operating-environment)
-      * [License](#license)
       * [AceQL Server side compatibility](#aceql-server-side-compatibility)
-      * [SDK instead of JDBC Driver](#sdk-instead-of-jdbc-driver)
-      * [AceQL Java Client SDK installation](#aceql-java-client-sdk-installation)
+      * [The AceQL Client JDBC Driver Editions](#the-aceql-client-jdbc-driver-editions)
+         * [Differences between the Community Edition &amp; the Professional Edition](#differences-between-the-community-edition--the-professional-edition)
+      * [Community Edition Installation](#community-edition-installation)
          * [Maven](#maven)
          * [Single Jar](#single-jar)
-         * [Android Project settings](#android-project-settings)
+      * [Professional Edition Installation](#professional-edition-installation)
+         * [Download](#download)
+         * [Defining the path to the Aceql license key file](#defining-the-path-to-the-aceql-license-key-file)
+      * [Android Project settings (Both Editions)](#android-project-settings-both-editions)
       * [Data transport](#data-transport)
          * [Transport format](#transport-format)
          * [Content streaming and memory management](#content-streaming-and-memory-management)
       * [Best practices for fast response time](#best-practices-for-fast-response-time)
-   * [Using the AceQL Java Client SDK](#using-the-aceql-java-client-sdk)
+   * [Using the AceQL Client JDBC Driver](#using-the-aceql-client-jdbc-driver)
       * [Connection creation](#connection-creation)
+         * [Community Edition](#community-edition)
+         * [Professional Edition](#professional-edition)
       * [Using a Proxy](#using-a-proxy)
       * [Handling Exceptions](#handling-exceptions)
          * [The error type](#the-error-type)
@@ -34,23 +41,31 @@
       * [Data types](#data-types)
       * [SQL Transactions and Connections modifiers](#sql-transactions-and-connections-modifiers)
       * [BLOB management](#blob-management)
-         * [BLOB creation](#blob-creation)
-         * [BLOB reading](#blob-reading)
-         * [Using Progress Bars with Blobs](#using-progress-bars-with-blobs)
+         * [Standard syntax](#standard-syntax)
+            * [BLOB creation with standard syntax](#blob-creation-with-standard-syntax)
+            * [BLOB reading with standard syntax](#blob-reading-with-standard-syntax)
+         * [Advanced syntax with streaming techniques (Professional Edition)](#advanced-syntax-with-streaming-techniques-professional-edition)
+            * [BLOB creation with stream syntax](#blob-creation-with-stream-syntax)
+            * [BLOB reading with stream syntax](#blob-reading-with-stream-syntax)
+            * [Using Progress Bars with Blobs](#using-progress-bars-with-blobs)
       * [HTTP session options](#http-session-options)
-      * [Using outer authentication without a password  and with an AceQL Session ID](#using-outer-authentication-without-a-password--and-with-an-aceql-session-id)
-   * [Using the Metadata Query API](#using-the-metadata-query-api)
-      * [Downloading database schema into a file](#downloading-database-schema-into-a-file)
-      * [Accessing remote database main properties](#accessing-remote-database-main-properties)
-      * [Getting Details of Tables and Columns](#getting-details-of-tables-and-columns)
+      * [Using the AceQL Metadata Query API](#using-the-aceql-metadata-query-api)
+         * [Downloading database schema into a file](#downloading-database-schema-into-a-file)
+         * [Accessing remote database main properties](#accessing-remote-database-main-properties)
+         * [Getting Details of Tables and Columns](#getting-details-of-tables-and-columns)
+      * [Using the native JDBC Metadata Query API (Professional Edition)](#using-the-native-jdbc-metadata-query-api-professional-edition)
+         * [Code Sample](#code-sample)
+         * [Using Database viewers with the AceQL Client JDBC Driver](#using-database-viewers-with-the-aceql-client-jdbc-driver)
+         * [Disabling JDBC MetaData calls when not required](#disabling-jdbc-metadata-calls-when-not-required)
+      * [Using outer authentication without a password and with an AceQL Session ID (Professional Edition)](#using-outer-authentication-without-a-password-and-with-an-aceql-session-id-professional-edition)
+      * [Passing request headers for validation on server side (Professional Edition)](#passing-request-headers-for-validation-on-server-side-professional-edition)
    * [Limitations](#limitations)
-
 
 # Fundamentals 
 
-This document describes how to use the AceQL Java Client SDK and gives some details about how it operates with the server side.
+This document describes how to use the AceQL Client JDBC Driver and gives some details about how it operates with the server side.
 
-The AceQL Java Client SDK allows users to wrap the [AceQL HTTP APIs](https://github.com/kawansoft/aceql-http/blob/master/aceql-http-6.2-user-guide-api.md) and eliminate the tedious work of handling communication errors and parsing JSON results.
+The AceQL Client JDBC Driver allows users to wrap the [AceQL HTTP APIs](https://github.com/kawansoft/aceql-http/blob/master/aceql-http-6.2-user-guide-api.md) and eliminate the tedious work of handling communication errors and parsing JSON results.
 
 Android and Java Desktop application developers can access remote SQL databases and/or SQL databases in the cloud, simply by including standard JDBC calls in their code, just like they would for a local database.
 
@@ -58,52 +73,88 @@ The AceQL Server operation is described in [AceQL HTTP Server Installation and C
 
 ## Technical operating environment 
 
-The AceQL Java Client SDK is entirely written in Java, and functions identically with Microsoft Windows, Linux, and all versions of UNIX supporting Java 8+.
+The AceQL Client JDBC Driver is entirely written in Java, and functions identically with Microsoft Windows, Linux, and all versions of UNIX supporting Java 8+.
 
 The only required third party installation is a recent JVM:
 
-| OS                                       | **JVM (Java Virtual Machine)** |
-| ---------------------------------------- | ------------------------------ |
-| Android                                  | Android 4.1+                   |
-| Windows <br>UNIX/Linux<br>OS X  / mac OS | Java 8+                        |
-
-## License
-
-The SDK is licensed with the liberal [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0) license.
+| OS                                  | **JVM (Java Virtual Machine)** |
+| ----------------------------------- | ------------------------------ |
+| Android                             | Android 4.1+                   |
+| Windows, UNIX/Linux, OS X  / mac OS | Java 8+                        |
 
 ## AceQL Server side compatibility
 
-This 4.0.x SDK version is compatible with AceQL HTTP server side v5.0.2+.
+The Client JDBC Driver version is compatible with AceQL HTTP server side v6.2+.
 
-## SDK instead of JDBC Driver
+## The AceQL Client JDBC Driver Editions
 
-Note that the SDK is *not *a real JDBC Driver, because it lacks important metadata call capabilities:
+The AceQL Client JDBC Driver comes in two Editions:
 
-- `Connection.getMetaData()`.
-- `ResultSet.getMetaData()`.
+| Edition Name         | Description                                                  | License                                                      |
+| -------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| Community Edition    | The software is free and fully open source with a liberal license. | [Apache 2.0 License](https://www.apache.org/licenses/LICENSE-2.0) |
+| Professional Edition | The software may be [tried for free](https://www.aceql.com/trial.html) or bought on our [online shop](https://sowl.co/VxAsp). License is per year and per developer - There are no runtime fees. | [Commercial License](http://www.aceql.com/rest/soft_java_client/6.0/legal/license.rtf) |
 
-Because Metadata calls are not supported, we decided not to package the SDK as a real JDBC Driver. It could not be used with third party database query tools, thus it would be misleading to present it as a real JDBC Driver.
+### Differences between the Community Edition & the Professional Edition
 
-Note that we will soon release a real JDBC Driver. Please contact us at [contact@kawansoft.com](mailto:contact@kawansoft.com) if you would like more information.
+This comparison matrix describes the differences between the two Editions:
 
-## AceQL Java Client SDK installation
+| Professional Edition<br>&nbsp;                               | Free - Community Edition<br>&nbsp;                           |
+| :----------------------------------------------------------- | :----------------------------------------------------------- |
+| <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Works as a real [JDBC Driver](https://docs.oracle.com/javase/tutorial/jdbc/basics/connecting.html) <br/>Plug & play without source code edition | <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Works as a  real [JDBC Driver](https://docs.oracle.com/javase/tutorial/jdbc/basics/connecting.html) <br/>Plug & play without source code edition |
+| <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Main SQL types<br/>`Boolean`, `Integer`, `Short`, `Double`, `Float`, `BigDecimal`, `Long`, `String`, `Date`, `Time`, `Timestamp` | <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Main SQL types<br/>`Boolean`, `Integer`, `Short`, `Double`, `Float`, `BigDecimal`, `Long`, `String`, `Date`, `Time`, `Timestamp` |
+| <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Connection  through HTTP Proxy | <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Connection  through HTTP Proxy |
+| <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;SQL Transactions<br/>`Connection.commit()`, `Connection.rollback()`, `Connection.setAutocomit()` | <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;SQL Transactions<br/>`Connection.commit()`, `Connection.rollback()`, `Connection.setAutocomit()` |
+| <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Open Source Databases<br/>MySQL, PostgreSQL, MariaDB | <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Open Source Databases<br/>MySQL, PostgreSQL, MariaDB |
+| <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;MS SQL Server | <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;MS SQL Server |
+| <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Oracle Database | <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Oracle Database |
+| <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Community  Support | <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Community  Support |
+| <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;[BLOB](https://docs.oracle.com/javase/tutorial/jdbc/basics/blob.html) Type - Size up to 4GB | [BLOB]() type - *Size limited to 16MB*                       |
+| <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;IBM DB2 Database | <img src="https://www.aceql.com/images/delete_20.png" alt="check!"/> |
+| <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;[Array](https://docs.oracle.com/en/java/javase/11/docs/api/java.sql/java/sql/Array.html) Type | <img src="https://www.aceql.com/images/delete_20.png" alt="check!"/> |
+| <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;[Stored Procedures](https://docs.oracle.com/javase/tutorial/jdbc/basics/storedprocedures.html) | <img src="https://www.aceql.com/images/delete_20.png" alt="check!"/> |
+| <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;JDBC API Metadata<br/>`Connection.getMetadata()`, `ResultSet.getMetaData()` | <img src="https://www.aceql.com/images/delete_20.png" alt="check!"/> |
+| <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;JDBC Clients Tools & GUI <br/>[DBeaver](https://dbeaver.io/), [DbVisualizer](https://www.dbvis.com/), [JetBrains DataGrip](https://www.jetbrains.com/datagrip/), [RazorSQL](https://razorsql.com/), [SQuirreL SQL](http://squirrel-sql.sourceforge.net/) | <img src="https://www.aceql.com/images/delete_20.png" alt="check!"/> |
+| <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>Allows outer authentication without a password | <img src="https://www.aceql.com/images/delete_20.png" alt="check!"/> |
+| <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>Allows passing request headers for validation on server | <img src="https://www.aceql.com/images/delete_20.png" alt="check!"/> |
+| <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Enterprise Support (Slack & Email)<br/>4H Guaranteed Response Time | <img src="https://www.aceql.com/images/delete_20.png" alt="check!"/> |
+
+## Community Edition Installation
 
 ### Maven
 
 ```xml
 <dependency>
     <groupId>com.aceql</groupId>
-    <artifactId>aceql-http-client-sdk</artifactId>
-    <version>5.1</version>
+    <artifactId>aceql-http-client-jdbc-driver</artifactId>
+    <version>6.0</version>
 </dependency>
 ```
 ### Single Jar 
 
 For non Maven users: a single jar with all dependencies is available on the [download page](https://www.aceql.com/aceql-download-page.html).
 
-### Android Project settings
+## Professional Edition Installation
 
- Add the following3 lines to your AndroidManifest.xml:
+### Download
+
+You may download the Professional Edition through either :
+
+1. [The Free 30-Trial Web Page](https://www.aceql.com/trial.html): the download link and the trial key license file will be sent by email.
+2. [The Online Shop](https://sowl.co/VxAsp): the download link and the product key license file will be sent by email.
+
+Extract from the archive the `aceql-http-client-jdbc-driver-pro-6.0.jar` and add it to your CLASSPATH.
+
+### Defining the path to the Aceql license key file
+
+There a two ways to precise the path of the `aceql_license_key.txt` file:
+
+1. **Default**: Put the `aceql_license_key.txt` file into the  `user.dir` directory of your Desktop application.
+2. **Using the `licenseKeyFolder` JDBC Driver property**: Define the JDBC Driver `licenseKeyFolder` property and set the value of the folder that contains the `aceql_license_key.txt` file.  See [Using the AceQL Client JDBC Driver](# Using the AceQL Client JDBC Driver) for implementation.
+
+## Android Project settings (Both Editions)
+
+ Add the following 3 lines to your AndroidManifest.xml:
 
 ```xml
 <uses-permission android:name="android.permission.INTERNET" />
@@ -122,8 +173,6 @@ AceQL transfers the least possible amount of meta-information:
 - Request parameters are  transported in UTF-8 format.
 - JSON format is used for data  and class transport (using `javax.json` package).
 
-
-
 ### Content streaming and memory management 
 
 All requests are streamed: 
@@ -131,9 +180,7 @@ All requests are streamed:
 - Output requests (from the client side) are streamed directly from the socket to the server to avoid     buffering any content body.
 - Input responses (for the client side) are streamed directly from the socket to the server to efficiently read the response body.
 
-
-
-Large content (ResultSet, Blobs/Clobs…) is transferred using files. It is never loaded in memory. Streaming techniques are always used to read and write this content.
+Large content (ResultSet, …) is transferred using files. It is never loaded in memory. Streaming techniques are always used to read and write this content.
 
 ## Best practices for fast response time
 
@@ -143,71 +190,118 @@ Try to avoid coding JDBC calls inside loops, as this can reduce execution speed.
 
 Note that AceQL is optimized as much as possible:
 
-- A SELECT call returning a huge Result Set will not consume memory on the server or client side:  AceQL uses input stream and output stream I/O for ResultSet transfer.
+- A SELECT call returning a huge Result Set will not consume memory on the server or client side:  AceQL uses input stream and output stream I/O for `ResultSet` transfer.
 
 - Result Set retrieval is as fast as possible:  
   - The `ResultSet` creation is done once on the server by the `executeQuery()`.
   - The rows are all dumped at once on the servlet output stream by the server.
-  - The client side gets the ResultSet content as a file.
+  - The client side gets the `ResultSet` content as a file.
   - All `ResultSet` navigation commands are executed locally on the client side by navigating through the file:  `next()`, `prev(`), `first()`, `last()`, etc. 
 
-# Using the AceQL Java Client SDK
+# Using the AceQL Client JDBC Driver
 
 We will use the same `sampledb` database for all our code samples. 
 
-The schema is available here: [sampledb.txt](http://www.aceql.com/rest/soft_java_client/5.1/src/sampledb.txt). 
+The schema is available here: [sampledb.txt](http://www.aceql.com/rest/soft_java_client/6.0/src/sampledb.txt). 
 
 ## Connection creation
 
-The  `Connection` to the remote database is created using AceQL’s [AceQLConnection](https://www.aceql.com/rest/soft_java_client/5.1/javadoc/com/aceql/client/jdbc/AceQLConnection.html) class and passing the URL of the `ServerSqlManager` Servlet of your server configuration:
+Usage of the AceQL Client JDBC Driver is straightforward: it just requires to create a `Connection` as you would do with any other JDBC Driver. There 
+
+The  `Connection` to the remote database is created using the standard [DriverManager.getConnection(String url, Properties info)](https://docs.oracle.com/javase/8/docs/api/java/sql/DriverManager.html#getConnection-java.lang.String-java.util.Properties-) JDBC method and passing the URL of the `ServerSqlManager` Servlet of your server configuration:
+
+### Community Edition
 
 ```java
-  // The URL of the AceQL Server servlet
-  // Port number is the port number used to start the Web Server:
-  String url = "https://www.acme.com:9443/aceql";
+	// The URL of the AceQL Server servlet
+	// Port number is the port number used to start the Web Server:
+	String url = "https://www.acme.com:9443/aceql";
 
-  // The remote database to use:
-  String database = "sampledb";
+	// The remote database to use:
+	String database = "sampledb";
 
-  // (username, password) for authentication on server side.
-  // No authentication will be done for our Quick Start:
-  String username = "MyUsername";
-  char [] password = { 'M', 'y', 'S', 'e', 'c', 'r', 'e', 't'}; 
+	// (user, password) for authentication on server side.
+	String user = "MyUsername";
+	String password = "MySecret";
 
-  // Attempt to establish a connection to the remote database:
-  Connection connection = new AceQLConnection(url, database, username,
-      password);
+	// Register the Community Edition Driver
+	DriverManager.registerDriver(new AceQLDriver());
+	Class.forName(AceQLDriver.class.getName());
+
+	Properties info = new Properties();
+	info.put("user", user);
+	info.put("password", password);
+	info.put("database", database);
+
+	Connection connection = DriverManager.getConnection(url, info);
 ```
+### Professional Edition
+
+Creating a Connection with the Professional Edition is slightly different: 
+
+1. The Driver class name is `AceQLDriverPro`
+2. The Driver requires to know the folder that contains the Aceql license key file (`aceql_license_key.txt` ). This is done by defining the folder path in the `licenseKeyFolder` property.
+
+```java
+	// The URL of the AceQL Server servlet
+	// Port number is the port number used to start the Web Server:
+	String url = "https://www.acme.com:9443/aceql";
+
+	// The remote database to use:
+	String database = "sampledb";
+
+	// (user, password) for authentication on server side
+	String user = "MyUsername";
+	String password = "MySecret";
+
+	// Register the Professional Edition Driver
+	DriverManager.registerDriver(new AceQLDriverPro());
+	Class.forName(AceQLDriverPro.class.getName());
+
+	Properties info = new Properties();
+	info.put("user", user);
+	info.put("password", password);
+	info.put("database", database);
+	
+	// c:\\myFolder contains the aceql_license_key.txt file.
+	// If not set, will default to user.dir resolved at runtime
+	info.put("licenseKeyFolder", "c:\\myFolder"); 
+
+	Connection connection = DriverManager.getConnection(url, info);
+```
+
 From now on, you can use the connection to execute updates and queries on the remote database, using standard and unmodified JDBC calls. 
 
 ## Using a Proxy
 
-Communication via a proxy server is done using a `java.net.Proxy` instance.
+Communication via a proxy server is done using dedicated `properties`.  Proxy authentication is supported.
 
-If proxy requires authentication, pass the credentials using  a `java.net.PasswordAuthentication` instance:
+| Property Name   | Property Value                                               | Remarks                                                      |
+| --------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| `proxyType`     | The proxy type.  `DIRECT`, `HTTP` or `SOCKS`. Defaults to `DIRECT`. | if `DIRECT`, no proxy will be used.                          |
+| `proxyHostname` | The hostname of the proxy. Defaults to `null`.               | Mandatory value if `proxyType` is not `DIRECT`.              |
+| `proxyPort`     | The proxy port. Defaults to `0`.                             | Property must be set as a String.                            |
+| `proxyUsername` | The username for an authenticated proxy. Defaults to `null`. | The proxy in use is an authenticated proxy if value is not `null`. |
+| `proxyPassword` | The password for an authenticated proxy. Defaults to `null`. | Must be not `null` if `proxyUsername` is set.                |
+
+Sample code:
 
 ```java
-  // Proxy info
-  String proxyHost = "localhost";
-  int proxyPort = 8080;
-  String proxyUsername = "myProxyUsername";
-  char[] proxyPassword = { 'p', 'a', 's', 's', 'w', 'o', 'r', 'd' };
+  	// Proxy info. Port number is passed as a String
+	info.put("proxyType", "HTTP");
+	info.put("proxyHostname", "localhost");
+	info.put("proxyPort", "8081"); 
+	info.put("proxyUsername", "myProxyUsername");
+	info.put("proxyPassword", "myProxyPassword");
 
-  Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(
-  proxyHost, proxyPort));
-
-  PasswordAuthentication authentication = new PasswordAuthentication(
-  proxyUsername, proxyPassword);
-
-  // Attempt to establish a connection to the remote database using a
-  // Proxy
-  Connection connection = new AceQLConnection(url, database, username,
-  password, proxy, authentication);
+  	// Attempt to establish a connection to the remote database 
+	// using an HTTP Proxy:
+  	Connection connection = DriverManager.getConnection(url, info);
 ```
 
 ## Handling Exceptions
 
-Except for `NullPointerException`, exceptions thrown are always an instance of [AceQLException](https://www.aceql.com/rest/soft_java_client/5.1/javadoc/com/aceql/client/jdbc/AceQLException.html).
+Except for `NullPointerException`, exceptions thrown are always an instance of [AceQLException](https://www.aceql.com/rest/soft_java_client/6.0/javadoc/com/aceql/client/jdbc/AceQLException.html).
 
 The `AceQLException` contains 5 pieces of information :
 
@@ -271,142 +365,171 @@ When an error occurs:
 
 ## Data types 
 
- The main JDBC data types for columns are supported: 
+The main JDBC data types for columns are supported: 
 
-Boolean, Blob/Clob, Integer, Short, Double, Float, BigDecimal, Long,String, Date, Time, Timestamp, URL and Array.  
+Boolean, Blob, Integer, Short, Double, Float, BigDecimal, Long,String, Date, Time, Timestamp, and Array.  
 
 ## SQL Transactions and Connections modifiers
 
-The AceQLSDK support SQL transactions with:
+The AceQL Client JDBC Driver support SQL transactions with:
 
-- `commit()`
-- `rollback()`
-- `setAutoCommit(boolean autoCommit)`
+- `Connection.commit()`
+- `Connection.rollback()`
+- Connection.`setAutoCommit(boolean autoCommit)`
 
-The following Connections modifiers calls are supported in this version:
+The following Connections modifiers calls are supported in this version for all Editions:
 
-- `setHoldability(int holdability)`
+- `Connection.setHoldability(int holdability)`
 
-- `setTransactionIsolation(int level)`
+- `Connection.setTransactionIsolation(int level)`
 
-- `setReadOnly(boolean readOnly)`
+- `Connection.setReadOnly(boolean readOnly)`
 
 
 ## BLOB management
 
-The AceQL SDK supports BLOB creation and reading. Methods are implemented using streaming techniques to keep memory consumption low, both on the client and server sides.
+The AceQL Client JDBC Driver supports BLOB creation and reading. Methods are implemented using streaming techniques to always keep memory consumption low on server side.
 
-CLOB are not supported in this version.
+Trivial or unrelated code is skipped with `//...` comments and `null` values are not tested in the sample codes for the sake of clarity.
 
-### BLOB creation
+### Standard syntax
 
-BLOB creation is supported through `PreparedStatement.setBinaryStream()`:
+#### BLOB creation with standard syntax
 
 ```java
-    /**
-     * An INSERT example with a Blob.
-     */
-    public void insertOrderWithImage(int customerId, int itemNumber,
-	    String itemDescription, BigDecimal itemCost, File imageFile)
-	    throws SQLException, IOException {
-
-	// Some databases require to be in a transaction for BLOB actions
-	connection.setAutoCommit(false);
-
-	try {
-
-	    String sql = "insert into orderlog "
-		    + "values ( ?, ?, ?, ?, ?, ?, ?, ?, ? )";
-
-	    // We will insert a Blob (the image of the product).
-	    // The transfer will be done in streaming both on the client
-	    // and on the Server: we can upload/download very big files.
-	    InputStream in = new BufferedInputStream(new FileInputStream(
-		    imageFile));
-
-	    // Create a new Prepared Statement
-	    PreparedStatement prepStatement = connection.prepareStatement(sql);
-
-	    int i = 1;
-	    long theTime = new java.util.Date().getTime();
-	    java.sql.Date theDate = new java.sql.Date(theTime);
-	    Timestamp theTimestamp = new Timestamp(theTime);
-
-	    prepStatement.setInt(i++, customerId);
-	    prepStatement.setInt(i++, itemNumber);
-	    prepStatement.setString(i++, itemDescription);
-	    prepStatement.setBigDecimal(i++, itemCost);
-	    prepStatement.setDate(i++, theDate);
-	    prepStatement.setTimestamp(i++, theTimestamp);
-	    prepStatement.setBinaryStream(i++, in, (int) imageFile.length());
-	    prepStatement.setInt(i++, 0);
-	    prepStatement.setInt(i++, 1);
-
-	    prepStatement.executeUpdate();
-	    prepStatement.close();
-	} catch (Exception e) {
-	    connection.rollback();
-	    throw e;
-	} finally {
-	    connection.setAutoCommit(true);
-	}
-  }
+	// BLOB Creation 
+	// 1) Syntax with PreparedStatement.setBytes
+    String sql = "insert into orderlog values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    File file = createMyBlobFile();
+	PreparedStatement preparedStatement = connection.prepareStatement(sql);
+	//...
+	byte[] bytes = Files.readAllBytes(file.toPath());
+	preparedStatement.setBytes(parameterIndex, bytes);
+    //...
+	preparedStatement.executeUpdate();
 ```
 
+<<<<<<< HEAD
 ### BLOB reading 
 
 BLOB reading is supported through `ResultSet.getBinaryStream()`:
+=======
+```java
+    // BLOB Creation 
+	// 2) Syntax with PreparedStatement.setBlob
+    String sql = "insert into orderlog values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    File file = createMyBlobFile();
+	PreparedStatement preparedStatement = connection.prepareStatement(sql);
+    //...
+    Blob blob = connection.createBlob();
+    byte[] bytes = Files.readAllBytes(file.toPath());
+    blob.setBytes(1, bytes);
+    preparedStatement.setBlob(parameterIndex, blob);
+    //...
+	preparedStatement.executeUpdate();
+```
+#### BLOB reading with standard syntax
+>>>>>>> refs/heads/6.0
 
 ```java
-   /**
-     * A SELECT example with a BLOB.
-     */
-    public void selectOrdersForCustomerWithImage(int customerId, int itemId,
-	    File imageFile) throws SQLException, IOException {
+	// BLOB Reading
+	// 1) Syntax with ResultSet.getBytes
+	String sql = "select * from orderlog where customer_id = ? and item_id = ?";
+	PreparedStatement preparedStatement = connection.prepareStatement(sql);
+	//...
+	ResultSet rs = preparedStatement.executeQuery();
+	if (rs.next()) {
+        //...
+        File file = myAppCreateBlobFile();
+		byte[] bytes = rs.getBytes(columnIndex);
+		InputStream in = new ByteArrayInputStream(bytes);
+		Files.copy(in, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+    }
+```
+```java
+    // BLOB Reading
+    // 2) Syntax with ResultSet.getBlob
+	String sql = "select * from orderlog where customer_id = ? and item_id = ?";
+	PreparedStatement preparedStatement = connection.prepareStatement(sql);
+    //...
+    ResultSet rs = preparedStatement.executeQuery();
+    if (rs.next()) {
+        //...
+        File file = myAppCreateBlobFile();
+        Blob blob = rs.getBlob(columnIndex);
+        byte[] bytes = blob.getBytes(1, (int)blob.length());
+        InputStream in = new ByteArrayInputStream(bytes);
+		Files.copy(in, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+    }
+```
+### Advanced syntax with streaming techniques (Professional Edition)
 
-	// Some databases require to be in a transaction for BLOB actions
-	connection.setAutoCommit(false);
+The advanced syntax allows keeping memory consumption low on server side while uploading very large files (> 2 Gb).
 
-	try {
+#### BLOB creation with stream syntax
 
-	    String sql = "select customer_if, order_id, jpeg_image "
-	    	+ "from orderlog where customer_id = ? and item_id = ?";
-
-	    PreparedStatement prepStatement = connection.prepareStatement(sql);
-	    int i = 1;
-	    prepStatement.setInt(i++, customerId);
-	    prepStatement.setInt(i++, itemId);
-
-	    ResultSet rs = prepStatement.executeQuery();
-
-	    if (rs.next()) {
-		int customer_id = rs.getInt("customer_id");
-		int item_id = rs.getInt("item_id");
-
-		// Get BLOB from remote server and store it on disk:
-		try (InputStream in = rs.getBinaryStream("jpeg_image")) {
-		    Files.copy(in, imageFile.toPath());
-		}
-
-		System.out.println();
-		System.out.println("customer_id : " + customer_id);
-		System.out.println("item_id     : " + item_id);
-		System.out.println("jpeg_image  : " + imageFile);
-
-	    }
-
-	    prepStatement.close();
-	    rs.close();
-	} catch (Exception e) {
-	    connection.rollback();
-	    throw e;
-	} finally {
-	    connection.setAutoCommit(true);
-	}
- }
+```java
+	// BLOB Creation 
+	// 1) Stream syntax with PreparedStatement.setBytes
+    String sql = "insert into orderlog values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    File file = myAppCreateBlobFile();
+	PreparedStatement preparedStatement = connection.prepareStatement(sql);
+	//...
+	InputStream in = new FileInputStream(file); // Stream will be closed by the Driver
+	preparedStatement.setBinaryStream(parameterIndex, in, file.length());
+    //...
+	preparedStatement.executeUpdate();
 ```
 
-### Using Progress Bars with Blobs
+```java
+   	// BLOB Creation
+	// 2) Stream syntax with PreparedStatement.setBlob
+    String sql = "insert into orderlog values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    File file = myAppCreateBlobFile();
+	PreparedStatement preparedStatement = connection.prepareStatement(sql);
+    //...
+    Blob blob = connection.createBlob();
+    OutputStream out = blob.setBinaryStream(1);
+    Files.copy(file.toPath(), out);
+    preparedStatement.setBlob(parameterIndex, blob);
+    //...
+	preparedStatement.executeUpdate();
+```
+
+#### BLOB reading with stream syntax
+
+```java
+    // BLOB Reading
+    // 1) Stream syntax with ResultSet.getBinaryStream
+	String sql = "select * from orderlog where customer_id = ? and item_id = ?";
+    PreparedStatement preparedStatement = connection.prepareStatement(sql);
+    //...
+    ResultSet rs = preparedStatement.executeQuery();
+    if (rs.next()) {
+        //...
+        File file = myAppCreateBlobFile();
+		try (InputStream in = rs.getBinaryStream(columnIndex);) {
+			Files.copy(in, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+		}
+    }
+```
+```java
+    // BLOB Reading
+    // 2) Stream syntax with ResultSet.getBlob
+	String sql = "select * from orderlog where customer_id = ? and item_id = ?";
+    PreparedStatement preparedStatement = connection.prepareStatement(sql);
+    //...
+    ResultSet rs = preparedStatement.executeQuery();
+    if (rs.next()) {
+        //...
+        File file = myAppCreateBlobFile();
+        Blob blob = rs.getBlob(columnIndex);
+        try (InputStream in = blob.getBinaryStream()) {
+        	Files.copy(in, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        }
+    }
+```
+#### Using Progress Bars with Blobs
 
 Using Progress Bar when inserting Blobs in a background engine requires two atomic variables:
 
@@ -419,9 +542,9 @@ The atomic variables values will be shared by AceQL download/upload processes an
 
 The values are to be initialized and passed to `AceQLConnection` before the JDBC actions with the static setters:
 
-- [AceQLConnection.setProgress(AtomicInteger progress)](https://www.aceql.com/rest/soft_java_client/5.1/javadoc/com/aceql/client/jdbc/AceQLConnection.html#setProgress(java.util.concurrent.atomic.AtomicInteger))
+- [AceQLConnection.setProgress(AtomicInteger progress)](https://www.aceql.com/rest/soft_java_client/6.0/javadoc/com/aceql/client/jdbc/AceQLConnection.html#setProgress(java.util.concurrent.atomic.AtomicInteger))
 
-- [AceQLConnection.setCancelled(AtomicBoolean cancelled)](https://www.aceql.com/rest/soft_java_client/5.1/javadoc/com/aceql/client/jdbc/AceQLConnection.html#setCancelled(java.util.concurrent.atomic.AtomicBoolean))
+- [AceQLConnection.setCancelled(AtomicBoolean cancelled)](https://www.aceql.com/rest/soft_java_client/6.0/javadoc/com/aceql/client/jdbc/AceQLConnection.html#setCancelled(java.util.concurrent.atomic.AtomicBoolean))
 
 
 Values will then be updated and read:
@@ -448,62 +571,66 @@ The first step is to declare the 2 atomic variables:
 The atomic variables will be passed to the `AceQLConnection` with their setter:
 
 ```java
-    /** 
-     *SQL insert with BLOB column
+    /**
+     * SQL insert with BLOB column
      */
     private void doInsert() {
-	try {
-	    // BEGIN MODIFY WITH YOUR VALUES
-	    String userHome = System.getProperty("user.home");
+        try {
+            // BEGIN MODIFY WITH YOUR VALUES
+            String url = "http://localhost:9090/aceql";
+            String database = "sampledb";
+            String username = "username";
+            String password = "password";
+            String myFolder = "c:\\myFolder";
+            File imageFile = new File(System.getProperty("user.home") 
+                + File.separator + "image_1.jpg");
+            // END MODIFY WITH YOUR VALUES
 
-	    // Port number is the port number used to start the Web Server:
-	    String url = "https://www.acme.com:9443/aceql";
-	    String database = "kawansoft_example";
-	    String username = "username";
-	    char [] password = { 'p', 'a', 's', 's', 'w', 'o', 'r', 'd'};
-	    File imageFile = 
-		    new File(userHome + File.separator + "image_1.jpg");
-	    // END MODIFY WITH YOUR VALUES
+            // Register Driver 
+            DriverManager.registerDriver(new AceQLDriverPro());
+            Class.forName(AceQLDriverPro.class.getName());
 
-	    // Attempts to establish a connection to the remote database:
-	    Connection connection = new AceQLConnection(url, database,
-		    username, password);
+            Properties info = new Properties();
+            info.put("user", username);
+            info.put("password", password);
+            info.put("database", database);
+            info.put("licenseKeyFolder", myFolder);
 
-	    // Pass the mutable & shareable progress and canceled to the
-	    // underlying AceQLConnection.
-	    // - progress value will be updated by the AceQLConnection and
-	    // retrieved by SwingWorker to increment the progress.
-	    // - cancelled value will be updated to true if user cancels the
-	    // task and AceQLConnection will interrupt the Blob upload.
+            // Open a connection
+            Connection connection = DriverManager.getConnection(url, info);
 
-	    ((AceQLConnection) connection).setProgress(progress);
-	    ((AceQLConnection) connection).setCancelled(cancelled);
+            // Pass the mutable & sharable progress and canceled to the
+            // underlying RemoteConnection.
+            // - progress value will be updated by the RemoteConnection and
+            // retrieved by SwingWorker to increment the progress.
+            // - cancelled value will be updated to true if user cancels the
+            // task and RemoteConnection will interrupt the Blob upload.
 
-	    // Now run our insert
-	    BlobExample blobExample = new BlobExample(connection);
+            ((AceQLConnection) connection).setProgress(progress);
+            ((AceQLConnection) connection).setCancelled(cancelled);
 
-	    // Delete if duplicate
-	    blobExample.deleteOrderlog(1, 1);
+            // Now run our insert
+            BlobExample blobExample = new BlobExample(connection);
+            // Delete if duplicate
+            blobExample.deleteOrderlog(1, 1);
+           	blobExample.insertOrderWithImage(1, 1, "description", 
+		    	new BigDecimal("99.99"), imageFile);
+            System.out.println("Blob upload done.");
 
-	    blobExample.insertOrderWithImage(1, 1, "description",
-		    new BigDecimal("99.99"), imageFile);
+        } catch (Exception e) {
+            if (e instanceof SQLException && e.getCause() != null 
+                && e.getCause() instanceof InterruptedException) {
+                System.out.println(e.getMessage());
+                return;
+            }
+            e.printStackTrace();
+        } finally {
+            // Always set progress to maximum/end value
+            // to close the progress monitor
+            progress.set(100);
+        }
+  	}
 
-	    System.out.println("Blob upload done.");
-
-	} catch (Exception e) {
-
-	    if (e instanceof SQLException && e.getCause() != null
-		    && e.getCause() instanceof InterruptedException) {
-		System.out.println(e.getMessage());
-		return;
-	    }
-	    e.printStackTrace();
-	} finally {
-	    // Always set progress to maximum/end value to close the progress
-	    // monitor
-	    progress.set(100);
-	}
- }
 ```
 
 Assuming hat you want to display a progress indicator using `SwingWorker`, you would start the preceding code as a Thread. To update the progress bar, the `SwingWorker.doInBackground()` method would be overridden as follows: 
@@ -517,77 +644,51 @@ Assuming hat you want to display a progress indicator using `SwingWorker`, you w
 	    setProgress(0);
 	    
 	    while (progress.get() < 100) {
-		try {
-		    Thread.sleep(50);
-		} catch (InterruptedException ignore) {
-		}
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException ignore) {
+            }
 
-		if (isCancelled()) {
-		    // If end user cancels the task, say it to mutable 
-                // & shareable cancelled. 
-                //cancelled will be read by AceQLConnection to
-		    // interrupt blob upload
-		    cancelled.set(true);
-		    break;
-		}
+            if (isCancelled()) {
+                // If end user cancels the task, say it to mutable 
+                    // & shareable cancelled. 
+                    //cancelled will be read by AceQLConnection to
+                // interrupt blob upload
+                cancelled.set(true);
+                break;
+            }
 
-		// Get the progress value between 0 and 100 that
-		// is updated by doInsert in background thread
-		setProgress(Math.min(progress.get(), 100));
+            // Get the progress value between 0 and 100 that
+            // is updated by doInsert in background thread
+            setProgress(Math.min(progress.get(), 100));
 	    }
 
 	    return null;
 	}
 ```
 
-A complete example is available in [SqlProgressMonitorDemo.java](http://www.aceql.com/rest/soft_java_client/5.1/src/SqlProgressMonitorDemo.java) and [BlobExample.java](https://www.aceql.com/rest/soft_java_client/5.1/src/BlobExample.java) 
+A complete example is available in [SqlProgressMonitorDemo.java](http://www.aceql.com/rest/soft_java_client/6.0/src/SqlProgressMonitorDemo.java) and [BlobExample.java](https://www.aceql.com/rest/soft_java_client/6.0/src/BlobExample.java) 
 
 ## HTTP session options 
 
-You can set the http timeout values with the static setters to be called before `AceQLConnection` creation:
+You can set the http timeout values with the properties to pass at `Connection` creation:
 
-- [AceQLConnection.setConnectTimeout(int connectTimeout)](https://www.aceql.com/rest/soft_java_client/5.1/javadoc/com/aceql/client/jdbc/AceQLConnection.html#setConnectTimeout(int))
-- [AceQLConnection.setReadTimeout(int readTimeout)](https://www.aceql.com/rest/soft_java_client/5.1/javadoc/com/aceql/client/jdbc/AceQLConnection.html#setReadTimeout(int))
+| Property Name    | Property value                                               |
+| ---------------- | ------------------------------------------------------------ |
+| `connectTimeout` | Timeout value, in milliseconds, to be used when opening a communications link to the remote server. If the timeout expires before the connection can be established, a j`ava.net.SocketTimeoutException` is raised. A timeout of zero is interpreted as an infinite timeout. Defaults to `0` |
+| `readTimeout`    | Read timeout to a specified timeout, in milliseconds. A non-zero value specifies the timeout when reading from Input stream when a connection is established to a resource. If the timeout expires before there is data available for read, a java.net.`SocketTimeoutException` is raised. A timeout of zero is interpreted as an infinite timeout. Defaults to `0`. |
 
-## Using outer authentication without a password  and with an AceQL Session ID
+## Using the AceQL Metadata Query API 
 
-Some working environments (Intranet, etc.) require that the client user authenticates himself without a password. Thus, it is not possible for this users to authenticate though the AceQL client SDK.
-
-In this case, you may use directly the native HTTP [login](https://github.com/kawansoft/aceql-http/blob/master/aceql-http-6.2-user-guide-api.md#login) API to authenticate the users and retrieve the `session_id` returned by the API.
-
-The `session_id` value will be passed to the dedicated `AceQLConnection` constructor:
-
-```java
-  // The URL of the AceQL Server servlet
-  // Port number is the port number used to start the Web Server:
-  String url = "https://www.acme.com:9443/aceql";
-
-  // The remote database to use:
-  String database = "sampledb";
-
-  // (username, sessIonId) for authentication on server side.
-  String username = "MyUsername";
-  String sessionId = getMySessionIdFromApiLogin();
-
-  // Attempt to establish a connection to the remote database:
-  Connection connection = new AceQLConnection(url, database, username,
-      sessionId);
-```
-
-
-
-# Using the Metadata Query API 
-
-The metadata API allows:
+The AceQL Metadata Query API is supported in both Community and Professional Editions. It's an helper API that allows:
 
 - downloading a remote database schema
-  in HTML or text format
-- to get a remote database main properties.
+  in HTML or text format,
+- to get a remote database main properties,
 - to get the list of tables, 
 - to get the details of each table. 
 
-It also allows wrapping remote tables, columns, indexes, etc. into
-easy to use provided Java classes: Table, Index, Column, etc.
+It also allows wrapping remote tables, columns, indexes, etc. into easy to use provided Java classes: `Table`, `Index`, `Column`, etc.
 
 First step is to get an instance of `RemoteDatabaseMetaData`:
 
@@ -596,19 +697,20 @@ RemoteDatabaseMetaData remoteDatabaseMetaData =
     ((AceQLConnection) connection).getRemoteDatabaseMetaData();
 ```
 
-## Downloading database schema into a file
+### Downloading database schema into a file
 
-Downloading a schema into a Java `File` is done through the method. See the `RemoteDatabaseMetaData` [javadoc](https://www.aceql.com/rest/soft_java_client/5.1/javadoc/com/aceql/client/metadata/RemoteDatabaseMetaData.html): 
+Downloading a schema into a Java `File` is done through the method. See the `RemoteDatabaseMetaData` [javadoc](https://www.aceql.com/rest/soft_java_client/6.0/javadoc/com/aceql/client/metadata/RemoteDatabaseMetaData.html): 
 
 ```java
 File file = new File("db_schema.out.html");
 remoteDatabaseMetaData.dbSchemaDownload(file);
 ```
-See an example of the built HTML schema:  [db_schema.out.html](https://www.aceql.com/rest/soft_java_client/5.1/src/db_schema.out.html)
 
-## Accessing remote database main properties
+See an example of the built HTML schema:  [db_schema.out.html](https://www.aceql.com/rest/soft_java_client/6.0/src/db_schema.out.html)
 
-The [JdbcDatabaseMetaData](https://www.aceql.com/rest/soft_java_client/5.1/javadoc/com/aceql/client/metadata/JdbcDatabaseMetaData.html) class wraps instance the main value retrieved by a remote JDBC call to `Connection.getMetaData`(): 
+### Accessing remote database main properties
+
+The [JdbcDatabaseMetaData](https://www.aceql.com/rest/soft_java_client/6.0/javadoc/com/aceql/client/metadata/JdbcDatabaseMetaData.html) class wraps instance the main value retrieved by a remote JDBC call to `Connection.getMetaData`(): 
 
 ```java
 JdbcDatabaseMetaData jdbcDatabaseMetaData = remoteDatabaseMetaData.getJdbcDatabaseMetaData();
@@ -617,44 +719,164 @@ JdbcDatabaseMetaData jdbcDatabaseMetaData = remoteDatabaseMetaData.getJdbcDataba
 	System.out.println("isReadOnly   : " + jdbcDatabaseMetaData.isReadOnly());
 ```
 
-## Getting Details of Tables and Columns
+### Getting Details of Tables and Columns
 
-See the [javadoc](https://www.aceql.com/rest/soft_java_client/5.1/javadoc/com/aceql/client/metadata/package-summary.html) of the `com.aceql.client.metadata` package: 
+See the [javadoc](https://www.aceql.com/rest/soft_java_client/6.0/javadoc/com/aceql/client/metadata/package-summary.html) of the `com.aceql.jdbc.commons.main.metadata` package: 
 
 ```java
-System.out.println("Get the table names:");
-List<String> tableNames = remoteDatabaseMetaData.getTableNames();
+    System.out.println("Get the table names:");
+    List<String> tableNames = remoteDatabaseMetaData.getTableNames();
 
-System.out.println("Print the details of each table:");
-for (String tableName : tableNames) {
-    System.out.println();
-    Table table = remoteDatabaseMetaData.getTable(tableName);
+    System.out.println("Print the details of each table:");
+    for (String tableName : tableNames) {
+        System.out.println();
+        Table table = remoteDatabaseMetaData.getTable(tableName);
 
-    System.out.println();
-    System.out.println("Columns      : " + table.getColumns());
-    System.out.println("Indexes      : " + table.getIndexes());
-    System.out.println("Primary Keys : " + table.getPrimaryKeys());
-    System.out.println("Exported Keys: " + table.getExportedforeignKeys());
-    System.out.println("Imported Keys: " + table.getImportedforeignKeys());
-}
+        System.out.println();
+        System.out.println("Columns      : " + table.getColumns());
+        System.out.println("Indexes      : " + table.getIndexes());
+        System.out.println("Primary Keys : " + table.getPrimaryKeys());
+        System.out.println("Exported Keys: " + table.getExportedforeignKeys());
+        System.out.println("Imported Keys: " + table.getImportedforeignKeys());
+    }
 ```
+
+## Using the native JDBC Metadata Query API (Professional Edition)
+
+### Code Sample
+
+Standard JDBC [DatabaseMetadata](https://docs.oracle.com/javase/8/docs/api/java/sql/DatabaseMetaData.html)  and [ResultSetMetadata](https://docs.oracle.com/javase/8/docs/api/java/sql/ResultSetMetaData.html) calls are fully supported in Professional Edition.
+
+`DatabaseMetaData` example:
+
+```java
+	// connection is an AceQL Connection
+	Connection connection = DriverManager.getConnection(url, info);
+
+	// Retrieves DatabaseMetaData
+	String schema = null;
+	String catalog = null;
+	
+	DatabaseMetaData databaseMetaData = connection.getMetaData();
+	ResultSet rs = databaseMetaData.getColumns(schema, catalog, null, null);
+
+	while (rs.next()) {
+	    String tableCat = rs.getString("TABLE_CAT");
+	    String tableShem = rs.getString("TABLE_SCHEM");
+	    String tableName = rs.getString("TABLE_NAME");
+	    String colName = rs.getString("COLUMN_NAME");
+	    String dataType = rs.getString("DATA_TYPE");
+
+	    System.out.println("TABLE_CAT  : " + tableCat);
+	    System.out.println("TABLE_SCHEM: " + tableShem);
+	    System.out.println("TABLE_NAME : " + tableName);
+	    System.out.println("COLUMN_NAME: " + colName);
+	    System.out.println("DATA_TYPE  : " + dataType);
+	}
+	rs.close();
+```
+
+`ResultSetMetaData` example:
+
+```java
+    // connection is an AceQL Connection
+    Connection connection = DriverManager.getConnection(url, info);
+
+    String sql = "select * from customer where customer_id = 1";
+    Statement statement = connection.createStatement();
+    statement.execute(sql);
+
+    ResultSet rs = statement.getResultSet();
+
+    // Retrieves the number, types and properties of this ResultSet object's columns.
+    ResultSetMetaData resultSetMetaData = rs.getMetaData();
+
+    int count = resultSetMetaData.getColumnCount();
+    System.out.println("resultSetMetaData.getColumnCount(): " + count);
+
+    for (int i = 1; i < count + 1; i++) {
+        System.out.println();
+        System.out.println("Column name     : " + resultSetMetaData.getColumnName(i));
+        System.out.println("Column label    : " + resultSetMetaData.getColumnLabel(i));
+        System.out.println("Column type     : " + resultSetMetaData.getColumnType(i));
+        System.out.println("Column type name: " + resultSetMetaData.getColumnTypeName(i));
+    }
+```
+
+### Using Database viewers with the AceQL Client JDBC Driver
+
+The following JDBC Database viewers are supported :
+
+[DBeaver](https://dbeaver.io/), [DbVisualizer](https://www.dbvis.com/), [JetBrains DataGrip](https://www.jetbrains.com/datagrip/), [RazorSQL](https://razorsql.com/), [SQuirreL SQL](http://squirrel-sql.sourceforge.net/)
+
+These snapshots show usage of a remote AceQL Connection in DbVisualizer:
+
+<img src="https://www.aceql.com/img/dbvisualiser_meta_2.png" alt="DbVisualizer MetaData"/>
+
+
+
+<img src="https://www.aceql.com/img/dbvisualiser_select.png" alt="DbVisualizer MetaData"/>
+
+### Disabling JDBC MetaData calls when not required
+
+`MetaData` data is automatically downloaded along with the `ResultSet` content. This default setting allows faster usage with database viewers (by eliminating separated server calls.)
+
+If your application never calls `ResultSet.getMetaData()`, it's better to disallow the default behavior by passing the `resultSetMetaDataPolicy` property set to `off` value:
+
+```java
+// Do not download the metadata along with ResultSet content:
+info.put("resultSetMetaDataPolicy ", "off"); 
+Connection connection = DriverManager.getConnection(url, info);
+```
+
+## Using outer authentication without a password and with an AceQL Session ID (Professional Edition)
+
+Some working environments (Intranet, etc.) require that the client user authenticates himself *without* a password. Thus, it is not possible for this users to authenticate though the AceQL Client JDBC Driver.
+
+In this case, you may use directly the native HTTP [login](https://github.com/kawansoft/aceql-http/blob/master/aceql-http-6.2-user-guide-api.md#login) API to authenticate the users and retrieve the `session_id` returned by the API.
+
+The `session_id` value will be passed to the dedicated `sessionId` property:
+
+```java
+	Properties info = new Properties();
+	info.put("user", user);
+	info.put("database", database);
+	info.put("licenseKeyFolder", "c:\\myFolder"); 
+    
+	String sessionId = getMySessionIdFromApiLogin();
+	info.put("sessionId", sessionId); 
+    
+	Connection connection = DriverManager.getConnection(url, info);
+```
+
+## Passing request headers for validation on server side (Professional Edition)
+
+You may pass any request headers to the AceQL server side for a validation process: just prefix the header name with the `request-property-` prefix and pass it as as a property to `DriverManager.getConnection(url, info)`. 
+
+Example code that passes two request headers `token-1` & `token-2`:
+
+```java
+    info.put("request-property-token-1", "value_of_token_1");
+    info.put("request-property-token-2", "value_of_token_2");
+
+    Connection connection = DriverManager.getConnection(url, info);
+```
+The request headers will be intercepted on the server side by the `validate` method of your Java class that implements the [RequestHeadersAuthenticator](https://www.aceql.com/rest/soft/6.4/javadoc/org/kawanfw/sql/api/server/auth/headers/RequestHeadersAuthenticator.html) interface.
+
+See also the Headers Authentication sub-section in the [aceql-server.properties](https://www.aceql.com/rest/soft/6.4/src/aceql-server.properties) file for details about declaring your `RequestHeadersAuthenticator` concrete implementation on server side.
+
 # Limitations 
 
-The following JDBC features are not supported nor implemented in this version: 
+The following JDBC features are not supported nor implemented in this version Community  Edition nor in the Professional Edition. They will be added in future versions: 
 
-- Metadata calls are not supported:
-  - `Connection.getMetaData()`
-  - `ResultSet.getMetaData()`.
-- Savepoints are not supported.
 - Batch methods are not supported.
-- BLOB syntax is limited in `PreparedStatement` and in `ResultSet`.
-- There are no `java.sql.Blob` and `java.sql.Clob` interface implementation.
-- CLOB are not supported.
+- `Savepoint` are not supported.
+- `CLOB` are not supported.
 
 
 - `ROWID` are not supported.
 - Auto-generated keys are not supported.
-- Advanced data types:   `Struct`, `NClob`, `SQLXML` and `Typemaps`.
+- Some Advanced data types:   `Struct`, `NClob`, `SQLXML` and `Typemaps`.
 - Some Statement methods: `getWarnings`, `isPoolable`/`setPoolable`, `getMoreResults`, `setCursorName`.
 - Updatable Result Set.
 - `RowSet` Objects.

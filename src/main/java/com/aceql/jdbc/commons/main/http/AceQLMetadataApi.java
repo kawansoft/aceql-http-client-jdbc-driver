@@ -1,4 +1,4 @@
-package com.aceql.client.jdbc.http;
+package com.aceql.jdbc.commons.main.http;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -7,8 +7,6 @@ import java.util.Map;
 import java.util.Objects;
 
 import com.aceql.jdbc.commons.AceQLException;
-import com.aceql.jdbc.commons.main.http.HttpManager;
-import com.aceql.jdbc.commons.main.http.ResultAnalyzer;
 import com.aceql.jdbc.commons.main.metadata.dto.JdbcDatabaseMetaDataDto;
 import com.aceql.jdbc.commons.main.metadata.dto.TableDto;
 import com.aceql.jdbc.commons.main.metadata.dto.TableNamesDto;
@@ -97,12 +95,12 @@ public class AceQLMetadataApi {
 	    JdbcDatabaseMetaDataDto jdbcDatabaseMetaDataDto = GsonWsUtil.fromJson(result,
 		    JdbcDatabaseMetaDataDto.class);
 	    return jdbcDatabaseMetaDataDto;
-	} catch (Exception e) {
-	    if (e instanceof AceQLException) {
-		throw (AceQLException) e;
-	    } else {
-		throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
-	    }
+	} 
+	catch (AceQLException e) {
+	    throw e;
+	}
+	catch (Exception e) {
+	    throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
 	}
     }
 
@@ -127,12 +125,12 @@ public class AceQLMetadataApi {
 	    // If result is OK, it's a DTO
 	    TableNamesDto tableNamesDto = GsonWsUtil.fromJson(result, TableNamesDto.class);
 	    return tableNamesDto;
-	} catch (Exception e) {
-	    if (e instanceof AceQLException) {
-		throw (AceQLException) e;
-	    } else {
-		throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
-	    }
+	} 
+	catch (AceQLException e) {
+	    throw e;
+	}
+	catch (Exception e) {
+	    throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
 	}
     }
 
@@ -155,12 +153,12 @@ public class AceQLMetadataApi {
 	    // If result is OK, it's a DTO
 	    TableDto tableDto = GsonWsUtil.fromJson(result, TableDto.class);
 	    return tableDto;
-	} catch (Exception e) {
-	    if (e instanceof AceQLException) {
-		throw (AceQLException) e;
-	    } else {
-		throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
-	    }
+	} 
+	catch (AceQLException e) {
+	    throw e;
+	}
+	catch (Exception e) {
+	    throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
 	}
     }
 
