@@ -150,11 +150,11 @@ Extract from the archive the `aceql-http-client-jdbc-driver-pro-6.0.jar`  jar fi
 There a two ways to precise the path of the `aceql_license_key.txt` file:
 
 1. **Default**: Put the `aceql_license_key.txt` file into the  `user.dir` directory of your Desktop application.
-2. **Using the `licenseKeyFolder` JDBC Driver property**: Define the JDBC Driver `licenseKeyFolder` property and set the value of the folder that contains the `aceql_license_key.txt` file.  See [Using the AceQL Client JDBC Driver](# Using the AceQL Client JDBC Driver) for implementation.
+2. **Using the `licenseKeyFolder` JDBC Driver property**: Define the JDBC Driver `licenseKeyFolder` property and set the value of the folder that contains the `aceql_license_key.txt` file.  See [Using the AceQL Client JDBC Driver](#using-the-aceql-client-jdbc-driver) for implementation.
 
 ## Android Project settings (Both Editions)
 
- Add the following 3 lines to your AndroidManifest.xml:
+ Add the following 3 lines to your `AndroidManifest.xml`:
 
 ```xml
 <uses-permission android:name="android.permission.INTERNET" />
