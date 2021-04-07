@@ -709,10 +709,10 @@ See an example of the built HTML schema:  [db_schema.out.html](https://www.aceql
 The [JdbcDatabaseMetaData](https://www.aceql.com/rest/soft_java_client/6.0/javadoc/com/aceql/jdbc/commons/main/metadata/JdbcDatabaseMetaData.html) class wraps instance the main value retrieved by a remote JDBC call to `Connection.getMetaData`(): 
 
 ```java
-	JdbcDatabaseMetaData jdbcDatabaseMetaData = remoteDatabaseMetaData.getJdbcDatabaseMetaData();
-	System.out.println("Major Version: " + jdbcDatabaseMetaData.getDatabaseMajorVersion());
-	System.out.println("Minor Version: " + jdbcDatabaseMetaData.getDatabaseMinorVersion());
-	System.out.println("isReadOnly   : " + jdbcDatabaseMetaData.isReadOnly());
+    JdbcDatabaseMetaData jdbcDatabaseMetaData = remoteDatabaseMetaData.getJdbcDatabaseMetaData();
+    System.out.println("Major Version: " + jdbcDatabaseMetaData.getDatabaseMajorVersion());
+    System.out.println("Minor Version: " + jdbcDatabaseMetaData.getDatabaseMinorVersion());
+    System.out.println("isReadOnly   : " + jdbcDatabaseMetaData.isReadOnly());
 ```
 
 ### Getting Details of Tables and Columns
