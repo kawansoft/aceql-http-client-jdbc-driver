@@ -143,7 +143,7 @@ You may download the Professional Edition through either :
 1. [The Free 30-Trial Web Page](https://www.aceql.com/trial.html): the download link and the trial key license file will be sent by email.
 2. [The Online Shop](https://sowl.co/VxAsp): the download link and the product key license file will be sent by email.
 
-Extract from the archive the `aceql-http-client-jdbc-driver-pro-6.0.jar` and add it to your CLASSPATH.
+Extract from the archive the `aceql-http-client-jdbc-driver-pro-6.0.jar`  jar file and add it to your CLASSPATH.
 
 ### Defining the path to the Aceql license key file
 
