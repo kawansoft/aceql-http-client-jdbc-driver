@@ -115,8 +115,8 @@ This comparison matrix describes the differences between the two Editions:
 | <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;[Stored Procedures](https://docs.oracle.com/javase/tutorial/jdbc/basics/storedprocedures.html) | <img src="https://www.aceql.com/images/delete_20.png" alt="check!"/> |
 | <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;JDBC API Metadata<br/>`Connection.getMetadata()`, `ResultSet.getMetaData()` | <img src="https://www.aceql.com/images/delete_20.png" alt="check!"/> |
 | <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;JDBC Clients Tools & GUI <br/>[DBeaver](https://dbeaver.io/), [DbVisualizer](https://www.dbvis.com/), [JetBrains DataGrip](https://www.jetbrains.com/datagrip/), [RazorSQL](https://razorsql.com/), [SQuirreL SQL](http://squirrel-sql.sourceforge.net/) | <img src="https://www.aceql.com/images/delete_20.png" alt="check!"/> |
-| <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>Allows outer authentication without a password | <img src="https://www.aceql.com/images/delete_20.png" alt="check!"/> |
-| <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>Allows passing request headers for validation on server | <img src="https://www.aceql.com/images/delete_20.png" alt="check!"/> |
+| <img src="https://www.aceql.com/images/check_20.png" alt="check!"/> [Allows outer authentication without a password](#using-outer-authentication-without-a-password-and-with-an-aceql-session-id-professional-edition) | <img src="https://www.aceql.com/images/delete_20.png" alt="check!"/> |
+| <img src="https://www.aceql.com/images/check_20.png" alt="check!"/> [Allows passing request headers for validation on server](#passing-request-headers-for-validation-on-server-side-professional-edition) | <img src="https://www.aceql.com/images/delete_20.png" alt="check!"/> |
 | <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Enterprise Support (Slack & Email)<br/>4H Guaranteed Response Time | <img src="https://www.aceql.com/images/delete_20.png" alt="check!"/> |
 
 ## Community Edition Installation
