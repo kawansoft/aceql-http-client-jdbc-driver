@@ -626,7 +626,7 @@ The atomic variables will be passed to the `AceQLConnection` with their setter:
             // to close the progress monitor
             progress.set(100);
         }
-  	}
+    }
 
 ```
 
