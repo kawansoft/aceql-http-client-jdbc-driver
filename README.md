@@ -92,7 +92,7 @@ The AceQL Client JDBC Driver comes in two Editions:
 
 | Edition Name         | Description / Summary                                        | License                                                      |
 | -------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| Community Edition    | Packaged as a real JDBC Driver, with major databases support.<br/>Includes main JDBC options, transactions and BLOB support. <br/>Free and fully open source with a liberal license. | [Apache 2.0 License](https://www.apache.org/licenses/LICENSE-2.0) |
+| Community Edition    | Packaged as a real JDBC Driver, with major databases support.<br/>Includes main JDBC options, SQL transactions and BLOB support. <br/>Free and fully open source with a liberal license. | [Apache 2.0 License](https://www.apache.org/licenses/LICENSE-2.0) |
 | Professional Edition | Packaged as a real JDBC Driver, includes DB2 support . <br/>Includes advanced JDBC options: Arrays, Stored Procedures, JDBC native Metadata API, large BLOB files.<br/>Includes advanced security options and professional support  (4H GRT).<br/>The software may be [tried for free](https://www.aceql.com/trial.html) or bought in our [online shop](https://sowl.co/VxAsp). | [Commercial License](https://www.aceql.com/rest/soft_java_client/6.0/legal/license.rtf)<br/>Per year and Per developer.<br/>**No runtime fees** |
 
 ### Differences between the Community Edition & the Professional Edition
