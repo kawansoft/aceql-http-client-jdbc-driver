@@ -214,27 +214,27 @@ The  `Connection` to the remote database is created using the standard [DriverMa
 ### Community Edition
 
 ```java
-	// The URL of the AceQL Server servlet
-	// Port number is the port number used to start the Web Server:
-	String url = "https://www.acme.com:9443/aceql";
+    // The URL of the AceQL Server servlet
+    // Port number is the port number used to start the Web Server:
+    String url = "https://www.acme.com:9443/aceql";
 
-	// The remote database to use:
-	String database = "sampledb";
+    // The remote database to use:
+    String database = "sampledb";
 
-	// (user, password) for authentication on server side.
-	String user = "MyUsername";
-	String password = "MySecret";
+    // (user, password) for authentication on server side.
+    String user = "MyUsername";
+    String password = "MySecret";
 
-	// Register the Community Edition Driver
-	DriverManager.registerDriver(new AceQLDriver());
-	Class.forName(AceQLDriver.class.getName());
+    // Register the Community Edition Driver
+    DriverManager.registerDriver(new AceQLDriver());
+    Class.forName(AceQLDriver.class.getName());
 
-	Properties info = new Properties();
-	info.put("user", user);
-	info.put("password", password);
-	info.put("database", database);
+    Properties info = new Properties();
+    info.put("user", user);
+    info.put("password", password);
+    info.put("database", database);
 
-	Connection connection = DriverManager.getConnection(url, info);
+    Connection connection = DriverManager.getConnection(url, info);
 ```
 ### Professional Edition
 
@@ -244,31 +244,31 @@ Creating a Connection with the Professional Edition is slightly different:
 2. The Driver requires to know the folder that contains the Aceql license key file (`aceql_license_key.txt` ). This is done by defining the folder path in the `licenseKeyFolder` property.
 
 ```java
-	// The URL of the AceQL Server servlet
-	// Port number is the port number used to start the Web Server:
-	String url = "https://www.acme.com:9443/aceql";
+    // The URL of the AceQL Server servlet
+    // Port number is the port number used to start the Web Server:
+    String url = "https://www.acme.com:9443/aceql";
 
-	// The remote database to use:
-	String database = "sampledb";
+    // The remote database to use:
+    String database = "sampledb";
 
-	// (user, password) for authentication on server side
-	String user = "MyUsername";
-	String password = "MySecret";
+    // (user, password) for authentication on server side
+    String user = "MyUsername";
+    String password = "MySecret";
 
-	// Register the Professional Edition Driver
-	DriverManager.registerDriver(new AceQLDriverPro());
-	Class.forName(AceQLDriverPro.class.getName());
+    // Register the Professional Edition Driver
+    DriverManager.registerDriver(new AceQLDriverPro());
+    Class.forName(AceQLDriverPro.class.getName());
 
-	Properties info = new Properties();
-	info.put("user", user);
-	info.put("password", password);
-	info.put("database", database);
-	
-	// c:\\myFolder contains the aceql_license_key.txt file.
-	// If not set, will default to user.dir resolved at runtime
-	info.put("licenseKeyFolder", "c:\\myFolder"); 
+    Properties info = new Properties();
+    info.put("user", user);
+    info.put("password", password);
+    info.put("database", database);
 
-	Connection connection = DriverManager.getConnection(url, info);
+    // c:\\myFolder contains the aceql_license_key.txt file.
+    // If not set, will default to user.dir resolved at runtime
+    info.put("licenseKeyFolder", "c:\\myFolder"); 
+
+    Connection connection = DriverManager.getConnection(url, info);
 ```
 
 From now on, you can use the connection to execute updates and queries on the remote database, using standard and unmodified JDBC calls. 
@@ -288,16 +288,16 @@ Communication via a proxy server is done using dedicated `properties`.  Proxy au
 Sample code:
 
 ```java
-  	// Proxy info. Port number is passed as a String
-	info.put("proxyType", "HTTP");
-	info.put("proxyHostname", "localhost");
-	info.put("proxyPort", "8081"); 
-	info.put("proxyUsername", "myProxyUsername");
-	info.put("proxyPassword", "myProxyPassword");
+    // Proxy info. Port number is passed as a String
+    info.put("proxyType", "HTTP");
+    info.put("proxyHostname", "localhost");
+    info.put("proxyPort", "8081"); 
+    info.put("proxyUsername", "myProxyUsername");
+    info.put("proxyPassword", "myProxyPassword");
 
-  	// Attempt to establish a connection to the remote database 
-	// using an HTTP Proxy:
-  	Connection connection = DriverManager.getConnection(url, info);
+    // Attempt to establish a connection to the remote database 
+    // using an HTTP Proxy:
+    Connection connection = DriverManager.getConnection(url, info);
 ```
 
 ## Handling Exceptions
