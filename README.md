@@ -11,7 +11,7 @@
 
 ## April 6, 2021
 
-<img src="https://www.aceql.com/favicon.png" alt="AceQ HTTP Icon"/>
+<img src="https://www.aceql.com/img/AceQL-Schema-min.jpg" alt="AceQL Draw"/>
 
    * [Fundamentals](#fundamentals)
       * [Technical operating environment](#technical-operating-environment)
