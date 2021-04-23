@@ -18,6 +18,7 @@
  */
 package com.aceql.jdbc.commons.main.util.json;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -220,7 +221,8 @@ public class RowParser {
 
 	Reader fileReader = null;
 	try {
-	    fileReader = new InputStreamReader(new FileInputStream(jsonFile), "UTF-8");
+	    //fileReader = new InputStreamReader(new FileInputStream(jsonFile), "UTF-8");
+	    fileReader = new BufferedReader(new InputStreamReader(new FileInputStream(jsonFile), "UTF-8"));
 	} catch (Exception e) {
 	    throw new SQLException(e);
 	}

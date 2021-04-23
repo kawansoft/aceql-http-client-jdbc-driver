@@ -18,6 +18,7 @@
  */
 package com.aceql.jdbc.commons.main.util.json;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
@@ -96,7 +97,8 @@ public class StreamResultAnalyzer {
 
 	try {
 	    try {
-		reader = new InputStreamReader(new FileInputStream(jsonFile), "UTF-8");
+		//reader = new InputStreamReader(new FileInputStream(jsonFile), "UTF-8");
+		reader = new BufferedReader(new InputStreamReader(new FileInputStream(jsonFile), "UTF-8"));
 	    } catch (Exception e) {
 		throw new SQLException(e);
 	    }
@@ -290,7 +292,8 @@ public class StreamResultAnalyzer {
 
 	try {
 	    try {
-		reader = new InputStreamReader(new FileInputStream(jsonFile), "UTF-8");
+		//reader = new InputStreamReader(new FileInputStream(jsonFile), "UTF-8");
+		reader = new BufferedReader(new InputStreamReader(new FileInputStream(jsonFile), "UTF-8"));
 	    } catch (Exception e) {
 		throw new SQLException(e);
 	    }
@@ -344,7 +347,8 @@ public class StreamResultAnalyzer {
 
 	try {
 	    try {
-		reader = new InputStreamReader(new FileInputStream(jsonFile), "UTF-8");
+		//reader = new InputStreamReader(new FileInputStream(jsonFile), "UTF-8");
+		reader = new BufferedReader(new InputStreamReader(new FileInputStream(jsonFile), "UTF-8"));
 	    } catch (Exception e) {
 		throw new SQLException(e);
 	    }
@@ -441,7 +445,8 @@ public class StreamResultAnalyzer {
 
 	try {
 	    try {
-		reader = new InputStreamReader(new FileInputStream(jsonFile), "UTF-8");
+		//reader = new InputStreamReader(new FileInputStream(jsonFile), "UTF-8");
+		reader = new BufferedReader(new InputStreamReader(new FileInputStream(jsonFile), "UTF-8"));
 	    } catch (Exception e) {
 		throw new SQLException(e);
 	    }
