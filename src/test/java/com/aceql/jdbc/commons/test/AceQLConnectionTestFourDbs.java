@@ -45,7 +45,7 @@ public class AceQLConnectionTestFourDbs {
 	testPostgreSQL();
 	testMySQL();
 	testSqlServer();
-	testOracle();
+	//testOracle();
     }
 
     /**
