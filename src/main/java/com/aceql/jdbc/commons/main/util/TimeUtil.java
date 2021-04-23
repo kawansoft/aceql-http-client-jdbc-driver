@@ -25,7 +25,7 @@ import java.util.Date;
  * @author Nicolas de Pomereu
  *
  */
-public class Timeutil {
+public class TimeUtil {
 
     public static void printTimeStamp(String tag) {
 	System.out.println(getCurrentTimeStamp() + " " + tag);
