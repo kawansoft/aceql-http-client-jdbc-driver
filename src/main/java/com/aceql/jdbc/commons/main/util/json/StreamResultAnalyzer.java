@@ -31,9 +31,8 @@ import java.util.Map;
 import javax.json.Json;
 import javax.json.stream.JsonParser;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.aceql.jdbc.commons.main.http.ResultAnalyzer;
+import com.aceql.jdbc.commons.main.util.framework.FastRowCounter;
 
 /**
  * @author Nicolas de Pomereu
@@ -325,13 +324,14 @@ public class StreamResultAnalyzer {
 
     }
 
+    
     /**
      * Returns the "row_count" key int value from the Json file
      *
      * @return the "row_count" key int value from the Json file
      * @throws SQLException
      */
-    public int getRowCountNew() throws SQLException {
+    public int getRowCount() throws SQLException {
 
 	// If file does not exist ==> http failure
 	if (!jsonFile.exists()) {
@@ -345,30 +345,10 @@ public class StreamResultAnalyzer {
 	}
 
 	debug("");
-	BufferedReader reader = null;
+	Reader reader = null;
 
 	try {
-	    try {
-		//reader = new InputStreamReader(new FileInputStream(jsonFile), "UTF-8");
-		reader = new BufferedReader(new InputStreamReader(new FileInputStream(jsonFile), "UTF-8"));
-	    } catch (Exception e) {
-		throw new SQLException(e);
-	    }
-
-	    String line = null;
-
-	    while ((line = reader.readLine()) != null) {
-		if (! line.contains("row_count")) {
-		    continue;
-		}
-		if (line.contains("\"row_count\":")) {
-		    String countStr = StringUtils.substringAfter(line, ":").trim();
-		    return Integer.parseInt(countStr);
-		}
-	    }
-	    
-	   
-	    return 0;
+	    return FastRowCounter.getRowCount(jsonFile);
 	} catch (Exception e) {
 	    this.parseException = e;
 
@@ -389,14 +369,14 @@ public class StreamResultAnalyzer {
 	    }
 	}
     }
-    
+
     /**
      * Returns the "row_count" key int value from the Json file
      *
      * @return the "row_count" key int value from the Json file
      * @throws SQLException
      */
-    public int getRowCount() throws SQLException {
+    public int getRowCountWithParse() throws SQLException {
 
 	// If file does not exist ==> http failure
 	if (!jsonFile.exists()) {
@@ -480,7 +460,7 @@ public class StreamResultAnalyzer {
 	    }
 	}
     }
-
+    
     /**
      * @param s
      */

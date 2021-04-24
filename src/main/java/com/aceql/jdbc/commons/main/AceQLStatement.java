@@ -138,7 +138,7 @@ public class AceQLStatement extends AbstractStatement implements Statement {
 	    
 	    TimeUtil.printTimeStamp("Before streamResultAnalyzer.getRowCount()");
 	    simpleTimer = new SimpleTimer();
-	    int rowCount = streamResultAnalyzer.getRowCountNew();
+	    int rowCount = streamResultAnalyzer.getRowCount();
 	    TimeUtil.printTimeStamp("After  streamResultAnalyzer.getRowCount() " + simpleTimer.getElapsedMs());
 	    
 	    debug("statement.isResultSet: " + isResultSet);
