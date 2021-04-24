@@ -63,7 +63,7 @@ import com.aceql.jdbc.commons.main.util.json.RowParser;
  */
 public class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
 
-    public boolean DEBUG;
+    public boolean DEBUG = false;
 
     /** A File containing the result set returned by an /execute_query call */
     public File jsonFile;
@@ -116,19 +116,10 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	this.statement = statement;
 
 	aceQLConnection = (AceQLConnection) this.getStatement().getConnection();
-	// Keep for now: this.aceQLHttpApi = aceQLConnection.aceQLHttpApi;
 	this.aceQLHttpApi = InternalWrapper.getAceQLHttpApi(aceQLConnection);
 
 	this.rowParser = new RowParser(jsonFile);
-
-	long begin = System.currentTimeMillis();
-	debug(new java.util.Date() + " Begin getRowCount");
-
 	this.rowCount = rowCount;
-
-	long end = System.currentTimeMillis();
-	debug(new java.util.Date() + " End getRowCount: " + rowCount);
-	debug("Elapsed = " + (end - begin));
     }
 
     /**

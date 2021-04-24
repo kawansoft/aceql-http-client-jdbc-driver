@@ -252,7 +252,7 @@ public class HttpManager {
 	// Analyze the error after request execution
 	httpStatusCode = conn.getResponseCode();
 	httpStatusMessage = conn.getResponseMessage();
-
+	
 	InputStream in = null;
 	if (httpStatusCode == HttpURLConnection.HTTP_OK) {
 	    in = conn.getInputStream();

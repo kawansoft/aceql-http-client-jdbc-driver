@@ -31,6 +31,8 @@ import java.util.Map;
 import javax.json.Json;
 import javax.json.stream.JsonParser;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.aceql.jdbc.commons.main.http.ResultAnalyzer;
 
 /**
@@ -323,6 +325,71 @@ public class StreamResultAnalyzer {
 
     }
 
+    /**
+     * Returns the "row_count" key int value from the Json file
+     *
+     * @return the "row_count" key int value from the Json file
+     * @throws SQLException
+     */
+    public int getRowCountNew() throws SQLException {
+
+	// If file does not exist ==> http failure
+	if (!jsonFile.exists()) {
+
+	    this.errorType = "0";
+	    errorMessage = "Unknown error.";
+	    if (httpStatusCode != HttpURLConnection.HTTP_OK) {
+		errorMessage = "HTTP FAILURE " + httpStatusCode + " (" + httpStatusMessage + ")";
+	    }
+	    return 0;
+	}
+
+	debug("");
+	BufferedReader reader = null;
+
+	try {
+	    try {
+		//reader = new InputStreamReader(new FileInputStream(jsonFile), "UTF-8");
+		reader = new BufferedReader(new InputStreamReader(new FileInputStream(jsonFile), "UTF-8"));
+	    } catch (Exception e) {
+		throw new SQLException(e);
+	    }
+
+	    String line = null;
+
+	    while ((line = reader.readLine()) != null) {
+		if (! line.contains("row_count")) {
+		    continue;
+		}
+		if (line.contains("\"row_count\":")) {
+		    String countStr = StringUtils.substringAfter(line, ":").trim();
+		    return Integer.parseInt(countStr);
+		}
+	    }
+	    
+	   
+	    return 0;
+	} catch (Exception e) {
+	    this.parseException = e;
+
+	    this.errorType = "0";
+	    errorMessage = "Unknown error";
+	    if (httpStatusCode != HttpURLConnection.HTTP_OK) {
+		errorMessage = "HTTP FAILURE " + httpStatusCode + " (" + httpStatusMessage + ")";
+	    }
+
+	    return 0;
+	} finally {
+	    if (reader != null) {
+		try {
+		    reader.close();
+		} catch (Exception ignore) {
+		    // ignore
+		}
+	    }
+	}
+    }
+    
     /**
      * Returns the "row_count" key int value from the Json file
      *

@@ -38,6 +38,7 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import com.aceql.jdbc.commons.main.util.framework.FrameworkFileUtil;
 import com.aceql.jdbc.commons.main.util.framework.Tag;
+import com.aceql.jdbc.commons.main.util.framework.UniqueIDBuilder;
 
 /**
  * Blob implementation. Allows to use {@link java.sql.Blob} objects for Blobs
@@ -336,7 +337,7 @@ public class AceQLBlob implements Blob {
 
     private static File createBlobFile() {
 	File file = new File(FrameworkFileUtil.getKawansoftTempDir() + File.separator + "blob-file-for-server-"
-		+ FrameworkFileUtil.getUniqueId() + ".txt");
+		+ UniqueIDBuilder.getUniqueId() + ".txt");
 	return file;
     }
 

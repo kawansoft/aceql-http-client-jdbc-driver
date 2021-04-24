@@ -16,26 +16,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.aceql.jdbc.commons.main.util;
+
+package com.aceql.jdbc.commons.main.util.framework;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
+ * Our UUID builder for PC side because old UUID idOne = UUID.randomUUID() is too slow...
  * @author Nicolas de Pomereu
  *
  */
-public class TimeUtil {
+public class UniqueIDBuilder {
 
-    public static boolean DEBUG = false;
-
-    public static void printTimeStamp(String tag) {
-	if (DEBUG) {
-	    System.out.println(getCurrentTimeStamp() + " " + tag);
-	}
+    private static final AtomicInteger atomicValue = new AtomicInteger(1);
+    
+    /**
+     * Build a unique string
+     *
+     * @return a unique string
+     */
+    public static String getUniqueId() {
+        // Old version was : UUID idOne = UUID.randomUUID();
+	return new SimpleDateFormat("yyyy_MM_dd_HHmm_ss").format(new Date())  + "_" + atomicValue.getAndIncrement();
     }
 
-    public static String getCurrentTimeStamp() {
-	return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date());
-    }
+
+
 }

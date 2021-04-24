@@ -63,6 +63,7 @@ import com.aceql.jdbc.commons.main.util.EditionUtil;
 import com.aceql.jdbc.commons.main.util.SimpleClassCaller;
 import com.aceql.jdbc.commons.main.util.framework.FrameworkFileUtil;
 import com.aceql.jdbc.commons.main.util.framework.Tag;
+import com.aceql.jdbc.commons.main.util.framework.UniqueIDBuilder;
 import com.aceql.jdbc.commons.main.util.json.PrepStatementParametersBuilder;
 import com.aceql.jdbc.commons.main.util.json.SqlParameter;
 import com.aceql.jdbc.commons.main.util.json.StreamResultAnalyzer;
@@ -416,7 +417,7 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
 
     private static File buildBlobIdFile() {
 	File file = new File(FrameworkFileUtil.getKawansoftTempDir() + File.separator + "pc-blob-out-"
-		+ FrameworkFileUtil.getUniqueId() + ".txt");
+		+ UniqueIDBuilder.getUniqueId() + ".txt");
 	return file;
     }
 
