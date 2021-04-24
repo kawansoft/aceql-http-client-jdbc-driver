@@ -54,6 +54,8 @@ import com.aceql.jdbc.commons.main.util.json.StreamResultAnalyzer;
  */
 public class AceQLStatement extends AbstractStatement implements Statement {
 
+    public static boolean KEEP_EXECUTION_FILES = true;
+    
     public static boolean DEBUG_DUMP_FILE;
     private static boolean DEBUG = false;
 
@@ -138,7 +140,15 @@ public class AceQLStatement extends AbstractStatement implements Statement {
 	    
 	    TimeUtil.printTimeStamp("Before streamResultAnalyzer.getRowCount()");
 	    simpleTimer = new SimpleTimer();
-	    int rowCount = streamResultAnalyzer.getRowCount();
+	    int rowCount = 0; 
+	    
+	    if (isResultSet) {
+		rowCount = streamResultAnalyzer.getRowCount();
+	    }
+	    else {
+		rowCount = streamResultAnalyzer.getRowCountWithParse();
+	    }
+	    
 	    TimeUtil.printTimeStamp("After  streamResultAnalyzer.getRowCount() " + simpleTimer.getElapsedMs());
 	    
 	    debug("statement.isResultSet: " + isResultSet);
@@ -267,7 +277,9 @@ public class AceQLStatement extends AbstractStatement implements Statement {
     @Override
     public void close() throws SQLException {
 	for (File file : localResultSetFiles) {
-	    file.delete();
+	    if (! KEEP_EXECUTION_FILES) {
+		file.delete();
+	    }
 	}
     }
 
