@@ -939,7 +939,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	rowParser.close();
 	isClosed = true;
 
-	if (!AceQLStatement.KEEP_EXECUTION_FILES) {
+	if (!AceQLStatement.KEEP_EXECUTION_FILES_DEBUG) {
 	    jsonFile.delete();
 	}
 

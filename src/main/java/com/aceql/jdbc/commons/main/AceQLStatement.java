@@ -54,9 +54,9 @@ import com.aceql.jdbc.commons.main.util.json.StreamResultAnalyzer;
  */
 public class AceQLStatement extends AbstractStatement implements Statement {
 
-    public static boolean KEEP_EXECUTION_FILES = true;
+    public static boolean KEEP_EXECUTION_FILES_DEBUG = true;
+    public static boolean DUMP_FILE_DEBUG;
     
-    public static boolean DEBUG_DUMP_FILE;
     private static boolean DEBUG = false;
 
     // Can be private, not used in daughter AceQLPreparedStatement
@@ -244,7 +244,7 @@ public class AceQLStatement extends AbstractStatement implements Statement {
 		}
 	    }
 
-	    if (DEBUG_DUMP_FILE) {
+	    if (DUMP_FILE_DEBUG) {
 		System.out.println("STATEMENT_FILE_BEGIN");
 		System.out.println(FileUtils.readFileToString(file, Charset.defaultCharset()));
 		System.out.println("STATEMENT_FILE_END");
@@ -277,7 +277,7 @@ public class AceQLStatement extends AbstractStatement implements Statement {
     @Override
     public void close() throws SQLException {
 	for (File file : localResultSetFiles) {
-	    if (! KEEP_EXECUTION_FILES) {
+	    if (! KEEP_EXECUTION_FILES_DEBUG) {
 		file.delete();
 	    }
 	}
