@@ -229,7 +229,7 @@ public class HttpManager {
 	conn.setRequestMethod("POST");
 	conn.setDoOutput(true);
 	AceQLHttpApi.addUserRequestProperties(conn, connectionInfo);
-
+	
 	TimeoutConnector timeoutConnector = new TimeoutConnector(conn, connectTimeout);
 
 	try (OutputStream connOut = timeoutConnector.getOutputStream();) {

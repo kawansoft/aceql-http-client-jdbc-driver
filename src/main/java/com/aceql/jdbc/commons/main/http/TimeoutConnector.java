@@ -71,6 +71,10 @@ class TimeoutConnector {
     public OutputStream getOutputStream()
 	    throws IOException, SocketTimeoutException {
 
+	if (connectTimeout <= 0) {
+	    return  conn.getOutputStream();
+	}
+	
 	os = null;
 	connected = false;
 	exception = null;
