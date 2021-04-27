@@ -101,8 +101,8 @@ public class AceQLStatement extends AbstractStatement implements Statement {
 	updateCount = -1;
 
 	try {
-	    SimpleTimer simpleTimer = new SimpleTimer();
 	    TimeUtil.printTimeStamp("Before buildtResultSetFile");
+	    SimpleTimer simpleTimer = new SimpleTimer();
 	    File file = buildtResultSetFile();
 	    TimeUtil.printTimeStamp("After  buildtResultSetFile " + simpleTimer.getElapsedMs());
 	    this.localResultSetFiles.add(file);
@@ -299,15 +299,8 @@ public class AceQLStatement extends AbstractStatement implements Statement {
     */
    static File buildtResultSetFile() {
 	File file = new File(FrameworkFileUtil.getKawansoftTempDir() + File.separator + "pc-result-set-"
-		+ getUniqueId() + ".txt");
+		+ UniqueIDBuilder.getUniqueId() + ".txt");
 	return file;
-    }
-
-    /**
-     * @returns a unique ID
-     */
-    public static String getUniqueId() {
-        return UniqueIDBuilder.getUniqueId();
     }
 
     /*
