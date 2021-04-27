@@ -42,6 +42,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import com.aceql.jdbc.commons.main.AceQLPreparedStatement;
 import com.aceql.jdbc.commons.main.AceQLSavepoint;
 import com.aceql.jdbc.commons.main.AceQLStatement;
+import com.aceql.jdbc.commons.main.AceQLStatementNew;
 import com.aceql.jdbc.commons.main.abstracts.AbstractConnection;
 import com.aceql.jdbc.commons.main.http.AceQLHttpApi;
 import com.aceql.jdbc.commons.main.metadata.RemoteDatabaseMetaData;
@@ -162,6 +163,8 @@ import com.aceql.jdbc.driver.free.AceQLDriver;
  *
  */
 public class AceQLConnection extends AbstractConnection implements Connection, Cloneable, Closeable {
+
+    private static final boolean USE_INPUT_STREAM_SAVER = false;
 
     /** The Http instance that does all Http stuff */
     AceQLHttpApi aceQLHttpApi = null;
@@ -423,8 +426,13 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      */
     @Override
     public Statement createStatement() throws SQLException {
-	AceQLStatement aceQLStatement = new AceQLStatement(this);
-	return aceQLStatement;
+	if (USE_INPUT_STREAM_SAVER) {
+	    AceQLStatementNew aceQLStatement = new AceQLStatementNew(this);
+	    return aceQLStatement;
+	} else {
+	    AceQLStatement aceQLStatement = new AceQLStatement(this);
+	    return aceQLStatement;
+	}
     }
 
     /*
@@ -436,8 +444,13 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      */
     @Override
     public Statement createStatement(int resultSetType, int resultSetConcurrency) throws SQLException {
-	AceQLStatement aceQLStatement = new AceQLStatement(this);
-	return aceQLStatement;
+	if (USE_INPUT_STREAM_SAVER) {
+	    AceQLStatementNew aceQLStatement = new AceQLStatementNew(this);
+	    return aceQLStatement;
+	} else {
+	    AceQLStatement aceQLStatement = new AceQLStatement(this);
+	    return aceQLStatement;
+	}
     }
 
     /*
@@ -449,8 +462,13 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      */
     @Override
     public Statement createStatement(int resultSetType, int resultSetConcurrency, int resultSetHoldability) {
-	AceQLStatement aceQLStatement = new AceQLStatement(this);
-	return aceQLStatement;
+	if (USE_INPUT_STREAM_SAVER) {
+	    AceQLStatementNew aceQLStatement = new AceQLStatementNew(this);
+	    return aceQLStatement;
+	} else {
+	    AceQLStatement aceQLStatement = new AceQLStatement(this);
+	    return aceQLStatement;
+	}
     }
 
     /*

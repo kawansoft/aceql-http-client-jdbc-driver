@@ -43,7 +43,7 @@ import org.apache.commons.io.IOUtils;
 public class InputStreamSaver implements Closeable {
 
     /** The content of the stream must be < at his limit to be stored in a String */
-    public static long DEFAULT_STRING_MAX_LENGTH_BYTES = 1024 * 1024;
+    public static long DEFAULT_STRING_MAX_LENGTH_BYTES = 80 * 1024 * 1024;
 
     /**
      * Will hold the stream positioned after string length
@@ -121,8 +121,8 @@ public class InputStreamSaver implements Closeable {
 
 			if (fileOutput == null) {
 			    contentInMemory = false;
-			    tempFile = File.createTempFile("ogo_temp_input_stream_saver_", ".txt");
-			    file = File.createTempFile("ogo_final_input_stream_saver_", ".txt");
+			    tempFile = File.createTempFile("input_stream_saver_temp_", ".txt");
+			    file = File.createTempFile("input_stream_saver_final_", ".txt");
 			    fileOutput = new FileOutputStream(tempFile);
 			}
 
