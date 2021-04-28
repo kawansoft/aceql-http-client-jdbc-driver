@@ -22,7 +22,7 @@ AceQL Client JDBC Driver - Version 6.1 - 28-Apr-2021
 ----------------------------------------------------
 
 Whats'new:
-- Performance has been improved on SELECT calls
+- Performance has been improved on SELECT calls.
 - commons-io library has been upgraded to 2.7.
 
 
