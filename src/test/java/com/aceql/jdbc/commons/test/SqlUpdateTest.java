@@ -62,8 +62,8 @@ public class SqlUpdateTest {
 	String sql = "update customer set customer_title = 'Miss'";
 	Statement statement = connection.createStatement();
 	statement.execute(sql);
-	System.out.println("statement.getMoreResults(): " + statement.getMoreResults());
-	System.out.println("statement.getUpdateCount(): " + statement.getUpdateCount());
+	out.println("statement.getMoreResults(): " + statement.getMoreResults());
+	out.println("statement.getUpdateCount(): " + statement.getUpdateCount());
 	out.println("Executed: " + sql);
     }
 

@@ -18,6 +18,7 @@
  */
 package com.aceql.jdbc.commons.main.util.json;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
@@ -31,6 +32,7 @@ import javax.json.Json;
 import javax.json.stream.JsonParser;
 
 import com.aceql.jdbc.commons.main.http.ResultAnalyzer;
+import com.aceql.jdbc.commons.main.util.framework.FastRowCounter;
 
 /**
  * @author Nicolas de Pomereu
@@ -96,7 +98,8 @@ public class StreamResultAnalyzer {
 
 	try {
 	    try {
-		reader = new InputStreamReader(new FileInputStream(jsonFile), "UTF-8");
+		//reader = new InputStreamReader(new FileInputStream(jsonFile), "UTF-8");
+		reader = new BufferedReader(new InputStreamReader(new FileInputStream(jsonFile), "UTF-8"));
 	    } catch (Exception e) {
 		throw new SQLException(e);
 	    }
@@ -290,7 +293,8 @@ public class StreamResultAnalyzer {
 
 	try {
 	    try {
-		reader = new InputStreamReader(new FileInputStream(jsonFile), "UTF-8");
+		//reader = new InputStreamReader(new FileInputStream(jsonFile), "UTF-8");
+		reader = new BufferedReader(new InputStreamReader(new FileInputStream(jsonFile), "UTF-8"));
 	    } catch (Exception e) {
 		throw new SQLException(e);
 	    }
@@ -320,6 +324,7 @@ public class StreamResultAnalyzer {
 
     }
 
+    
     /**
      * Returns the "row_count" key int value from the Json file
      *
@@ -343,8 +348,54 @@ public class StreamResultAnalyzer {
 	Reader reader = null;
 
 	try {
+	    return FastRowCounter.getRowCount(jsonFile);
+	} catch (Exception e) {
+	    this.parseException = e;
+
+	    this.errorType = "0";
+	    errorMessage = "Unknown error";
+	    if (httpStatusCode != HttpURLConnection.HTTP_OK) {
+		errorMessage = "HTTP FAILURE " + httpStatusCode + " (" + httpStatusMessage + ")";
+	    }
+
+	    return 0;
+	} finally {
+	    if (reader != null) {
+		try {
+		    reader.close();
+		} catch (Exception ignore) {
+		    // ignore
+		}
+	    }
+	}
+    }
+
+    /**
+     * Returns the "row_count" key int value from the Json file
+     *
+     * @return the "row_count" key int value from the Json file
+     * @throws SQLException
+     */
+    public int getRowCountWithParse() throws SQLException {
+
+	// If file does not exist ==> http failure
+	if (!jsonFile.exists()) {
+
+	    this.errorType = "0";
+	    errorMessage = "Unknown error.";
+	    if (httpStatusCode != HttpURLConnection.HTTP_OK) {
+		errorMessage = "HTTP FAILURE " + httpStatusCode + " (" + httpStatusMessage + ")";
+	    }
+	    return 0;
+	}
+
+	debug("");
+	Reader reader = null;
+
+	try {
 	    try {
-		reader = new InputStreamReader(new FileInputStream(jsonFile), "UTF-8");
+		//reader = new InputStreamReader(new FileInputStream(jsonFile), "UTF-8");
+		reader = new BufferedReader(new InputStreamReader(new FileInputStream(jsonFile), "UTF-8"));
 	    } catch (Exception e) {
 		throw new SQLException(e);
 	    }
@@ -409,7 +460,7 @@ public class StreamResultAnalyzer {
 	    }
 	}
     }
-
+    
     /**
      * @param s
      */
@@ -441,7 +492,8 @@ public class StreamResultAnalyzer {
 
 	try {
 	    try {
-		reader = new InputStreamReader(new FileInputStream(jsonFile), "UTF-8");
+		//reader = new InputStreamReader(new FileInputStream(jsonFile), "UTF-8");
+		reader = new BufferedReader(new InputStreamReader(new FileInputStream(jsonFile), "UTF-8"));
 	    } catch (Exception e) {
 		throw new SQLException(e);
 	    }

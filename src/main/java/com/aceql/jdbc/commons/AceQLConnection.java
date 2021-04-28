@@ -174,7 +174,8 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 
     /**
      * Login on the AceQL server and connect to a database.
-     * @param connectionInfo         Connection Info required for login.
+     * 
+     * @param connectionInfo Connection Info required for login.
      * @throws SQLException if any I/O error occurs
      */
     AceQLConnection(ConnectionInfo connectionInfo) throws SQLException {

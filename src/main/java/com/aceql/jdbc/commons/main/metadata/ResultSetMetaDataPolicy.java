@@ -8,7 +8,7 @@ import com.aceql.jdbc.commons.AceQLConnection;
 /**
  * Defines the policy for {@code ResultSetMetaData} access:
  * <ul>
- * <li>on: {@link ResulSetMetaData} will be always accessible, because
+ * <li>on: {@code ResulSetMetaData} will be always accessible, because
  * downloaded along with ResultSet for each {@code SELECT}. This will allow to use
  * {@code ResultSet#getMetaData()} calls, but {@code SELECT} calls will be a bit
  * slower.</li>

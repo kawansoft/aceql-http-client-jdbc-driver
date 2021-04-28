@@ -37,12 +37,15 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
 import com.aceql.jdbc.commons.AceQLConnection;
-import com.aceql.jdbc.commons.InternalWrapper;
 import com.aceql.jdbc.commons.AceQLException;
+import com.aceql.jdbc.commons.InternalWrapper;
 import com.aceql.jdbc.commons.main.abstracts.AbstractStatement;
 import com.aceql.jdbc.commons.main.http.AceQLHttpApi;
 import com.aceql.jdbc.commons.main.util.AceQLStatementUtil;
+import com.aceql.jdbc.commons.main.util.SimpleTimer;
+import com.aceql.jdbc.commons.main.util.TimeUtil;
 import com.aceql.jdbc.commons.main.util.framework.FrameworkFileUtil;
+import com.aceql.jdbc.commons.main.util.framework.UniqueIDBuilder;
 import com.aceql.jdbc.commons.main.util.json.StreamResultAnalyzer;
 
 /**
@@ -51,7 +54,9 @@ import com.aceql.jdbc.commons.main.util.json.StreamResultAnalyzer;
  */
 public class AceQLStatement extends AbstractStatement implements Statement {
 
-    public static boolean DEBUG_DUMP_FILE;
+    public static boolean KEEP_EXECUTION_FILES_DEBUG = false;
+    public static boolean DUMP_FILE_DEBUG;
+    
     private static boolean DEBUG = false;
 
     // Can be private, not used in daughter AceQLPreparedStatement
@@ -96,8 +101,10 @@ public class AceQLStatement extends AbstractStatement implements Statement {
 	updateCount = -1;
 
 	try {
-
+	    TimeUtil.printTimeStamp("Before buildtResultSetFile");
+	    SimpleTimer simpleTimer = new SimpleTimer();
 	    File file = buildtResultSetFile();
+	    TimeUtil.printTimeStamp("After  buildtResultSetFile " + simpleTimer.getElapsedMs());
 	    this.localResultSetFiles.add(file);
 
 	    aceQLHttpApi.trace("file: " + file);
@@ -105,12 +112,19 @@ public class AceQLStatement extends AbstractStatement implements Statement {
 	    boolean isPreparedStatement = false;
 	    Map<String, String> statementParameters = null;
 
+	    simpleTimer = new SimpleTimer();
+	    TimeUtil.printTimeStamp("Before Execute");
+	    
 	    try (InputStream in = aceQLHttpApi.execute(sql, isPreparedStatement, statementParameters, maxRows);
-		    OutputStream out = new BufferedOutputStream(new FileOutputStream(file));) {
+		    OutputStream out = new FileOutputStream(file);) {
 
+		TimeUtil.printTimeStamp("After  Execute " + simpleTimer.getElapsedMs());
+		simpleTimer = new SimpleTimer();
 		if (in != null) {
 		    IOUtils.copy(in, out);
 		}
+		
+		TimeUtil.printTimeStamp("After  copy " + simpleTimer.getElapsedMs());
 	    }
 
 	    StreamResultAnalyzer streamResultAnalyzer = new StreamResultAnalyzer(file, aceQLHttpApi.getHttpStatusCode(),
@@ -120,14 +134,30 @@ public class AceQLStatement extends AbstractStatement implements Statement {
 			null, streamResultAnalyzer.getStackTrace(), aceQLHttpApi.getHttpStatusCode());
 	    }
 
+	    TimeUtil.printTimeStamp("After  streamResultAnalyzer.isStatusOk()");
+	    
 	    boolean isResultSet = streamResultAnalyzer.isResultSet();
-	    int rowCount = streamResultAnalyzer.getRowCount();
-
+	    
+	    TimeUtil.printTimeStamp("Before streamResultAnalyzer.getRowCount()");
+	    simpleTimer = new SimpleTimer();
+	    int rowCount = 0; 
+	    
+	    if (isResultSet) {
+		rowCount = streamResultAnalyzer.getRowCount();
+	    }
+	    else {
+		rowCount = streamResultAnalyzer.getRowCountWithParse();
+	    }
+	    
+	    TimeUtil.printTimeStamp("After  streamResultAnalyzer.getRowCount() " + simpleTimer.getElapsedMs());
+	    
 	    debug("statement.isResultSet: " + isResultSet);
 	    debug("statement.rowCount   : " + rowCount);
 
 	    if (isResultSet) {
+		TimeUtil.printTimeStamp("Before new AceQLResultSet(file, this, rowCount)");
 		aceQLResultSet = new AceQLResultSet(file, this, rowCount);
+		TimeUtil.printTimeStamp("After  new AceQLResultSet(file, this, rowCount)");
 		return true;
 	    } else {
 		// NO ! update count must be -1, as we have no more updates...
@@ -214,7 +244,7 @@ public class AceQLStatement extends AbstractStatement implements Statement {
 		}
 	    }
 
-	    if (DEBUG_DUMP_FILE) {
+	    if (DUMP_FILE_DEBUG) {
 		System.out.println("STATEMENT_FILE_BEGIN");
 		System.out.println(FileUtils.readFileToString(file, Charset.defaultCharset()));
 		System.out.println("STATEMENT_FILE_END");
@@ -247,7 +277,9 @@ public class AceQLStatement extends AbstractStatement implements Statement {
     @Override
     public void close() throws SQLException {
 	for (File file : localResultSetFiles) {
-	    file.delete();
+	    if (! KEEP_EXECUTION_FILES_DEBUG) {
+		file.delete();
+	    }
 	}
     }
 
@@ -261,9 +293,13 @@ public class AceQLStatement extends AbstractStatement implements Statement {
 	return this.aceQLConnection;
     }
 
-    static File buildtResultSetFile() {
+   /**
+    * Builds the the Result Set file with a unique name 
+    * @return
+    */
+   static File buildtResultSetFile() {
 	File file = new File(FrameworkFileUtil.getKawansoftTempDir() + File.separator + "pc-result-set-"
-		+ FrameworkFileUtil.getUniqueId() + ".txt");
+		+ UniqueIDBuilder.getUniqueId() + ".txt");
 	return file;
     }
 

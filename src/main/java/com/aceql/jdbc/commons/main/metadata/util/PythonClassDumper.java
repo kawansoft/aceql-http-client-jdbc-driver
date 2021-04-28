@@ -17,8 +17,7 @@ import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
-
-import com.aceql.jdbc.commons.main.metadata.Table;
+import org.apache.commons.lang3.SystemUtils;
 
 /**
  * @author Nicolas de Pomereu
@@ -26,7 +25,8 @@ import com.aceql.jdbc.commons.main.metadata.Table;
  */
 public class PythonClassDumper {
 
-    private static final String PYTHON_HEADERS_FILE = "I:\\_dev_awake\\aceql-http-main\\aceql-http-client-sdk\\src\\main\\java\\com\\aceql\\client\\metadata\\util\\python_header.txt";
+    private static final String PYTHON_HEADERS_FILE = 
+	    "I:\\_dev_awake\\aceql-http-main\\aceql-http-client-jdbc-driver\\src\\main\\java\\com\\aceql\\jdbc\\commons\\main\\metadata\\util\\python_header.txt";
     private static final String FOUR_BLANKS = "    ";
 
     /**
@@ -45,17 +45,21 @@ public class PythonClassDumper {
 	classes.add(Index.class);
 	classes.add(PrimaryKey.class);
 	*/
-	classes.add(Table.class);
+	classes.add(ConnectionOptions.class);
 
+	File baseDir = new File(SystemUtils.USER_HOME + File.separator + "tmp");
+	baseDir.mkdirs();
+	
 	for (Class<?> clazz : classes) {
-	    System.out.println(new Date() + " " + clazz.getSimpleName());
-	    try (PrintWriter out = new PrintWriter(new OutputStreamWriter(
-		    new FileOutputStream("C:\\test\\pyhton\\" + clazz.getSimpleName().toLowerCase() + ".py")));) {
+	    //System.out.println(new Date() + " " + clazz.getSimpleName());
+	    String pyfileName = baseDir + File.separator + clazz.getSimpleName().toLowerCase() + ".py";
+	    System.out.println(new Date() + "Py File created: " + pyfileName);
+	    try (PrintWriter out = new PrintWriter(new OutputStreamWriter(new FileOutputStream(pyfileName)));) {
 		printPythonClass(clazz, printHeader, out);
 	    }
 
 	}
-
+	//System.out.println("Generated: " + classes);
 	System.out.println(new Date() + " Done.");
     }
 

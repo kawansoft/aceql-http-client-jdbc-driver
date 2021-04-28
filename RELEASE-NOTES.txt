@@ -18,6 +18,15 @@ The AceQL Client JDBC Driver is licensed under the Apache 2.0
 License.
 
 
+AceQL Client JDBC Driver - Version 6.1 - 28-Apr-2021
+----------------------------------------------------
+
+Whats'new:
+- Performance has been improved on SELECT calls.
+- commons-io library has been upgraded to 2.7.
+
+
+
 AceQL Client JDBC Driver - Version 6.0 - 06-Apr-2021
 ----------------------------------------------------
 
@@ -29,7 +38,6 @@ Whats New:
   ResultSet implementation.
 
 
-  
 AceQL Java Client SDK - Version 5.1 - 11-Nov-2020
 -------------------------------------------------
 

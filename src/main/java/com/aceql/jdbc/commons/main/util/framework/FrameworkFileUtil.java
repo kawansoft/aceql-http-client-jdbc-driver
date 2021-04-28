@@ -28,7 +28,6 @@ import java.io.InputStreamReader;
 import java.io.RandomAccessFile;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 import java.util.Vector;
 
 /**
@@ -52,16 +51,6 @@ public class FrameworkFileUtil {
      */
     protected FrameworkFileUtil() {
 	super();
-    }
-
-    /**
-     * Build a unique string
-     *
-     * @return a unique string
-     */
-    public static synchronized String getUniqueId() {
-	UUID idOne = UUID.randomUUID();
-	return idOne.toString();
     }
 
     /**
