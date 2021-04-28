@@ -54,15 +54,16 @@ public class InputStreamSaver implements Closeable {
     /** Will hold the content if is a File */
     private File file = null;
 
-    /** Says if the content is stored in a ByteArrayOutputStream or in a File (false) */
+    /**
+     * Says if the content is stored in a ByteArrayOutputStream or in a File (false)
+     */
     private boolean contentInMemory = true;
 
     /** The maximum length for storage of InputStream as String */
     private long stringMaxLengthBytes = DEFAULT_STRING_MAX_LENGTH_BYTES;
 
-
     /** Size of the request */
-    private long  length = -1;
+    private long length = -1;
 
     private ByteArrayOutputStream bytesOut;
 
@@ -82,7 +83,7 @@ public class InputStreamSaver implements Closeable {
     public InputStreamSaver(long stringMaxLength) {
 
 	if (stringMaxLength < 0) {
-	    throw new NullPointerException("stringMaxLengthBytes can not be < 0.");
+	    throw new IllegalArgumentException("stringMaxLengthBytes can not be < 0.");
 	}
 	this.stringMaxLengthBytes = stringMaxLength;
     }
@@ -107,10 +108,7 @@ public class InputStreamSaver implements Closeable {
 	bytesOut = new ByteArrayOutputStream();
 
 	try {
-	    if (inputStream == null) {
-		// Nothing
-	    } else {
-
+	    if (inputStream != null) {
 		byte[] charBuffer = new byte[128];
 		int bytesRead = -1;
 		while ((bytesRead = inputStream.read(charBuffer)) > 0) {
@@ -167,13 +165,11 @@ public class InputStreamSaver implements Closeable {
 	this.length = file.length();
     }
 
-
-    private static  void closeQuietly(OutputStream outputStream) {
+    private static void closeQuietly(OutputStream outputStream) {
 	if (outputStream != null) {
 	    try {
 		outputStream.close();
-	    }
-	    catch (Exception e ) {
+	    } catch (Exception e) {
 		// Ignore
 	    }
 	}
@@ -183,20 +179,20 @@ public class InputStreamSaver implements Closeable {
 	if (inputStream != null) {
 	    try {
 		inputStream.close();
-	    }
-	    catch (Exception e ) {
+	    } catch (Exception e) {
 		// Ignore
 	    }
 	}
     }
 
     /**
-     * Says if the underlying content is stored in a ByteArrayOutputStream or in a File.
+     * Says if the underlying content is stored in a ByteArrayOutputStream or in a
+     * File.
      *
      * @return true if content is stored as String, else false.
      */
     public boolean isContentInMemory() {
-        return contentInMemory;
+	return contentInMemory;
     }
 
     /**
@@ -212,7 +208,7 @@ public class InputStreamSaver implements Closeable {
 	    InputStream in = new ByteArrayInputStream(bytesOut.toByteArray());
 	    return in;
 	} else {
-	    if (! file.exists()) {
+	    if (!file.exists()) {
 		throw new FileNotFoundException("Underlying file does not exist: " + file);
 	    }
 	    InputStream in = new BufferedInputStream(new FileInputStream(file));
@@ -231,13 +227,13 @@ public class InputStreamSaver implements Closeable {
 	return file;
     }
 
-
     /**
      * Thes size of the request.
+     * 
      * @return
      */
     public long getLength() {
-        return length;
+	return length;
     }
 
     /**
