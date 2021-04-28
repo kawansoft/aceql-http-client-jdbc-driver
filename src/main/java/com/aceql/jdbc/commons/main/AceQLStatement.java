@@ -54,7 +54,7 @@ import com.aceql.jdbc.commons.main.util.json.StreamResultAnalyzer;
  */
 public class AceQLStatement extends AbstractStatement implements Statement {
 
-    public static boolean KEEP_EXECUTION_FILES_DEBUG = true;
+    public static boolean KEEP_EXECUTION_FILES_DEBUG = false;
     public static boolean DUMP_FILE_DEBUG;
     
     private static boolean DEBUG = false;
