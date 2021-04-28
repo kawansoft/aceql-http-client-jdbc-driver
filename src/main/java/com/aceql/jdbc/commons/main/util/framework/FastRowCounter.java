@@ -43,44 +43,6 @@ public class FastRowCounter {
      * @return  the Json Result Set rows count
      * @throws IOException if any I/O Exception or file does not exist
      */
-    public static int getRowCount(InputStream inputStream, long size) throws IOException {
-
-	StringBuffer sb = new StringBuffer();
-
-	//long size = file.length();
-
-	try (InputStream is = new BufferedInputStream(inputStream)) {
-	    byte[] c = new byte[1024];
-
-	    int readChars = 0;
-	    long cpt = 0;
-	    while ((readChars = is.read(c)) != -1) {
-
-		for (int i = 0; i < readChars; ++i) {
-		    cpt++;
-		    if (cpt > size - 40 && cpt < size - 1) {
-			sb.append((char) c[i]);
-		    }
-		}
-	    }
-
-	} 
-
-	String line = sb.toString();
-	debug("!" + line + "!");
-	line = StringUtils.substringAfter(line, ",");
-	line = StringUtils.substringAfter(line, ":").trim();
-	debug("!" + line + "!");
-	return Integer.parseInt(line);
-    }
-
-    
-    /**
-     * Returns the Result Set rows count without parsing the Json file.
-     * @param file the Json Result Set file to counts the rows from
-     * @return  the Json Result Set rows count
-     * @throws IOException if any I/O Exception or file does not exist
-     */
     public static int getRowCount(File file) throws IOException {
 	Objects.requireNonNull(file, "file cannot be null!");
 	
