@@ -28,7 +28,6 @@ import com.aceql.jdbc.commons.AceQLConnection;
 import com.aceql.jdbc.commons.AceQLException;
 import com.aceql.jdbc.commons.test.connection.ConnectionBuilder;
 import com.aceql.jdbc.commons.test.connection.FourDbConnections;
-import com.aceql.jdbc.commons.test.stored_procedures.PotsgreSqlStoredProcedureTest;
 
 /**
  * Test all SDK functions.
@@ -50,7 +49,7 @@ public class TestAll {
 	testSchemaMethodsFourDbs();
 
 	connection = ConnectionBuilder.createOnConfig();
-	PotsgreSqlStoredProcedureTest.testStoredProcedures(connection);
+	//PotsgreSqlStoredProcedureTest.testStoredProcedures(connection);
 	connection.close();
 	((AceQLConnection) connection).logout();
 

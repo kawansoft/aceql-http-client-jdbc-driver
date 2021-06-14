@@ -23,6 +23,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.SQLException;
+import java.sql.Savepoint;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +33,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import com.aceql.jdbc.commons.AceQLException;
 import com.aceql.jdbc.commons.ConnectionInfo;
+import com.aceql.jdbc.commons.main.AceQLSavepoint;
 import com.aceql.jdbc.commons.main.metadata.ResultSetMetaDataPolicy;
 import com.aceql.jdbc.commons.main.metadata.dto.JdbcDatabaseMetaDataDto;
 import com.aceql.jdbc.commons.main.metadata.dto.TableDto;
@@ -426,7 +428,101 @@ public class AceQLHttpApi {
     public void rollback() throws AceQLException {
 	callApiNoResult("rollback", null);
     }
+    
+    /**
+     * Sets an unnamed Savepoint. Number will be generated on the server side
+     * @return an unnamed Savepoint
+     * @throws AceQLException if any Exception occurs
+     */
+    public Savepoint setSavepoint() throws AceQLException {
+	String result = callApiWithResult("set_savepoint", null);
+	AceQLSavepoint savepoint = (AceQLSavepoint) AceQLSavepoint.buildFromString(result);
+	return savepoint;
+    }
+    
+    /**
+     * Sets a named Savepoint
+     * @param name
+     * @return
+     * @throws AceQLException
+     */
+    public Savepoint setSavePoint(String name) throws AceQLException {
+	try {
+	    if (name == null) {
+		Objects.requireNonNull(name, "savepoint name be null!");
+	    }
+	    Map<String, String> parametersMap = new HashMap<String, String>();
+	    parametersMap.put("name", "" + name);
 
+	    URL theUrl = new URL(url + "set_savepoint_name");
+	    String result = httpManager.callWithPostReturnString(theUrl, parametersMap);
+
+	    ResultAnalyzer resultAnalyzer = new ResultAnalyzer(result, httpManager.getHttpStatusCode(),
+		    httpManager.getHttpStatusMessage());
+	    if (!resultAnalyzer.isStatusOk()) {
+		throw new AceQLException(resultAnalyzer.getErrorMessage(), resultAnalyzer.getErrorType(), null,
+			resultAnalyzer.getStackTrace(), httpManager.getHttpStatusCode());
+	    }
+	    
+	    AceQLSavepoint savepoint = (AceQLSavepoint) AceQLSavepoint.buildFromString(result);
+	    return savepoint;
+
+	} catch (Exception e) {
+	    throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
+	}
+    }
+    
+    
+    /**
+     * Roolbacks a Savepoint.
+     * @param savepoint
+     * @throws AceQLException
+     */
+    public void rollbback(Savepoint savepoint) throws AceQLException {
+	String action = "rollback_savepoint";
+	callSavepointAction(action, savepoint);
+    }
+    
+    /**
+     * Roolbacks a Savepoint.
+     * @param savepoint
+     * @throws AceQLException
+     */
+    public void releaseSavepoint(Savepoint savepoint) throws AceQLException {
+	String action = "release_savepoint";
+	callSavepointAction(action, savepoint);
+    }
+    
+    /**
+     * @param action
+     * @param savepoint
+     * @throws AceQLException
+     */
+    private void callSavepointAction(String action, Savepoint savepoint) throws AceQLException {
+	try {
+	    if (savepoint == null) {
+		Objects.requireNonNull(savepoint, "savepoint cannot be null!");
+	    }
+	    Map<String, String> parametersMap = new HashMap<String, String>();
+	    parametersMap.put("id", "" + savepoint.getSavepointId());
+	    parametersMap.put("name", "" + savepoint.getSavepointName());
+
+	    URL theUrl = new URL(url + action);
+	    String result = httpManager.callWithPostReturnString(theUrl, parametersMap);
+
+	    ResultAnalyzer resultAnalyzer = new ResultAnalyzer(result, httpManager.getHttpStatusCode(),
+		    httpManager.getHttpStatusMessage());
+	    if (!resultAnalyzer.isStatusOk()) {
+		throw new AceQLException(resultAnalyzer.getErrorMessage(), resultAnalyzer.getErrorType(), null,
+			resultAnalyzer.getStackTrace(), httpManager.getHttpStatusCode());
+	    }
+
+	} catch (Exception e) {
+	    throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
+	}
+    }
+
+    
     /**
      * Calls /set_transaction_isolation_level API
      *
@@ -949,5 +1045,13 @@ public class AceQLHttpApi {
 	    conn.addRequestProperty(key, map.get(key));
 	}
     }
+
+
+
+
+
+
+
+
 
 }

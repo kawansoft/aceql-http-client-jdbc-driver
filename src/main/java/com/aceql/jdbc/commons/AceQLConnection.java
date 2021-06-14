@@ -40,7 +40,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.aceql.jdbc.commons.main.AceQLPreparedStatement;
-import com.aceql.jdbc.commons.main.AceQLSavepoint;
 import com.aceql.jdbc.commons.main.AceQLStatement;
 import com.aceql.jdbc.commons.main.abstracts.AbstractConnection;
 import com.aceql.jdbc.commons.main.http.AceQLHttpApi;
@@ -314,6 +313,47 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     /*
      * (non-Javadoc)
      *
+     * @see com.aceql.jdbc.commons.main.abstracts.AbstractConnection#setSavepoint()
+     */
+    @Override
+    public Savepoint setSavepoint() throws SQLException {
+	return aceQLHttpApi.setSavepoint();
+    }
+
+    
+    @Override
+    public Savepoint setSavepoint(String name) throws SQLException {
+	return aceQLHttpApi.setSavePoint(name);
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see
+     * com.aceql.jdbc.commons.main.abstracts.AbstractConnection#rollback(java.sql.
+     * Savepoint)
+     */
+    @Override
+    public void rollback(Savepoint savepoint) throws SQLException {
+	aceQLHttpApi.rollbback(savepoint);
+    }
+    
+    /*
+     * (non-Javadoc)
+     *
+     * @see
+     * com.aceql.jdbc.commons.main.abstracts.AbstractConnection#releaseSavepoint(
+     * java. sql.Savepoint)
+     */
+    @Override
+    public void releaseSavepoint(Savepoint savepoint) throws SQLException {
+	aceQLHttpApi.releaseSavepoint(savepoint);
+    }
+
+    
+    /*
+     * (non-Javadoc)
+     *
      * @see java.sql.Connection#setHoldability(int)
      */
     @Override
@@ -353,6 +393,8 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	return aceQLHttpApi.getAutoCommit();
     }
 
+    
+    
     /*
      * (non-Javadoc)
      *
@@ -759,51 +801,8 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	// Do nothing for now. Future usage.
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see com.aceql.jdbc.commons.main.abstracts.AbstractConnection#setSavepoint()
-     */
-    @Override
-    public Savepoint setSavepoint() throws SQLException {
-	return new AceQLSavepoint();
-    }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * com.aceql.jdbc.commons.main.abstracts.AbstractConnection#setSavepoint(java.
-     * lang. String)
-     */
-    @Override
-    public Savepoint setSavepoint(String name) throws SQLException {
-	return new AceQLSavepoint();
-    }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * com.aceql.jdbc.commons.main.abstracts.AbstractConnection#rollback(java.sql.
-     * Savepoint)
-     */
-    @Override
-    public void rollback(Savepoint savepoint) throws SQLException {
-	// Do nothing for now. Future usage.
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * com.aceql.jdbc.commons.main.abstracts.AbstractConnection#releaseSavepoint(
-     * java. sql.Savepoint)
-     */
-    @Override
-    public void releaseSavepoint(Savepoint savepoint) throws SQLException {
-	// Do nothing for now. Future usage.
-    }
 
     /*
      * (non-Javadoc)
