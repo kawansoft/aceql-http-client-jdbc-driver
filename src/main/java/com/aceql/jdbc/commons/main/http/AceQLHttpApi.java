@@ -454,7 +454,7 @@ public class AceQLHttpApi {
 	    Map<String, String> parametersMap = new HashMap<String, String>();
 	    parametersMap.put("name", "" + name);
 
-	    URL theUrl = new URL(url + "set_savepoint_name");
+	    URL theUrl = new URL(url + "set_named_savepoint");
 	    String result = httpManager.callWithPostReturnString(theUrl, parametersMap);
 
 	    ResultAnalyzer resultAnalyzer = new ResultAnalyzer(result, httpManager.getHttpStatusCode(),
