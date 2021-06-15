@@ -448,9 +448,9 @@ public class AceQLHttpApi {
      */
     public Savepoint setSavePoint(String name) throws AceQLException {
 	try {
-	    if (name == null) {
-		Objects.requireNonNull(name, "savepoint name be null!");
-	    }
+	    Objects.requireNonNull(name, "Savepoint name cannot be null!");
+	    name = name.trim();
+	    
 	    Map<String, String> parametersMap = new HashMap<String, String>();
 	    parametersMap.put("name", "" + name);
 
@@ -500,9 +500,7 @@ public class AceQLHttpApi {
      */
     private void callSavepointAction(String action, Savepoint savepoint) throws AceQLException {
 	try {
-	    if (savepoint == null) {
-		Objects.requireNonNull(savepoint, "savepoint cannot be null!");
-	    }
+	    Objects.requireNonNull(savepoint, "savepoint cannot be null!");
 	    Map<String, String> parametersMap = new HashMap<String, String>();
 	    
 	    int id = -1;
