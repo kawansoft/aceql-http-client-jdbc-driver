@@ -98,7 +98,8 @@ public class AceQLHttpConnectionTestColumnAsKeyName {
 	    for (int i = 1; i < 10; i++) {
 		int customerId = i;
 
-		sql = "insert into customer_2 values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+		sql = "insert into customer values (?, ?, ?, ?, ?, ?, ?, ?)";
 		preparedStatement = connection
 			.prepareStatement(sql);
 
@@ -111,8 +112,6 @@ public class AceQLHttpConnectionTestColumnAsKeyName {
 		preparedStatement.setString(j++, "Town_" + customerId);
 		preparedStatement.setString(j++, customerId + "");
 		preparedStatement.setString(j++, customerId + "-12345678");
-		preparedStatement.setString(j++, customerId + "_row_num");
-		preparedStatement.setString(j++, customerId + "_row_count");
 		int rowCount = preparedStatement.executeUpdate();
 		preparedStatement.close();
 		assert (rowCount == 1);
@@ -127,7 +126,7 @@ public class AceQLHttpConnectionTestColumnAsKeyName {
     @Test
     public void testSelect() {
 	try {
-	    String sql = "select * from customer_2 order by customer_id limit 3";
+	    String sql = "select * from customer order by customer_id limit 3";
 	    PreparedStatement preparedStatement = getConnection()
 		    .prepareStatement(sql);
 
@@ -149,8 +148,8 @@ public class AceQLHttpConnectionTestColumnAsKeyName {
 		System.out.println("town          : " + rs.getString(i++));
 		System.out.println("zipcode       : " + rs.getString(i++));
 		System.out.println("phone         : " + rs.getString(i++));
-		System.out.println("row_2         : " + rs.getString(i++));
-		System.out.println("row_count     : " + rs.getString(i++));
+		//System.out.println("row_2         : " + rs.getString(i++));
+		//System.out.println("row_count     : " + rs.getString(i++));
 
 	    }
 	    assert (cpt == 3);
