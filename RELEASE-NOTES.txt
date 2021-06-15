@@ -18,6 +18,18 @@ The AceQL Client JDBC Driver is licensed under the Apache 2.0
 License.
 
 
+AceQL Client JDBC Driver - Version 6.2 - 28-Apr-2021
+----------------------------------------------------
+
+Whats'new:
+- Savepoints methods are now fully supported 
+  (require AceQL HTTP Server v7.2+):
+  Connection.setSavepoint(), 
+  Connection.setSavepoint(String name),
+  Connection.rollback(Savepoint savepoint),
+  Connection.releaseSavepoint(Savepoint savepoint).
+
+
 AceQL Client JDBC Driver - Version 6.1 - 28-Apr-2021
 ----------------------------------------------------
 
