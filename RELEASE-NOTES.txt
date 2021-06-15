@@ -22,8 +22,8 @@ AceQL Client JDBC Driver - Version 6.2 - 28-Apr-2021
 ----------------------------------------------------
 
 Whats'new:
-- Savepoints methods are now fully supported 
-  (require AceQL HTTP Server v7.2+):
+- Savepoints methods are now fully supported. Savepoints 
+  require AceQL HTTP Server v7.2+:
   Connection.setSavepoint(), 
   Connection.setSavepoint(String name),
   Connection.rollback(Savepoint savepoint),
