@@ -141,6 +141,9 @@ public class AceQLConnectionTest {
 	if (doSelectOnRegions) {
 	    sqlSelectTest.selectOnRegions();
 	}
+	
+	SavepointTest savepointTest = new SavepointTest(connection, System.out);
+	savepointTest.doIt();
     }
 
     /**

@@ -464,7 +464,7 @@ public class AceQLHttpApi {
 			resultAnalyzer.getStackTrace(), httpManager.getHttpStatusCode());
 	    }
 	    
-	    AceQLSavepoint savepoint = (AceQLSavepoint) AceQLSavepoint.buildFromString(result);
+	    AceQLSavepoint savepoint = (AceQLSavepoint) AceQLSavepoint.buildFromString(resultAnalyzer.getResult());
 	    return savepoint;
 
 	} catch (Exception e) {
@@ -504,8 +504,27 @@ public class AceQLHttpApi {
 		Objects.requireNonNull(savepoint, "savepoint cannot be null!");
 	    }
 	    Map<String, String> parametersMap = new HashMap<String, String>();
-	    parametersMap.put("id", "" + savepoint.getSavepointId());
-	    parametersMap.put("name", "" + savepoint.getSavepointName());
+	    
+	    int id = -1;
+	    String name = "aceql_savepoint_noname";
+	    
+	    // We try to get the id and the name
+	    try {
+		id = savepoint.getSavepointId();
+	    }
+	    catch (Exception ignore) {
+		
+	    }
+	    
+	    try {
+		name = savepoint.getSavepointName();
+	    }
+	    catch (Exception ignore) {
+		
+	    }
+	    
+	    parametersMap.put("id", "" + id);
+	    parametersMap.put("name", "" + name);
 
 	    URL theUrl = new URL(url + action);
 	    String result = httpManager.callWithPostReturnString(theUrl, parametersMap);

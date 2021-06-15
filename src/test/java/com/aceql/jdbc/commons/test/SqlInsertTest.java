@@ -75,7 +75,7 @@ public class SqlInsertTest {
      * @param records the position for insert
      * @throws SQLException
      */
-    private void insertUsingStatement(int records) throws SQLException {
+    public void insertUsingStatement(int records) throws SQLException {
 	String sql;
 	Statement statement;
 	sql = "insert into customer values (" + records
