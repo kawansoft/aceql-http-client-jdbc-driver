@@ -38,6 +38,7 @@ import com.aceql.jdbc.commons.main.metadata.ResultSetMetaDataPolicy;
 import com.aceql.jdbc.commons.main.metadata.dto.JdbcDatabaseMetaDataDto;
 import com.aceql.jdbc.commons.main.metadata.dto.TableDto;
 import com.aceql.jdbc.commons.main.metadata.dto.TableNamesDto;
+import com.aceql.jdbc.commons.main.metadata.util.GsonWsUtil;
 import com.aceql.jdbc.commons.main.util.UserLoginStore;
 import com.aceql.jdbc.commons.main.util.json.SqlParameter;
 import com.aceql.jdbc.commons.main.version.VersionValues;
@@ -435,9 +436,29 @@ public class AceQLHttpApi {
      * @throws AceQLException if any Exception occurs
      */
     public Savepoint setSavepoint() throws AceQLException {
-	String result = callApiWithResult("set_savepoint", null);
-	AceQLSavepoint savepoint = (AceQLSavepoint) AceQLSavepoint.buildFromString(result);
-	return savepoint;
+	try {
+
+	    URL theUrl = new URL(url + "set_savepoint");
+	    String result = httpManager.callWithGet(theUrl.toString());
+
+	    //Keep for debug:
+	    //System.out.println(result);
+	    
+	    ResultAnalyzer resultAnalyzer = new ResultAnalyzer(result, httpManager.getHttpStatusCode(),
+		    httpManager.getHttpStatusMessage());
+	    if (!resultAnalyzer.isStatusOk()) {
+		throw new AceQLException(resultAnalyzer.getErrorMessage(), resultAnalyzer.getErrorType(), null,
+			resultAnalyzer.getStackTrace(), httpManager.getHttpStatusCode());
+	    }
+	    
+	    // If result is OK, it's a DTO
+	    SavepointDto savepointDto = GsonWsUtil.fromJson(result, SavepointDto.class);
+	    AceQLSavepoint savepoint = new AceQLSavepoint(savepointDto.getId(), savepointDto.getName());
+	    return savepoint;
+
+	} catch (Exception e) {
+	    throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
+	}
     }
     
     /**
@@ -457,6 +478,8 @@ public class AceQLHttpApi {
 	    URL theUrl = new URL(url + "set_named_savepoint");
 	    String result = httpManager.callWithPostReturnString(theUrl, parametersMap);
 
+	    //Keep for debug:System.out.println(result);
+	    
 	    ResultAnalyzer resultAnalyzer = new ResultAnalyzer(result, httpManager.getHttpStatusCode(),
 		    httpManager.getHttpStatusMessage());
 	    if (!resultAnalyzer.isStatusOk()) {
@@ -464,7 +487,9 @@ public class AceQLHttpApi {
 			resultAnalyzer.getStackTrace(), httpManager.getHttpStatusCode());
 	    }
 	    
-	    AceQLSavepoint savepoint = (AceQLSavepoint) AceQLSavepoint.buildFromString(resultAnalyzer.getResult());
+	    // If result is OK, it's a DTO
+	    SavepointDto savepointDto = GsonWsUtil.fromJson(result, SavepointDto.class);
+	    AceQLSavepoint savepoint = new AceQLSavepoint(savepointDto.getId(), savepointDto.getName());
 	    return savepoint;
 
 	} catch (Exception e) {
@@ -503,8 +528,8 @@ public class AceQLHttpApi {
 	    Objects.requireNonNull(savepoint, "savepoint cannot be null!");
 	    Map<String, String> parametersMap = new HashMap<String, String>();
 	    
-	    int id = -1;
-	    String name = "aceql_savepoint_noname";
+	    int id = -1; // value if savepoint is named
+	    String name = ""; // value is savepoint is unnamed.
 	    
 	    // We try to get the id and the name
 	    try {

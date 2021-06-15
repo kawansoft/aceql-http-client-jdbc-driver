@@ -45,7 +45,7 @@ public class TableDto {
 
     @Override
     public String toString() {
-	return "TableDto [status=" + status + ", table=" + table + "]";
+	return "SavepointDto [status=" + status + ", table=" + table + "]";
     }
 
 }
