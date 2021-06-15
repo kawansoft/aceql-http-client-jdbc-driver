@@ -22,10 +22,8 @@ package com.aceql.jdbc.commons.test.http;
 import static org.junit.Assert.fail;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -34,13 +32,12 @@ import java.sql.SQLException;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 
-import com.aceql.jdbc.commons.AceQLConnection;
 import com.aceql.jdbc.commons.test.connection.ConnectionBuilder;
 import com.aceql.jdbc.commons.test.connection.ConnectionParms;
 
 public class AceQLHttpConnectionTest {
 
-    private AceQLConnection connection = null;
+    private Connection connection = null;
 
     public Connection getConnection() throws SQLException, IOException {
 
@@ -51,7 +48,11 @@ public class AceQLHttpConnectionTest {
 	    new File(ConnectionParms.OUT_DIRECTORY).mkdirs();
 	}
 
-	return ConnectionBuilder.createOnConfig();
+	if (connection == null) {
+	    connection = ConnectionBuilder.createOnConfig();
+	}
+	
+	return connection;
     }
 
     @Test
@@ -95,6 +96,7 @@ public class AceQLHttpConnectionTest {
 	    getConnection().setAutoCommit(originalState);
 	    assert (originalState == getConnection().getAutoCommit());
 	} catch (final Exception e) {
+	    e.printStackTrace();
 	    fail(e.getMessage());
 	}
     }
@@ -120,48 +122,48 @@ public class AceQLHttpConnectionTest {
 	}
     }
 
-    @Test
-    public void testTransactionIsolation() {
-	try {
-	    int originalState = getConnection().getTransactionIsolation();
-	    System.out.println("getConnection().getTransactionIsolation(): "
-		    + getConnection().getTransactionIsolation());
-
-	    getConnection().setTransactionIsolation(
-		    Connection.TRANSACTION_READ_UNCOMMITTED);
-	    System.out.println("getConnection().getTransactionIsolation(): "
-		    + getConnection().getTransactionIsolation());
-	    assert (getConnection()
-		    .getTransactionIsolation() == Connection.TRANSACTION_READ_UNCOMMITTED);
-
-	    getConnection().setTransactionIsolation(
-		    Connection.TRANSACTION_READ_COMMITTED);
-	    System.out.println("getConnection().getTransactionIsolation(): "
-		    + getConnection().getTransactionIsolation());
-	    assert (getConnection()
-		    .getTransactionIsolation() == Connection.TRANSACTION_READ_COMMITTED);
-
-	    getConnection().setTransactionIsolation(
-		    Connection.TRANSACTION_REPEATABLE_READ);
-	    System.out.println("getConnection().getTransactionIsolation(): "
-		    + getConnection().getTransactionIsolation());
-	    assert (getConnection()
-		    .getTransactionIsolation() == Connection.TRANSACTION_REPEATABLE_READ);
-
-	    getConnection().setTransactionIsolation(
-		    Connection.TRANSACTION_SERIALIZABLE);
-	    System.out.println("getConnection().getTransactionIsolation(): "
-		    + getConnection().getTransactionIsolation());
-	    assert (getConnection()
-		    .getTransactionIsolation() == Connection.TRANSACTION_SERIALIZABLE);
-
-	    getConnection().setTransactionIsolation(originalState);
-	    assert (getConnection().getTransactionIsolation() == originalState);
-
-	} catch (final Exception e) {
-	    fail(e.getMessage());
-	}
-    }
+//    @Test
+//    public void testTransactionIsolation() {
+//	try {
+//	    int originalState = getConnection().getTransactionIsolation();
+//	    System.out.println("getConnection().getTransactionIsolation(): "
+//		    + getConnection().getTransactionIsolation());
+//
+//	    getConnection().setTransactionIsolation(
+//		    Connection.TRANSACTION_READ_UNCOMMITTED);
+//	    System.out.println("getConnection().getTransactionIsolation(): "
+//		    + getConnection().getTransactionIsolation());
+//	    assert (getConnection()
+//		    .getTransactionIsolation() == Connection.TRANSACTION_READ_UNCOMMITTED);
+//
+//	    getConnection().setTransactionIsolation(
+//		    Connection.TRANSACTION_READ_COMMITTED);
+//	    System.out.println("getConnection().getTransactionIsolation(): "
+//		    + getConnection().getTransactionIsolation());
+//	    assert (getConnection()
+//		    .getTransactionIsolation() == Connection.TRANSACTION_READ_COMMITTED);
+//
+//	    getConnection().setTransactionIsolation(
+//		    Connection.TRANSACTION_REPEATABLE_READ);
+//	    System.out.println("getConnection().getTransactionIsolation(): "
+//		    + getConnection().getTransactionIsolation());
+//	    assert (getConnection()
+//		    .getTransactionIsolation() == Connection.TRANSACTION_REPEATABLE_READ);
+//
+//	    getConnection().setTransactionIsolation(
+//		    Connection.TRANSACTION_SERIALIZABLE);
+//	    System.out.println("getConnection().getTransactionIsolation(): "
+//		    + getConnection().getTransactionIsolation());
+//	    assert (getConnection()
+//		    .getTransactionIsolation() == Connection.TRANSACTION_SERIALIZABLE);
+//
+//	    getConnection().setTransactionIsolation(originalState);
+//	    assert (getConnection().getTransactionIsolation() == originalState);
+//
+//	} catch (final Exception e) {
+//	    fail(e.getMessage());
+//	}
+//    }
 
     @Test
     public void testInsert() {
@@ -282,7 +284,6 @@ public class AceQLHttpConnectionTest {
 	    sql = "insert into orderlog values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	    preparedStatement = connection.prepareStatement(sql);
 
-	    InputStream in = new FileInputStream(file);
 	    int j = 1;
 	    preparedStatement.setInt(j++, customerId);
 	    preparedStatement.setInt(j++, itemId);
@@ -292,7 +293,7 @@ public class AceQLHttpConnectionTest {
 		    new java.sql.Date(System.currentTimeMillis()));
 	    preparedStatement.setTimestamp(j++,
 		    new java.sql.Timestamp(System.currentTimeMillis()));
-	    preparedStatement.setBinaryStream(j++, in);
+	    preparedStatement.setBytes(j++, FileUtils.readFileToByteArray(file));
 	    preparedStatement.setInt(j++, customerId);
 	    preparedStatement.setInt(j++, itemId * 1000);
 
@@ -303,6 +304,7 @@ public class AceQLHttpConnectionTest {
 
 	    connection.commit();
 	} catch (final Exception e) {
+	    e.printStackTrace();
 	    fail(e.getMessage());
 	}
     }
@@ -332,10 +334,9 @@ public class AceQLHttpConnectionTest {
 
 		file = new File(ConnectionParms.OUT_DIRECTORY + File.separator + "downloaded_new_blob.jpg");
 
-		try (InputStream in = rs.getBinaryStream(i++);){
-		    FileUtils.copyToFile(in, file);
-		}
-
+		byte [] bytes = rs.getBytes(i++);
+		FileUtils.writeByteArrayToFile(file, bytes);
+		
 		System.out.println("is_delivered  : " + rs.getBoolean(i++));
 		System.out.println("quantity      : " + rs.getInt(i++));
 
