@@ -9,7 +9,7 @@
 
 ## AceQL Client JDBC Driver v6.2 - User Guide
 
-## June 15, 2021
+## June 16, 2021
 
 <img src="https://www.aceql.com/img/AceQL-Schema-min.jpg" alt="AceQL Draw"/>
 
@@ -105,7 +105,7 @@ This comparison matrix describes the differences between the two Editions:
 | <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>Commercial License per developer and per year.<br/>**Unlimited deployment without runtime fees.** | <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>Apache 2.0 License.<br/>Unlimited deployment without any constraints. |
 | <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Main SQL types<br/>`Boolean`, `Integer`, `Short`, `Double`, `Float`, `BigDecimal`, `Long`, `String`, `Date`, `Time`, `Timestamp` | <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Main SQL types<br/>`Boolean`, `Integer`, `Short`, `Double`, `Float`, `BigDecimal`, `Long`, `String`, `Date`, `Time`, `Timestamp` |
 | <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Connection  through HTTP Proxy | <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Connection  through HTTP Proxy |
-| <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;SQL Transactions<br/>`Connection.commit()`, `Connection.rollback()`, `Connection.setAutocomit()`.<br/>Savepoints are also supported. | <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;SQL Transactions<br/>`Connection.commit()`, `Connection.rollback()`, `Connection.setAutocomit()`.<br/>Savepoints are also supported. |
+| <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;SQL Transactions<br/>`Connection.commit()`, `Connection.rollback()`, `Connection.setAutocomit(boolean autoCommit)`.<br/>[Savepoints](https://docs.oracle.com/javase/tutorial/jdbc/basics/transactions.html#set_roll_back_savepoints) are also fully supported: | <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;SQL Transactions<br/>`Connection.commit()`, `Connection.rollback()`, `Connection.setAutocomit()`.<br/>[Savepoints](https://docs.oracle.com/javase/tutorial/jdbc/basics/transactions.html#set_roll_back_savepoints) are also supported. |
 | <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Open Source Databases<br/>MySQL, PostgreSQL, MariaDB | <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Open Source Databases<br/>MySQL, PostgreSQL, MariaDB |
 | <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;MS SQL Server | <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;MS SQL Server |
 | <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Oracle Database | <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Oracle Database |
