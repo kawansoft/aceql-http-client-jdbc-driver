@@ -320,7 +320,11 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	return aceQLHttpApi.setSavepoint();
     }
 
-    
+    /*
+     * (non-Javadoc)
+     *
+     * @see com.aceql.jdbc.commons.main.abstracts.AbstractConnection#setSavepoint(String name)
+     */
     @Override
     public Savepoint setSavepoint(String name) throws SQLException {
 	return aceQLHttpApi.setSavePoint(name);
