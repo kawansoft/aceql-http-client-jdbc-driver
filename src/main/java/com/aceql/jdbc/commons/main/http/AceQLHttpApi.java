@@ -725,6 +725,8 @@ public class AceQLHttpApi {
 	    trace("statement_parameters: " + statementParameters);
 
 	    URL theUrl = new URL(url + action);
+	    debug("execute url: " + url);
+	    
 	    InputStream in = httpManager.callWithPost(theUrl, parametersMap);
 	    return in;
 
@@ -854,7 +856,7 @@ public class AceQLHttpApi {
 	    trace("statement_parameters: " + statementParameters);
 
 	    URL theUrl = new URL(url + action);
-	    debug("execute url: " + url);
+	    debug("executeQuery url: " + url);
 	    
 	    InputStream in = httpManager.callWithPost(theUrl, parametersMap);
 	    return in;
