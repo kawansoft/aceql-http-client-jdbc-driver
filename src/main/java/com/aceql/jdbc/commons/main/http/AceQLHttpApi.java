@@ -24,6 +24,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.SQLException;
 import java.sql.Savepoint;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -853,6 +854,8 @@ public class AceQLHttpApi {
 	    trace("statement_parameters: " + statementParameters);
 
 	    URL theUrl = new URL(url + action);
+	    debug("execute url: " + url);
+	    
 	    InputStream in = httpManager.callWithPost(theUrl, parametersMap);
 	    return in;
 
@@ -1089,11 +1092,11 @@ public class AceQLHttpApi {
     }
 
 
-
-
-
-
-
+    private void debug(String s) {
+	if (DEBUG) {
+	    System.out.println(new Date() + " " + s);
+	}
+    }
 
 
 }
