@@ -11,6 +11,8 @@ public class SavepointTestDirectPostgreSql {
      */
     public static void main(String[] args) throws Exception {
 	Connection connection = new DirectConnectionBuilder().createPostgreSql();
+	System.out.println("connection id: " + connection.hashCode());
+	
 	SavepointTest savepointTest = new SavepointTest(connection, System.out);
 	savepointTest.doIt();
     }
