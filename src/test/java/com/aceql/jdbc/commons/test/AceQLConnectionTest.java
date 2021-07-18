@@ -41,7 +41,6 @@ public class AceQLConnectionTest {
 
     public static void main(String[] args) throws Exception {
 	doIt();
-	doIt();
     }
 
 
@@ -54,23 +53,10 @@ public class AceQLConnectionTest {
      * @throws IOException
      * @throws NoSuchAlgorithmException
      */
-    @SuppressWarnings("unused")
     public static void doIt()
 	    throws SQLException, AceQLException, FileNotFoundException, IOException, NoSuchAlgorithmException {
 	Connection connection = ConnectionBuilder.createOnConfig();
-	//connection.close();
-	
-	/*
-	SqlDeleteTest sqlDeleteTest = new SqlDeleteTest(connection, System.out);
-	sqlDeleteTest.deleteCustomerAll();
-	
-	SqlInsertTest sqlInsertTest = new SqlInsertTest(connection, System.out);
-	sqlInsertTest.loopInsertCustomer(10);
-	*/
-	//SqlSelectTest sqlSelectTest = new SqlSelectTest(connection, System.out);
-	//sqlSelectTest.selectOrderlogStatement();
-	
-	//doItPassConnection(connection);
+	doItPassConnection(connection);
 	
     }
     /**
