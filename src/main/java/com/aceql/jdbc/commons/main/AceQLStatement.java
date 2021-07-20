@@ -32,6 +32,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -413,6 +414,7 @@ public class AceQLStatement extends AbstractStatement implements Statement {
      */
     @Override
     public void addBatch(String sql) throws SQLException {
+	Objects.requireNonNull(sql, "sql cannot be null!");
 	this.batchList.add(sql);
     }
 
