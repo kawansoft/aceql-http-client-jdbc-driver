@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
 
+import com.aceql.jdbc.commons.AceQLConnection;
 import com.aceql.jdbc.commons.test.SqlDeleteTest;
 import com.aceql.jdbc.commons.test.SqlSelectTest;
 import com.aceql.jdbc.commons.test.connection.DirectConnectionBuilder;
@@ -14,7 +15,6 @@ public class SqlBatchTest {
      * @param args
      */
     public static void main(String[] args) throws Exception {
-
 	Connection connection = new DirectConnectionBuilder().createPostgreSql();
 	callInsertFlow(connection);
     }
@@ -24,6 +24,10 @@ public class SqlBatchTest {
      * @throws SQLException
      */
     public static void callInsertFlow(Connection connection) throws SQLException {
+	if (connection instanceof AceQLConnection) {
+	    System.out.println("Connection is an AceQLConnection!");
+	}
+
 	SqlDeleteTest sqlDeleteTest = new SqlDeleteTest(connection, System.out);
 	sqlDeleteTest.deleteCustomerAll();
 	insertWithBatch(connection);
@@ -32,17 +36,16 @@ public class SqlBatchTest {
     }
 
     private static void insertWithBatch(Connection connection) throws SQLException {
-	
 	final String sql = "insert into customer values ({0}, 'Sir', 'Doe', 'André', '1600 Pennsylvania Ave NW', 'Washington', 'DC 20500', NULL)";
-	
+
 	Statement statement = connection.createStatement();
 	for (int i = 1; i < 11; i++) {
 	    String sqlLine = sql;
 	    sqlLine = sql.replace("{0}", i + "");
 	    statement.addBatch(sqlLine);
 	}
-	int [] rc = statement.executeBatch();
-	
+	int[] rc = statement.executeBatch();
+
 	for (int i : rc) {
 	    System.out.println(i);
 	}
@@ -77,7 +80,7 @@ public class SqlBatchTest {
 
 	System.out.println(new Date() + " cpt : " + cpt);
 	System.out.println(new Date() + " size: " + sb.toString().length() / 1024 + " Kb");
-	
+
 	System.out.println(new Date() + " Done!");
     }
 
