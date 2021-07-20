@@ -24,7 +24,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.SQLException;
 import java.sql.Savepoint;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -761,9 +760,7 @@ public class AceQLHttpApi {
 	    throws AceQLException {
 
 	try {
-	    if (sql == null) {
-		Objects.requireNonNull(sql, "sql cannot be null!");
-	    }
+	    Objects.requireNonNull(sql, "sql cannot be null!");
 
 	    String action = "execute_update";
 
@@ -815,9 +812,11 @@ public class AceQLHttpApi {
 
     }
 
-    public int[] executeBatch(ArrayList<String> batchList) throws AceQLException {
+    public int[] executeBatch(List<String> batchList) throws AceQLException {
 
 	try {
+	    Objects.requireNonNull(batchList, "batchList cannot be null!");
+	    
 	    String action = "execute_batch";
 	    URL theUrl = new URL(url + action);
 

@@ -76,7 +76,7 @@ public class AceQLStatement extends AbstractStatement implements Statement {
     protected int maxRows = 0;
 
     private int fetchSise = 0;
-    private ArrayList<String> batchList; // For batch
+    private List<String> batchList = new ArrayList<>(); // For batch
 
     /**
      * Constructor
@@ -217,6 +217,10 @@ public class AceQLStatement extends AbstractStatement implements Statement {
     
     @Override
     public int[] executeBatch() throws SQLException {
+	if (this.batchList == null || this.batchList.isEmpty()) {
+	    throw new SQLException("Cannot call executeBatch: No SQL commands / addBatch(String sql) has never been called.");
+	}
+	
 	int [] updateCountsArray =  aceQLHttpApi.executeBatch(this.batchList);
 	this.batchList = new ArrayList<>(); // clearBatch() in fact...
 	return updateCountsArray;

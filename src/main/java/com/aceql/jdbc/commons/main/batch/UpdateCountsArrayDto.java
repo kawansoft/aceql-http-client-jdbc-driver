@@ -34,15 +34,13 @@ public class UpdateCountsArrayDto {
 	this.updateCountsArray = updateCountsArray;
     }
 
-    
     /**
      * @return the status
      */
     public String getStatus() {
         return status;
     }
-
-
+    
     /**
      * @return the updateCountsArray
      */
