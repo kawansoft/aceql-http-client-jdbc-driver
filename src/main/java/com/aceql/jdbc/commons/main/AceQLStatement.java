@@ -75,6 +75,7 @@ public class AceQLStatement extends AbstractStatement implements Statement {
     protected int maxRows = 0;
 
     private int fetchSise = 0;
+    private ArrayList<String> batchList; // For batch
 
     /**
      * Constructor
@@ -209,6 +210,15 @@ public class AceQLStatement extends AbstractStatement implements Statement {
 	boolean isStoredProcedure = false;
 	Map<String, String> statementParameters = null;
 	return aceQLHttpApi.executeUpdate(sql, isPreparedStatement, isStoredProcedure, statementParameters, null);
+    }
+
+    
+    
+    @Override
+    public int[] executeBatch() throws SQLException {
+	int [] updateCountsArray =  aceQLHttpApi.executeBatch(this.batchList);
+	this.batchList = new ArrayList<>(); // clearBatch() in fact...
+	return updateCountsArray;
     }
 
     /*
@@ -392,7 +402,18 @@ public class AceQLStatement extends AbstractStatement implements Statement {
      */
     @Override
     public void clearBatch() throws SQLException {
-	// Do nothing for now. Future usage.
+	this.batchList = new ArrayList<>();
+    }
+
+    
+    /*
+     * (non-Javadoc)
+     *
+     * @see com.aceql.jdbc.commons.main.abstracts.AbstractStatement#addBatch()
+     */
+    @Override
+    public void addBatch(String sql) throws SQLException {
+	this.batchList.add(sql);
     }
 
     /*

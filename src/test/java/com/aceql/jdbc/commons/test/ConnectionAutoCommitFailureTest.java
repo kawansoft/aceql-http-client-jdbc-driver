@@ -15,7 +15,6 @@ public class ConnectionAutoCommitFailureTest {
 	
 	System.out.println("connection.getAutoCommit(): " + connection.getAutoCommit());
 
-	
 	try {
 	    connection.commit();
 	    System.out.println("commit done!");

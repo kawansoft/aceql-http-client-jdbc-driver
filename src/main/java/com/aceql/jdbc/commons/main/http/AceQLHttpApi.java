@@ -24,6 +24,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.SQLException;
 import java.sql.Savepoint;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -35,6 +36,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import com.aceql.jdbc.commons.AceQLException;
 import com.aceql.jdbc.commons.ConnectionInfo;
 import com.aceql.jdbc.commons.main.AceQLSavepoint;
+import com.aceql.jdbc.commons.main.batch.StatementsBatchDto;
+import com.aceql.jdbc.commons.main.batch.UpdateCountsArrayDto;
 import com.aceql.jdbc.commons.main.metadata.ResultSetMetaDataPolicy;
 import com.aceql.jdbc.commons.main.metadata.dto.JdbcDatabaseMetaDataDto;
 import com.aceql.jdbc.commons.main.metadata.dto.TableDto;
@@ -812,6 +815,35 @@ public class AceQLHttpApi {
 
     }
 
+    public int[] executeBatch(ArrayList<String> batchList) throws AceQLException {
+
+	try {
+	    String action = "execute_batch";
+	    URL theUrl = new URL(url + action);
+
+	    Map<String, String> parametersMap = new HashMap<String, String>();
+	    StatementsBatchDto statementsBatchDto = new StatementsBatchDto(batchList);
+	    String jsonString = GsonWsUtil.getJSonString(statementsBatchDto);
+	    parametersMap.put("batch_list", jsonString);
+
+	    String result = httpManager.callWithPostReturnString(theUrl, parametersMap);
+
+	    ResultAnalyzer resultAnalyzer = new ResultAnalyzer(result, httpManager.getHttpStatusCode(),
+		    httpManager.getHttpStatusMessage());
+	    if (!resultAnalyzer.isStatusOk()) {
+		throw new AceQLException(resultAnalyzer.getErrorMessage(), resultAnalyzer.getErrorType(), null,
+			resultAnalyzer.getStackTrace(), httpManager.getHttpStatusCode());
+	    }
+	    
+	    UpdateCountsArrayDto updateCountsArrayDto = GsonWsUtil.fromJson(result, UpdateCountsArrayDto.class);
+	    int [] updateCountsArray = updateCountsArrayDto.getUpdateCountsArray();
+	    return updateCountsArray;
+	    
+	} catch (Exception e) {
+	    throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
+	}
+    }
+    
     /**
      * Calls /execute_query API
      *
@@ -1099,6 +1131,8 @@ public class AceQLHttpApi {
 	    System.out.println(new Date() + " " + s);
 	}
     }
+
+
 
 
 }

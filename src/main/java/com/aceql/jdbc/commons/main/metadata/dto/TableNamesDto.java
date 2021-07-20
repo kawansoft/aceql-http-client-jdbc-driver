@@ -45,7 +45,7 @@ public class TableNamesDto {
 
     @Override
     public String toString() {
-	return "TableNamesDto [status=" + status + ", tableNames=" + tableNames + "]";
+	return "UpdateCountsArrayDto [status=" + status + ", tableNames=" + tableNames + "]";
     }
 
 }
