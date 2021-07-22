@@ -4,13 +4,13 @@ import java.sql.Connection;
 
 import com.aceql.jdbc.commons.test.connection.DirectConnectionBuilder;
 
-public class SqlBatchTestDirect {
+public class SqlStatementBatchTestDirect {
     /**
      * @param args
      */
     public static void main(String[] args) throws Exception {
 	Connection connection = new DirectConnectionBuilder().createPostgreSql();
-	SqlBatchTest.callInsertFlow(connection);
+	SqlStatementBatchTest.callInsertFlow(connection);
     }
 
 }

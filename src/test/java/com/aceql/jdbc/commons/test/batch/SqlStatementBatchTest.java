@@ -10,7 +10,7 @@ import com.aceql.jdbc.commons.test.SqlDeleteTest;
 import com.aceql.jdbc.commons.test.SqlSelectTest;
 import com.aceql.jdbc.commons.test.connection.DirectConnectionBuilder;
 
-public class SqlBatchTest {
+public class SqlStatementBatchTest {
     /**
      * @param args
      */
