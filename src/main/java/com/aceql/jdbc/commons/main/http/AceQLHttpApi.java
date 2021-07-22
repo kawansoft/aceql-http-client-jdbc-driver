@@ -35,6 +35,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import com.aceql.jdbc.commons.AceQLException;
 import com.aceql.jdbc.commons.ConnectionInfo;
 import com.aceql.jdbc.commons.main.AceQLSavepoint;
+import com.aceql.jdbc.commons.main.batch.PrepStatementParamsHolder;
+import com.aceql.jdbc.commons.main.batch.PreparedStatementsBatchDto;
 import com.aceql.jdbc.commons.main.batch.StatementsBatchDto;
 import com.aceql.jdbc.commons.main.batch.UpdateCountsArrayDto;
 import com.aceql.jdbc.commons.main.metadata.ResultSetMetaDataPolicy;
@@ -817,7 +819,7 @@ public class AceQLHttpApi {
 	try {
 	    Objects.requireNonNull(batchList, "batchList cannot be null!");
 	    
-	    String action = "execute_batch";
+	    String action = "statement_execute_batch";
 	    URL theUrl = new URL(url + action);
 
 	    Map<String, String> parametersMap = new HashMap<String, String>();
@@ -842,6 +844,40 @@ public class AceQLHttpApi {
 	    throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
 	}
     }
+    
+    public int[] executePreparedStatementBatch(String sql,
+	    List<PrepStatementParamsHolder> prepStatementParamsHolderList) throws AceQLException {
+	try {
+	    Objects.requireNonNull(prepStatementParamsHolderList, "prepStatementParamsHolderList cannot be null!");
+	    
+	    String action = "execute_prepared_statement_batch";
+	    URL theUrl = new URL(url + action);
+
+	    PreparedStatementsBatchDto statementsBatchDto = new PreparedStatementsBatchDto(prepStatementParamsHolderList);
+	    String jsonString = GsonWsUtil.getJSonString(statementsBatchDto);
+	    
+	    Map<String, String> parametersMap = new HashMap<String, String>();
+	    parametersMap.put("sql", sql);
+	    parametersMap.put("batch_list", jsonString);
+
+	    String result = httpManager.callWithPostReturnString(theUrl, parametersMap);
+
+	    ResultAnalyzer resultAnalyzer = new ResultAnalyzer(result, httpManager.getHttpStatusCode(),
+		    httpManager.getHttpStatusMessage());
+	    if (!resultAnalyzer.isStatusOk()) {
+		throw new AceQLException(resultAnalyzer.getErrorMessage(), resultAnalyzer.getErrorType(), null,
+			resultAnalyzer.getStackTrace(), httpManager.getHttpStatusCode());
+	    }
+	    
+	    UpdateCountsArrayDto updateCountsArrayDto = GsonWsUtil.fromJson(result, UpdateCountsArrayDto.class);
+	    int [] updateCountsArray = updateCountsArrayDto.getUpdateCountsArray();
+	    return updateCountsArray;
+	    
+	} catch (Exception e) {
+	    throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
+	}
+    }
+    
     
     /**
      * Calls /execute_query API
@@ -1130,6 +1166,9 @@ public class AceQLHttpApi {
 	    System.out.println(new Date() + " " + s);
 	}
     }
+
+
+
 
 
 

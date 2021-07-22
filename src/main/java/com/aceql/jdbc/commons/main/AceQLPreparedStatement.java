@@ -55,6 +55,7 @@ import org.apache.commons.io.IOUtils;
 import com.aceql.jdbc.commons.AceQLConnection;
 import com.aceql.jdbc.commons.AceQLException;
 import com.aceql.jdbc.commons.main.abstracts.AbstractConnection;
+import com.aceql.jdbc.commons.main.batch.PrepStatementParamsHolder;
 import com.aceql.jdbc.commons.main.http.BlobUploader;
 import com.aceql.jdbc.commons.main.http.HttpManager;
 import com.aceql.jdbc.commons.main.util.AceQLStatementUtil;
@@ -84,9 +85,14 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
     private List<String> localBlobIds = new ArrayList<>();
 
     protected PrepStatementParametersBuilder builder = new PrepStatementParametersBuilder();
+    
+    /** For batch */
+    private List<PrepStatementParamsHolder> prepStatementParamsHolderList= new ArrayList<>();
 
     /** is set to true if CallableStatement */
     protected boolean isStoredProcedure = false;
+
+    private boolean paramsContainBlob;
 
     // For execute() command
     // private AceQLResultSet aceQLResultSet;
@@ -341,6 +347,8 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
 
 	if (x != null) {
 
+	    this.paramsContainBlob = true;
+		
 	    if (x.length > HttpManager.MEDIUM_BLOB_LENGTH) {
 		throw new SQLException(
 			Tag.PRODUCT + " " + "Can not upload Blob. Length > " + HttpManager.MEDIUMB_BLOB_LENGTH_MB
@@ -373,7 +381,8 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
     public void setBinaryStream(int parameterIndex, InputStream inputStream, long length) throws SQLException {
 
 	if (inputStream != null) {
-
+	    this.paramsContainBlob = true;
+		
 	    String blobId = buildBlobIdFile().getName();
 	    builder.setInParameter(parameterIndex, AceQLTypes.BLOB, blobId);
 
@@ -459,6 +468,53 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
 	Map<Integer, SqlParameter> callableOutParameters = builder.getCallableOutParameters();
 	return aceQLHttpApi.executeUpdate(sql, isPreparedStatement, isStoredProcedure, statementParameters,
 		callableOutParameters);
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see java.sql.PreparedStatement#clearParameters()
+     */
+    @Override
+    public void clearParameters() throws SQLException {
+	this.paramsContainBlob = false;
+	this.prepStatementParamsHolderList= new ArrayList<>();
+
+    }
+    
+    @Override
+    public void clearBatch() throws SQLException {
+	super.clearBatch();
+	this.paramsContainBlob = false;
+	this.prepStatementParamsHolderList= new ArrayList<>();
+    }
+    
+    /*
+     * (non-Javadoc)
+     *
+     * @see java.sql.PreparedStatement#addBatch()
+     */
+    @Override
+    public void addBatch() throws SQLException {
+	
+	if (this.paramsContainBlob) {
+	    this.paramsContainBlob = false;
+	    throw new SQLException(
+		    Tag.PRODUCT + " " + "Cannot use batch with non-null Blobs in this AceQL JDBC Client version.");
+	}
+	    
+	Map<String, String> statementParameters = builder.getHttpFormattedStatementParameters();
+	PrepStatementParamsHolder paramsHolder = new PrepStatementParamsHolder(statementParameters);
+	this.prepStatementParamsHolderList.add(paramsHolder);
+    }
+
+    
+    
+    @Override
+    public int[] executeBatch() throws SQLException {
+	int [] updateCountsArray =  aceQLHttpApi.executePreparedStatementBatch(sql, this.prepStatementParamsHolderList);
+	this.clearBatch();
+	return updateCountsArray;
     }
 
     @Override
@@ -680,18 +736,7 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
 
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.sql.PreparedStatement#clearParameters()
-     */
-    @Override
-    public void clearParameters() throws SQLException {
-	String methodName = new Object() {
-	}.getClass().getEnclosingMethod().getName();
-	throwExceptionIfCalled(methodName);
 
-    }
 
     /*
      * (non-Javadoc)
@@ -718,17 +763,6 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
 	throwExceptionIfCalled(methodName);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.sql.PreparedStatement#addBatch()
-     */
-    @Override
-    public void addBatch() throws SQLException {
-	String methodName = new Object() {
-	}.getClass().getEnclosingMethod().getName();
-	throwExceptionIfCalled(methodName);
-    }
 
     /*
      * (non-Javadoc)
@@ -761,7 +795,8 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
      */
     @Override
     public void setBlob(int parameterIndex, Blob x) throws SQLException {
-
+	
+	this.paramsContainBlob = true;
 	Connection connection = super.getConnection();
 	boolean professionalEdition = EditionUtil.isProfessionalEdition(connection);
 
