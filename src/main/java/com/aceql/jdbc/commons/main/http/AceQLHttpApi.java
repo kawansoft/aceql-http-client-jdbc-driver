@@ -850,7 +850,7 @@ public class AceQLHttpApi {
 	try {
 	    Objects.requireNonNull(prepStatementParamsHolderList, "prepStatementParamsHolderList cannot be null!");
 	    
-	    String action = "execute_prepared_statement_batch";
+	    String action = "prepared_statement_execute_batch";
 	    URL theUrl = new URL(url + action);
 
 	    PreparedStatementsBatchDto statementsBatchDto = new PreparedStatementsBatchDto(prepStatementParamsHolderList);
