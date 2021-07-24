@@ -498,7 +498,7 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
 	if (this.paramsContainBlob) {
 	    this.paramsContainBlob = false;
 	    throw new SQLException(
-		    Tag.PRODUCT + " " + "Cannot use batch with BLOB parameter in this AceQL JDBC Client version.");
+		    Tag.PRODUCT + " " + "Cannot use batch for a table with BLOB parameter in this AceQL JDBC Client version.");
 	}
 	    
 	Map<String, String> statementParameters = builder.getHttpFormattedStatementParameters();
