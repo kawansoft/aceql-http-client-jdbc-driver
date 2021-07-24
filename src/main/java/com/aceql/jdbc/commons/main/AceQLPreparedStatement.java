@@ -504,6 +504,7 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
 	Map<String, String> statementParameters = builder.getHttpFormattedStatementParameters();
 	PrepStatementParamsHolder paramsHolder = new PrepStatementParamsHolder(statementParameters);
 	this.prepStatementParamsHolderList.add(paramsHolder);
+	builder = new PrepStatementParametersBuilder();
     }
 
     
