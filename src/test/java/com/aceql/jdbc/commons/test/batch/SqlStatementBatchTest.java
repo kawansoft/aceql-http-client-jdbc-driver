@@ -47,8 +47,9 @@ public class SqlStatementBatchTest {
 	int[] rc = statement.executeBatch();
 
 	for (int i : rc) {
-	    System.out.println(i);
+	    System.out.print(i + " ");
 	}
+	System.out.println();
     }
 
     /**

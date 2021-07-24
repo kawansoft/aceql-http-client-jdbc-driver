@@ -3,7 +3,7 @@
  */
 package com.aceql.jdbc.commons.main.batch;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -12,8 +12,8 @@ import java.util.Map;
  */
 public class PrepStatementParamsHolder {
 
-    /** All the PreparedStatement parameters and ther values */
-    private Map<String, String> statementParameters = new HashMap<>();
+    /** All the PreparedStatement parameters and their values */
+    private Map<String, String> statementParameters = new LinkedHashMap<>();
 
     public PrepStatementParamsHolder(Map<String, String> statementParameters) {
 	this.statementParameters = statementParameters;

@@ -344,11 +344,9 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
      */
     @Override
     public void setBytes(int parameterIndex, byte[] x) throws SQLException {
-
-	if (x != null) {
-
-	    this.paramsContainBlob = true;
-		
+	this.paramsContainBlob = true;
+	    
+	if (x != null) {	
 	    if (x.length > HttpManager.MEDIUM_BLOB_LENGTH) {
 		throw new SQLException(
 			Tag.PRODUCT + " " + "Can not upload Blob. Length > " + HttpManager.MEDIUMB_BLOB_LENGTH_MB
@@ -379,10 +377,10 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
      */
     @Override
     public void setBinaryStream(int parameterIndex, InputStream inputStream, long length) throws SQLException {
+	this.paramsContainBlob = true;
 
 	if (inputStream != null) {
-	    this.paramsContainBlob = true;
-		
+
 	    String blobId = buildBlobIdFile().getName();
 	    builder.setInParameter(parameterIndex, AceQLTypes.BLOB, blobId);
 
@@ -500,7 +498,7 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
 	if (this.paramsContainBlob) {
 	    this.paramsContainBlob = false;
 	    throw new SQLException(
-		    Tag.PRODUCT + " " + "Cannot use batch with non-null Blobs in this AceQL JDBC Client version.");
+		    Tag.PRODUCT + " " + "Cannot use batch with BLOB parameter in this AceQL JDBC Client version.");
 	}
 	    
 	Map<String, String> statementParameters = builder.getHttpFormattedStatementParameters();
