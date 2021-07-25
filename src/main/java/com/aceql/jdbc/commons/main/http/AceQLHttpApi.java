@@ -827,6 +827,8 @@ public class AceQLHttpApi {
 	    String jsonString = GsonWsUtil.getJSonString(statementsBatchDto);
 	    parametersMap.put("batch_list", jsonString);
 
+	    debug("batch_list: " + jsonString);
+	    
 	    String result = httpManager.callWithPostReturnString(theUrl, parametersMap);
 
 	    ResultAnalyzer resultAnalyzer = new ResultAnalyzer(result, httpManager.getHttpStatusCode(),
@@ -860,6 +862,8 @@ public class AceQLHttpApi {
 	    parametersMap.put("sql", sql);
 	    parametersMap.put("batch_list", jsonString);
 
+	    debug("batch_list: " + jsonString);
+	    
 	    String result = httpManager.callWithPostReturnString(theUrl, parametersMap);
 
 	    ResultAnalyzer resultAnalyzer = new ResultAnalyzer(result, httpManager.getHttpStatusCode(),
