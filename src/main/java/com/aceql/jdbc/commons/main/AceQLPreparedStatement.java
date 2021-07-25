@@ -502,6 +502,12 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
 	}
 	    
 	Map<String, String> statementParameters = builder.getHttpFormattedStatementParameters();
+	
+	if (statementParameters.isEmpty()) {
+	    throw new SQLException(
+		    Tag.PRODUCT + " " + "Cannot call addBatch() if no parameters have been set.");	    
+	}
+	
 	PrepStatementParamsHolder paramsHolder = new PrepStatementParamsHolder(statementParameters);
 	this.prepStatementParamsHolderList.add(paramsHolder);
 	builder = new PrepStatementParametersBuilder();
