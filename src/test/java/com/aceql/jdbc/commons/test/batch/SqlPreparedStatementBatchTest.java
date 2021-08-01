@@ -41,7 +41,7 @@ public class SqlPreparedStatementBatchTest {
 	final String sql = "insert into customer values (?, ?, ?, ?, ?, ?, ?, ?)";
 	 
 	PreparedStatement statement = connection.prepareStatement(sql);
-	for (int i = 1; i < 11; i++) {
+	for (int i = 1; i < 3; i++) {
 	    int j = 1;
 	    statement.setInt(j++, i);
 	    statement.setString(j++, "Sir");
