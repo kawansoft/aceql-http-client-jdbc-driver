@@ -19,8 +19,11 @@
 package com.aceql.jdbc.commons.main;
 
 import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
@@ -60,6 +63,9 @@ public class AceQLStatement extends AbstractStatement implements Statement {
     
     private static boolean DEBUG = false;
 
+    /** Universal and clean line separator */
+    protected static String CR_LF = System.getProperty("line.separator");
+    
     // Can be private, not used in daughter AceQLPreparedStatement
     private AceQLConnection aceQLConnection = null;
 
@@ -76,8 +82,10 @@ public class AceQLStatement extends AbstractStatement implements Statement {
     protected int maxRows = 0;
 
     private int fetchSise = 0;
-    private List<String> batchList = new ArrayList<>(); // For batch
-
+    
+    // For batch, contain all SQL orders, one per line, in text mode: 
+    private File batchFileSqlOrders;
+    
     /**
      * Constructor
      *
@@ -217,13 +225,17 @@ public class AceQLStatement extends AbstractStatement implements Statement {
     
     @Override
     public int[] executeBatch() throws SQLException {
-	if (this.batchList == null || this.batchList.isEmpty()) {
+	if (this.batchFileSqlOrders == null || ! this.batchFileSqlOrders.exists()) {
 	    throw new SQLException("Cannot call executeBatch: No SQL commands / addBatch(String sql) has never been called.");
 	}
 	
-	int [] updateCountsArray =  aceQLHttpApi.executeBatch(this.batchList);
-	this.batchList = new ArrayList<>(); // clearBatch() in fact...
-	return updateCountsArray;
+	try {
+	    int [] updateCountsArray =  aceQLHttpApi.executeBatch(batchFileSqlOrders);
+	    return updateCountsArray;
+	} catch (AceQLException e) {
+	    this.clearBatch();
+	    throw e;
+	}
     }
 
     /*
@@ -407,7 +419,10 @@ public class AceQLStatement extends AbstractStatement implements Statement {
      */
     @Override
     public void clearBatch() throws SQLException {
-	this.batchList = new ArrayList<>();
+	if (this.batchFileSqlOrders != null) {
+	    this.batchFileSqlOrders.delete();
+	}
+	this.batchFileSqlOrders = null; // Reset
     }
 
     
@@ -419,7 +434,18 @@ public class AceQLStatement extends AbstractStatement implements Statement {
     @Override
     public void addBatch(String sql) throws SQLException {
 	Objects.requireNonNull(sql, "sql cannot be null!");
-	this.batchList.add(sql);
+	
+	if (this.batchFileSqlOrders == null) {
+	    this.batchFileSqlOrders = AceQLPreparedStatement.buildBlobIdFile();
+	}
+	
+	try {
+	    try (BufferedWriter output = new BufferedWriter(new FileWriter(this.batchFileSqlOrders, true));){
+	        output.write(sql + CR_LF);
+	    }
+	} catch (IOException e) {
+	    throw new SQLException(e);
+	}
     }
 
     /*

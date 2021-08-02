@@ -18,6 +18,10 @@
  */
 package com.aceql.jdbc.commons.main.http;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -35,9 +39,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import com.aceql.jdbc.commons.AceQLException;
 import com.aceql.jdbc.commons.ConnectionInfo;
 import com.aceql.jdbc.commons.main.AceQLSavepoint;
-import com.aceql.jdbc.commons.main.batch.PrepStatementParamsHolder;
-import com.aceql.jdbc.commons.main.batch.PreparedStatementsBatchDto;
-import com.aceql.jdbc.commons.main.batch.StatementsBatchDto;
 import com.aceql.jdbc.commons.main.batch.UpdateCountsArrayDto;
 import com.aceql.jdbc.commons.main.metadata.ResultSetMetaDataPolicy;
 import com.aceql.jdbc.commons.main.metadata.dto.JdbcDatabaseMetaDataDto;
@@ -814,21 +815,28 @@ public class AceQLHttpApi {
 
     }
 
-    public int[] executeBatch(List<String> batchList) throws AceQLException {
+    public int[] executeBatch(File batchFileSqlOrders) throws AceQLException {
 
 	try {
-	    Objects.requireNonNull(batchList, "batchList cannot be null!");
+	    Objects.requireNonNull(batchFileSqlOrders, "batchFileSqlOrders cannot be null!");
+
+	    if (! batchFileSqlOrders.exists()) {
+		throw new FileNotFoundException("batchFileSqlOrders does not exist anymore: " + batchFileSqlOrders);
+	    }
 	    
+	    String blobId = batchFileSqlOrders.getName();
+	    try (InputStream in = new BufferedInputStream(new FileInputStream(batchFileSqlOrders));) {
+		BlobUploader blobUploader = new BlobUploader(this);
+		blobUploader.blobUpload(blobId, in, batchFileSqlOrders.length());
+	    }
+
 	    String action = "statement_execute_batch";
 	    URL theUrl = new URL(url + action);
 
 	    Map<String, String> parametersMap = new HashMap<String, String>();
-	    StatementsBatchDto statementsBatchDto = new StatementsBatchDto(batchList);
-	    String jsonString = GsonWsUtil.getJSonString(statementsBatchDto);
-	    parametersMap.put("batch_list", jsonString);
+	    parametersMap.put("blob_id", blobId);
+	    debug("blobId: " + blobId);
 
-	    debug("batch_list: " + jsonString);
-	    
 	    String result = httpManager.callWithPostReturnString(theUrl, parametersMap);
 
 	    ResultAnalyzer resultAnalyzer = new ResultAnalyzer(result, httpManager.getHttpStatusCode(),
@@ -848,21 +856,28 @@ public class AceQLHttpApi {
     }
     
     public int[] executePreparedStatementBatch(String sql,
-	    List<PrepStatementParamsHolder> prepStatementParamsHolderList) throws AceQLException {
+	    File batchFileParameters) throws AceQLException {
 	try {
-	    Objects.requireNonNull(prepStatementParamsHolderList, "prepStatementParamsHolderList cannot be null!");
+	    Objects.requireNonNull(sql, "sql cannot be null!");
+	    Objects.requireNonNull(batchFileParameters, "batchFileSqlOrders cannot be null!");
+
+	    if (! batchFileParameters.exists()) {
+		throw new FileNotFoundException("batchFileParameters does not exist anymore: " + batchFileParameters);
+	    }
 	    
 	    String action = "prepared_statement_execute_batch";
 	    URL theUrl = new URL(url + action);
 
-	    PreparedStatementsBatchDto statementsBatchDto = new PreparedStatementsBatchDto(prepStatementParamsHolderList);
-	    String jsonString = GsonWsUtil.getJSonString(statementsBatchDto);
-	    
-	    Map<String, String> parametersMap = new HashMap<String, String>();
-	    parametersMap.put("sql", sql);
-	    parametersMap.put("batch_list", jsonString);
+	    String blobId = batchFileParameters.getName();
+	    try (InputStream in = new BufferedInputStream(new FileInputStream(batchFileParameters));) {
+		BlobUploader blobUploader = new BlobUploader(this);
+		blobUploader.blobUpload(blobId, in, batchFileParameters.length());
+	    }
 
-	    debug("batch_list: " + jsonString);
+	    Map<String, String> parametersMap = new HashMap<String, String>();
+	    parametersMap.put("sql", sql);	    
+	    parametersMap.put("blob_id", blobId);
+	    debug("blobId: " + blobId);	
 	    
 	    String result = httpManager.callWithPostReturnString(theUrl, parametersMap);
 

@@ -19,8 +19,11 @@
 package com.aceql.jdbc.commons.main;
 
 import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
@@ -58,6 +61,7 @@ import com.aceql.jdbc.commons.main.abstracts.AbstractConnection;
 import com.aceql.jdbc.commons.main.batch.PrepStatementParamsHolder;
 import com.aceql.jdbc.commons.main.http.BlobUploader;
 import com.aceql.jdbc.commons.main.http.HttpManager;
+import com.aceql.jdbc.commons.main.metadata.util.GsonWsUtil;
 import com.aceql.jdbc.commons.main.util.AceQLStatementUtil;
 import com.aceql.jdbc.commons.main.util.AceQLTypes;
 import com.aceql.jdbc.commons.main.util.EditionUtil;
@@ -86,9 +90,9 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
 
     protected PrepStatementParametersBuilder builder = new PrepStatementParametersBuilder();
     
-    /** For batch */
-    private List<PrepStatementParamsHolder> prepStatementParamsHolderList= new ArrayList<>();
-
+    // For batch, contain all SQL orders, one per line, in text mode: 
+    private File batchFileParameters;
+    
     /** is set to true if CallableStatement */
     protected boolean isStoredProcedure = false;
 
@@ -422,7 +426,7 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
 	}
     }
 
-    private static File buildBlobIdFile() {
+    static File buildBlobIdFile() {
 	File file = new File(FrameworkFileUtil.getKawansoftTempDir() + File.separator + "pc-blob-out-"
 		+ UniqueIDBuilder.getUniqueId() + ".txt");
 	return file;
@@ -476,7 +480,6 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
     @Override
     public void clearParameters() throws SQLException {
 	this.paramsContainBlob = false;
-	this.prepStatementParamsHolderList= new ArrayList<>();
 
     }
     
@@ -484,7 +487,10 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
     public void clearBatch() throws SQLException {
 	super.clearBatch();
 	this.paramsContainBlob = false;
-	this.prepStatementParamsHolderList= new ArrayList<>();
+	if (this.batchFileParameters != null) {
+	    this.batchFileParameters.delete();
+	}
+	this.batchFileParameters = null; // Reset
     }
     
     /*
@@ -507,9 +513,22 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
 	    throw new SQLException(
 		    Tag.PRODUCT + " " + "Cannot call addBatch() if no parameters have been set.");	    
 	}
+
+	if (this.batchFileParameters == null) {
+	    this.batchFileParameters = AceQLPreparedStatement.buildBlobIdFile();
+	}
 	
-	PrepStatementParamsHolder paramsHolder = new PrepStatementParamsHolder(statementParameters);
-	this.prepStatementParamsHolderList.add(paramsHolder);
+	try {
+	    try (BufferedWriter output = new BufferedWriter(new FileWriter(this.batchFileParameters, true));){
+		PrepStatementParamsHolder paramsHolder = new PrepStatementParamsHolder(statementParameters);
+		String jsonString = GsonWsUtil.getJSonString(paramsHolder);
+	        output.write(jsonString + AceQLStatement.CR_LF);
+	    }
+	} catch (IOException e) {
+	    throw new SQLException(e);
+	}
+	
+	// Reinit
 	builder = new PrepStatementParametersBuilder();
     }
 
@@ -517,7 +536,7 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
     
     @Override
     public int[] executeBatch() throws SQLException {
-	int [] updateCountsArray =  aceQLHttpApi.executePreparedStatementBatch(sql, this.prepStatementParamsHolderList);
+	int [] updateCountsArray =  aceQLHttpApi.executePreparedStatementBatch(sql, batchFileParameters);
 	this.clearBatch();
 	return updateCountsArray;
     }

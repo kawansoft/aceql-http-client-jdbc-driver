@@ -25,6 +25,9 @@ public class MyTest {
 	//PreparedStatementsBatchDto
 	//prepared_statements_batch_dto
 	//prep_statement_params_holder_list
+	
+	//UpdateCountsArrayDto
+	//update_counts_array_dto
     }
 
 }
