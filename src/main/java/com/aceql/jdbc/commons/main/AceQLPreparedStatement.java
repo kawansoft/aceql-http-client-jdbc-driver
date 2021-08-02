@@ -521,7 +521,7 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
 	try {
 	    try (BufferedWriter output = new BufferedWriter(new FileWriter(this.batchFileParameters, true));){
 		PrepStatementParamsHolder paramsHolder = new PrepStatementParamsHolder(statementParameters);
-		String jsonString = GsonWsUtil.getJSonString(paramsHolder);
+		String jsonString = GsonWsUtil.getJSonStringNotPretty(paramsHolder);
 	        output.write(jsonString + AceQLStatement.CR_LF);
 	    }
 	} catch (IOException e) {
