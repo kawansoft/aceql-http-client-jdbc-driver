@@ -18,6 +18,17 @@ The AceQL Client JDBC Driver is licensed under the Apache 2.0
 License.
 
 
+AceQL Client JDBC Driver - Version 7.0 - 05-Aug-2021
+----------------------------------------------------
+
+What's new:
+- Statement.executeBatch() and PreparedStatement.executeBatch() are
+  now supported. In order to support large batch, batch data are streamed
+  when sent to the server. Transactions are also supported for the sake of
+  batch best speed.
+  
+
+
 AceQL Client JDBC Driver - Version 6.2 - 16-Jun-2021
 ----------------------------------------------------
 
@@ -28,7 +39,6 @@ Whats'new:
   - Connection.setSavepoint(String name)
   - Connection.rollback(Savepoint savepoint)
   - Connection.releaseSavepoint(Savepoint savepoint).
-
 
 
 AceQL Client JDBC Driver - Version 6.1 - 28-Apr-2021
