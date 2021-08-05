@@ -26,6 +26,7 @@ import java.sql.SQLException;
 
 import com.aceql.jdbc.commons.AceQLConnection;
 import com.aceql.jdbc.commons.AceQLException;
+import com.aceql.jdbc.commons.test.auth.AceQLTestAuthenticationAll;
 import com.aceql.jdbc.commons.test.connection.ConnectionBuilder;
 import com.aceql.jdbc.commons.test.connection.FourDbConnections;
 
@@ -42,7 +43,7 @@ public class TestAll {
     public static void main(String[] args) throws Exception {
 
 	AceQLConnectionTestFourDbs.doIt();
-	AceConnectionTestAuthentication.doIt();
+	AceQLTestAuthenticationAll.doIt();
 	AceConnectionTestFirewall.doIt();
 
 	Connection connection;

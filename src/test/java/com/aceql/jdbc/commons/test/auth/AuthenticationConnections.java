@@ -16,9 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.aceql.jdbc.commons.test.connection;
+package com.aceql.jdbc.commons.test.auth;
 
 import java.sql.Connection;
+
+import com.aceql.jdbc.commons.test.connection.AceQLDriverLoader;
 
 /**
  *  Desribe the parameters in order to have a Connecion on main Four databases
