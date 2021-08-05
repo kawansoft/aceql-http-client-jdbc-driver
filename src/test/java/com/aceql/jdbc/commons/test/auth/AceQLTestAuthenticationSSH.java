@@ -18,10 +18,12 @@
  */
 package com.aceql.jdbc.commons.test.auth;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Date;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 
 import com.aceql.jdbc.commons.test.SqlSelectTest;
@@ -78,7 +80,7 @@ public class AceQLTestAuthenticationSSH {
     public static void testSSKOK() throws Exception {
 	System.out.println(new Date() + " Testing SSH Authentication...");
 	String username = "user1";
-	String password = "password1";
+	String password = FileUtils.readFileToString(new File("I:\\__NDP\\_MyPasswords\\login_user1.txt"), "UTF-8");
 	Connection connection = AuthenticationConnections.getSSHConnection(username, password);
 	SqlSelectTest sqlSelectTest = new SqlSelectTest(connection, System.out);
 	sqlSelectTest.selectCustomerPreparedStatement();
