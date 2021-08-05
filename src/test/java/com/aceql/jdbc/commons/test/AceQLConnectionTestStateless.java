@@ -28,6 +28,8 @@ import java.sql.SQLException;
 
 import com.aceql.jdbc.commons.AceQLConnection;
 import com.aceql.jdbc.commons.AceQLException;
+import com.aceql.jdbc.commons.test.batch.SqlPreparedStatementBatchTest;
+import com.aceql.jdbc.commons.test.batch.SqlStatementBatchTest;
 import com.aceql.jdbc.commons.test.connection.ConnectionBuilder;
 import com.aceql.jdbc.commons.test.connection.ConnectionParms;
 import com.aceql.jdbc.commons.test.util.Sha1;
@@ -138,6 +140,12 @@ public class AceQLConnectionTestStateless {
 	if (doSelectOnRegions) {
 	    sqlSelectTest.selectOnRegions();
 	}
+	
+	// Batch with Statement
+	SqlStatementBatchTest.callInsertFlow(connection);
+	
+	// Batch with Prepared Statement
+	SqlPreparedStatementBatchTest.callInsertFlow(connection);
 	
 	try {
 	    connection.setAutoCommit(false);
