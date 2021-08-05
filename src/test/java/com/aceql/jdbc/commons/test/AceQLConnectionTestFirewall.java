@@ -25,14 +25,16 @@ import java.util.Date;
 
 import org.junit.Assert;
 
+import com.aceql.jdbc.commons.test.base.dml.SqlDeleteTest;
+import com.aceql.jdbc.commons.test.base.dml.SqlSelectTest;
 import com.aceql.jdbc.commons.test.connection.AceQLDriverLoader;
 
-public class AceConnectionTestFirewall {
+public class AceQLConnectionTestFirewall {
 
     /**
      * Static class
      */
-    protected AceConnectionTestFirewall() {
+    protected AceQLConnectionTestFirewall() {
     }
 
     /**

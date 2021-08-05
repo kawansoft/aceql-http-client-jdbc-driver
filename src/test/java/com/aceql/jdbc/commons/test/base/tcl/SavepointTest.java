@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.aceql.jdbc.commons.test;
+package com.aceql.jdbc.commons.test.base.tcl;
 
 import java.io.PrintStream;
 import java.sql.Connection;
@@ -11,6 +11,8 @@ import java.sql.Savepoint;
 import java.sql.Statement;
 
 import com.aceql.jdbc.commons.AceQLConnection;
+import com.aceql.jdbc.commons.test.base.dml.SqlDeleteTest;
+import com.aceql.jdbc.commons.test.base.dml.SqlInsertTest;
 
 /**
  * @author Nicolas de Pomereu

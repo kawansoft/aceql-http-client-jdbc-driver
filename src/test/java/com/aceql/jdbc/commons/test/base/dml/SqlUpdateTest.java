@@ -17,31 +17,32 @@
  * limitations under the License.
  */
 
-package com.aceql.jdbc.commons.test;
+package com.aceql.jdbc.commons.test.base.dml;
 
 import java.io.PrintStream;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class SqlDeleteTest {
+public class SqlUpdateTest {
 
     private Connection connection;
     private PrintStream out;
 
-    public SqlDeleteTest(Connection connection, PrintStream out) {
+    public SqlUpdateTest(Connection connection, PrintStream out) {
 	this.connection = connection;
 	this.out = out;
     }
+
     /**
-     * Delete all orderlog.
+     * Delete all customer.
      * @throws SQLException
      */
-    public void deleteOrderlogAll() throws SQLException {
-	String sql = "delete from orderlog where customer_id >=1 ";
+    public void updateCustomerAllStatement() throws SQLException {
+	String sql = "update customer set customer_title = 'Sir'";
 	Statement statement = connection.createStatement();
 	statement.executeUpdate(sql);
-	statement.close();
 	out.println("Executed: " + sql);
     }
 
@@ -49,11 +50,22 @@ public class SqlDeleteTest {
      * Delete all customer.
      * @throws SQLException
      */
-    public void deleteCustomerAll() throws SQLException {
-	String sql = "delete from customer where customer_id >= 1 ";
-	Statement statement = connection.createStatement();
-	statement.executeUpdate(sql);
+    public void updateCustomerAllPreparedStatement() throws SQLException {
+	String sql = "update customer set customer_title = ?";
+	PreparedStatement preparedStatement = connection.prepareStatement(sql);
+	preparedStatement.setString(1, "Ms");
+	preparedStatement.executeUpdate();
 	out.println("Executed: " + sql);
     }
+
+    public void updateCustomerAllExecuteRaw() throws SQLException {
+	String sql = "update customer set customer_title = 'Miss'";
+	Statement statement = connection.createStatement();
+	statement.execute(sql);
+	out.println("statement.getMoreResults(): " + statement.getMoreResults());
+	out.println("statement.getUpdateCount(): " + statement.getUpdateCount());
+	out.println("Executed: " + sql);
+    }
+
 
 }

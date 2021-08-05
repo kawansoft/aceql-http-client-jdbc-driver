@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package com.aceql.jdbc.commons.test;
+package com.aceql.jdbc.commons.test.base.dml;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;

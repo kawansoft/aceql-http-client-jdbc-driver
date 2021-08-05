@@ -44,7 +44,7 @@ public class TestAll {
 
 	AceQLConnectionTestFourDbs.doIt();
 	AceQLTestAuthenticationAll.doIt();
-	AceConnectionTestFirewall.doIt();
+	AceQLConnectionTestFirewall.doIt();
 
 	Connection connection;
 	testSchemaMethodsFourDbs();

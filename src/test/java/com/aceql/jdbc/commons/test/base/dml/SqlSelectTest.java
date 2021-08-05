@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package com.aceql.jdbc.commons.test;
+package com.aceql.jdbc.commons.test.base.dml;
 
 import java.io.PrintStream;
 import java.sql.Connection;
@@ -25,6 +25,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Date;
 
 public class SqlSelectTest {
 
@@ -131,5 +132,36 @@ public class SqlSelectTest {
 	statement.close();
 
     }
+    
+    /**
+     * @param connection
+     * @param records
+     * @throws SQLException
+     */
+    public  void selectCustomerBig(int records) throws SQLException {
+	String sql;
+	out.println(new Date() + " Begin display...");
+	sql = "select * from customer where customer_id >= ? order by customer_id";
+	PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+	preparedStatement.setInt(1, 1);
+	ResultSet rs = preparedStatement.executeQuery();
+
+	int cpt = 0;
+	while (rs.next()) {
+	    cpt++;
+
+	    if ((cpt % 10000) == 0 || cpt >= records - 1) {
+		out.println(new Date());
+		out.println("customer_id   : " + rs.getInt("customer_id"));
+		out.println("customer_title: " + rs.getString("customer_title"));
+		out.println("fname         : " + rs.getString("fname"));
+	    }
+	}
+
+	rs.close();
+	preparedStatement.close();
+    }
+
 
 }

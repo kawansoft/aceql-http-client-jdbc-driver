@@ -25,7 +25,7 @@ import java.util.Date;
 
 import org.junit.Assert;
 
-import com.aceql.jdbc.commons.test.SqlSelectTest;
+import com.aceql.jdbc.commons.test.base.dml.SqlSelectTest;
 
 /**
  * Tests all

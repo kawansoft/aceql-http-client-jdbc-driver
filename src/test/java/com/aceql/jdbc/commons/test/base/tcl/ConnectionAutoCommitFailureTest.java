@@ -1,4 +1,4 @@
-package com.aceql.jdbc.commons.test;
+package com.aceql.jdbc.commons.test.base.tcl;
 
 import java.sql.Connection;
 import java.sql.SQLException;

@@ -6,8 +6,8 @@ import java.sql.Statement;
 import java.util.Date;
 
 import com.aceql.jdbc.commons.AceQLConnection;
-import com.aceql.jdbc.commons.test.SqlDeleteTest;
-import com.aceql.jdbc.commons.test.SqlSelectTest;
+import com.aceql.jdbc.commons.test.base.dml.SqlDeleteTest;
+import com.aceql.jdbc.commons.test.base.dml.SqlSelectTest;
 import com.aceql.jdbc.commons.test.connection.DirectConnectionBuilder;
 
 public class SqlStatementBatchTest {

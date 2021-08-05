@@ -22,13 +22,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 
 import com.aceql.jdbc.commons.AceQLConnection;
 import com.aceql.jdbc.commons.AceQLException;
+import com.aceql.jdbc.commons.test.base.dml.SqlSelectTest;
 import com.aceql.jdbc.commons.test.connection.ConnectionBuilder;
 import com.aceql.jdbc.commons.test.connection.ConnectionParms;
 
@@ -36,7 +35,7 @@ import com.aceql.jdbc.commons.test.connection.ConnectionParms;
  * @author Nicolas de Pomereu
  *
  */
-public class AceQLConnectionTestSelectExecute {
+public class AceQLConnectionTestSelectBig {
 
 
     public static void main(String[] args) throws Exception {
@@ -68,41 +67,12 @@ public class AceQLConnectionTestSelectExecute {
 	System.out.println();
 
 	SqlSelectTest sqlSelectTest = new SqlSelectTest(connection, System.out);
-	sqlSelectTest.selectCustomerExecute();
+	sqlSelectTest.selectCustomerBig(10000);
 
 	connection.close();
 	System.out.println(new Date() + " End!");
 
     }
 
-    /**
-     * @param connection
-     * @param records
-     * @throws SQLException
-     */
-    public static void bigSelect(Connection connection, int records) throws SQLException {
-	String sql;
-	System.out.println(new Date() + " Begin display...");
-	sql = "select * from customer where customer_id >= ? order by customer_id";
-	PreparedStatement preparedStatement = connection.prepareStatement(sql);
-
-	preparedStatement.setInt(1, 1);
-	ResultSet rs = preparedStatement.executeQuery();
-
-	int cpt = 0;
-	while (rs.next()) {
-	    cpt++;
-
-	    if ((cpt % 10000) == 0 || cpt >= records - 1) {
-		System.out.println(new Date());
-		System.out.println("customer_id   : " + rs.getInt("customer_id"));
-		System.out.println("customer_title: " + rs.getString("customer_title"));
-		System.out.println("fname         : " + rs.getString("fname"));
-	    }
-	}
-
-	rs.close();
-	preparedStatement.close();
-    }
-
+ 
 }

@@ -29,6 +29,7 @@ import java.util.Date;
 
 import com.aceql.jdbc.commons.AceQLConnection;
 import com.aceql.jdbc.commons.AceQLException;
+import com.aceql.jdbc.commons.test.base.dml.SqlUpdateTest;
 import com.aceql.jdbc.commons.test.connection.ConnectionBuilder;
 import com.aceql.jdbc.commons.test.connection.ConnectionParms;
 

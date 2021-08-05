@@ -28,6 +28,10 @@ import java.sql.SQLException;
 
 import com.aceql.jdbc.commons.AceQLConnection;
 import com.aceql.jdbc.commons.AceQLException;
+import com.aceql.jdbc.commons.test.base.dml.SqlBlobTest;
+import com.aceql.jdbc.commons.test.base.dml.SqlDeleteTest;
+import com.aceql.jdbc.commons.test.base.dml.SqlInsertTest;
+import com.aceql.jdbc.commons.test.base.dml.SqlSelectTest;
 import com.aceql.jdbc.commons.test.batch.SqlPreparedStatementBatchTest;
 import com.aceql.jdbc.commons.test.batch.SqlStatementBatchTest;
 import com.aceql.jdbc.commons.test.connection.ConnectionBuilder;
