@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.aceql.jdbc.commons.test;
+package com.aceql.jdbc.commons.test.connection.raw;
 
 import java.io.File;
 import java.nio.charset.Charset;

@@ -32,6 +32,7 @@ import com.aceql.jdbc.commons.test.base.dml.SqlBlobTest;
 import com.aceql.jdbc.commons.test.base.dml.SqlDeleteTest;
 import com.aceql.jdbc.commons.test.base.dml.SqlInsertTest;
 import com.aceql.jdbc.commons.test.base.dml.SqlSelectTest;
+import com.aceql.jdbc.commons.test.base.schema.AceQLSchemaTest;
 import com.aceql.jdbc.commons.test.base.tcl.SavepointTest;
 import com.aceql.jdbc.commons.test.batch.SqlPreparedStatementBatchTest;
 import com.aceql.jdbc.commons.test.batch.SqlStatementBatchTest;
@@ -160,6 +161,8 @@ public class AceQLConnectionTest {
 	
 	// Batch with Prepared Statement
 	SqlPreparedStatementBatchTest.callInsertFlow(connection);
+	
+	AceQLSchemaTest.doIt(connection);
 	
 	connection.close();
     }

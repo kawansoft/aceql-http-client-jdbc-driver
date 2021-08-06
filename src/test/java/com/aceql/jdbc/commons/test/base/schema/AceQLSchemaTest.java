@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.aceql.jdbc.commons.test;
+package com.aceql.jdbc.commons.test.base.schema;
 
 import java.awt.Desktop;
 import java.io.File;
@@ -40,7 +40,7 @@ import com.aceql.jdbc.commons.test.connection.ConnectionBuilder;
  * @author Nicolas de Pomereu
  *
  */
-public class AceQLConnectionSchemaTest {
+public class AceQLSchemaTest {
 
     private static boolean DEBUG = true;
 
