@@ -1,7 +1,6 @@
-package com.aceql.jdbc.commons.test.batch;
+package com.aceql.jdbc.commons.test.base.dml.batch;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
@@ -11,7 +10,7 @@ import com.aceql.jdbc.commons.test.base.dml.SqlDeleteTest;
 import com.aceql.jdbc.commons.test.base.dml.SqlSelectTest;
 import com.aceql.jdbc.commons.test.connection.DirectConnectionBuilder;
 
-public class SqlPreparedStatementBatchTest {
+public class SqlStatementBatchTest {
     /**
      * @param args
      */
@@ -37,21 +36,13 @@ public class SqlPreparedStatementBatchTest {
     }
 
     private static void insertWithBatch(Connection connection) throws SQLException {
-	//final String sql = "insert into customer values ({0}, 'Sir', 'Doe', 'André', '1600 Pennsylvania Ave NW', 'Washington', 'DC 20500', NULL)";
-	final String sql = "insert into customer values (?, ?, ?, ?, ?, ?, ?, ?)";
-	 
-	PreparedStatement statement = connection.prepareStatement(sql);
-	for (int i = 1; i < 10; i++) {
-	    int j = 1;
-	    statement.setInt(j++, i);
-	    statement.setString(j++, "Sir");
-	    statement.setString(j++, "Doe" + i);
-	    statement.setString(j++, "André" + i);
-	    statement.setString(j++, "1600 Pennsylvania Ave NW" + i);
-	    statement.setString(j++, "Washington" + i);
-	    statement.setString(j++, "DC 20500" + i);
-	    statement.setString(j++,  null);
-	    statement.addBatch();
+	final String sql = "insert into customer values ({0}, 'Sir', 'Doe', 'André', '1600 Pennsylvania Ave NW', 'Washington', 'DC 20500', NULL)";
+
+	Statement statement = connection.createStatement();
+	for (int i = 1; i < 11; i++) {
+	    String sqlLine = sql;
+	    sqlLine = sql.replace("{0}", i + "");
+	    statement.addBatch(sqlLine);
 	}
 	int[] rc = statement.executeBatch();
 

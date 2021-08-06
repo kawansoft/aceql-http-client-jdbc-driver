@@ -48,7 +48,7 @@ public class AuthenticationConnections {
     }
 
     public static Connection getWindowsConnection(String username, String password) throws Exception {
-	Connection connection = AceQLDriverLoader.getConnection("http://localhost:9094/aceql", "sampledb", username, password.toCharArray());
+	Connection connection = AceQLDriverLoader.getConnection("http://localhost:9092/aceql", "sampledb", username, password.toCharArray());
 	return connection;
     }
 

@@ -1,4 +1,4 @@
-package com.aceql.jdbc.commons.test.batch;
+package com.aceql.jdbc.commons.test.base.dml.batch;
 
 import java.sql.Connection;
 

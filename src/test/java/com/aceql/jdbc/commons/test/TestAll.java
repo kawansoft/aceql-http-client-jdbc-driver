@@ -44,11 +44,11 @@ public class TestAll {
     public static void main(String[] args) throws Exception {
 
 	AceQLConnectionTestFourDbs.doIt();
+	AceQLConnectionTestStateless.doIt();
 	AceQLTestAuthenticationAll.doIt();
 	AceQLConnectionTestFirewall.doIt();
 
 	Connection connection = ConnectionBuilder.createOnConfig();
-	//PotsgreSqlStoredProcedureTest.testStoredProcedures(connection);
 	connection.close();
 	((AceQLConnection) connection).logout();
 

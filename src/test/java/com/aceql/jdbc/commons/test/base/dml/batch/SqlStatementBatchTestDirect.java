@@ -1,16 +1,16 @@
-package com.aceql.jdbc.commons.test.batch;
+package com.aceql.jdbc.commons.test.base.dml.batch;
 
 import java.sql.Connection;
 
 import com.aceql.jdbc.commons.test.connection.DirectConnectionBuilder;
 
-public class SqlPreparedStatementBatchTestDirect {
+public class SqlStatementBatchTestDirect {
     /**
      * @param args
      */
     public static void main(String[] args) throws Exception {
 	Connection connection = new DirectConnectionBuilder().createPostgreSql();
-	SqlPreparedStatementBatchTest.callInsertFlow(connection);
+	SqlStatementBatchTest.callInsertFlow(connection);
     }
 
 }
