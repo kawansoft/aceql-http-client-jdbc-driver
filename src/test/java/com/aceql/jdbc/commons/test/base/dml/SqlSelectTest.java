@@ -68,7 +68,7 @@ public class SqlSelectTest {
 	rs.close();
     }
 
-    public void selectCustomerStatement() throws SQLException {
+    public void selectOneCustomerStatement() throws SQLException {
 	String sql = "select * from customer where customer_id >= 1 order by customer_id limit 1";
 	Statement preparedStatement = connection.createStatement();
 	ResultSet rs = preparedStatement.executeQuery(sql);

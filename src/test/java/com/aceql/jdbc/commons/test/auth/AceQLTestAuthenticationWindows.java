@@ -63,7 +63,7 @@ public class AceQLTestAuthenticationWindows {
 	try {
 	    Connection connection = AuthenticationConnections.getWindowsConnection("username", "password");
 	    SqlSelectTest sqlSelectTest = new SqlSelectTest(connection, System.out);
-	    sqlSelectTest.selectCustomerPreparedStatement();
+	    sqlSelectTest.selectOneCustomerStatement();
 	} catch (Exception e) {
 	    System.out.println("Test with bad username & password: " + e.toString());
 	    hasException = true;
@@ -85,7 +85,7 @@ public class AceQLTestAuthenticationWindows {
 	String password = FileUtils.readFileToString(new File("I:\\__NDP\\_MyPasswords\\login_user1.txt"), "UTF-8");
 	Connection connection = AuthenticationConnections.getWindowsConnection(username, password);
 	SqlSelectTest sqlSelectTest = new SqlSelectTest(connection, System.out);
-	sqlSelectTest.selectCustomerPreparedStatement();
+	sqlSelectTest.selectOneCustomerStatement();
 	connection.close();
     }
 

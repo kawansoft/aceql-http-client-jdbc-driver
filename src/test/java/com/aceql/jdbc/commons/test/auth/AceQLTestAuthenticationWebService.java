@@ -59,7 +59,7 @@ public class AceQLTestAuthenticationWebService {
 	String password = "password1";
 	Connection connection = AuthenticationConnections.getWebConnection(username, password);
 	SqlSelectTest sqlSelectTest = new SqlSelectTest(connection, System.out);
-	sqlSelectTest.selectCustomerPreparedStatement();
+	sqlSelectTest.selectOneCustomerStatement();
 	connection.close();
     }
     
@@ -76,7 +76,7 @@ public class AceQLTestAuthenticationWebService {
 	try {
 	    Connection connection = AuthenticationConnections.getLDAPConnection("username", "password");
 	    SqlSelectTest sqlSelectTest = new SqlSelectTest(connection, System.out);
-	    sqlSelectTest.selectCustomerPreparedStatement();
+	    sqlSelectTest.selectOneCustomerStatement();
 	} catch (Exception e) {
 	    System.out.println(e.toString());
 	    hasException = true;

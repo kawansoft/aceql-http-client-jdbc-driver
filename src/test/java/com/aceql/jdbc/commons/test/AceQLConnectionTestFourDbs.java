@@ -34,6 +34,9 @@ import com.aceql.jdbc.commons.test.connection.FourDbConnections;
  */
 public class AceQLConnectionTestFourDbs {
 
+    private static final boolean DO_TEST_ORACLE = false;
+
+
     /**
      * Static class
      */
@@ -60,7 +63,10 @@ public class AceQLConnectionTestFourDbs {
 	testPostgreSQL();
 	testMySQL();
 	testSqlServer();
-	//testOracle();
+	
+	if (DO_TEST_ORACLE) {
+	    testOracle();	    
+	}
     }
 
     /**
@@ -75,7 +81,6 @@ public class AceQLConnectionTestFourDbs {
 	    throws Exception  {
 	Connection connection = FourDbConnections.getPostgreSQLConnection();
 	AceQLConnectionTest.doItPassConnection(connection);
-	connection.close();
     }
 
     /**
@@ -90,7 +95,6 @@ public class AceQLConnectionTestFourDbs {
 	    throws Exception {
 	Connection connection = FourDbConnections.getMySQLConnection();
 	AceQLConnectionTest.doItPassConnection(connection);
-	connection.close();
     }
 
     /**
@@ -105,7 +109,6 @@ public class AceQLConnectionTestFourDbs {
 	    throws Exception {
 	Connection connection = FourDbConnections.getSqlServerConnection();
 	AceQLConnectionTest.doItPassConnection(connection);
-	connection.close();
     }
 
 

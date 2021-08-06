@@ -57,7 +57,7 @@ public class AceQLTestAuthenticationLDAP {
 	String password = "password";
 	Connection connection = AuthenticationConnections.getLDAPConnection(username, password);
 	SqlSelectTest sqlSelectTest = new SqlSelectTest(connection, System.out);
-	sqlSelectTest.selectCustomerPreparedStatement();
+	sqlSelectTest.selectOneCustomerStatement();
 	connection.close();
     }
     
@@ -74,7 +74,7 @@ public class AceQLTestAuthenticationLDAP {
 	try {
 	    Connection connection = AuthenticationConnections.getLDAPConnection("username", "password");
 	    SqlSelectTest sqlSelectTest = new SqlSelectTest(connection, System.out);
-	    sqlSelectTest.selectCustomerPreparedStatement();
+	    sqlSelectTest.selectOneCustomerStatement();
 	} catch (Exception e) {
 	    System.out.println("Test with bad username & password: " + e.toString());
 	    hasException = true;

@@ -34,7 +34,7 @@ import com.aceql.jdbc.commons.test.base.dml.SqlInsertTest;
 import com.aceql.jdbc.commons.test.base.dml.SqlSelectTest;
 import com.aceql.jdbc.commons.test.batch.SqlPreparedStatementBatchTest;
 import com.aceql.jdbc.commons.test.batch.SqlStatementBatchTest;
-import com.aceql.jdbc.commons.test.connection.ConnectionBuilder;
+import com.aceql.jdbc.commons.test.connection.AceQLDriverLoader;
 import com.aceql.jdbc.commons.test.connection.ConnectionParms;
 import com.aceql.jdbc.commons.test.util.Sha1;
 
@@ -60,8 +60,10 @@ public class AceQLConnectionTestStateless {
      * @throws NoSuchAlgorithmException
      */
     public static void doIt()
-	    throws SQLException, AceQLException, FileNotFoundException, IOException, NoSuchAlgorithmException {
-	Connection connection = ConnectionBuilder.createOnConfig();
+	    throws Exception {
+	String user = "user1";
+	String password = "password1";
+	Connection connection = AceQLDriverLoader.getConnection("http://localhost:9097/aceql", "sampledb", user, password.toCharArray());
 	doItPassConnection(connection);
 	
     }

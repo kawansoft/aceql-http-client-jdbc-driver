@@ -63,6 +63,7 @@ public class AceQLConnectionTest {
     public static void doIt()
 	    throws SQLException, AceQLException, FileNotFoundException, IOException, NoSuchAlgorithmException {
 	Connection connection = ConnectionBuilder.createOnConfig();
+	
 	doItPassConnection(connection);
 	
     }
@@ -150,7 +151,7 @@ public class AceQLConnectionTest {
 	if (doSelectOnRegions) {
 	    sqlSelectTest.selectOnRegions();
 	}
-	
+
 	SavepointTest savepointTest = new SavepointTest(connection, System.out);
 	savepointTest.doIt();
 	

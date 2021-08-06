@@ -46,10 +46,9 @@ public class TestAll {
 	AceQLTestAuthenticationAll.doIt();
 	AceQLConnectionTestFirewall.doIt();
 
-	Connection connection;
 	testSchemaMethodsFourDbs();
 
-	connection = ConnectionBuilder.createOnConfig();
+	Connection connection = ConnectionBuilder.createOnConfig();
 	//PotsgreSqlStoredProcedureTest.testStoredProcedures(connection);
 	connection.close();
 	((AceQLConnection) connection).logout();

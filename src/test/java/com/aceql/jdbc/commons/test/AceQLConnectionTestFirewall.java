@@ -60,7 +60,7 @@ public class AceQLConnectionTestFirewall {
 	System.out.println(new Date() + " testing not allowed Statement...");
 	boolean hasException = false;
 	try {
-	    sqlSelectTest.selectCustomerStatement();
+	    sqlSelectTest.selectOneCustomerStatement();
 	} catch (Exception e) {
 	    System.out.println(e.toString());
 	    hasException = true;

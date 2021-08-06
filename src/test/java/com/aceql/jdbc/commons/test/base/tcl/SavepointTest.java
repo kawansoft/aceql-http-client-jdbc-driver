@@ -11,6 +11,8 @@ import java.sql.Savepoint;
 import java.sql.Statement;
 
 import com.aceql.jdbc.commons.AceQLConnection;
+import com.aceql.jdbc.commons.main.metadata.JdbcDatabaseMetaData;
+import com.aceql.jdbc.commons.main.metadata.RemoteDatabaseMetaData;
 import com.aceql.jdbc.commons.test.base.dml.SqlDeleteTest;
 import com.aceql.jdbc.commons.test.base.dml.SqlInsertTest;
 
@@ -35,6 +37,15 @@ public class SavepointTest {
      */
     public void doIt() throws SQLException {
 
+        RemoteDatabaseMetaData remoteDatabaseMetaData = ((AceQLConnection)connection).getRemoteDatabaseMetaData();
+        JdbcDatabaseMetaData jdbcDatabaseMetaData =  remoteDatabaseMetaData.getJdbcDatabaseMetaData();
+        String databaseProductName = jdbcDatabaseMetaData.getDatabaseProductName();
+
+	if (!databaseProductName.toLowerCase().contains("postgres")) {
+	    out.println("Savepoint to be tested with PostgreSQL only in this version.");
+	    return;
+	}
+            
 	out.println();
 	if (connection instanceof AceQLConnection) {
 	   out.println(
@@ -54,6 +65,8 @@ public class SavepointTest {
 	    sqlInsertTest.insertUsingStatement(1);
 
 	    Savepoint savepoint = connection.setSavepoint();
+	    
+	    
 	    out.println("savepoint id  : " + savepoint.getSavepointId());
 	    try {
 	        out.println("savepoint name: " + savepoint.getSavepointName());
