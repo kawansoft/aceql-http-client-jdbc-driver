@@ -44,7 +44,7 @@ public class TestAll {
     public static void main(String[] args) throws Exception {
 
 	AceQLConnectionTestFourDbs.doIt();
-	AceQLConnectionTestStateless.doIt();
+	//AceQLConnectionTestStateless.doIt(); To be done apart!
 	AceQLTestAuthenticationAll.doIt();
 	AceQLConnectionTestFirewall.doIt();
 
