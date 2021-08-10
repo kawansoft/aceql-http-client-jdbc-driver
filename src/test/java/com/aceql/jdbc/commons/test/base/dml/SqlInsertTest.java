@@ -65,7 +65,6 @@ public class SqlInsertTest {
 	    out.println("Executed: " + sql);
 	}
 
-	insertUsingStatement(records);
     }
 
     /**
@@ -75,14 +74,15 @@ public class SqlInsertTest {
      * @param records the position for insert
      * @throws SQLException
      */
-    public void insertUsingStatement(int records) throws SQLException {
+    public int  insertUsingStatement(int records) throws SQLException {
 	String sql;
 	Statement statement;
 	sql = "insert into customer values (" + records
 		+ ", 'Sir', 'Doe', 'André', '1600 Pennsylvania Ave NW', 'Washington', 'DC 20500', NULL)";
 	statement = connection.createStatement();
-	statement.executeUpdate(sql);
-	out.println("Executed: " + sql);
+	int rows = statement.executeUpdate(sql);
+	out.println("Executed. Rows: " + rows + " (" + sql + "");
+	return rows;
     }
 
     /**
@@ -96,18 +96,18 @@ public class SqlInsertTest {
 	Statement statement;
 	sql = "delete from regions";
 	statement = connection.createStatement();
-	statement.executeUpdate(sql);
-	out.println("Executed: " + sql);
+	int rows = statement.executeUpdate(sql);
+	out.println("Executed. Rows: " + rows + " (" + sql + "");
 
 	sql = "insert into regions values ('NorthEast', '{10022,02110,07399}')";
 	statement = connection.createStatement();
-	statement.executeUpdate(sql);
-	out.println("Executed: " + sql);
+	rows = statement.executeUpdate(sql);
+	out.println("Executed. Rows: " + rows + " (" + sql + "");
 
 	sql = "insert into regions values ('Northwest', '{93101,97201,99210}')";
 	statement = connection.createStatement();
-	statement.executeUpdate(sql);
-	out.println("Executed: " + sql);
+	rows = statement.executeUpdate(sql);
+	out.println("Executed. Rows: " + rows + " (" + sql + "");
     }
 
 

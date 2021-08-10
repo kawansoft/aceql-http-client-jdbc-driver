@@ -37,23 +37,25 @@ public class SqlDeleteTest {
      * Delete all orderlog.
      * @throws SQLException
      */
-    public void deleteOrderlogAll() throws SQLException {
+    public int deleteOrderlogAll() throws SQLException {
 	String sql = "delete from orderlog where customer_id >=1 ";
 	Statement statement = connection.createStatement();
-	statement.executeUpdate(sql);
+	int rows= statement.executeUpdate(sql);
 	statement.close();
-	out.println("Executed: " + sql);
+	out.println("Executed. Rows: " + rows + " (" + sql + "");
+	return rows;
     }
 
     /**
      * Delete all customer.
      * @throws SQLException
      */
-    public void deleteCustomerAll() throws SQLException {
+    public int deleteCustomerAll() throws SQLException {
 	String sql = "delete from customer where customer_id >= 1 ";
 	Statement statement = connection.createStatement();
-	statement.executeUpdate(sql);
-	out.println("Executed: " + sql);
+	int rows = statement.executeUpdate(sql);
+	out.println("Executed. Rows: " + rows + " (" + sql + "");
+	return rows;
     }
 
 }

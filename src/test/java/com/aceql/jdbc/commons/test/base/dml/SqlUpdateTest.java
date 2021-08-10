@@ -50,21 +50,23 @@ public class SqlUpdateTest {
      * Delete all customer.
      * @throws SQLException
      */
-    public void updateCustomerAllPreparedStatement() throws SQLException {
+    public int updateCustomerAllPreparedStatement() throws SQLException {
 	String sql = "update customer set customer_title = ?";
 	PreparedStatement preparedStatement = connection.prepareStatement(sql);
 	preparedStatement.setString(1, "Ms");
-	preparedStatement.executeUpdate();
-	out.println("Executed: " + sql);
+	int rows = preparedStatement.executeUpdate();
+	out.println("Executed. Rows: " + rows + " (" + sql + "");
+	return rows;
     }
 
-    public void updateCustomerAllExecuteRaw() throws SQLException {
+    public boolean updateCustomerAllExecuteRaw() throws SQLException {
 	String sql = "update customer set customer_title = 'Miss'";
 	Statement statement = connection.createStatement();
-	statement.execute(sql);
+	boolean firstIsResultSet = statement.execute(sql);
 	out.println("statement.getMoreResults(): " + statement.getMoreResults());
 	out.println("statement.getUpdateCount(): " + statement.getUpdateCount());
-	out.println("Executed: " + sql);
+	out.println("Executed. firstIsResultSet: " + firstIsResultSet + " (" + sql + "");
+	return firstIsResultSet;
     }
 
 
