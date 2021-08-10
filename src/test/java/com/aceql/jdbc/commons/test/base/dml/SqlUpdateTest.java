@@ -39,11 +39,12 @@ public class SqlUpdateTest {
      * Delete all customer.
      * @throws SQLException
      */
-    public void updateCustomerAllStatement() throws SQLException {
+    public int updateCustomerAllStatement() throws SQLException {
 	String sql = "update customer set customer_title = 'Sir'";
 	Statement statement = connection.createStatement();
-	statement.executeUpdate(sql);
-	out.println("Executed: " + sql);
+	int rows = statement.executeUpdate(sql);
+	out.println("Executed. Rows: " + rows + " (" + sql + "");
+	return rows;
     }
 
     /**
