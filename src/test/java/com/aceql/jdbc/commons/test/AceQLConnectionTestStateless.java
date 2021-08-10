@@ -28,12 +28,13 @@ import java.sql.SQLException;
 
 import com.aceql.jdbc.commons.AceQLConnection;
 import com.aceql.jdbc.commons.AceQLException;
-import com.aceql.jdbc.commons.test.base.dml.SqlBlobTest;
 import com.aceql.jdbc.commons.test.base.dml.SqlDeleteTest;
 import com.aceql.jdbc.commons.test.base.dml.SqlInsertTest;
 import com.aceql.jdbc.commons.test.base.dml.SqlSelectTest;
 import com.aceql.jdbc.commons.test.base.dml.batch.SqlPreparedStatementBatchTest;
 import com.aceql.jdbc.commons.test.base.dml.batch.SqlStatementBatchTest;
+import com.aceql.jdbc.commons.test.base.dml.blob.SqlBlobInsertTest;
+import com.aceql.jdbc.commons.test.base.dml.blob.SqlBlobSelectTest;
 import com.aceql.jdbc.commons.test.connection.AceQLDriverLoader;
 import com.aceql.jdbc.commons.test.connection.ConnectionParms;
 import com.aceql.jdbc.commons.test.util.Sha1;
@@ -115,6 +116,9 @@ public class AceQLConnectionTestStateless {
 	SqlDeleteTest sqlDeleteTest = new SqlDeleteTest(connection, System.out);
 	SqlSelectTest sqlSelectTest = new SqlSelectTest(connection, System.out);
 
+	SqlBlobSelectTest sqlBlobSelectTest = new SqlBlobSelectTest(connection, System.out);
+	SqlBlobInsertTest sqlBlobInsertTest = new SqlBlobInsertTest(connection, System.out);
+	
 	System.out.println("catalog: " + connection.getCatalog());
 
 	falseQuery(falseQuery, sqlSelectTest);
@@ -133,14 +137,13 @@ public class AceQLConnectionTestStateless {
 	sqlSelectTest.selectCustomerPreparedStatement();
 
 	
-	SqlBlobTest sqlBlobTest = new SqlBlobTest(connection, System.out);
 	File fileUpload = new File(ConnectionParms.IN_DIRECTORY + File.separator + "username_koala.jpg");
 	File fileDownload = new File(ConnectionParms.OUT_DIRECTORY + File.separator + "username_koala.jpg");
 	int customerId = 1;
 	int itemId = 1;
 
-	blobUpload(connection, sqlDeleteTest, sqlBlobTest, fileUpload, customerId, itemId);
-	blobDownload(connection, sqlBlobTest, customerId, itemId, fileDownload);
+	blobUpload(connection, sqlDeleteTest, sqlBlobInsertTest, fileUpload, customerId, itemId);
+	blobDownload(connection, sqlBlobSelectTest, customerId, itemId, fileDownload);
 	checkBlobIntegrity(fileUpload, fileDownload);
 	
 	if (doSelectOnRegions) {
@@ -220,17 +223,17 @@ public class AceQLConnectionTestStateless {
 
     /**
      * @param connection
-     * @param sqlBlobTest
+     * @param sqlBlobSelectTest
      * @param customerId
      * @param itemId
      * @param fileDownload
      * @throws SQLException
      * @throws IOException
      */
-    static void blobDownload(Connection connection, SqlBlobTest sqlBlobTest, int customerId, int itemId, File fileDownload)
+    static void blobDownload(Connection connection, SqlBlobSelectTest sqlBlobSelectTest, int customerId, int itemId, File fileDownload)
 	    throws SQLException, IOException {
 	//connection.setAutoCommit(false); // Must be in Autocommit false with PostgreSQL only
-	sqlBlobTest.blobDownload(customerId, itemId, fileDownload);
+	sqlBlobSelectTest.blobDownload(customerId, itemId, fileDownload);
     }
 
 
@@ -244,13 +247,13 @@ public class AceQLConnectionTestStateless {
      * @throws SQLException
      * @throws IOException
      */
-    static void blobUpload(Connection connection, SqlDeleteTest sqlDeleteTest, SqlBlobTest sqlBlobTest,
+    static void blobUpload(Connection connection, SqlDeleteTest sqlDeleteTest, SqlBlobInsertTest sqlBlobInsertTest,
 	    File fileUpload, int customerId, int itemId) throws SQLException, IOException {
 	connection.setAutoCommit(true);
 	sqlDeleteTest.deleteOrderlogAll();
 
 	//connection.setAutoCommit(false); // Must be in Autocommit false with PostgreSQL only
-	sqlBlobTest.blobUpload(customerId, itemId, fileUpload);
+	sqlBlobInsertTest.blobUpload(customerId, itemId, fileUpload);
 	//connection.commit();
     }
 

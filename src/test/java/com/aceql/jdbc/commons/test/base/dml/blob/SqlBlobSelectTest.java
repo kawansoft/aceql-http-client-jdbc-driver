@@ -17,14 +17,12 @@
  * limitations under the License.
  */
 
-package com.aceql.jdbc.commons.test.base.dml;
+package com.aceql.jdbc.commons.test.base.dml.blob;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
@@ -43,14 +41,14 @@ import com.aceql.jdbc.commons.EditionType;
  * @author Nicolas de Pomereu
  *
  */
-public class SqlBlobTest {
+public class SqlBlobSelectTest {
 
     public static boolean USE_BLOB_NATIVE_SYNTAX = true;
 
     private Connection connection;
     private PrintStream out;
 
-    public SqlBlobTest(Connection connection, PrintStream out) {
+    public SqlBlobSelectTest(Connection connection, PrintStream out) {
 	this.connection = connection;
 	this.out = out;
     }
@@ -62,54 +60,6 @@ public class SqlBlobTest {
 
 	AceQLConnection aceQLConnection = (AceQLConnection) connection;
 	return aceQLConnection.getConnectionInfo().getEditionType().equals(EditionType.Professional);
-    }
-
-    public void blobUpload(int customerId, int itemId, File file) throws SQLException, IOException {
-
-	String sql = "insert into orderlog values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-	PreparedStatement preparedStatement = connection.prepareStatement(sql);
-
-	int j = 1;
-	preparedStatement.setInt(j++, customerId);
-	preparedStatement.setInt(j++, itemId);
-	preparedStatement.setString(j++, "description_" + itemId);
-	preparedStatement.setInt(j++, itemId * 1000);
-	preparedStatement.setDate(j++, new java.sql.Date(System.currentTimeMillis()));
-	preparedStatement.setTimestamp(j++, new java.sql.Timestamp(System.currentTimeMillis()));
-
-	Blob blob = null;
-	if (USE_BLOB_NATIVE_SYNTAX) {
-	    if (isDriverPro(connection)) {
-		out.println("BLOB UPLOAD USING DRIVER PRO AND BLOB NATIVE SYNTAX!");
-		blob = connection.createBlob();
-		OutputStream out = blob.setBinaryStream(1);
-		Files.copy(file.toPath(), out);
-		preparedStatement.setBlob(j++, blob);
-	    } else {
-		blob = connection.createBlob();
-		byte[] bytes = Files.readAllBytes(file.toPath());
-		blob.setBytes(1, bytes);
-		preparedStatement.setBlob(j++, blob);
-	    }
-	} else {
-	    if (isDriverPro(connection)) {
-		out.println("BLOB UPLOAD USING DRIVER PRO!");
-		InputStream in = new FileInputStream(file);
-		preparedStatement.setBinaryStream(j++, in, file.length());
-	    } else {
-		byte[] bytes = Files.readAllBytes(file.toPath());
-		preparedStatement.setBytes(j++, bytes);
-	    }
-	}
-
-	preparedStatement.setInt(j++, customerId);
-	preparedStatement.setInt(j++, itemId * 1000);
-
-	preparedStatement.executeUpdate();
-	if (blob != null) {
-	    blob.free();
-	}
-	preparedStatement.close();
     }
 
     public void blobDownload(int customerId, int itemId, File file) throws SQLException, IOException {
