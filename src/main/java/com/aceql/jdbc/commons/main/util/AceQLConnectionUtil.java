@@ -38,6 +38,13 @@ public class AceQLConnectionUtil {
 
     // Minimum version for Connection.getMetaData() and ResultSet.getMetaData()
     public static final String META_DATA_CALLS_MIN_SERVER_VERSION = "6.0";
+    
+    // Minimum version for Statement.executeBatch() & PreparedStatement.executeBatch();
+    public static final String BATCH_MIN_SERVER_VERSION = "8.0";
+    
+    //
+    //public static final String META_DATA_CALLS_MIN_SERVER_VERSION = "6.0";
+    
     private static String SERVER_VERSION_NUMBER = null;
 
     protected AceQLConnectionUtil() {
@@ -111,6 +118,22 @@ public class AceQLConnectionUtil {
     }
 
 
+    /**
+     * Says it the server version supports batch callls. True if >= 8.0
+     * @param connection
+     * @return true if server version  >= 8.0
+     * @throws AceQLException
+     */
+    public static boolean isBatchSupported(Connection connection) throws SQLException {
+	AceQLConnection aceqlConnection = (AceQLConnection)connection;
+	if (SERVER_VERSION_NUMBER == null) {
+	    SERVER_VERSION_NUMBER =  aceqlConnection.getServerVersion();
+	}
+
+	String rawServerVersion = extractRawServerVersion(SERVER_VERSION_NUMBER);
+	return rawServerVersion.compareToIgnoreCase(BATCH_MIN_SERVER_VERSION) >= 0 ;
+    }
+    
     /**
      * Says it the server version supports JDBC MetaData calls. True if >= 6.0
      * @param connection
