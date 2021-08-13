@@ -33,13 +33,13 @@ import com.aceql.jdbc.commons.test.base.dml.SqlInsertTest;
 import com.aceql.jdbc.commons.test.base.dml.SqlSelectTest;
 import com.aceql.jdbc.commons.test.base.dml.batch.SqlPreparedStatementBatchTest;
 import com.aceql.jdbc.commons.test.base.dml.batch.SqlStatementBatchTest;
+import com.aceql.jdbc.commons.test.base.dml.blob.BlobTestUtil;
 import com.aceql.jdbc.commons.test.base.dml.blob.SqlBlobInsertTest;
 import com.aceql.jdbc.commons.test.base.dml.blob.SqlBlobSelectTest;
 import com.aceql.jdbc.commons.test.base.schema.AceQLSchemaTest;
 import com.aceql.jdbc.commons.test.base.tcl.SavepointTest;
 import com.aceql.jdbc.commons.test.connection.ConnectionBuilder;
 import com.aceql.jdbc.commons.test.connection.ConnectionParms;
-import com.aceql.jdbc.commons.test.util.Sha1;
 
 /**
  *
@@ -150,7 +150,7 @@ public class AceQLConnectionTest {
 
 	blobUpload(connection, sqlDeleteTest, sqlBlobInsertTest, fileUpload, customerId, itemId);
 	blobDownload(connection, sqlBlobSelectTest, customerId, itemId, fileDownload);
-	checkBlobIntegrity(fileUpload, fileDownload);
+	BlobTestUtil.checkBlobIntegrity(fileUpload, fileDownload, System.out);
 
 	if (doSelectOnRegions) {
 	    sqlSelectTest.selectOnRegions();
@@ -183,28 +183,6 @@ public class AceQLConnectionTest {
 	    } catch (Exception e) {
 		System.err.println(e);
 	    }
-	}
-    }
-
-    /**
-     * @param fileUpload
-     * @param fileDownload
-     * @throws NoSuchAlgorithmException
-     * @throws IOException
-     */
-    private static void checkBlobIntegrity(File fileUpload, File fileDownload)
-	    throws NoSuchAlgorithmException, IOException {
-	// Compare the in file and the out file
-	String sha1In = Sha1.getSha1(fileUpload);
-	String sha1Out = Sha1.getSha1(fileDownload);
-
-	if (sha1In.equals(sha1Out)) {
-	    System.out.println();
-	    System.out.println("Blob upload & downoad sucess! sha1In & sha1Out match! :" + sha1In);
-	} else {
-	    System.err.println("sha1In: " + sha1In);
-	    System.err.println("sha1Out: " + sha1Out);
-	    throw new IOException("fileUpload & fileUpload hash do not match!");
 	}
     }
 
