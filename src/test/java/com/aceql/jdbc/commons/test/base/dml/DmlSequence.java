@@ -90,7 +90,8 @@ public class DmlSequence {
 	    Assert.assertEquals("insert rows must be 1", 1, rows);
 
 	    // Select same raw and make user all values get back are the same;
-	    selectInstance(orderlogRaw);
+	    selectInstance(orderlogRaw, false);
+	    selectInstance(orderlogRaw, true);
 	    out.println("Select done.");
 	    connection.commit();
 	} finally {
@@ -143,7 +144,7 @@ public class DmlSequence {
 	return rows;
     }
 
-    private void selectInstance(OrderlogRaw orderlogRaw) throws SQLException, IOException, NoSuchAlgorithmException {
+    private void selectInstance(OrderlogRaw orderlogRaw, boolean useColumnNames) throws SQLException, IOException, NoSuchAlgorithmException {
 	String sql = "select * from orderlog where customer_id = ? and item_id = ?";
 	PreparedStatement preparedStatement = connection.prepareStatement(sql);
 	preparedStatement.setInt(1, orderlogRaw.getCustomerId());
@@ -152,27 +153,59 @@ public class DmlSequence {
 	ResultSet rs = preparedStatement.executeQuery();
 
 	while (rs.next()) {
-	    int i = 1;
-
-	    int customerId = rs.getInt(i++);
-	    int itemId = rs.getInt(i++);
-	    String description = rs.getString(i++);
-	    BigDecimal itemCost = rs.getBigDecimal(i++);
-	    Date datePlaced = rs.getDate(i++);
-	    Timestamp dateShipped = rs.getTimestamp(i++);
-
+	    
+	    int customerId;
+	    int itemId;
+	    String description;
+	    BigDecimal itemCost;
+	    Date datePlaced;
+	    Timestamp dateShipped;
+	    Blob blob;
+	    boolean isDelivered;
+	    int quantity;
 	    File file = new File(ConnectionParms.OUT_DIRECTORY + File.separator + "username_koala.jpg");
-	    Blob blob = rs.getBlob(i++);
+	    
+	    if (useColumnNames) {
+		customerId = rs.getInt("customer_id");
+		itemId = rs.getInt("item_id");
+		description = rs.getString("description");
+		itemCost = rs.getBigDecimal("item_cost");
+		datePlaced = rs.getDate("date_placed");
+		dateShipped = rs.getTimestamp("date_shipped");
+		
+		blob = rs.getBlob("jpeg_image");
 
-	    if (blob != null) {
-		try (InputStream in = blob.getBinaryStream()) {
-		    Files.copy(in, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+		if (blob != null) {
+		    try (InputStream in = blob.getBinaryStream()) {
+			Files.copy(in, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+		    }
 		}
+		
+		isDelivered = (rs.getInt("is_delivered") == 1) ? true : false; // (a < b) ? a : b;
+		quantity = rs.getInt("quantity");
+	    }
+	    else {
+		int i = 1;
+		customerId = rs.getInt(i++);
+		itemId = rs.getInt(i++);
+		description = rs.getString(i++);
+		itemCost = rs.getBigDecimal(i++);
+		datePlaced = rs.getDate(i++);
+		dateShipped = rs.getTimestamp(i++);
+
+		file = new File(ConnectionParms.OUT_DIRECTORY + File.separator + "username_koala.jpg");
+		blob = rs.getBlob(i++);
+
+		if (blob != null) {
+		    try (InputStream in = blob.getBinaryStream()) {
+			Files.copy(in, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+		    }
+		}
+
+		isDelivered = (rs.getInt(i++) == 1) ? true : false; // (a < b) ? a : b;
+		quantity = rs.getInt(i++);	
 	    }
 
-	    boolean isDelivered = (rs.getInt(i++) == 1) ? true : false; // (a < b) ? a : b;
-
-	    int quantity = rs.getInt(i++);
 
 	    out.println();
 	    out.println("customer_id   : " + customerId);
