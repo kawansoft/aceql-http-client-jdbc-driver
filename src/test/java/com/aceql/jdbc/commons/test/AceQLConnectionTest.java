@@ -28,6 +28,7 @@ import java.sql.SQLException;
 
 import com.aceql.jdbc.commons.AceQLConnection;
 import com.aceql.jdbc.commons.AceQLException;
+import com.aceql.jdbc.commons.test.base.dml.DmlSequence;
 import com.aceql.jdbc.commons.test.base.dml.SqlDeleteTest;
 import com.aceql.jdbc.commons.test.base.dml.SqlInsertTest;
 import com.aceql.jdbc.commons.test.base.dml.SqlSelectTest;
@@ -156,6 +157,11 @@ public class AceQLConnectionTest {
 	    sqlSelectTest.selectOnRegions();
 	}
 
+	//Do a full sequence of INSERT / SELECT / UPDATE / SELECT and test at each
+	//action that attended values are OK with Junit.
+	DmlSequence dmlSequence = new DmlSequence(connection, System.out);
+	dmlSequence.testSequence();
+	
 	SavepointTest savepointTest = new SavepointTest(connection, System.out);
 	savepointTest.doIt();
 	
