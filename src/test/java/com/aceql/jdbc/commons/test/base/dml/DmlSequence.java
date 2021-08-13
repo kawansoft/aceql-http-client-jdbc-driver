@@ -144,7 +144,8 @@ public class DmlSequence {
 	return rows;
     }
 
-    private void selectInstance(OrderlogRaw orderlogRaw, boolean useColumnNames) throws SQLException, IOException, NoSuchAlgorithmException {
+    private void selectInstance(OrderlogRaw orderlogRaw, boolean useColumnNames)
+	    throws SQLException, IOException, NoSuchAlgorithmException {
 	String sql = "select * from orderlog where customer_id = ? and item_id = ?";
 	PreparedStatement preparedStatement = connection.prepareStatement(sql);
 	preparedStatement.setInt(1, orderlogRaw.getCustomerId());
@@ -153,7 +154,7 @@ public class DmlSequence {
 	ResultSet rs = preparedStatement.executeQuery();
 
 	while (rs.next()) {
-	    
+
 	    int customerId;
 	    int itemId;
 	    String description;
@@ -164,7 +165,7 @@ public class DmlSequence {
 	    boolean isDelivered;
 	    int quantity;
 	    File file = new File(ConnectionParms.OUT_DIRECTORY + File.separator + "username_koala.jpg");
-	    
+
 	    if (useColumnNames) {
 		customerId = rs.getInt("customer_id");
 		itemId = rs.getInt("item_id");
@@ -172,7 +173,7 @@ public class DmlSequence {
 		itemCost = rs.getBigDecimal("item_cost");
 		datePlaced = rs.getDate("date_placed");
 		dateShipped = rs.getTimestamp("date_shipped");
-		
+
 		blob = rs.getBlob("jpeg_image");
 
 		if (blob != null) {
@@ -180,11 +181,10 @@ public class DmlSequence {
 			Files.copy(in, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
 		    }
 		}
-		
+
 		isDelivered = (rs.getInt("is_delivered") == 1) ? true : false; // (a < b) ? a : b;
 		quantity = rs.getInt("quantity");
-	    }
-	    else {
+	    } else {
 		int i = 1;
 		customerId = rs.getInt(i++);
 		itemId = rs.getInt(i++);
@@ -203,9 +203,8 @@ public class DmlSequence {
 		}
 
 		isDelivered = (rs.getInt(i++) == 1) ? true : false; // (a < b) ? a : b;
-		quantity = rs.getInt(i++);	
+		quantity = rs.getInt(i++);
 	    }
-
 
 	    out.println();
 	    out.println("customer_id   : " + customerId);
