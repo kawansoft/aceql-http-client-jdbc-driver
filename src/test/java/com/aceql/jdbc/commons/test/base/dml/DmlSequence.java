@@ -193,7 +193,6 @@ public class DmlSequence {
 		datePlaced = rs.getDate(i++);
 		dateShipped = rs.getTimestamp(i++);
 
-		file = new File(ConnectionParms.OUT_DIRECTORY + File.separator + "username_koala.jpg");
 		blob = rs.getBlob(i++);
 
 		if (blob != null) {
