@@ -133,7 +133,6 @@ public class DmlSequence {
 	blob.setBytes(1, bytes);
 	preparedStatement.setBlob(i++, blob);
 		
-
 	int isDelivered = orderlogRaw.isDelivered() ? 1:0;
 	preparedStatement.setInt(i++, isDelivered);
 	preparedStatement.setInt(i++, orderlogRaw.getQuantity());
