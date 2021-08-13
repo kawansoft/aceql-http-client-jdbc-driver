@@ -99,11 +99,11 @@ public class DmlSequence {
 
 	connection.setAutoCommit(false);
 	try {
-	    int rows = updateInstanceQuantity(orderlogRaw);
+	    int rows = updateInstanceQuantityAddOneThousand(orderlogRaw);
 	    out.println("Update done. Rows: " + rows);
 	    Assert.assertEquals("insert rows must be 1", 1, rows);
 
-	    selectInstanceQuantity(orderlogRaw);
+	    selectInstanceDisplayQuantity(orderlogRaw);
 	    out.println("Select quantity done.");
 	    connection.commit();
 	} finally {
@@ -207,7 +207,7 @@ public class DmlSequence {
 	}
     }
 
-    private int updateInstanceQuantity(OrderlogRaw orderlogRaw) throws SQLException {
+    private int updateInstanceQuantityAddOneThousand(OrderlogRaw orderlogRaw) throws SQLException {
 	String sql = "update orderlog set quantity = ?";
 	PreparedStatement preparedStatement = connection.prepareStatement(sql);
 	preparedStatement.setInt(1, orderlogRaw.getQuantity() + 1000);
@@ -216,7 +216,7 @@ public class DmlSequence {
 	return rows;
     }
 
-    private void selectInstanceQuantity(OrderlogRaw orderlogRaw) throws SQLException {
+    private void selectInstanceDisplayQuantity(OrderlogRaw orderlogRaw) throws SQLException {
 	String sql = "select * from orderlog where customer_id = ? and item_id = ?";
 	PreparedStatement preparedStatement = connection.prepareStatement(sql);
 	preparedStatement.setInt(1, orderlogRaw.getCustomerId());
