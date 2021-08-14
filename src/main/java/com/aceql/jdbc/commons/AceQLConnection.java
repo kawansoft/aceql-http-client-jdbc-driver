@@ -96,9 +96,9 @@ import com.aceql.jdbc.driver.free.AceQLDriver;
  * info.</li>
  * <li>{@link #getConnectionInfo()}: Gets major options/Properties passed when
  * calling {@link DriverManager#getConnection(String, Properties)}.</li>
- * <li>{@link #setCancelled(AtomicBoolean)}: Allows to pass a sharable progress
+ * <li>{@link #setProgress(AtomicInteger)}: Allows to pass a sharable progress
  * value. See below.</li>
- * <li>{@link #setProgress(AtomicInteger)}: Allows to pass a sharable canceled
+ * <li> {@link #setCancelled(AtomicBoolean)}: Allows to pass a sharable canceled
  * variable that will be used by the progress indicator to notify this instance
  * that the end user has cancelled the current Blob/Clob upload or download</li>
  * </ul>

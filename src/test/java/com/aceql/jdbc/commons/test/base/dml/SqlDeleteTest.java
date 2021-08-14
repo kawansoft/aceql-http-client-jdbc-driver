@@ -38,7 +38,7 @@ public class SqlDeleteTest {
      * @throws SQLException
      */
     public int deleteOrderlogAll() throws SQLException {
-	String sql = "delete from orderlog where customer_id >=1 ";
+	String sql = "delete from orderlog where customer_id >=0 ";
 	Statement statement = connection.createStatement();
 	int rows= statement.executeUpdate(sql);
 	statement.close();
