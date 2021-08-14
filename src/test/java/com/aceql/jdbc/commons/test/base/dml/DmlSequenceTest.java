@@ -87,7 +87,7 @@ public class DmlSequenceTest {
 	    // Insert a row
 	    int rows = insertRaw(orderlogRaw);
 	    out.println("Insert done. Rows: " + rows);
-	    Assert.assertEquals("insert rows must be 1", 1, rows);
+	    Assert.assertEquals("inserted rows must be 1", 1, rows);
 
 	    // Select same raw and make user all values get back are the same;
 	    selectRaw(orderlogRaw, false);
@@ -102,7 +102,7 @@ public class DmlSequenceTest {
 	try {
 	    int rows = updateRawQuantityAddOneThousand(orderlogRaw);
 	    out.println("Update done. Rows: " + rows);
-	    Assert.assertEquals("insert rows must be 1", 1, rows);
+	    Assert.assertEquals("updated rows must be 1", 1, rows);
 
 	    selectRawDisplayQuantity(orderlogRaw);
 	    out.println("Select quantity done.");
