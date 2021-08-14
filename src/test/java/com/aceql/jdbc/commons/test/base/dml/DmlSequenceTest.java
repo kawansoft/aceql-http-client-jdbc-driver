@@ -47,7 +47,7 @@ import com.aceql.jdbc.commons.test.connection.ConnectionParms;
  * @author Nicolas de Pomereu
  *
  */
-public class DmlSequence {
+public class DmlSequenceTest {
 
     private Connection connection;
     private PrintStream out;
@@ -58,7 +58,7 @@ public class DmlSequence {
      * @param connection
      * @param out
      */
-    public DmlSequence(Connection connection, PrintStream out) {
+    public DmlSequenceTest(Connection connection, PrintStream out) {
 	this.connection = connection;
 	this.out = out;
     }
@@ -85,13 +85,13 @@ public class DmlSequence {
 
 	try {
 	    // Insert a row
-	    int rows = insertInstance(orderlogRaw);
+	    int rows = insertRaw(orderlogRaw);
 	    out.println("Insert done. Rows: " + rows);
 	    Assert.assertEquals("insert rows must be 1", 1, rows);
 
 	    // Select same raw and make user all values get back are the same;
-	    selectInstance(orderlogRaw, false);
-	    selectInstance(orderlogRaw, true);
+	    selectRaw(orderlogRaw, false);
+	    selectRaw(orderlogRaw, true);
 	    out.println("Select done.");
 	    connection.commit();
 	} finally {
@@ -100,11 +100,11 @@ public class DmlSequence {
 
 	connection.setAutoCommit(false);
 	try {
-	    int rows = updateInstanceQuantityAddOneThousand(orderlogRaw);
+	    int rows = updateRawQuantityAddOneThousand(orderlogRaw);
 	    out.println("Update done. Rows: " + rows);
 	    Assert.assertEquals("insert rows must be 1", 1, rows);
 
-	    selectInstanceDisplayQuantity(orderlogRaw);
+	    selectRawDisplayQuantity(orderlogRaw);
 	    out.println("Select quantity done.");
 	    connection.commit();
 	} finally {
@@ -118,7 +118,7 @@ public class DmlSequence {
      * @throws SQLException
      * @throws IOException
      */
-    public int insertInstance(OrderlogRaw orderlogRaw) throws SQLException, IOException {
+    public int insertRaw(OrderlogRaw orderlogRaw) throws SQLException, IOException {
 	// Insert
 	String sql = "insert into orderlog values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -144,7 +144,7 @@ public class DmlSequence {
 	return rows;
     }
 
-    private void selectInstance(OrderlogRaw orderlogRaw, boolean useColumnNames)
+    private void selectRaw(OrderlogRaw orderlogRaw, boolean useColumnNames)
 	    throws SQLException, IOException, NoSuchAlgorithmException {
 	String sql = "select * from orderlog where customer_id = ? and item_id = ?";
 	PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -238,7 +238,7 @@ public class DmlSequence {
 	}
     }
 
-    private int updateInstanceQuantityAddOneThousand(OrderlogRaw orderlogRaw) throws SQLException {
+    private int updateRawQuantityAddOneThousand(OrderlogRaw orderlogRaw) throws SQLException {
 	String sql = "update orderlog set quantity = ?";
 	PreparedStatement preparedStatement = connection.prepareStatement(sql);
 	preparedStatement.setInt(1, orderlogRaw.getQuantity() + 1000);
@@ -247,7 +247,7 @@ public class DmlSequence {
 	return rows;
     }
 
-    private void selectInstanceDisplayQuantity(OrderlogRaw orderlogRaw) throws SQLException {
+    private void selectRawDisplayQuantity(OrderlogRaw orderlogRaw) throws SQLException {
 	String sql = "select * from orderlog where customer_id = ? and item_id = ?";
 	PreparedStatement preparedStatement = connection.prepareStatement(sql);
 	preparedStatement.setInt(1, orderlogRaw.getCustomerId());
@@ -268,8 +268,8 @@ public class DmlSequence {
      */
     public static void main(String[] args) throws Exception {
 	Connection connection = ConnectionBuilder.createOnConfig();
-	DmlSequence dmlSequence = new DmlSequence(connection, System.out);
-	dmlSequence.testSequence();
+	DmlSequenceTest dmlSequenceTest = new DmlSequenceTest(connection, System.out);
+	dmlSequenceTest.testSequence();
     }
 
 }
