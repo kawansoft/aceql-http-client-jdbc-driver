@@ -79,19 +79,19 @@ public class DmlSequenceTest {
 	out.println("Delete deleteOrderlogAll() done to clear all for test.");
 
 	// Instantiate all elements of an Orderlog raw
-	OrderlogRaw orderlogRaw = new OrderlogRaw();
+	OrderlogRow orderlogRow = new OrderlogRow();
 
 	connection.setAutoCommit(false);
 
 	try {
 	    // Insert a row
-	    int rows = insertRaw(orderlogRaw);
+	    int rows = insertRow(orderlogRow);
 	    out.println("Insert done. Rows: " + rows);
 	    Assert.assertEquals("inserted rows must be 1", 1, rows);
 
 	    // Select same raw and make user all values get back are the same;
-	    selectRaw(orderlogRaw, false);
-	    selectRaw(orderlogRaw, true);
+	    selectRow(orderlogRow, false);
+	    selectRow(orderlogRow, true);
 	    out.println("Select done.");
 	    connection.commit();
 	} finally {
@@ -100,11 +100,11 @@ public class DmlSequenceTest {
 
 	connection.setAutoCommit(false);
 	try {
-	    int rows = updateRawQuantityAddOneThousand(orderlogRaw);
+	    int rows = updateRowQuantityAddOneThousand(orderlogRow);
 	    out.println("Update done. Rows: " + rows);
 	    Assert.assertEquals("updated rows must be 1", 1, rows);
 
-	    selectRawDisplayQuantity(orderlogRaw);
+	    selectRowDisplayQuantity(orderlogRow);
 	    out.println("Select quantity done.");
 	    connection.commit();
 	} finally {
@@ -113,43 +113,43 @@ public class DmlSequenceTest {
     }
 
     /**
-     * @param orderlogRaw
+     * @param orderlogRow
      * @return
      * @throws SQLException
      * @throws IOException
      */
-    public int insertRaw(OrderlogRaw orderlogRaw) throws SQLException, IOException {
+    public int insertRow(OrderlogRow orderlogRow) throws SQLException, IOException {
 	// Insert
 	String sql = "insert into orderlog values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	PreparedStatement preparedStatement = connection.prepareStatement(sql);
 	int i = 1;
 
-	preparedStatement.setInt(i++, orderlogRaw.getCustomerId());
-	preparedStatement.setInt(i++, orderlogRaw.getItemId());
-	preparedStatement.setString(i++, orderlogRaw.getDescription());
-	preparedStatement.setBigDecimal(i++, orderlogRaw.getItemCost());
-	preparedStatement.setDate(i++, orderlogRaw.getDatePlaced());
-	preparedStatement.setTimestamp(i++, orderlogRaw.getDateShipped());
+	preparedStatement.setInt(i++, orderlogRow.getCustomerId());
+	preparedStatement.setInt(i++, orderlogRow.getItemId());
+	preparedStatement.setString(i++, orderlogRow.getDescription());
+	preparedStatement.setBigDecimal(i++, orderlogRow.getItemCost());
+	preparedStatement.setDate(i++, orderlogRow.getDatePlaced());
+	preparedStatement.setTimestamp(i++, orderlogRow.getDateShipped());
 
 	// Blob in this example
 	Blob blob = connection.createBlob();
-	byte[] bytes = Files.readAllBytes(orderlogRaw.getJpegImage().toPath());
+	byte[] bytes = Files.readAllBytes(orderlogRow.getJpegImage().toPath());
 	blob.setBytes(1, bytes);
 	preparedStatement.setBlob(i++, blob);
 
-	int isDelivered = orderlogRaw.isDelivered() ? 1 : 0;
+	int isDelivered = orderlogRow.isDelivered() ? 1 : 0;
 	preparedStatement.setInt(i++, isDelivered);
-	preparedStatement.setInt(i++, orderlogRaw.getQuantity());
+	preparedStatement.setInt(i++, orderlogRow.getQuantity());
 	int rows = preparedStatement.executeUpdate();
 	return rows;
     }
 
-    private void selectRaw(OrderlogRaw orderlogRaw, boolean useColumnNames)
+    private void selectRow(OrderlogRow orderlogRow, boolean useColumnNames)
 	    throws SQLException, IOException, NoSuchAlgorithmException {
 	String sql = "select * from orderlog where customer_id = ? and item_id = ?";
 	PreparedStatement preparedStatement = connection.prepareStatement(sql);
-	preparedStatement.setInt(1, orderlogRaw.getCustomerId());
-	preparedStatement.setInt(2, orderlogRaw.getItemId());
+	preparedStatement.setInt(1, orderlogRow.getCustomerId());
+	preparedStatement.setInt(2, orderlogRow.getItemId());
 
 	ResultSet rs = preparedStatement.executeQuery();
 
@@ -217,48 +217,48 @@ public class DmlSequenceTest {
 	    out.println("is_delivered  : " + isDelivered);
 	    out.println("quantity      : " + quantity);
 
-	    Assert.assertEquals("customer_id in select is not the same as insert", orderlogRaw.getCustomerId(),
+	    Assert.assertEquals("customer_id in select is not the same as insert", orderlogRow.getCustomerId(),
 		    customerId);
-	    Assert.assertEquals("item_id in select is not the same as insert", orderlogRaw.getItemId(), itemId);
-	    Assert.assertEquals("description in select is not the same as insert", orderlogRaw.getDescription(),
+	    Assert.assertEquals("item_id in select is not the same as insert", orderlogRow.getItemId(), itemId);
+	    Assert.assertEquals("description in select is not the same as insert", orderlogRow.getDescription(),
 		    description);
-	    Assert.assertEquals("item_cost in select is not the same as insert", orderlogRaw.getItemCost(), itemCost);
+	    Assert.assertEquals("item_cost in select is not the same as insert", orderlogRow.getItemCost(), itemCost);
 
 	    Assert.assertEquals("date_placed in select is not the same as insert",
-		    orderlogRaw.getDatePlaced().toString(), datePlaced.toString());
-	    Assert.assertEquals("date_shipped in select is not the same as insert", orderlogRaw.getDateShipped(),
+		    orderlogRow.getDatePlaced().toString(), datePlaced.toString());
+	    Assert.assertEquals("date_shipped in select is not the same as insert", orderlogRow.getDateShipped(),
 		    dateShipped);
 
-	    BlobTestUtil.checkBlobIntegrity(orderlogRaw.getJpegImage(), file, System.out);
+	    BlobTestUtil.checkBlobIntegrity(orderlogRow.getJpegImage(), file, System.out);
 
-	    Assert.assertEquals("is_delivered in select is not the same as insert", orderlogRaw.isDelivered(),
+	    Assert.assertEquals("is_delivered in select is not the same as insert", orderlogRow.isDelivered(),
 		    isDelivered);
-	    Assert.assertEquals("quantity in select is not the same as insert", orderlogRaw.getQuantity(), quantity);
+	    Assert.assertEquals("quantity in select is not the same as insert", orderlogRow.getQuantity(), quantity);
 
 	}
     }
 
-    private int updateRawQuantityAddOneThousand(OrderlogRaw orderlogRaw) throws SQLException {
+    private int updateRowQuantityAddOneThousand(OrderlogRow orderlogRow) throws SQLException {
 	String sql = "update orderlog set quantity = ?";
 	PreparedStatement preparedStatement = connection.prepareStatement(sql);
-	preparedStatement.setInt(1, orderlogRaw.getQuantity() + 1000);
+	preparedStatement.setInt(1, orderlogRow.getQuantity() + 1000);
 	int rows = preparedStatement.executeUpdate();
 	out.println("Executed. Rows: " + rows + " (" + sql + ")");
 	return rows;
     }
 
-    private void selectRawDisplayQuantity(OrderlogRaw orderlogRaw) throws SQLException {
+    private void selectRowDisplayQuantity(OrderlogRow orderlogRow) throws SQLException {
 	String sql = "select * from orderlog where customer_id = ? and item_id = ?";
 	PreparedStatement preparedStatement = connection.prepareStatement(sql);
-	preparedStatement.setInt(1, orderlogRaw.getCustomerId());
-	preparedStatement.setInt(2, orderlogRaw.getItemId());
+	preparedStatement.setInt(1, orderlogRow.getCustomerId());
+	preparedStatement.setInt(2, orderlogRow.getItemId());
 
 	ResultSet rs = preparedStatement.executeQuery();
 	out.println();
 	while (rs.next()) {
 	    int quantity = rs.getInt("quantity");
 	    out.println("quantity      : " + quantity);
-	    Assert.assertEquals("quantity in select is not the same as updated", orderlogRaw.getQuantity() + 1000,
+	    Assert.assertEquals("quantity in select is not the same as updated", orderlogRow.getQuantity() + 1000,
 		    quantity);
 	}
     }

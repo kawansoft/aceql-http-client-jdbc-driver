@@ -30,7 +30,7 @@ import com.aceql.jdbc.commons.test.connection.ConnectionParms;
  * @author Nicolas de Pomereu
  *
  */
-public class OrderlogRaw {
+public class OrderlogRow {
 
     private int customerId;
     private int itemId;
@@ -46,7 +46,7 @@ public class OrderlogRaw {
     /**
      * Create an instance with default values.
      */
-    public OrderlogRaw() {
+    public OrderlogRow() {
 	
 	customerId = 1;
 	itemId = 11;
@@ -134,7 +134,7 @@ public class OrderlogRaw {
 
     @Override
     public String toString() {
-	return "OrderlogRaw [customerId=" + customerId + ", itemId=" + itemId + ", description=" + description
+	return "OrderlogRow [customerId=" + customerId + ", itemId=" + itemId + ", description=" + description
 		+ ", itemCost=" + itemCost + ", datePlaced=" + datePlaced + ", dateShipped=" + dateShipped
 		+ ", jpegImage=" + jpegImage + ", isDelivered=" + isDelivered + ", quantity=" + quantity + "]";
     }
