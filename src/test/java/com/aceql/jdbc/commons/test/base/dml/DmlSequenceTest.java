@@ -166,6 +166,13 @@ public class DmlSequenceTest {
 	    int quantity;
 	    File file = new File(ConnectionParms.OUT_DIRECTORY + File.separator + "username_koala.jpg");
 
+	    if (file.exists()) {
+		boolean deleted = file.delete();
+		if (! deleted) {
+		    throw new IOException("Can not delete file file: " + file);
+		}		
+	    }
+		
 	    if (useColumnNames) {
 		customerId = rs.getInt("customer_id");
 		itemId = rs.getInt("item_id");
