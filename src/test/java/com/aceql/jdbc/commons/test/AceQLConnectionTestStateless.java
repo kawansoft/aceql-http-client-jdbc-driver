@@ -80,7 +80,6 @@ public class AceQLConnectionTestStateless {
     public static void doItPassConnection(Connection connection)
 	    throws SQLException, AceQLException, FileNotFoundException, IOException, NoSuchAlgorithmException {
 
-	//com.aceql.jdbc.commons.main.http.AceQLHttpApi.DEBUG = true;
 	
 	new File(ConnectionParms.IN_DIRECTORY).mkdirs();
 	new File(ConnectionParms.OUT_DIRECTORY).mkdirs();
