@@ -35,8 +35,8 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class FastRowCounter {
 
-    public static boolean DEBUG = false;
-
+    public static boolean DEBUG = FrameworkDebug.isSet(FastRowCounter.class);
+    
     /**
      * Returns the Result Set rows count without parsing the Json file.
      * @param file the Json Result Set file to counts the rows from

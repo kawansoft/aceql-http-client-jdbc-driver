@@ -33,6 +33,7 @@ import javax.json.stream.JsonParser;
 
 import com.aceql.jdbc.commons.main.http.ResultAnalyzer;
 import com.aceql.jdbc.commons.main.util.framework.FastRowCounter;
+import com.aceql.jdbc.commons.main.util.framework.FrameworkDebug;
 
 /**
  * @author Nicolas de Pomereu
@@ -40,7 +41,7 @@ import com.aceql.jdbc.commons.main.util.framework.FastRowCounter;
  */
 public class StreamResultAnalyzer {
 
-    public static boolean DEBUG = false;
+    public static boolean DEBUG = FrameworkDebug.isSet(StreamResultAnalyzer.class);
 
     private File jsonFile = null;
 

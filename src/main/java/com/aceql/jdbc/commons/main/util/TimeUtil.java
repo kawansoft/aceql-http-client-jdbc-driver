@@ -21,13 +21,15 @@ package com.aceql.jdbc.commons.main.util;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.aceql.jdbc.commons.main.util.framework.FrameworkDebug;
+
 /**
  * @author Nicolas de Pomereu
  *
  */
 public class TimeUtil {
 
-    public static boolean DEBUG = false;
+    public static boolean DEBUG = FrameworkDebug.isSet(TimeUtil.class);
 
     public static void printTimeStamp(String tag) {
 	if (DEBUG) {

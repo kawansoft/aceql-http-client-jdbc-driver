@@ -21,6 +21,8 @@ package com.aceql.jdbc.commons.main.metadata;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 
+import com.aceql.jdbc.commons.main.util.framework.FrameworkDebug;
+
 /**
  * Contains main SQL meta info sent by remote JDBC Driver. <br>
  * The info matches the JDBC {@link DatabaseMetaData} main values.
@@ -30,7 +32,7 @@ import java.sql.SQLException;
 
 public class JdbcDatabaseMetaData {
 
-    public static boolean DEBUG = false;
+    public static boolean DEBUG = FrameworkDebug.isSet(JdbcDatabaseMetaData.class);
 
     private String getURL;
     private boolean isReadOnly;

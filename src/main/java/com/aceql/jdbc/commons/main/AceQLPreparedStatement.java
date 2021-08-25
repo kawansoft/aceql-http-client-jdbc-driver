@@ -67,6 +67,7 @@ import com.aceql.jdbc.commons.main.util.AceQLStatementUtil;
 import com.aceql.jdbc.commons.main.util.AceQLTypes;
 import com.aceql.jdbc.commons.main.util.EditionUtil;
 import com.aceql.jdbc.commons.main.util.SimpleClassCaller;
+import com.aceql.jdbc.commons.main.util.framework.FrameworkDebug;
 import com.aceql.jdbc.commons.main.util.framework.FrameworkFileUtil;
 import com.aceql.jdbc.commons.main.util.framework.Tag;
 import com.aceql.jdbc.commons.main.util.framework.UniqueIDBuilder;
@@ -80,7 +81,7 @@ import com.aceql.jdbc.commons.main.util.json.StreamResultAnalyzer;
  */
 public class AceQLPreparedStatement extends AceQLStatement implements PreparedStatement {
 
-    private static boolean DEBUG = false;
+    private static boolean DEBUG = FrameworkDebug.isSet(AceQLPreparedStatement.class);
 
     private String sql = null;
 

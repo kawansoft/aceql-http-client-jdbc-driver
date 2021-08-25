@@ -40,13 +40,15 @@ import java.util.logging.Logger;
 
 import org.apache.commons.io.IOUtils;
 
+import com.aceql.jdbc.commons.main.util.framework.FrameworkDebug;
+
 /**
  * @author Nicolas de Pomereu
  *
  */
 class MultipartUtility {
 
-    public boolean DEBUG = false;
+    public boolean DEBUG = FrameworkDebug.isSet(MultipartUtility.class);
 
     @SuppressWarnings("unused")
     private static final Logger log = getLogger(

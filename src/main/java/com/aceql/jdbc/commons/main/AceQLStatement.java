@@ -49,6 +49,7 @@ import com.aceql.jdbc.commons.main.util.AceQLConnectionUtil;
 import com.aceql.jdbc.commons.main.util.AceQLStatementUtil;
 import com.aceql.jdbc.commons.main.util.SimpleTimer;
 import com.aceql.jdbc.commons.main.util.TimeUtil;
+import com.aceql.jdbc.commons.main.util.framework.FrameworkDebug;
 import com.aceql.jdbc.commons.main.util.framework.FrameworkFileUtil;
 import com.aceql.jdbc.commons.main.util.framework.UniqueIDBuilder;
 import com.aceql.jdbc.commons.main.util.json.StreamResultAnalyzer;
@@ -62,7 +63,7 @@ public class AceQLStatement extends AbstractStatement implements Statement {
     public static boolean KEEP_EXECUTION_FILES_DEBUG = false;
     public static boolean DUMP_FILE_DEBUG;
     
-    private static boolean DEBUG = false;
+    private static boolean DEBUG = FrameworkDebug.isSet(AceQLStatement.class);
 
     /** Universal and clean line separator */
     protected static String CR_LF = System.getProperty("line.separator");

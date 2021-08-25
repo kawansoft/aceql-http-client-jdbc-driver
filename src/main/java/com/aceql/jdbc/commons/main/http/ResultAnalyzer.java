@@ -37,6 +37,8 @@ import javax.json.stream.JsonParser.Event;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.aceql.jdbc.commons.main.util.framework.FrameworkDebug;
+
 /**
  *
  * Analyses the JSON result sent by server
@@ -46,7 +48,7 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class ResultAnalyzer {
 
-    public static boolean DEBUG = false;
+    public static boolean DEBUG = FrameworkDebug.isSet(ResultAnalyzer.class);
 
     private String jsonResult = null;
     private int httpStatusCode;

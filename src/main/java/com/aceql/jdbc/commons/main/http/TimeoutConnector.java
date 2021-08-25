@@ -23,6 +23,8 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.SocketTimeoutException;
 
+import com.aceql.jdbc.commons.main.util.framework.FrameworkDebug;
+
 /**
  * Allows to get the HttpUrlConnection output stream with a real timeout using a
  * thread and a timer.
@@ -32,7 +34,7 @@ import java.net.SocketTimeoutException;
  */
 class TimeoutConnector {
 
-    public static boolean DEBUG = false;
+    public static boolean DEBUG = FrameworkDebug.isSet(TimeoutConnector.class);
 
     private HttpURLConnection conn = null;
 
