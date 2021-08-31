@@ -393,7 +393,7 @@ The following Connections modifiers calls are supported in this version for all 
 
 ## Batch management
 
-[Statement.executeBatch()](https://docs.oracle.com/javase/8/docs/api/java/sql/Statement.html#executeBatch--)  is supported on both Editions.  `Statement` and `PreparedStatement` interfaces calls are both supported.
+[Statement.executeBatch()](https://docs.oracle.com/javase/8/docs/api/java/sql/Statement.html#executeBatch--)  is supported on both Editions.  `Statement` and `PreparedStatement` implementations are both supported.
 
 Batch commands processing is optimized in order to run as fast as possible and consume fewer possible resources:
 
@@ -402,6 +402,8 @@ Batch commands processing is optimized in order to run as fast as possible and c
 - Transactions are supported, so as usual, it's much faster to run in autocommit off.
 
 It is higly recommanded to Always use  batch commands  when you have many rows to INSERT or UPDATE.
+
+Note that batch commands are supported with AceQL HTTP version 8.0 or higher on server side.
 
 ## BLOB management
 

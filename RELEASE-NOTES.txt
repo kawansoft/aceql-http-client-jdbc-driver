@@ -22,8 +22,9 @@ AceQL Client JDBC Driver - Version 7.0 - 01-Sep-2021
 ----------------------------------------------------
 
 What's new:
-- Statement.executeBatch() and PreparedStatement.executeBatch() are
-  now supported. In order to support large batch, batch data are streamed
+- batch commands (Statement.executeBatch(), ...)  are
+  now supported both with Statement and PreparedStatement. 
+  In order to support large batches, batch data are streamed
   when sent to the server. Transactions are also supported for the sake of
   batch best speed.
   
