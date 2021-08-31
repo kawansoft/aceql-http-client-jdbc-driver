@@ -9,11 +9,11 @@
 
 ## AceQL Client JDBC Driver v7.0 - User Guide
 
-## August 31, 2021
+## September 1, 2021
 
 <img src="https://www.aceql.com/img/AceQL-Schema-min.jpg" alt="AceQL Draw"/>
 
-   * [Fundamentals](#fundamentals)
+  * [Fundamentals](#fundamentals)
       * [Technical operating environment](#technical-operating-environment)
       * [AceQL Server side compatibility](#aceql-server-side-compatibility)
       * [The AceQL Client JDBC Driver Editions](#the-aceql-client-jdbc-driver-editions)
@@ -40,9 +40,11 @@
          * [HTTP Status Codes](#http-status-codes)
       * [Data types](#data-types)
       * [SQL Transactions and Connections modifiers](#sql-transactions-and-connections-modifiers)
+      * [Batch management](#batch-management)
       * [BLOB management](#blob-management)
          * [Standard syntax](#standard-syntax)
             * [BLOB creation with standard syntax](#blob-creation-with-standard-syntax)
+         * [BLOB reading](#blob-reading)
             * [BLOB reading with standard syntax](#blob-reading-with-standard-syntax)
          * [Advanced syntax with streaming techniques (Professional Edition)](#advanced-syntax-with-streaming-techniques-professional-edition)
             * [BLOB creation with stream syntax](#blob-creation-with-stream-syntax)
@@ -190,7 +192,7 @@ Large content (ResultSet, …) is transferred using files. It is never loaded in
 
 Every HTTP exchange between the client and server side is time-consuming, because the HTTP call is synchronous and waits for the server's response
 
-Try to avoid coding JDBC calls inside loops, as this can reduce execution speed. Each JDBC call will send an HTTP request and wait for the response from the server.
+Try to avoid coding JDBC calls inside loops, as this can reduce execution speed. Each JDBC call will send an HTTP request and wait for the response from the server. Always use  batch commands (`Statement.executeBatch()`,...)   when you have many rows to INSERT or UPDATE.
 
 Note that AceQL is optimized as much as possible:
 
@@ -389,6 +391,17 @@ The following Connections modifiers calls are supported in this version for all 
 
 - `Connection.setReadOnly(boolean readOnly)`
 
+## Batch management
+
+[Statement.executeBatch()](https://docs.oracle.com/javase/8/docs/api/java/sql/Statement.html#executeBatch--)  is supported on both Editions.  `Statement` and `PreparedStatement` interfaces calls are both supported.
+
+Batch commands processing is optimized in order to run as fast as possible and consume fewer possible resources:
+
+- All batch commands & parameters are send using only one upload at the start of the `Statement.executeBatch()`  processing. 
+- The upload of the batch commands & parameters  is done using streaming techniques on the client-side. The incoming reading is also done in streaming on the server side.
+- Transactions are supported, so as usual, it's much faster to run in autocommit off.
+
+It is higly recommanded to Always use  batch commands  when you have many rows to INSERT or UPDATE.
 
 ## BLOB management
 
