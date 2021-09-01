@@ -18,21 +18,25 @@
  */
 package com.aceql.jdbc.commons.test;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.SQLException;
 import java.util.Date;
 
 import com.aceql.jdbc.commons.AceQLConnection;
-import com.aceql.jdbc.commons.test.connection.AceQLDriverLoader;
+import com.aceql.jdbc.commons.AceQLException;
+import com.aceql.jdbc.commons.test.base.dml.SqlSelectTest;
+import com.aceql.jdbc.commons.test.connection.ConnectionBuilder;
+import com.aceql.jdbc.commons.test.connection.ConnectionParms;
 
 /**
  * @author Nicolas de Pomereu
  *
  */
-public class AceQLConnectionSessionIdTest {
+public class AceQLConnectionTestSelectBig {
 
-    private static boolean DEBUG = true;
 
     public static void main(String[] args) throws Exception {
 
@@ -43,21 +47,15 @@ public class AceQLConnectionSessionIdTest {
 	}
     }
 
-    private static void doIt() throws Exception {
-
-	String serverUrlLocalhostEmbedded = "http://localhost:9090/aceql";
-
-	String serverUrl = serverUrlLocalhostEmbedded;
-	String database = "sampledb";
-	String username = "username";
-	String sessionId = getSessionIdFromApiLogin();
+    public static void doIt() throws SQLException, AceQLException, FileNotFoundException, IOException {
+	new File(ConnectionParms.IN_DIRECTORY).mkdirs();
+	new File(ConnectionParms.OUT_DIRECTORY).mkdirs();
 
 	// Get a real Connection instance that points to remote AceQL server
-	Connection connection = AceQLDriverLoader.getConnection(serverUrl, database, username, sessionId);
+	Connection connection = ConnectionBuilder.createOnConfig();
 
+	connection.setAutoCommit(true);
 	System.out.println();
-	String sql = null;
-
 	System.out.println("aceQLConnection.getServerVersion(): " + ((AceQLConnection) connection).getServerVersion());
 	System.out.println("aceQLConnection.getClientVersion(): " + ((AceQLConnection) connection).getClientVersion());
 
@@ -66,44 +64,15 @@ public class AceQLConnectionSessionIdTest {
 	System.out.println("aceQLConnection.getHoldability(): " + connection.getHoldability());
 	System.out.println("aceQLConnection.getTransactionIsolation() : " + connection.getTransactionIsolation());
 
-	connection.setAutoCommit(false);
-	sql = "select * from orderlog";
-	Statement statement = connection.createStatement();
-	ResultSet rs = statement.executeQuery(sql);
+	System.out.println();
 
-	// ResultSetPrinter resultSetPrinter = new ResultSetPrinter(rs,
-	// System.out);
-	// resultSetPrinter.print();
+	SqlSelectTest sqlSelectTest = new SqlSelectTest(connection, System.out);
+	sqlSelectTest.selectCustomerBig(10000);
 
-	while (rs.next()) {
-	    System.out.println();
-	    System.out.println("customer_id: " + rs.getInt(1));
-	    System.out.println("item_id    : " + rs.getInt(2));
-	    System.out.println("description: " + rs.getString(3));
-	}
-	rs.close();
-
-	connection.setAutoCommit(true);
 	connection.close();
+	System.out.println(new Date() + " End!");
 
-	((AceQLConnection) connection).logout();
     }
 
-    /**
-     * @return
-     */
-    private static String getSessionIdFromApiLogin() {
-	return "iolluz22yk0iflzrwu2kp7i0g6";
-    }
-
-    /**
-     * @param s
-     */
-
-    protected static void debug(String s) {
-	if (DEBUG) {
-	    System.out.println(new Date() + " " + s);
-	}
-    }
-
+ 
 }

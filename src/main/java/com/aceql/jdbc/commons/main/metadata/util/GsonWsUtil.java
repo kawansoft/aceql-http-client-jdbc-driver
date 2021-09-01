@@ -34,7 +34,7 @@ import com.google.gson.GsonBuilder;
 public final class GsonWsUtil {
 
     /**
-     * Create json string representing object
+     * Create json string representing object in pretty printing
      *
      * @param obj
      * @return
@@ -45,6 +45,17 @@ public final class GsonWsUtil {
 	return gson.toJson(obj, obj.getClass());
     }
 
+    /**
+     *  Create json string representing object (NO pretty priting)
+     * @param obj
+     * @return
+     */
+    public static String getJSonStringNotPretty(final Object obj) {
+	final GsonBuilder builder = new GsonBuilder();
+	final Gson gson = builder.create();
+	return gson.toJson(obj, obj.getClass());
+    }
+    
     /**
      * Create Object from jsonString
      *
@@ -59,4 +70,6 @@ public final class GsonWsUtil {
 	final T dTO = gson.fromJson(bufferedReader, type);
 	return dTO;
     }
+
+
 }

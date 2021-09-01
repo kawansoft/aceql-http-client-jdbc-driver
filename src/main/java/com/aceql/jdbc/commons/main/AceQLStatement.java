@@ -19,8 +19,11 @@
 package com.aceql.jdbc.commons.main;
 
 import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
@@ -32,6 +35,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -41,9 +45,11 @@ import com.aceql.jdbc.commons.AceQLException;
 import com.aceql.jdbc.commons.InternalWrapper;
 import com.aceql.jdbc.commons.main.abstracts.AbstractStatement;
 import com.aceql.jdbc.commons.main.http.AceQLHttpApi;
+import com.aceql.jdbc.commons.main.util.AceQLConnectionUtil;
 import com.aceql.jdbc.commons.main.util.AceQLStatementUtil;
 import com.aceql.jdbc.commons.main.util.SimpleTimer;
 import com.aceql.jdbc.commons.main.util.TimeUtil;
+import com.aceql.jdbc.commons.main.util.framework.FrameworkDebug;
 import com.aceql.jdbc.commons.main.util.framework.FrameworkFileUtil;
 import com.aceql.jdbc.commons.main.util.framework.UniqueIDBuilder;
 import com.aceql.jdbc.commons.main.util.json.StreamResultAnalyzer;
@@ -57,10 +63,13 @@ public class AceQLStatement extends AbstractStatement implements Statement {
     public static boolean KEEP_EXECUTION_FILES_DEBUG = false;
     public static boolean DUMP_FILE_DEBUG;
     
-    private static boolean DEBUG = false;
+    private static boolean DEBUG = FrameworkDebug.isSet(AceQLStatement.class);
 
+    /** Universal and clean line separator */
+    protected static String CR_LF = System.getProperty("line.separator");
+    
     // Can be private, not used in daughter AceQLPreparedStatement
-    private AceQLConnection aceQLConnection = null;
+    protected AceQLConnection aceQLConnection = null;
 
     /** The Http instance that does all Http stuff */
     protected AceQLHttpApi aceQLHttpApi = null;
@@ -75,7 +84,10 @@ public class AceQLStatement extends AbstractStatement implements Statement {
     protected int maxRows = 0;
 
     private int fetchSise = 0;
-
+    
+    // For batch, contain all SQL orders, one per line, in text mode: 
+    private File batchFileSqlOrders;
+    
     /**
      * Constructor
      *
@@ -209,6 +221,28 @@ public class AceQLStatement extends AbstractStatement implements Statement {
 	boolean isStoredProcedure = false;
 	Map<String, String> statementParameters = null;
 	return aceQLHttpApi.executeUpdate(sql, isPreparedStatement, isStoredProcedure, statementParameters, null);
+    }
+
+    
+    
+    @Override
+    public int[] executeBatch() throws SQLException {
+	if (this.batchFileSqlOrders == null || ! this.batchFileSqlOrders.exists()) {
+	    throw new SQLException("Cannot call executeBatch: No SQL commands / addBatch(String sql) has never been called.");
+	}
+	
+	if (!AceQLConnectionUtil.isBatchSupported(this.aceQLConnection)) {
+	    throw new SQLException("AceQL Server version must be >= " + AceQLConnectionUtil.BATCH_MIN_SERVER_VERSION
+		    + " in order to call Statement.executeBatch().");
+	}
+
+	try {
+	    int [] updateCountsArray =  aceQLHttpApi.executeBatch(batchFileSqlOrders);
+	    return updateCountsArray;
+	} catch (AceQLException e) {
+	    this.clearBatch();
+	    throw e;
+	}
     }
 
     /*
@@ -392,7 +426,33 @@ public class AceQLStatement extends AbstractStatement implements Statement {
      */
     @Override
     public void clearBatch() throws SQLException {
-	// Do nothing for now. Future usage.
+	if (this.batchFileSqlOrders != null) {
+	    this.batchFileSqlOrders.delete();
+	}
+	this.batchFileSqlOrders = null; // Reset
+    }
+
+    
+    /*
+     * (non-Javadoc)
+     *
+     * @see com.aceql.jdbc.commons.main.abstracts.AbstractStatement#addBatch()
+     */
+    @Override
+    public void addBatch(String sql) throws SQLException {
+	Objects.requireNonNull(sql, "sql cannot be null!");
+	
+	if (this.batchFileSqlOrders == null) {
+	    this.batchFileSqlOrders = AceQLPreparedStatement.buildBlobIdFile();
+	}
+	
+	try {
+	    try (BufferedWriter output = new BufferedWriter(new FileWriter(this.batchFileSqlOrders, true));){
+	        output.write(sql + CR_LF);
+	    }
+	} catch (IOException e) {
+	    throw new SQLException(e);
+	}
     }
 
     /*

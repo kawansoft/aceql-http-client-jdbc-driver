@@ -16,37 +16,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.aceql.jdbc.commons.test;
+package com.aceql.jdbc.commons.test.auth;
 
-import java.io.File;
-import java.nio.charset.Charset;
-import java.util.Map;
-
-import org.apache.commons.io.FileUtils;
-
-import com.aceql.jdbc.commons.main.http.ResultAnalyzer;
-import com.aceql.jdbc.commons.test.connection.ConnectionParms;
+import java.sql.SQLException;
 
 /**
+ * Tests all
+ *
  * @author Nicolas de Pomereu
  *
  */
-public class ResultAnalyzerTest {
+public class AceQLTestAuthenticationAll {
+
+    /**
+     * Static class
+     */
+    protected AceQLTestAuthenticationAll() {
+    }
 
     /**
      * @param args
      */
     public static void main(String[] args) throws Exception {
+	doIt();
+    }
 
-	//AceQLConnection.setTraceOn(true);
-
-	ResultAnalyzer resultAnalyzer = new ResultAnalyzer(FileUtils.readFileToString(new File(ConnectionParms.IN_DIRECTORY + File.separator + "json_out.txt"), Charset.defaultCharset()), 200, "OK");
-	Map<Integer, String> parametersOutPerIndex = resultAnalyzer.getParametersOutPerIndex();
-
-	System.out.println();
-	System.out.println("parametersOutPerIndex: ");
-	System.out.println(parametersOutPerIndex);
-
+    /**
+     * @throws SQLException
+     */
+    public static void doIt() throws Exception {
+	AceQLTestAuthenticationLDAP.doIt();
+	AceQLTestAuthenticationSSH.doIt();
+	AceQLTestAuthenticationWebService.doIt();
+	AceQLTestAuthenticationWindows.doIt();
     }
 
 }

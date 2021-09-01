@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.aceql.jdbc.commons.test;
+package com.aceql.jdbc.commons.test.base.firewall;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -25,14 +25,16 @@ import java.util.Date;
 
 import org.junit.Assert;
 
+import com.aceql.jdbc.commons.test.base.dml.SqlDeleteTest;
+import com.aceql.jdbc.commons.test.base.dml.SqlSelectTest;
 import com.aceql.jdbc.commons.test.connection.AceQLDriverLoader;
 
-public class AceConnectionTestFirewall {
+public class AceQLConnectionTestFirewall {
 
     /**
      * Static class
      */
-    protected AceConnectionTestFirewall() {
+    protected AceQLConnectionTestFirewall() {
     }
 
     /**
@@ -58,7 +60,7 @@ public class AceConnectionTestFirewall {
 	System.out.println(new Date() + " testing not allowed Statement...");
 	boolean hasException = false;
 	try {
-	    sqlSelectTest.selectCustomerStatement();
+	    sqlSelectTest.selectOneCustomerStatement();
 	} catch (Exception e) {
 	    System.out.println(e.toString());
 	    hasException = true;

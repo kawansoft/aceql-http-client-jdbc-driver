@@ -17,55 +17,45 @@
  * limitations under the License.
  */
 
-package com.aceql.jdbc.commons.test;
+package com.aceql.jdbc.commons.test.base.dml;
 
 import java.io.PrintStream;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class SqlUpdateTest {
+public class SqlDeleteTest {
 
     private Connection connection;
     private PrintStream out;
 
-    public SqlUpdateTest(Connection connection, PrintStream out) {
+    public SqlDeleteTest(Connection connection, PrintStream out) {
 	this.connection = connection;
 	this.out = out;
     }
+    /**
+     * Delete all orderlog.
+     * @throws SQLException
+     */
+    public int deleteOrderlogAll() throws SQLException {
+	String sql = "delete from orderlog where customer_id >=0 ";
+	Statement statement = connection.createStatement();
+	int rows= statement.executeUpdate(sql);
+	statement.close();
+	out.println("Executed. Rows: " + rows + " (" + sql + "");
+	return rows;
+    }
 
     /**
      * Delete all customer.
      * @throws SQLException
      */
-    public void updateCustomerAllStatement() throws SQLException {
-	String sql = "update customer set customer_title = 'Sir'";
+    public int deleteCustomerAll() throws SQLException {
+	String sql = "delete from customer where customer_id >= 1 ";
 	Statement statement = connection.createStatement();
-	statement.executeUpdate(sql);
-	out.println("Executed: " + sql);
+	int rows = statement.executeUpdate(sql);
+	out.println("Executed. Rows: " + rows + " (" + sql + "");
+	return rows;
     }
-
-    /**
-     * Delete all customer.
-     * @throws SQLException
-     */
-    public void updateCustomerAllPreparedStatement() throws SQLException {
-	String sql = "update customer set customer_title = ?";
-	PreparedStatement preparedStatement = connection.prepareStatement(sql);
-	preparedStatement.setString(1, "Ms");
-	preparedStatement.executeUpdate();
-	out.println("Executed: " + sql);
-    }
-
-    public void updateCustomerAllExecuteRaw() throws SQLException {
-	String sql = "update customer set customer_title = 'Miss'";
-	Statement statement = connection.createStatement();
-	statement.execute(sql);
-	out.println("statement.getMoreResults(): " + statement.getMoreResults());
-	out.println("statement.getUpdateCount(): " + statement.getUpdateCount());
-	out.println("Executed: " + sql);
-    }
-
 
 }

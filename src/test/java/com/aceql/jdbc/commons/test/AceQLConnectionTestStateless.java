@@ -28,26 +28,23 @@ import java.sql.SQLException;
 
 import com.aceql.jdbc.commons.AceQLConnection;
 import com.aceql.jdbc.commons.AceQLException;
-import com.aceql.jdbc.commons.test.base.dml.DmlSequenceTest;
 import com.aceql.jdbc.commons.test.base.dml.SqlDeleteTest;
 import com.aceql.jdbc.commons.test.base.dml.SqlInsertTest;
 import com.aceql.jdbc.commons.test.base.dml.SqlSelectTest;
 import com.aceql.jdbc.commons.test.base.dml.batch.SqlPreparedStatementBatchTest;
 import com.aceql.jdbc.commons.test.base.dml.batch.SqlStatementBatchTest;
-import com.aceql.jdbc.commons.test.base.dml.blob.BlobTestUtil;
 import com.aceql.jdbc.commons.test.base.dml.blob.SqlBlobInsertTest;
 import com.aceql.jdbc.commons.test.base.dml.blob.SqlBlobSelectTest;
-import com.aceql.jdbc.commons.test.base.schema.AceQLSchemaTest;
-import com.aceql.jdbc.commons.test.base.tcl.SavepointTest;
-import com.aceql.jdbc.commons.test.connection.ConnectionBuilder;
+import com.aceql.jdbc.commons.test.connection.AceQLDriverLoader;
 import com.aceql.jdbc.commons.test.connection.ConnectionParms;
+import com.aceql.jdbc.commons.test.util.Sha1;
 
 /**
- *
+ * Stateless Tests
  * @author Nicolas de Pomereu
  *
  */
-public class AceQLConnectionTest {
+public class AceQLConnectionTestStateless {
 
     public static void main(String[] args) throws Exception {
 	doIt();
@@ -64,9 +61,10 @@ public class AceQLConnectionTest {
      * @throws NoSuchAlgorithmException
      */
     public static void doIt()
-	    throws SQLException, AceQLException, FileNotFoundException, IOException, NoSuchAlgorithmException {
-	Connection connection = ConnectionBuilder.createOnConfig();
-	
+	    throws Exception {
+	String user = "user1";
+	String password = "password1";
+	Connection connection = AceQLDriverLoader.getConnection("http://localhost:9097/aceql", "sampledb", user, password.toCharArray());
 	doItPassConnection(connection);
 	
     }
@@ -81,6 +79,7 @@ public class AceQLConnectionTest {
      */
     public static void doItPassConnection(Connection connection)
 	    throws SQLException, AceQLException, FileNotFoundException, IOException, NoSuchAlgorithmException {
+
 	
 	new File(ConnectionParms.IN_DIRECTORY).mkdirs();
 	new File(ConnectionParms.OUT_DIRECTORY).mkdirs();
@@ -115,33 +114,28 @@ public class AceQLConnectionTest {
 	SqlInsertTest sqlInsertTest = new SqlInsertTest(connection, System.out);
 	SqlDeleteTest sqlDeleteTest = new SqlDeleteTest(connection, System.out);
 	SqlSelectTest sqlSelectTest = new SqlSelectTest(connection, System.out);
-	
+
 	SqlBlobSelectTest sqlBlobSelectTest = new SqlBlobSelectTest(connection, System.out);
 	SqlBlobInsertTest sqlBlobInsertTest = new SqlBlobInsertTest(connection, System.out);
-
+	
 	System.out.println("catalog: " + connection.getCatalog());
 
-	connection.setAutoCommit(true);
 	falseQuery(falseQuery, sqlSelectTest);
 
 	int records = 300;
 
 	sqlDeleteTest.deleteCustomerAll();
 
-	connection.setAutoCommit(false);
 	sqlInsertTest.loopInsertCustomer(records);
 
 	if (doInsertOnRegions) {
 	    sqlInsertTest.insertInRegions(connection);
 	}
 
-	connection.commit();
-
 	sqlSelectTest.selectOrderlogStatement();
-	connection.setAutoCommit(true);
-
 	sqlSelectTest.selectCustomerPreparedStatement();
 
+	
 	File fileUpload = new File(ConnectionParms.IN_DIRECTORY + File.separator + "username_koala.jpg");
 	File fileDownload = new File(ConnectionParms.OUT_DIRECTORY + File.separator + "username_koala.jpg");
 	int customerId = 1;
@@ -149,19 +143,11 @@ public class AceQLConnectionTest {
 
 	blobUpload(connection, sqlDeleteTest, sqlBlobInsertTest, fileUpload, customerId, itemId);
 	blobDownload(connection, sqlBlobSelectTest, customerId, itemId, fileDownload);
-	BlobTestUtil.checkBlobIntegrity(fileUpload, fileDownload, System.out);
-
+	checkBlobIntegrity(fileUpload, fileDownload);
+	
 	if (doSelectOnRegions) {
 	    sqlSelectTest.selectOnRegions();
 	}
-
-	//Do a full sequence of INSERT / SELECT / UPDATE / SELECT and test at each
-	//action that attended values are OK with Junit.
-	DmlSequenceTest dmlSequenceTest = new DmlSequenceTest(connection, System.out);
-	dmlSequenceTest.testSequence();
-	
-	SavepointTest savepointTest = new SavepointTest(connection, System.out);
-	savepointTest.doIt();
 	
 	// Batch with Statement
 	SqlStatementBatchTest.callInsertFlow(connection);
@@ -169,9 +155,31 @@ public class AceQLConnectionTest {
 	// Batch with Prepared Statement
 	SqlPreparedStatementBatchTest.callInsertFlow(connection);
 	
-	AceQLSchemaTest.doIt(connection);
+	try {
+	    connection.setAutoCommit(false);
+	    System.out.println("setAutoCommit(false) done!");
+	} catch (SQLException e) {
+	    e.printStackTrace();
+	}
 	
+	
+	try {
+	    connection.commit();
+	    System.out.println("commit done!");
+	} catch (SQLException e) {
+	    e.printStackTrace();
+	}
+	
+	try {
+	    connection.rollback();
+	    System.out.println("rollback done!");
+	} catch (SQLException e) {
+	    e.printStackTrace();
+	}
+		
 	connection.close();
+	
+	System.out.println("Done!");
     }
 
     /**
@@ -191,6 +199,28 @@ public class AceQLConnectionTest {
     }
 
     /**
+     * @param fileUpload
+     * @param fileDownload
+     * @throws NoSuchAlgorithmException
+     * @throws IOException
+     */
+    static void checkBlobIntegrity(File fileUpload, File fileDownload)
+	    throws NoSuchAlgorithmException, IOException {
+	// Compare the in file and the out file
+	String sha1In = Sha1.getSha1(fileUpload);
+	String sha1Out = Sha1.getSha1(fileDownload);
+
+	if (sha1In.equals(sha1Out)) {
+	    System.out.println();
+	    System.out.println("Blob upload & downoad sucess! sha1In & sha1Out match! :" + sha1In);
+	} else {
+	    System.err.println("sha1In: " + sha1In);
+	    System.err.println("sha1Out: " + sha1Out);
+	    throw new IOException("fileUpload & fileUpload hash do not match!");
+	}
+    }
+
+    /**
      * @param connection
      * @param sqlBlobSelectTest
      * @param customerId
@@ -199,9 +229,9 @@ public class AceQLConnectionTest {
      * @throws SQLException
      * @throws IOException
      */
-    private static void blobDownload(Connection connection, SqlBlobSelectTest sqlBlobSelectTest, int customerId, int itemId, File fileDownload)
+    static void blobDownload(Connection connection, SqlBlobSelectTest sqlBlobSelectTest, int customerId, int itemId, File fileDownload)
 	    throws SQLException, IOException {
-	connection.setAutoCommit(false); // Must be in Autocommit false with PostgreSQL
+	//connection.setAutoCommit(false); // Must be in Autocommit false with PostgreSQL only
 	sqlBlobSelectTest.blobDownload(customerId, itemId, fileDownload);
     }
 
@@ -216,14 +246,14 @@ public class AceQLConnectionTest {
      * @throws SQLException
      * @throws IOException
      */
-    private static void blobUpload(Connection connection, SqlDeleteTest sqlDeleteTest, SqlBlobInsertTest sqlBlobInsertTest,
+    static void blobUpload(Connection connection, SqlDeleteTest sqlDeleteTest, SqlBlobInsertTest sqlBlobInsertTest,
 	    File fileUpload, int customerId, int itemId) throws SQLException, IOException {
 	connection.setAutoCommit(true);
 	sqlDeleteTest.deleteOrderlogAll();
 
-	connection.setAutoCommit(false); // Must be in Autocommit false with PostgreSQL
+	//connection.setAutoCommit(false); // Must be in Autocommit false with PostgreSQL only
 	sqlBlobInsertTest.blobUpload(customerId, itemId, fileUpload);
-	connection.commit();
+	//connection.commit();
     }
 
 

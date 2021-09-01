@@ -51,6 +51,7 @@ import com.aceql.jdbc.commons.main.util.AceQLConnectionUtil;
 import com.aceql.jdbc.commons.main.util.AceQLResultSetUtil;
 import com.aceql.jdbc.commons.main.util.EditionUtil;
 import com.aceql.jdbc.commons.main.util.SimpleClassCaller;
+import com.aceql.jdbc.commons.main.util.framework.FrameworkDebug;
 import com.aceql.jdbc.commons.main.util.framework.Tag;
 import com.aceql.jdbc.commons.main.util.json.RowParser;
 
@@ -63,7 +64,7 @@ import com.aceql.jdbc.commons.main.util.json.RowParser;
  */
 public class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
 
-    public boolean DEBUG = false;
+    public boolean DEBUG = FrameworkDebug.isSet(AceQLResultSet.class);
 
     /** A File containing the result set returned by an /execute_query call */
     public File jsonFile;

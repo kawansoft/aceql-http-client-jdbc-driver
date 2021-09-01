@@ -16,28 +16,42 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.aceql.jdbc.commons.main.util;
+package com.aceql.jdbc.commons.main.batch;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import com.aceql.jdbc.commons.main.util.framework.FrameworkDebug;
+import java.util.Arrays;
 
 /**
+ * Contains the list of SQL batch responses downloaded for server
  * @author Nicolas de Pomereu
  *
  */
-public class TimeUtil {
+public class UpdateCountsArrayDto {
 
-    public static boolean DEBUG = FrameworkDebug.isSet(TimeUtil.class);
+    private String status = "OK";
+    private int [] updateCountsArray;
 
-    public static void printTimeStamp(String tag) {
-	if (DEBUG) {
-	    System.out.println(getCurrentTimeStamp() + " " + tag);
-	}
+    public UpdateCountsArrayDto(int[] updateCountsArray) {
+	this.updateCountsArray = updateCountsArray;
     }
 
-    public static String getCurrentTimeStamp() {
-	return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date());
+    /**
+     * @return the status
+     */
+    public String getStatus() {
+        return status;
     }
+    
+    /**
+     * @return the updateCountsArray
+     */
+    public int[] getUpdateCountsArray() {
+        return updateCountsArray;
+    }
+
+    @Override
+    public String toString() {
+	return "UpdateCountsArrayDto [updateCountsArray=" + Arrays.toString(updateCountsArray) + "]";
+    }
+
+   
 }

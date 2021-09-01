@@ -1,16 +1,16 @@
-package com.aceql.jdbc.commons.test;
+package com.aceql.jdbc.commons.test.base.tcl;
 
 import java.sql.Connection;
 
-import com.aceql.jdbc.commons.test.connection.DirectConnectionBuilder;
+import com.aceql.jdbc.commons.test.connection.ConnectionBuilder;
 
-public class SavepointTestDirectPostgreSql {
+public class SavepointTestAceQlConnection {
 
     /**
      * @param args
      */
     public static void main(String[] args) throws Exception {
-	Connection connection = new DirectConnectionBuilder().createPostgreSql();
+	Connection connection = ConnectionBuilder.createDefaultLocal();
 	SavepointTest savepointTest = new SavepointTest(connection, System.out);
 	savepointTest.doIt();
     }

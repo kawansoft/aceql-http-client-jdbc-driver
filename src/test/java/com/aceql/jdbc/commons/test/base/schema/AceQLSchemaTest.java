@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.aceql.jdbc.commons.test;
+package com.aceql.jdbc.commons.test.base.schema;
 
 import java.awt.Desktop;
 import java.io.File;
@@ -40,7 +40,7 @@ import com.aceql.jdbc.commons.test.connection.ConnectionBuilder;
  * @author Nicolas de Pomereu
  *
  */
-public class AceQLConnectionSchemaTest {
+public class AceQLSchemaTest {
 
     private static boolean DEBUG = true;
 
@@ -53,10 +53,10 @@ public class AceQLConnectionSchemaTest {
 
     public static void doIt(Connection connection) throws SQLException, AceQLException, FileNotFoundException, IOException {
 	// Get a real Connection instance that points to remote AceQL server
-	System.out.println(new Date() + " Begin...");
+	System.out.println(new Date() + " AceQLSchemaTest Begin...");
 
 	boolean autoCommit = connection.getAutoCommit();
-	System.out.println(new Date() + " autoCommit: " + autoCommit);
+	System.out.println(new Date() + " AceQLSchemaTest autoCommit: " + autoCommit);
 
 	RemoteDatabaseMetaData remoteDatabaseMetaData = ((AceQLConnection) connection).getRemoteDatabaseMetaData();
 	File file = new File(SystemUtils.USER_HOME + File.separator + "db_schema.out.html");
@@ -66,11 +66,15 @@ public class AceQLConnectionSchemaTest {
 
 	if (format.equals("html")) {
 	    Desktop desktop = Desktop.getDesktop();
+	    System.out.println(new Date() + " AceQLSchemaTest Before Desktop.getDesktop(): ");
 	    desktop.browse(file.toURI());
+	    System.out.println(new Date() + " AceQLSchemaTest After Desktop.getDesktop(): ");
 	} else {
 	    String content = FileUtils.readFileToString(file, "UTF-8");
+	    System.out.println(new Date() + " AceQLSchemaTest content: ");
 	    System.out.println(content);
 	}
+	
 
 	System.out.println();
 	List<String> tableNames = remoteDatabaseMetaData.getTableNames();

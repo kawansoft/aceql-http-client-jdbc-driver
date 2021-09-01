@@ -18,12 +18,17 @@
  */
 package com.aceql.jdbc.commons.main.http;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.SQLException;
 import java.sql.Savepoint;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +39,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import com.aceql.jdbc.commons.AceQLException;
 import com.aceql.jdbc.commons.ConnectionInfo;
 import com.aceql.jdbc.commons.main.AceQLSavepoint;
+import com.aceql.jdbc.commons.main.batch.UpdateCountsArrayDto;
 import com.aceql.jdbc.commons.main.metadata.ResultSetMetaDataPolicy;
 import com.aceql.jdbc.commons.main.metadata.dto.JdbcDatabaseMetaDataDto;
 import com.aceql.jdbc.commons.main.metadata.dto.TableDto;
@@ -724,6 +730,8 @@ public class AceQLHttpApi {
 	    trace("statement_parameters: " + statementParameters);
 
 	    URL theUrl = new URL(url + action);
+	    debug("execute url: " + url);
+	    
 	    InputStream in = httpManager.callWithPost(theUrl, parametersMap);
 	    return in;
 
@@ -755,9 +763,7 @@ public class AceQLHttpApi {
 	    throws AceQLException {
 
 	try {
-	    if (sql == null) {
-		Objects.requireNonNull(sql, "sql cannot be null!");
-	    }
+	    Objects.requireNonNull(sql, "sql cannot be null!");
 
 	    String action = "execute_update";
 
@@ -809,6 +815,89 @@ public class AceQLHttpApi {
 
     }
 
+    public int[] executeBatch(File batchFileSqlOrders) throws AceQLException {
+
+	try {
+	    Objects.requireNonNull(batchFileSqlOrders, "batchFileSqlOrders cannot be null!");
+
+	    if (! batchFileSqlOrders.exists()) {
+		throw new FileNotFoundException("batchFileSqlOrders does not exist anymore: " + batchFileSqlOrders);
+	    }
+	    
+	    String blobId = batchFileSqlOrders.getName();
+	    try (InputStream in = new BufferedInputStream(new FileInputStream(batchFileSqlOrders));) {
+		BlobUploader blobUploader = new BlobUploader(this);
+		blobUploader.blobUpload(blobId, in, batchFileSqlOrders.length());
+	    }
+
+	    String action = "statement_execute_batch";
+	    URL theUrl = new URL(url + action);
+
+	    Map<String, String> parametersMap = new HashMap<String, String>();
+	    parametersMap.put("blob_id", blobId);
+	    debug("blobId: " + blobId);
+
+	    String result = httpManager.callWithPostReturnString(theUrl, parametersMap);
+
+	    ResultAnalyzer resultAnalyzer = new ResultAnalyzer(result, httpManager.getHttpStatusCode(),
+		    httpManager.getHttpStatusMessage());
+	    if (!resultAnalyzer.isStatusOk()) {
+		throw new AceQLException(resultAnalyzer.getErrorMessage(), resultAnalyzer.getErrorType(), null,
+			resultAnalyzer.getStackTrace(), httpManager.getHttpStatusCode());
+	    }
+	    
+	    UpdateCountsArrayDto updateCountsArrayDto = GsonWsUtil.fromJson(result, UpdateCountsArrayDto.class);
+	    int [] updateCountsArray = updateCountsArrayDto.getUpdateCountsArray();
+	    return updateCountsArray;
+	    
+	} catch (Exception e) {
+	    throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
+	}
+    }
+    
+    public int[] executePreparedStatementBatch(String sql,
+	    File batchFileParameters) throws AceQLException {
+	try {
+	    Objects.requireNonNull(sql, "sql cannot be null!");
+	    Objects.requireNonNull(batchFileParameters, "batchFileSqlOrders cannot be null!");
+
+	    if (! batchFileParameters.exists()) {
+		throw new FileNotFoundException("batchFileParameters does not exist anymore: " + batchFileParameters);
+	    }
+	    
+	    String action = "prepared_statement_execute_batch";
+	    URL theUrl = new URL(url + action);
+
+	    String blobId = batchFileParameters.getName();
+	    try (InputStream in = new BufferedInputStream(new FileInputStream(batchFileParameters));) {
+		BlobUploader blobUploader = new BlobUploader(this);
+		blobUploader.blobUpload(blobId, in, batchFileParameters.length());
+	    }
+
+	    Map<String, String> parametersMap = new HashMap<String, String>();
+	    parametersMap.put("sql", sql);	    
+	    parametersMap.put("blob_id", blobId);
+	    debug("blobId: " + blobId);	
+	    
+	    String result = httpManager.callWithPostReturnString(theUrl, parametersMap);
+
+	    ResultAnalyzer resultAnalyzer = new ResultAnalyzer(result, httpManager.getHttpStatusCode(),
+		    httpManager.getHttpStatusMessage());
+	    if (!resultAnalyzer.isStatusOk()) {
+		throw new AceQLException(resultAnalyzer.getErrorMessage(), resultAnalyzer.getErrorType(), null,
+			resultAnalyzer.getStackTrace(), httpManager.getHttpStatusCode());
+	    }
+	    
+	    UpdateCountsArrayDto updateCountsArrayDto = GsonWsUtil.fromJson(result, UpdateCountsArrayDto.class);
+	    int [] updateCountsArray = updateCountsArrayDto.getUpdateCountsArray();
+	    return updateCountsArray;
+	    
+	} catch (Exception e) {
+	    throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
+	}
+    }
+    
+    
     /**
      * Calls /execute_query API
      *
@@ -853,6 +942,8 @@ public class AceQLHttpApi {
 	    trace("statement_parameters: " + statementParameters);
 
 	    URL theUrl = new URL(url + action);
+	    debug("executeQuery url: " + url);
+	    
 	    InputStream in = httpManager.callWithPost(theUrl, parametersMap);
 	    return in;
 
@@ -1089,6 +1180,11 @@ public class AceQLHttpApi {
     }
 
 
+    private void debug(String s) {
+	if (DEBUG) {
+	    System.out.println(new Date() + " " + s);
+	}
+    }
 
 
 

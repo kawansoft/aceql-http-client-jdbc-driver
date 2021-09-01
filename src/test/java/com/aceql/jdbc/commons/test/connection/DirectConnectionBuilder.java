@@ -39,4 +39,20 @@ public class DirectConnectionBuilder {
 	    throw new SQLException(e);
 	}
     }
+    
+    public Connection createMySql() throws SQLException {
+	// Class.forName("org.postgresql.Driver").newInstance();
+
+	try {
+	    Class<?> c = Class.forName("com.mysql.cj.jdbc.Driver");
+	    Constructor<?> constructor = c.getConstructor();
+	    constructor.newInstance();
+
+	    String url = "jdbc:mysql://localhost:3306/sampledb?characterEncoding=latin1&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+	    Connection connection = DriverManager.getConnection(url, "user1", "password1");
+	    return connection;
+	} catch (Exception e) {
+	    throw new SQLException(e);
+	}
+    }
 }

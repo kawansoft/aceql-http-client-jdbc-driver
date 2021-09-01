@@ -26,8 +26,10 @@ import java.sql.SQLException;
 
 import com.aceql.jdbc.commons.AceQLConnection;
 import com.aceql.jdbc.commons.AceQLException;
+import com.aceql.jdbc.commons.test.auth.AceQLTestAuthenticationAll;
+import com.aceql.jdbc.commons.test.base.firewall.AceQLConnectionTestFirewall;
+import com.aceql.jdbc.commons.test.base.schema.AceQLSchemaTest;
 import com.aceql.jdbc.commons.test.connection.ConnectionBuilder;
-import com.aceql.jdbc.commons.test.connection.FourDbConnections;
 
 /**
  * Test all SDK functions.
@@ -42,37 +44,14 @@ public class TestAll {
     public static void main(String[] args) throws Exception {
 
 	AceQLConnectionTestFourDbs.doIt();
-	AceConnectionTestAuthentication.doIt();
-	AceConnectionTestFirewall.doIt();
+	//AceQLConnectionTestStateless.doIt(); To be done apart!
+	AceQLTestAuthenticationAll.doIt();
+	AceQLConnectionTestFirewall.doIt();
 
-	Connection connection;
-	testSchemaMethodsFourDbs();
-
-	connection = ConnectionBuilder.createOnConfig();
-	//PotsgreSqlStoredProcedureTest.testStoredProcedures(connection);
+	Connection connection = ConnectionBuilder.createOnConfig();
 	connection.close();
 	((AceQLConnection) connection).logout();
 
-    }
-
-    /**
-     * @throws SQLException
-     * @throws IOException
-     * @throws AceQLException
-     * @throws FileNotFoundException
-     */
-    public static void testSchemaMethodsFourDbs() throws Exception {
-	Connection connection = ConnectionBuilder.createOnConfig();
-	testSchemaMethods(connection);
-
-	connection = FourDbConnections.getMySQLConnection();
-	testSchemaMethods(connection);
-
-	connection = FourDbConnections.getSqlServerConnection();
-	testSchemaMethods(connection);
-
-	connection = FourDbConnections.getOracleConnection();
-	testSchemaMethods(connection);
     }
 
     /**
@@ -84,7 +63,7 @@ public class TestAll {
      */
     public static void testSchemaMethods(Connection connection)
 	    throws SQLException, AceQLException, FileNotFoundException, IOException {
-	AceQLConnectionSchemaTest.doIt(connection);
+	AceQLSchemaTest.doIt(connection);
 	connection.close();
 	((AceQLConnection) connection).logout();
     }

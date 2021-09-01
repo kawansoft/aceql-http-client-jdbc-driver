@@ -19,8 +19,11 @@
 package com.aceql.jdbc.commons.main;
 
 import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
@@ -55,12 +58,16 @@ import org.apache.commons.io.IOUtils;
 import com.aceql.jdbc.commons.AceQLConnection;
 import com.aceql.jdbc.commons.AceQLException;
 import com.aceql.jdbc.commons.main.abstracts.AbstractConnection;
+import com.aceql.jdbc.commons.main.batch.PrepStatementParamsHolder;
 import com.aceql.jdbc.commons.main.http.BlobUploader;
 import com.aceql.jdbc.commons.main.http.HttpManager;
+import com.aceql.jdbc.commons.main.metadata.util.GsonWsUtil;
+import com.aceql.jdbc.commons.main.util.AceQLConnectionUtil;
 import com.aceql.jdbc.commons.main.util.AceQLStatementUtil;
 import com.aceql.jdbc.commons.main.util.AceQLTypes;
 import com.aceql.jdbc.commons.main.util.EditionUtil;
 import com.aceql.jdbc.commons.main.util.SimpleClassCaller;
+import com.aceql.jdbc.commons.main.util.framework.FrameworkDebug;
 import com.aceql.jdbc.commons.main.util.framework.FrameworkFileUtil;
 import com.aceql.jdbc.commons.main.util.framework.Tag;
 import com.aceql.jdbc.commons.main.util.framework.UniqueIDBuilder;
@@ -74,7 +81,7 @@ import com.aceql.jdbc.commons.main.util.json.StreamResultAnalyzer;
  */
 public class AceQLPreparedStatement extends AceQLStatement implements PreparedStatement {
 
-    private static boolean DEBUG = false;
+    private static boolean DEBUG = FrameworkDebug.isSet(AceQLPreparedStatement.class);
 
     private String sql = null;
 
@@ -84,9 +91,14 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
     private List<String> localBlobIds = new ArrayList<>();
 
     protected PrepStatementParametersBuilder builder = new PrepStatementParametersBuilder();
-
+    
+    // For batch, contain all SQL orders, one per line, in text mode: 
+    private File batchFileParameters;
+    
     /** is set to true if CallableStatement */
     protected boolean isStoredProcedure = false;
+
+    private boolean paramsContainBlob;
 
     // For execute() command
     // private AceQLResultSet aceQLResultSet;
@@ -338,9 +350,9 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
      */
     @Override
     public void setBytes(int parameterIndex, byte[] x) throws SQLException {
-
-	if (x != null) {
-
+	this.paramsContainBlob = true;
+	    
+	if (x != null) {	
 	    if (x.length > HttpManager.MEDIUM_BLOB_LENGTH) {
 		throw new SQLException(
 			Tag.PRODUCT + " " + "Can not upload Blob. Length > " + HttpManager.MEDIUMB_BLOB_LENGTH_MB
@@ -371,6 +383,7 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
      */
     @Override
     public void setBinaryStream(int parameterIndex, InputStream inputStream, long length) throws SQLException {
+	this.paramsContainBlob = true;
 
 	if (inputStream != null) {
 
@@ -415,7 +428,7 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
 	}
     }
 
-    private static File buildBlobIdFile() {
+    static File buildBlobIdFile() {
 	File file = new File(FrameworkFileUtil.getKawansoftTempDir() + File.separator + "pc-blob-out-"
 		+ UniqueIDBuilder.getUniqueId() + ".txt");
 	return file;
@@ -459,6 +472,85 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
 	Map<Integer, SqlParameter> callableOutParameters = builder.getCallableOutParameters();
 	return aceQLHttpApi.executeUpdate(sql, isPreparedStatement, isStoredProcedure, statementParameters,
 		callableOutParameters);
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see java.sql.PreparedStatement#clearParameters()
+     */
+    @Override
+    public void clearParameters() throws SQLException {
+	this.paramsContainBlob = false;
+
+    }
+    
+    @Override
+    public void clearBatch() throws SQLException {
+	super.clearBatch();
+	this.paramsContainBlob = false;
+	if (this.batchFileParameters != null) {
+	    this.batchFileParameters.delete();
+	}
+	this.batchFileParameters = null; // Reset
+    }
+    
+    /*
+     * (non-Javadoc)
+     *
+     * @see java.sql.PreparedStatement#addBatch()
+     */
+    @Override
+    public void addBatch() throws SQLException {
+	
+	if (this.paramsContainBlob) {
+	    this.paramsContainBlob = false;
+	    throw new SQLException(
+		    Tag.PRODUCT + " " + "Cannot use batch for a table with BLOB parameter in this AceQL JDBC Client version.");
+	}
+	    
+	Map<String, String> statementParameters = builder.getHttpFormattedStatementParameters();
+	
+	if (statementParameters.isEmpty()) {
+	    throw new SQLException(
+		    Tag.PRODUCT + " " + "Cannot call addBatch() if no parameters have been set.");	    
+	}
+
+	if (this.batchFileParameters == null) {
+	    this.batchFileParameters = AceQLPreparedStatement.buildBlobIdFile();
+	}
+	
+	try {
+	    try (BufferedWriter output = new BufferedWriter(new FileWriter(this.batchFileParameters, true));){
+		PrepStatementParamsHolder paramsHolder = new PrepStatementParamsHolder(statementParameters);
+		String jsonString = GsonWsUtil.getJSonStringNotPretty(paramsHolder);
+	        output.write(jsonString + AceQLStatement.CR_LF);
+	    }
+	} catch (IOException e) {
+	    throw new SQLException(e);
+	}
+	
+	// Reinit
+	builder = new PrepStatementParametersBuilder();
+    }
+
+    
+    
+    @Override
+    public int[] executeBatch() throws SQLException {
+	
+	if (this.batchFileParameters == null || ! this.batchFileParameters.exists()) {
+	    throw new SQLException("Cannot call executeBatch: addBatch() has never been called.");
+	}
+	
+	if (!AceQLConnectionUtil.isBatchSupported(super.aceQLConnection)) {
+	    throw new SQLException("AceQL Server version must be >= " + AceQLConnectionUtil.BATCH_MIN_SERVER_VERSION
+		    + " in order to call PreparedStatement.executeBatch().");
+	}
+	
+	int [] updateCountsArray =  aceQLHttpApi.executePreparedStatementBatch(sql, batchFileParameters);
+	this.clearBatch();
+	return updateCountsArray;
     }
 
     @Override
@@ -680,18 +772,7 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
 
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.sql.PreparedStatement#clearParameters()
-     */
-    @Override
-    public void clearParameters() throws SQLException {
-	String methodName = new Object() {
-	}.getClass().getEnclosingMethod().getName();
-	throwExceptionIfCalled(methodName);
 
-    }
 
     /*
      * (non-Javadoc)
@@ -718,17 +799,6 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
 	throwExceptionIfCalled(methodName);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.sql.PreparedStatement#addBatch()
-     */
-    @Override
-    public void addBatch() throws SQLException {
-	String methodName = new Object() {
-	}.getClass().getEnclosingMethod().getName();
-	throwExceptionIfCalled(methodName);
-    }
 
     /*
      * (non-Javadoc)
@@ -761,7 +831,8 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
      */
     @Override
     public void setBlob(int parameterIndex, Blob x) throws SQLException {
-
+	
+	this.paramsContainBlob = true;
 	Connection connection = super.getConnection();
 	boolean professionalEdition = EditionUtil.isProfessionalEdition(connection);
 

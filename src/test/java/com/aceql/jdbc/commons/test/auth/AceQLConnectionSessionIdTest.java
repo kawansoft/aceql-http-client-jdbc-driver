@@ -16,28 +16,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.aceql.jdbc.commons.test;
+package com.aceql.jdbc.commons.test.auth;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Date;
 
 import com.aceql.jdbc.commons.AceQLConnection;
-import com.aceql.jdbc.commons.AceQLException;
-import com.aceql.jdbc.commons.test.connection.ConnectionBuilder;
-import com.aceql.jdbc.commons.test.connection.ConnectionParms;
+import com.aceql.jdbc.commons.test.connection.AceQLDriverLoader;
 
 /**
  * @author Nicolas de Pomereu
  *
  */
-public class AceQLConnectionTestSelectExecute {
+public class AceQLConnectionSessionIdTest {
 
+    private static boolean DEBUG = true;
 
     public static void main(String[] args) throws Exception {
 
@@ -48,15 +43,21 @@ public class AceQLConnectionTestSelectExecute {
 	}
     }
 
-    public static void doIt() throws SQLException, AceQLException, FileNotFoundException, IOException {
-	new File(ConnectionParms.IN_DIRECTORY).mkdirs();
-	new File(ConnectionParms.OUT_DIRECTORY).mkdirs();
+    private static void doIt() throws Exception {
+
+	String serverUrlLocalhostEmbedded = "http://localhost:9090/aceql";
+
+	String serverUrl = serverUrlLocalhostEmbedded;
+	String database = "sampledb";
+	String username = "username";
+	String sessionId = getSessionIdFromApiLogin();
 
 	// Get a real Connection instance that points to remote AceQL server
-	Connection connection = ConnectionBuilder.createOnConfig();
+	Connection connection = AceQLDriverLoader.getConnection(serverUrl, database, username, sessionId);
 
-	connection.setAutoCommit(true);
 	System.out.println();
+	String sql = null;
+
 	System.out.println("aceQLConnection.getServerVersion(): " + ((AceQLConnection) connection).getServerVersion());
 	System.out.println("aceQLConnection.getClientVersion(): " + ((AceQLConnection) connection).getClientVersion());
 
@@ -65,44 +66,44 @@ public class AceQLConnectionTestSelectExecute {
 	System.out.println("aceQLConnection.getHoldability(): " + connection.getHoldability());
 	System.out.println("aceQLConnection.getTransactionIsolation() : " + connection.getTransactionIsolation());
 
-	System.out.println();
+	connection.setAutoCommit(false);
+	sql = "select * from orderlog";
+	Statement statement = connection.createStatement();
+	ResultSet rs = statement.executeQuery(sql);
 
-	SqlSelectTest sqlSelectTest = new SqlSelectTest(connection, System.out);
-	sqlSelectTest.selectCustomerExecute();
+	// ResultSetPrinter resultSetPrinter = new ResultSetPrinter(rs,
+	// System.out);
+	// resultSetPrinter.print();
 
+	while (rs.next()) {
+	    System.out.println();
+	    System.out.println("customer_id: " + rs.getInt(1));
+	    System.out.println("item_id    : " + rs.getInt(2));
+	    System.out.println("description: " + rs.getString(3));
+	}
+	rs.close();
+
+	connection.setAutoCommit(true);
 	connection.close();
-	System.out.println(new Date() + " End!");
 
+	((AceQLConnection) connection).logout();
     }
 
     /**
-     * @param connection
-     * @param records
-     * @throws SQLException
+     * @return
      */
-    public static void bigSelect(Connection connection, int records) throws SQLException {
-	String sql;
-	System.out.println(new Date() + " Begin display...");
-	sql = "select * from customer where customer_id >= ? order by customer_id";
-	PreparedStatement preparedStatement = connection.prepareStatement(sql);
+    private static String getSessionIdFromApiLogin() {
+	return "iolluz22yk0iflzrwu2kp7i0g6";
+    }
 
-	preparedStatement.setInt(1, 1);
-	ResultSet rs = preparedStatement.executeQuery();
+    /**
+     * @param s
+     */
 
-	int cpt = 0;
-	while (rs.next()) {
-	    cpt++;
-
-	    if ((cpt % 10000) == 0 || cpt >= records - 1) {
-		System.out.println(new Date());
-		System.out.println("customer_id   : " + rs.getInt("customer_id"));
-		System.out.println("customer_title: " + rs.getString("customer_title"));
-		System.out.println("fname         : " + rs.getString("fname"));
-	    }
+    protected static void debug(String s) {
+	if (DEBUG) {
+	    System.out.println(new Date() + " " + s);
 	}
-
-	rs.close();
-	preparedStatement.close();
     }
 
 }

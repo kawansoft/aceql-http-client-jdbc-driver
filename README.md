@@ -7,13 +7,13 @@
 
 # AceQL HTTP 
 
-## AceQL Client JDBC Driver v6.2 - User Guide
+## AceQL Client JDBC Driver v7.0 - User Guide
 
-## June 16, 2021
+## September 1, 2021
 
 <img src="https://www.aceql.com/img/AceQL-Schema-min.jpg" alt="AceQL Draw"/>
 
-   * [Fundamentals](#fundamentals)
+  * [Fundamentals](#fundamentals)
       * [Technical operating environment](#technical-operating-environment)
       * [AceQL Server side compatibility](#aceql-server-side-compatibility)
       * [The AceQL Client JDBC Driver Editions](#the-aceql-client-jdbc-driver-editions)
@@ -40,9 +40,11 @@
          * [HTTP Status Codes](#http-status-codes)
       * [Data types](#data-types)
       * [SQL Transactions and Connections modifiers](#sql-transactions-and-connections-modifiers)
+      * [Batch management](#batch-management)
       * [BLOB management](#blob-management)
          * [Standard syntax](#standard-syntax)
             * [BLOB creation with standard syntax](#blob-creation-with-standard-syntax)
+         * [BLOB reading](#blob-reading)
             * [BLOB reading with standard syntax](#blob-reading-with-standard-syntax)
          * [Advanced syntax with streaming techniques (Professional Edition)](#advanced-syntax-with-streaming-techniques-professional-edition)
             * [BLOB creation with stream syntax](#blob-creation-with-stream-syntax)
@@ -84,7 +86,7 @@ The only required third party installation is a recent JVM:
 
 ## AceQL Server side compatibility
 
-The Client JDBC Driver version is compatible with AceQL HTTP server side v6.2+.
+The Client JDBC Driver version is compatible with AceQL HTTP server side v6.2+.  Batch commands usage require AceQL HTTP server side v8.0+.
 
 ## The AceQL Client JDBC Driver Editions
 
@@ -93,11 +95,13 @@ The AceQL Client JDBC Driver comes in two Editions:
 | Edition Name         | Description / Summary                                        | License                                                      |
 | -------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | Community Edition    | Packaged as a real JDBC Driver, with major databases support.<br/>Includes main JDBC options, SQL transactions and BLOB support. <br/>Free and fully open source with a liberal license. | [Apache 2.0 License](https://www.apache.org/licenses/LICENSE-2.0) |
-| Professional Edition | Packaged as a real JDBC Driver, includes DB2 support . <br/>Includes advanced JDBC options: Arrays, Stored Procedures, JDBC native Metadata API, large BLOB.<br/>Includes advanced security options and professional support  (4H GRT).<br/>The software may be [tried for free](https://www.aceql.com/trial.html) or bought in our [online shop](https://sowl.co/VxAsp). | [Commercial License](https://www.aceql.com/rest/soft_java_client/6.2/legal/license.rtf)<br/>Per year and Per developer.<br/>**No runtime fees** |
+| Professional Edition | Packaged as a real JDBC Driver, includes DB2 support . <br/>Includes advanced JDBC options: Arrays, Stored Procedures, JDBC native Metadata API, large BLOB.<br/>Includes advanced security options and professional support  (4H GRT).<br/>The software may be [tried for free](https://www.aceql.com/trial.html) or bought in our [online shop](https://sowl.co/VxAsp). | [Commercial License](https://www.aceql.com/rest/soft_java_client/7/0/legal/license.rtf)<br/>Per year and Per developer.<br/>**No runtime fees** |
 
 ### Differences between the Community Edition & the Professional Edition
 
 This comparison matrix describes the differences between the two Editions:
+
+
 
 | Professional Edition<br>&nbsp;                               | Free - Community Edition<br>&nbsp;                           |
 | :----------------------------------------------------------- | :----------------------------------------------------------- |
@@ -106,6 +110,7 @@ This comparison matrix describes the differences between the two Editions:
 | <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Main SQL types<br/>`Boolean`, `Integer`, `Short`, `Double`, `Float`, `BigDecimal`, `Long`, `String`, `Date`, `Time`, `Timestamp` | <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Main SQL types<br/>`Boolean`, `Integer`, `Short`, `Double`, `Float`, `BigDecimal`, `Long`, `String`, `Date`, `Time`, `Timestamp` |
 | <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Connection  through HTTP Proxy | <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Connection  through HTTP Proxy |
 | <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;SQL Transactions<br/>`Connection.commit()`, `Connection.rollback()`, `Connection.setAutocomit(boolean autoCommit)`.<br/>[Savepoints](https://docs.oracle.com/javase/tutorial/jdbc/basics/transactions.html#set_roll_back_savepoints) are also fully supported: | <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;SQL Transactions<br/>`Connection.commit()`, `Connection.rollback()`, `Connection.setAutocomit()`.<br/>[Savepoints](https://docs.oracle.com/javase/tutorial/jdbc/basics/transactions.html#set_roll_back_savepoints) are also fully supported. |
+| <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>Batch methods for `Statement` <br>and `PreparedStatement` | <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>Batch methods for `Statement` <br>and `PreparedStatement` |
 | <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Open Source Databases<br/>MySQL, PostgreSQL, MariaDB | <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Open Source Databases<br/>MySQL, PostgreSQL, MariaDB |
 | <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;MS SQL Server | <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;MS SQL Server |
 | <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Oracle Database | <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Oracle Database |
@@ -128,7 +133,7 @@ This comparison matrix describes the differences between the two Editions:
 <dependency>
     <groupId>com.aceql</groupId>
     <artifactId>aceql-http-client-jdbc-driver</artifactId>
-    <version>6.2</version>
+    <version>7.0</version>
 </dependency>
 ```
 ### Single Jar 
@@ -144,7 +149,7 @@ You may download the Professional Edition through either :
 1. [The Free 30-Trial Web Page](https://www.aceql.com/trial.html): the download link and the trial key license file will be sent by email.
 2. [The Online Shop](https://sowl.co/VxAsp): the download link and the product key license file will be sent by email.
 
-Extract from the archive the `aceql-http-client-jdbc-driver-pro-6.2.jar`  jar file and add it to your CLASSPATH.
+Extract from the archive the `aceql-http-client-jdbc-driver-pro-7.0.jar`  jar file and add it to your CLASSPATH.
 
 ### Defining the path to the Aceql license key file
 
@@ -187,7 +192,7 @@ Large content (ResultSet, …) is transferred using files. It is never loaded in
 
 Every HTTP exchange between the client and server side is time-consuming, because the HTTP call is synchronous and waits for the server's response
 
-Try to avoid coding JDBC calls inside loops, as this can reduce execution speed. Each JDBC call will send an HTTP request and wait for the response from the server.
+Try to avoid coding JDBC calls inside loops, as this can reduce execution speed. Each JDBC call will send an HTTP request and wait for the response from the server. Always use  batch commands (`Statement.executeBatch()`,...)   when you have many rows to INSERT or UPDATE.
 
 Note that AceQL is optimized as much as possible:
 
@@ -198,12 +203,13 @@ Note that AceQL is optimized as much as possible:
   - The rows are all dumped at once on the servlet output stream by the server.
   - The client side gets the `ResultSet` content as a file.
   - All `ResultSet` navigation commands are executed locally on the client side by navigating through the file:  `next()`, `prev(`), `first()`, `last()`, etc. 
+- **It is highly recommended to always use  batch commands  when you have many rows to INSERT or UPDATE.**
 
 # Using the AceQL Client JDBC Driver
 
 We will use the same `sampledb` database for all our code samples. 
 
-The schema is available here: [sampledb.txt](http://www.aceql.com/rest/soft_java_client/6.2/src/sampledb.txt). 
+The schema is available here: [sampledb.txt](http://www.aceql.com/rest/soft_java_client/7/0/src/sampledb.txt). 
 
 ## Connection creation
 
@@ -302,7 +308,7 @@ Sample code:
 
 ## Handling Exceptions
 
-Except for `NullPointerException`, exceptions thrown are always an instance of [AceQLException.](https://www.aceql.com/rest/soft_java_client/6.2/javadoc/com/aceql/jdbc/commons/AceQLConnection.html)
+Except for `NullPointerException`, exceptions thrown are always an instance of [AceQLException.](https://www.aceql.com/rest/soft_java_client/7/0/javadoc/com/aceql/jdbc/commons/AceQLConnection.html)
 
 The `AceQLException` contains 5 pieces of information :
 
@@ -386,6 +392,19 @@ The following Connections modifiers calls are supported in this version for all 
 
 - `Connection.setReadOnly(boolean readOnly)`
 
+## Batch management
+
+[Statement.executeBatch()](https://docs.oracle.com/javase/8/docs/api/java/sql/Statement.html#executeBatch--)  is supported on both Editions.  `Statement` and `PreparedStatement` implementations are both supported.
+
+Batch commands processing is optimized in order to run as fast as possible and consume fewer possible resources:
+
+- All batch commands & parameters are send using only one upload at the start of the `Statement.executeBatch()`  processing. 
+- The upload of the batch commands & parameters  is done using streaming techniques on the client-side. The incoming reading is also done in streaming on the server side.
+- Transactions are supported, so as usual, it's much faster to run in autocommit off.
+
+**It is highly recommended to always use  batch commands  when you have many rows to INSERT or UPDATE.**
+
+Note that batch commands are supported with AceQL HTTP Server version 8.0 or higher on server side.
 
 ## BLOB management
 
@@ -540,8 +559,8 @@ The atomic variables values will be shared by AceQL download/upload processes an
 
 The values are to be initialized and passed to `AceQLConnection` before the JDBC actions with the static setters:
 
-- [AceQLConnection.setProgress(AtomicInteger progress)](https://www.aceql.com/rest/soft_java_client/6.2/javadoc/com/aceql/jdbc/commons/AceQLConnection.html#setProgress(java.util.concurrent.atomic.AtomicInteger))
-- [AceQLConnection.setCancelled(AtomicBoolean cancelled)](https://www.aceql.com/rest/soft_java_client/6.2/javadoc/com/aceql/jdbc/commons/AceQLConnection.html#setCancelled(java.util.concurrent.atomic.AtomicBoolean))
+- [AceQLConnection.setProgress(AtomicInteger progress)](https://www.aceql.com/rest/soft_java_client/7/0/javadoc/com/aceql/jdbc/commons/AceQLConnection.html#setProgress(java.util.concurrent.atomic.AtomicInteger))
+- [AceQLConnection.setCancelled(AtomicBoolean cancelled)](https://www.aceql.com/rest/soft_java_client/7/0/javadoc/com/aceql/jdbc/commons/AceQLConnection.html#setCancelled(java.util.concurrent.atomic.AtomicBoolean))
 
 
 Values will then be updated and read:
@@ -664,7 +683,7 @@ Assuming hat you want to display a progress indicator using `SwingWorker`, you w
 	}
 ```
 
-A complete example is available in [SqlProgressMonitorDemo.java](http://www.aceql.com/rest/soft_java_client/6.2/src/SqlProgressMonitorDemo.java) and [BlobExample.java](https://www.aceql.com/rest/soft_java_client/6.2/src/BlobExample.java) 
+A complete example is available in [SqlProgressMonitorDemo.java](http://www.aceql.com/rest/soft_java_client/7/0/src/SqlProgressMonitorDemo.java) and [BlobExample.java](https://www.aceql.com/rest/soft_java_client/7/0/src/BlobExample.java) 
 
 ## HTTP session options 
 
@@ -696,18 +715,18 @@ First step is to get an instance of `RemoteDatabaseMetaData`:
 
 ### Downloading database schema into a file
 
-Downloading a schema into a Java `File` is done through the method. See the `RemoteDatabaseMetaData` [javadoc](https://www.aceql.com/rest/soft_java_client/6.2/javadoc/com/aceql/jdbc/commons/main/metadata/RemoteDatabaseMetaData.html).
+Downloading a schema into a Java `File` is done through the method. See the `RemoteDatabaseMetaData` [javadoc](https://www.aceql.com/rest/soft_java_client/7/0/javadoc/com/aceql/jdbc/commons/main/metadata/RemoteDatabaseMetaData.html).
 
 ```java
     File file = new File("db_schema.out.html");
     remoteDatabaseMetaData.dbSchemaDownload(file);
 ```
 
-See an example of the built HTML schema:  [db_schema.out.html](https://www.aceql.com/rest/soft_java_client/6.2/src/db_schema.out.html)
+See an example of the built HTML schema:  [db_schema.out.html](https://www.aceql.com/rest/soft_java_client/7/0/src/db_schema.out.html)
 
 ### Accessing remote database main properties
 
-The [JdbcDatabaseMetaData](https://www.aceql.com/rest/soft_java_client/6.2/javadoc/com/aceql/jdbc/commons/main/metadata/JdbcDatabaseMetaData.html) class wraps instance the main value retrieved by a remote JDBC call to `Connection.getMetaData`(): 
+The [JdbcDatabaseMetaData](https://www.aceql.com/rest/soft_java_client/7/0/javadoc/com/aceql/jdbc/commons/main/metadata/JdbcDatabaseMetaData.html) class wraps instance the main value retrieved by a remote JDBC call to `Connection.getMetaData`(): 
 
 ```java
     JdbcDatabaseMetaData jdbcDatabaseMetaData = remoteDatabaseMetaData.getJdbcDatabaseMetaData();
@@ -718,7 +737,7 @@ The [JdbcDatabaseMetaData](https://www.aceql.com/rest/soft_java_client/6.2/javad
 
 ### Getting Details of Tables and Columns
 
-See the [javadoc](https://www.aceql.com/rest/soft_java_client/6.2/javadoc/com/aceql/jdbc/commons/main/metadata/package-summary.html) of the `com.aceql.jdbc.commons.main.metadata` package: 
+See the [javadoc](https://www.aceql.com/rest/soft_java_client/7/0/javadoc/com/aceql/jdbc/commons/main/metadata/package-summary.html) of the `com.aceql.jdbc.commons.main.metadata` package: 
 
 ```java
     System.out.println("Get the table names:");
@@ -866,7 +885,6 @@ See also the Headers Authentication sub-section in the [aceql-server.properties]
 
 The following JDBC features are not supported nor implemented in this version Community  Edition nor in the Professional Edition. They will be added in future versions: 
 
-- Batch methods are not supported.
 - `CLOB` are not supported.
 
 
