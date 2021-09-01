@@ -25,8 +25,8 @@ What's new:
 - Batch commands (Statement.executeBatch(), ...)  are
   now supported both with Statement and PreparedStatement. 
   In order to support large batches, batch data are streamed
-  when sent to the server. Transactions are also supported for the 
-  sake of batch best speed.
+  when sent to the server. Transactions are also supported when 
+  using batch commands for the sake of speed.
   
 
 
