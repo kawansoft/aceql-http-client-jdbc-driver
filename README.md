@@ -203,6 +203,9 @@ Note that AceQL is optimized as much as possible:
   - The rows are all dumped at once on the servlet output stream by the server.
   - The client side gets the `ResultSet` content as a file.
   - All `ResultSet` navigation commands are executed locally on the client side by navigating through the file:  `next()`, `prev(`), `first()`, `last()`, etc. 
+- **It is higly recommanded to always use  batch commands  when you have many rows to INSERT or UPDATE.**
+
+
 
 # Using the AceQL Client JDBC Driver
 
@@ -401,7 +404,7 @@ Batch commands processing is optimized in order to run as fast as possible and c
 - The upload of the batch commands & parameters  is done using streaming techniques on the client-side. The incoming reading is also done in streaming on the server side.
 - Transactions are supported, so as usual, it's much faster to run in autocommit off.
 
-It is higly recommanded to Always use  batch commands  when you have many rows to INSERT or UPDATE.
+**It is higly recommanded to always use  batch commands  when you have many rows to INSERT or UPDATE.**
 
 Note that batch commands are supported with AceQL HTTP version 8.0 or higher on server side.
 
