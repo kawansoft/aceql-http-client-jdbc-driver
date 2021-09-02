@@ -309,7 +309,7 @@ public class AceQLBlob implements Blob {
     File getFile() {
 	try {
 	    outputStream.close();
-	} catch (IOException e) {
+	} catch (Exception e) {
 	    System.err.println(
 		    Tag.PRODUCT + " Warning: error when closing Blob OutputStream: " + e.getLocalizedMessage());
 	}
