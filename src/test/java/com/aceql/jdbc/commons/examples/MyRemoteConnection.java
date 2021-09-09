@@ -168,20 +168,17 @@ public class MyRemoteConnection {
     public void selectCustomerAndOrderLog(int customerId, int itemId) throws SQLException {
 
 	// Display the created Customer:
-	String sql = "SELECT CUSTOMER_ID, FNAME, LNAME FROM CUSTOMER " + " WHERE CUSTOMER_ID = ?";
+	
+	String sql = "SELECT CUSTOMER_ID, FNAME, LNAME FROM CUSTOMER WHERE CUSTOMER_ID = ?";
 	PreparedStatement prepStatement = connection.prepareStatement(sql);
 	prepStatement.setInt(1, customerId);
 
 	ResultSet rs = prepStatement.executeQuery();
 	while (rs.next()) {
-	    int customerId2 = rs.getInt("customer_id");
-	    String fname = rs.getString("fname");
-	    String lname = rs.getString("lname");
-
 	    System.out.println();
-	    System.out.println("customer_id: " + customerId2);
-	    System.out.println("fname      : " + fname);
-	    System.out.println("lname      : " + lname);
+	    System.out.println("customer_id: " + rs.getInt("customer_id"));
+	    System.out.println("fname      : " + rs.getString("fname"));
+	    System.out.println("lname      : " + rs.getString("lname"));
 	}
 
 	prepStatement.close();
