@@ -67,7 +67,7 @@
 
 This document describes how to use the AceQL Client JDBC Driver and gives some details about how it operates with the server side.
 
-The AceQL Client JDBC Driver allows users to wrap the [AceQL HTTP APIs](https://github.com/kawansoft/aceql-http/blob/master/aceql-http-6.4-user-guide-api.md) and eliminate the tedious work of handling communication errors and parsing JSON results.
+The AceQL Client JDBC Driver allows users to wrap the [AceQL HTTP APIs](https://github.com/kawansoft/aceql-http/blob/master/aceql-http-user-guide-api.md) and eliminate the tedious work of handling communication errors and parsing JSON results.
 
 Android and Java Desktop application developers can access remote SQL databases and/or SQL databases in the cloud, simply by including standard JDBC calls in their code, just like they would for a local database.
 
@@ -849,7 +849,7 @@ If your application never calls `ResultSet.getMetaData()`, it's better to disall
 
 Some working environments (Intranet, etc.) require that the client user authenticates himself *without* a password. Thus, it is not possible for this users to authenticate though the AceQL Client JDBC Driver.
 
-In this case, you may use directly the native HTTP [login](https://github.com/kawansoft/aceql-http/blob/master/aceql-http-6.4-user-guide-api.md#login) API to authenticate the users and retrieve the `session_id` returned by the API.
+In this case, you may use directly the native HTTP [login](https://github.com/kawansoft/aceql-http/blob/master/aceql-http-user-guide-api.md#login) API to authenticate the users and retrieve the `session_id` returned by the API.
 
 The `session_id` value will be passed to the dedicated `sessionId` property:
 
