@@ -11,7 +11,7 @@
 
 ## September 1, 2021
 
-<img src="https://www.aceql.com/img/AceQL-Schema-min.jpg" alt="AceQL Draw"/>
+<img src="https://download.aceql.com/img/AceQL-Schema-min.jpg" alt="AceQL Draw"/>
 
   * [Fundamentals](#fundamentals)
       * [Technical operating environment](#technical-operating-environment)
@@ -105,25 +105,25 @@ This comparison matrix describes the differences between the two Editions:
 
 | Professional Edition<br>&nbsp;                               | Free - Community Edition<br>&nbsp;                           |
 | :----------------------------------------------------------- | :----------------------------------------------------------- |
-| <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Works as a real [JDBC Driver](https://docs.oracle.com/javase/tutorial/jdbc/basics/connecting.html) <br/>Plug & play without source code edition | <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Works as a  real [JDBC Driver](https://docs.oracle.com/javase/tutorial/jdbc/basics/connecting.html) <br/>Plug & play without source code edition |
-| <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>Commercial License per developer and per year.<br/>**Unlimited deployment without runtime fees.** | <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>Apache 2.0 License.<br/>Unlimited deployment without any constraints. |
-| <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Main SQL types<br/>`Boolean`, `Integer`, `Short`, `Double`, `Float`, `BigDecimal`, `Long`, `String`, `Date`, `Time`, `Timestamp` | <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Main SQL types<br/>`Boolean`, `Integer`, `Short`, `Double`, `Float`, `BigDecimal`, `Long`, `String`, `Date`, `Time`, `Timestamp` |
-| <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Connection  through HTTP Proxy | <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Connection  through HTTP Proxy |
-| <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;SQL Transactions<br/>`Connection.commit()`, `Connection.rollback()`, `Connection.setAutocomit(boolean autoCommit)`.<br/>[Savepoints](https://docs.oracle.com/javase/tutorial/jdbc/basics/transactions.html#set_roll_back_savepoints) are also fully supported: | <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;SQL Transactions<br/>`Connection.commit()`, `Connection.rollback()`, `Connection.setAutocomit()`.<br/>[Savepoints](https://docs.oracle.com/javase/tutorial/jdbc/basics/transactions.html#set_roll_back_savepoints) are also fully supported. |
-| <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>Batch methods for `Statement` <br>and `PreparedStatement` | <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>Batch methods for `Statement` <br>and `PreparedStatement` |
-| <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Open Source Databases<br/>MySQL, PostgreSQL, MariaDB | <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Open Source Databases<br/>MySQL, PostgreSQL, MariaDB |
-| <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;MS SQL Server | <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;MS SQL Server |
-| <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Oracle Database | <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Oracle Database |
-| <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Community  Support | <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Community  Support |
-| <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;[BLOB](https://docs.oracle.com/javase/tutorial/jdbc/basics/blob.html) Type - Size up to 4GB | BLOB type - *Size limited to 16MB*                           |
-| <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;IBM DB2 Database | <img src="https://www.aceql.com/images/delete_20.png" alt="check!"/> |
-| <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;[Array](https://docs.oracle.com/en/java/javase/11/docs/api/java.sql/java/sql/Array.html) Type | <img src="https://www.aceql.com/images/delete_20.png" alt="check!"/> |
-| <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;[Stored Procedures](https://docs.oracle.com/javase/tutorial/jdbc/basics/storedprocedures.html) | <img src="https://www.aceql.com/images/delete_20.png" alt="check!"/> |
-| <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;JDBC API Metadata<br/>`Connection.getMetadata()`, `ResultSet.getMetaData()` | <img src="https://www.aceql.com/images/delete_20.png" alt="check!"/> |
-| <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;JDBC Clients Tools & GUI <br/>[DBeaver](https://dbeaver.io/), [DbVisualizer](https://www.dbvis.com/), [JetBrains DataGrip](https://www.jetbrains.com/datagrip/), [RazorSQL](https://razorsql.com/), [SQuirreL SQL](http://squirrel-sql.sourceforge.net/) | <img src="https://www.aceql.com/images/delete_20.png" alt="check!"/> |
-| <img src="https://www.aceql.com/images/check_20.png" alt="check!"/> [Allows outer authentication without a password](#using-outer-authentication-without-a-password-and-with-an-aceql-session-id-professional-edition) | <img src="https://www.aceql.com/images/delete_20.png" alt="check!"/> |
-| <img src="https://www.aceql.com/images/check_20.png" alt="check!"/> [Allows passing request headers for validation on server](#passing-request-headers-for-validation-on-server-side-professional-edition) | <img src="https://www.aceql.com/images/delete_20.png" alt="check!"/> |
-| <img src="https://www.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Enterprise Support (Slack & Email)<br/>4H Guaranteed Response Time | <img src="https://www.aceql.com/images/delete_20.png" alt="check!"/> |
+| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Works as a real [JDBC Driver](https://docs.oracle.com/javase/tutorial/jdbc/basics/connecting.html) <br/>Plug & play without source code edition | <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Works as a  real [JDBC Driver](https://docs.oracle.com/javase/tutorial/jdbc/basics/connecting.html) <br/>Plug & play without source code edition |
+| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>Commercial License per developer and per year.<br/>**Unlimited deployment without runtime fees.** | <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>Apache 2.0 License.<br/>Unlimited deployment without any constraints. |
+| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Main SQL types<br/>`Boolean`, `Integer`, `Short`, `Double`, `Float`, `BigDecimal`, `Long`, `String`, `Date`, `Time`, `Timestamp` | <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Main SQL types<br/>`Boolean`, `Integer`, `Short`, `Double`, `Float`, `BigDecimal`, `Long`, `String`, `Date`, `Time`, `Timestamp` |
+| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Connection  through HTTP Proxy | <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Connection  through HTTP Proxy |
+| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;SQL Transactions<br/>`Connection.commit()`, `Connection.rollback()`, `Connection.setAutocomit(boolean autoCommit)`.<br/>[Savepoints](https://docs.oracle.com/javase/tutorial/jdbc/basics/transactions.html#set_roll_back_savepoints) are also fully supported: | <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;SQL Transactions<br/>`Connection.commit()`, `Connection.rollback()`, `Connection.setAutocomit()`.<br/>[Savepoints](https://docs.oracle.com/javase/tutorial/jdbc/basics/transactions.html#set_roll_back_savepoints) are also fully supported. |
+| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>Batch methods for `Statement` <br>and `PreparedStatement` | <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>Batch methods for `Statement` <br>and `PreparedStatement` |
+| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Open Source Databases<br/>MySQL, PostgreSQL, MariaDB | <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Open Source Databases<br/>MySQL, PostgreSQL, MariaDB |
+| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;MS SQL Server | <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;MS SQL Server |
+| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Oracle Database | <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Oracle Database |
+| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Community  Support | <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Community  Support |
+| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;[BLOB](https://docs.oracle.com/javase/tutorial/jdbc/basics/blob.html) Type - Size up to 4GB | BLOB type - *Size limited to 16MB*                           |
+| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;IBM DB2 Database | <img src="https://download.aceql.com/images/delete_20.png" alt="check!"/> |
+| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;[Array](https://docs.oracle.com/en/java/javase/11/docs/api/java.sql/java/sql/Array.html) Type | <img src="https://download.aceql.com/images/delete_20.png" alt="check!"/> |
+| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;[Stored Procedures](https://docs.oracle.com/javase/tutorial/jdbc/basics/storedprocedures.html) | <img src="https://download.aceql.com/images/delete_20.png" alt="check!"/> |
+| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;JDBC API Metadata<br/>`Connection.getMetadata()`, `ResultSet.getMetaData()` | <img src="https://download.aceql.com/images/delete_20.png" alt="check!"/> |
+| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;JDBC Clients Tools & GUI <br/>[DBeaver](https://dbeaver.io/), [DbVisualizer](https://www.dbvis.com/), [JetBrains DataGrip](https://www.jetbrains.com/datagrip/), [RazorSQL](https://razorsql.com/), [SQuirreL SQL](http://squirrel-sql.sourceforge.net/) | <img src="https://download.aceql.com/images/delete_20.png" alt="check!"/> |
+| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/> [Allows outer authentication without a password](#using-outer-authentication-without-a-password-and-with-an-aceql-session-id-professional-edition) | <img src="https://download.aceql.com/images/delete_20.png" alt="check!"/> |
+| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/> [Allows passing request headers for validation on server](#passing-request-headers-for-validation-on-server-side-professional-edition) | <img src="https://download.aceql.com/images/delete_20.png" alt="check!"/> |
+| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Enterprise Support (Slack & Email)<br/>4H Guaranteed Response Time | <img src="https://download.aceql.com/images/delete_20.png" alt="check!"/> |
 
 ## Community Edition Installation
 
@@ -827,11 +827,11 @@ The following JDBC Database viewers are supported :
 
 These snapshots show usage of a remote AceQL Connection in DbVisualizer:
 
-<img src="https://www.aceql.com/img/dbvisualiser_meta_2.png" alt="DbVisualizer MetaData"/>
+<img src="https://download.aceql.com/img/dbvisualiser_meta_2.png" alt="DbVisualizer MetaData"/>
 
 
 
-<img src="https://www.aceql.com/img/dbvisualiser_select.png" alt="DbVisualizer MetaData"/>
+<img src="https://download.aceql.com/img/dbvisualiser_select.png" alt="DbVisualizer MetaData"/>
 
 ### Disabling JDBC MetaData calls when not required
 
