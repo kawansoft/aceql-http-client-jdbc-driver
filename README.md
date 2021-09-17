@@ -11,7 +11,7 @@
 
 ## September 1, 2021
 
-<img src="https://download.aceql.com/img/AceQL-Schema-min.jpg" alt="AceQL Draw"/>
+<img src="https://docs.aceql.com/img/AceQL-Schema-min.jpg" alt="AceQL Draw"/>
 
   * [Fundamentals](#fundamentals)
       * [Technical operating environment](#technical-operating-environment)
