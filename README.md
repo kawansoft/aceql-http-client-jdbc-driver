@@ -825,13 +825,13 @@ The following JDBC Database viewers are supported :
 
 [DBeaver](https://dbeaver.io/), [DbVisualizer](https://www.dbvis.com/), [JetBrains DataGrip](https://www.jetbrains.com/datagrip/), [RazorSQL](https://razorsql.com/), [SQuirreL SQL](http://squirrel-sql.sourceforge.net/)
 
-These snapshots show usage of a remote AceQL Connection in DbVisualizer:
+These snapshots show usage of a remote AceQL Connection in DBeaver:
 
-<img src="https://download.aceql.com/img/dbvisualiser_meta_2.png" alt="DbVisualizer MetaData"/>
+<img src="https://download.aceql.com/img/dbeaver_metadata.png" alt="DBeaver MetaData"/>
 
 
 
-<img src="https://download.aceql.com/img/dbvisualiser_select.png" alt="DbVisualizer MetaData"/>
+<img src="https://download.aceql.com/img/dbeaver_select.png" alt="DbVisualizer MetaData"/>
 
 ### Disabling JDBC MetaData calls when not required
 
