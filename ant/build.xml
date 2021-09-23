@@ -2,7 +2,7 @@
 
 <project name="Buildfile for common LGPL and Commercial aceql-http-client-jdbc-driver-${version}.jar" default="all" basedir=".">
 
-    <property name="version"                        value="7.0"/>
+    <property name="version"                        value="7.1"/>
 	<property name="aceql-http-client-jdbc-driver"  value="aceql-http-client-jdbc-driver-${version}.jar"/>
 	
 	<property name="java.sql.Driver"            	value="../ant/java.sql.Driver"/>   

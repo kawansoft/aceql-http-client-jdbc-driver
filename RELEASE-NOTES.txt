@@ -18,6 +18,18 @@ The AceQL Client JDBC Driver is licensed under the Apache 2.0
 License.
 
 
+AceQL Client JDBC Driver - Version 7.1 - 23-Sep-2021
+----------------------------------------------------
+
+Bugs fixed:
+- Java Session variables were not cleaned/reset correctly 
+  after a call to Connection.close(). This could require
+  to restart the client JVM in order to create a new 
+  session with the AceQL Server. This has been fixed. 
+  It is thus  highly recommended to upgrade your client apps
+  with this new 7.1 version.
+
+
 AceQL Client JDBC Driver - Version 7.0 - 01-Sep-2021
 ----------------------------------------------------
 

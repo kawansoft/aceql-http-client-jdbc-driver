@@ -94,4 +94,11 @@ public class UserLoginStore {
 	return serverUrl + "/" + username + "/" + database;
     }
 
+    /**
+     * Clean all loggedUsers static Map.
+     */
+    public static void resetAll() {
+	loggedUsers = new HashMap<>();
+    }
+
 }

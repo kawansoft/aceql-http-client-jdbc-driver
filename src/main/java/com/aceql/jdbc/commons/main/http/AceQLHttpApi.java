@@ -403,6 +403,8 @@ public class AceQLHttpApi {
      * {@code Connection} with {@code Connection.close()}.
      */
     public void close() throws AceQLException {
+	UserLoginStore loginStore = new UserLoginStore(serverUrl, username, database);
+	loginStore.remove();
 	callApiNoResult("close", null);
     }
 
@@ -413,8 +415,7 @@ public class AceQLHttpApi {
      * @throws AceQLException if any Exception occurs
      */
     public void logout() throws AceQLException {
-	UserLoginStore loginStore = new UserLoginStore(serverUrl, username, database);
-	loginStore.remove();
+	UserLoginStore.resetAll();
 	callApiNoResult("logout", null);
     }
 

@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.aceql</groupId>
   <artifactId>aceql-http-client-jdbc-driver</artifactId>
-  <version>7.0</version>
+  <version>7.1</version>
   <dependencies>
       <dependency>
       <groupId>junit</groupId>
