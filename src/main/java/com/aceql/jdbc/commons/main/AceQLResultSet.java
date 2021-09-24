@@ -474,7 +474,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	} else {
 	    // Keep for now: blob = new AceQLBlob(getInputStream(value),
 	    // EditionType.Professional);
-	    blob = InternalWrapper.blobBuilder(getByteArray(value), EditionType.Community);
+	    blob = InternalWrapper.blobBuilder(getInputStream(value), EditionType.Professional);
 	}
 
 	return blob;

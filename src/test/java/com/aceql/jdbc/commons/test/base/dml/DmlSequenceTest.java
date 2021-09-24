@@ -21,6 +21,7 @@ package com.aceql.jdbc.commons.test.base.dml;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintStream;
 import java.math.BigDecimal;
 import java.nio.file.Files;
@@ -36,6 +37,7 @@ import java.sql.Timestamp;
 
 import org.junit.Assert;
 
+import com.aceql.jdbc.commons.main.util.EditionUtil;
 import com.aceql.jdbc.commons.test.base.dml.blob.BlobTestUtil;
 import com.aceql.jdbc.commons.test.connection.ConnectionBuilder;
 import com.aceql.jdbc.commons.test.connection.ConnectionParms;
@@ -133,8 +135,16 @@ public class DmlSequenceTest {
 
 	// Blob in this example
 	Blob blob = connection.createBlob();
-	byte[] bytes = Files.readAllBytes(orderlogRow.getJpegImage().toPath());
-	blob.setBytes(1, bytes);
+	
+	if (EditionUtil.isCommunityEdition(connection)) {
+	    byte[] bytes = Files.readAllBytes(orderlogRow.getJpegImage().toPath());
+	    blob.setBytes(1, bytes);  
+	}
+	else {
+	    OutputStream out = blob.setBinaryStream(1);
+	    Files.copy(orderlogRow.getJpegImage().toPath(), out);
+	}
+
 	preparedStatement.setBlob(i++, blob);
 
 	int isDelivered = orderlogRow.isDelivered() ? 1 : 0;
