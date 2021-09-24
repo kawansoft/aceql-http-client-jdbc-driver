@@ -623,6 +623,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	if (value == null || value.equals("NULL")) {
 	    return null;
 	}
+	value = getClobContentIfClobId(value);
 	return value;
     }
 
@@ -639,6 +640,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	if (value == null || value.equals("NULL")) {
 	    return null;
 	}
+	value = getClobContentIfClobId(value);
 	return value;
     }
 

@@ -82,7 +82,7 @@ public class SqlMySqlClobSelectTest {
 	    out.println();
 	    out.println("productLine    : " + rs.getString(i++));
 	    out.println("textDescription: " + rs.getString(i++));
-	    out.println("htmlDescription: " + rs.getString(i++)  +":");
+	    out.println("htmlDescription: " + rs.getObject(i++)  +":");
 	}
 	
 	preparedStatement.close();
