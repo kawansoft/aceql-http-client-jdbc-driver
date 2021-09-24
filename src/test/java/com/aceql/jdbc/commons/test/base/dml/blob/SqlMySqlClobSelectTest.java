@@ -26,7 +26,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.aceql.jdbc.commons.main.util.ClobUtil;
+import com.aceql.jdbc.commons.main.util.BlobUtil;
 import com.aceql.jdbc.commons.main.util.HexUtil;
 import com.aceql.jdbc.commons.test.connection.AceQLDriverLoader;
 
@@ -52,7 +52,11 @@ public class SqlMySqlClobSelectTest {
 	System.out.println("isHex: " + hexTotest+ ": " + HexUtil.isHexadecimal(hexTotest));
 	
 	String clobId =  "6e91b35fe4d84420acc6e230607ebc37.clob.txt";
-	System.out.println("isClobId: " + hexTotest+ ": " + ClobUtil.isClobId(clobId));
+	System.out.println("isClobId: " + hexTotest+ ": " + BlobUtil.isClobId(clobId));
+	
+	String blobId =  "2240582caba14943bd2e2c08bade45ec.blob";
+	System.out.println("isBlobId: " + hexTotest+ ": " + BlobUtil.isBlobId(blobId));
+	
 	
 	String serverUrl = "http://localhost:9090/aceql";
 	String username = "user1";
@@ -83,6 +87,7 @@ public class SqlMySqlClobSelectTest {
 	    out.println("productLine    : " + rs.getString(i++));
 	    out.println("textDescription: " + rs.getString(i++));
 	    out.println("htmlDescription: " + rs.getObject(i++)  +":");
+	    out.println("image          : " + rs.getBytes(i++)  +":");
 	}
 	
 	preparedStatement.close();

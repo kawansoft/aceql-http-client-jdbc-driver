@@ -21,9 +21,10 @@ package com.aceql.jdbc.commons.main.util;
 
 import org.apache.commons.lang3.StringUtils;
 
-public class ClobUtil {
+public class BlobUtil {
 
-    private static final String CLOB_TXT = ".clob.txt";
+    private static final String DOT_CLOB_TXT = ".clob.txt";
+    private static final String DOT_BLOB = ".blob";
 
     /**
      * Says if a string in fact a ClobId aka in format 6e91b35fe4d84420acc6e230607ebc37.clob.txt
@@ -35,13 +36,25 @@ public class ClobUtil {
 	    return false;
 	}
 	
-	if (! clobId.endsWith(CLOB_TXT)) {
+	if (! clobId.endsWith(DOT_CLOB_TXT)) {
 	    return false;
 	}
 	
-	String hexPart = StringUtils.substringBefore(clobId, CLOB_TXT);
+	String hexPart = StringUtils.substringBefore(clobId, DOT_CLOB_TXT);
 	return HexUtil.isHexadecimal(hexPart);
+    }
 
+    public static boolean isBlobId(String blobId) {
+	if (blobId == null) {
+	    return false;
+	}
+	
+	if (! blobId.endsWith(DOT_BLOB)) {
+	    return false;
+	}
+	
+	String hexPart = StringUtils.substringBefore(blobId, DOT_BLOB);
+	return HexUtil.isHexadecimal(hexPart);
     }
 
 }
