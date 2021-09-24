@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.sql.Array;
 import java.sql.Blob;
@@ -42,6 +43,7 @@ import org.apache.commons.io.FileUtils;
 
 import com.aceql.jdbc.commons.AceQLBlob;
 import com.aceql.jdbc.commons.AceQLConnection;
+import com.aceql.jdbc.commons.ConnectionInfo;
 import com.aceql.jdbc.commons.EditionType;
 import com.aceql.jdbc.commons.InternalWrapper;
 import com.aceql.jdbc.commons.main.abstracts.AbstractResultSet;
@@ -563,30 +565,45 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
      * return the content of corresponding downloaded file 
      * @param value the value to analyze as  
      * @return the value itself, or the content of the Clob if value is ClobId format
-     * @throws SQLException 
+     * @throws SQLException if Driver property 
      */
-    public String getClobContentIfClobId(String value) {
+    public String getClobContentIfClobId(String value) throws SQLException {
 	if (ClobUtil.isClobId(value)) {
 	    byte[] bytes;
 	    try {
 		bytes = getByteArray(value);
 	    } catch (SQLException e) {
-		// Better to trap errors than fail in tool? 
+		// Better to trap errors than fail in tool? Think about it for next version... 
 		e.printStackTrace();
 		return value;
 	    }
 	    
-	    // Security test. Should not happen
+	    // Security check. Should not happen
 	    if (bytes == null) {
-		return value;
+		return null;
 	    }
 	    
-	    String s = new String(bytes);
-	    s = s.trim();
-	    if (s.equals("NULL_STREAM")) {
-		s = null;
+	    ConnectionInfo connectionInfo = this.aceQLConnection.getConnectionInfo();
+	    String clobContent = null;
+	    if (connectionInfo.getClobCharset() == null) {
+		clobContent = new String(bytes);
 	    }
-	    return s;
+	    else {
+		try {
+		    clobContent = new String(bytes, connectionInfo.getClobCharset() );
+		} catch (UnsupportedEncodingException e) {
+		    throw new SQLException("Invalid Driver property clobCharset value: " + connectionInfo.getClobCharset());
+		}	
+	    }
+	    
+	    if (clobContent != null) { // Security check
+		clobContent = clobContent.trim();
+		if (clobContent.equals("NULL_STREAM")) {
+		    clobContent = null;
+		}
+	    }
+
+	    return clobContent;
 	}
 	else {
 	    return value;

@@ -64,6 +64,7 @@ public class ConnectionInfo {
     private EditionType editionType = EditionType.Community;
     private ResultSetMetaDataPolicy resultSetMetaDataPolicy = ResultSetMetaDataPolicy.off;
     private Map<String, String> requestProperties = new HashMap<>();
+    private String clobCharset;
 
     /**
      * Package protected constructor, Driver users can not instantiate the class.
@@ -79,11 +80,12 @@ public class ConnectionInfo {
      * @param editionType
      * @param resultSetMetaDataPolicy
      * @param requestProperties
+     * @param clobCharset
      */
     ConnectionInfo(String url, String database, PasswordAuthentication authentication,
 	    boolean passwordIsSessionId, Proxy proxy, PasswordAuthentication proxyAuthentication, int connectTimeout,
 	    int readTimeout, boolean gzipResult, EditionType editionType,
-	    ResultSetMetaDataPolicy resultSetMetaDataPolicy, Map<String, String> requestProperties) {
+	    ResultSetMetaDataPolicy resultSetMetaDataPolicy, Map<String, String> requestProperties, String clobCharset) {
 	this.url = url;
 	this.database = database;
 	this.authentication = authentication;
@@ -96,6 +98,7 @@ public class ConnectionInfo {
 	this.editionType = editionType;
 	this.resultSetMetaDataPolicy = resultSetMetaDataPolicy;
 	this.requestProperties = requestProperties;
+	this.clobCharset = clobCharset;
     }
 
     /**
@@ -222,6 +225,16 @@ public class ConnectionInfo {
     public Map<String, String> getRequestProperties() {
 	return requestProperties;
     }
+    
+    
+
+    /**
+     * Gets the charset name to use when reading a CLOB content with the {@code ResultSet#getString()} methods. Defaults to {@code null}.
+     * @return the charset name to use when reading a CLOB content with the {@code ResultSet#getString()} methods. Defaults to {@code null}.
+     */
+    public String getClobCharset() {
+        return clobCharset;
+    }
 
     @Override
     public String toString() {
@@ -233,7 +246,7 @@ public class ConnectionInfo {
 		+ ", passwordIsSessionId=" + passwordIsSessionId + ", proxy=" + proxy + ", proxyAuthentication="
 		+ proxyUsername + ", connectTimeout=" + connectTimeout + ", readTimeout=" + readTimeout
 		+ ", gzipResult=" + gzipResult + ", editionType=" + editionType + ", resultSetMetaDataPolicy="
-		+ resultSetMetaDataPolicy + ", requestProperties=" + requestProperties + "]";
+		+ resultSetMetaDataPolicy + ", requestProperties=" + requestProperties + ", clobCharset=" + clobCharset+ "]";
     }
 
    

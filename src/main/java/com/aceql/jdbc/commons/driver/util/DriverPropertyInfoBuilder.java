@@ -37,6 +37,7 @@ public class DriverPropertyInfoBuilder {
     public static final String READ_TIMEOUT = "Read timeout to a specified timeout, in milliseconds. A non-zero value specifies the timeout when reading from Input stream when a connection is established to a resource. If the timeout expires before there is dataavailable for read, a java.net.SocketTimeoutException israised. A timeout of zero is interpreted as an infinite timeout.";
     public static final String TIMEOUT_VALUE_IN_MILLISECONDS = "Timeout value, in milliseconds, to be used when opening a communications link to the remote server. If the timeout expires before the connection can be established, a java.net.SocketTimeoutExceptionis raised. A timeout of zero is interpreted as an infinite timeout.";
     public static final String GZIP_RESULT = "Boolean to say if the ResultSet is Gzipped before download. Defaults to true.";
+    private static final String CLOB_CHARSET = "Name of the charset  to use when reading a CLOB content with the ResultSet.getString() methods. Default sto null.";
 
     /**
      * Build a new DriverPropertyInfo with the passed property
@@ -124,6 +125,12 @@ public class DriverPropertyInfoBuilder {
 	driverPropertyInfo.value = "0";
 	driverPropertyInfo.required = false;
 	driverPropertyInfoList.add(driverPropertyInfo);
+	
+	driverPropertyInfo = getNewDriverPropertyInfo("clobCharset", info);
+	driverPropertyInfo.description = CLOB_CHARSET;
+	driverPropertyInfo.required = false;
+	driverPropertyInfoList.add(driverPropertyInfo);
+	
 
 	return driverPropertyInfoList;
     }

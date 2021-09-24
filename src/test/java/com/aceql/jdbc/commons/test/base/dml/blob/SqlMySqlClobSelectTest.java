@@ -59,7 +59,7 @@ public class SqlMySqlClobSelectTest {
 	char[] password = new String("password1").toCharArray();
 	String database = "classicmodels";
 	
-	Connection connection =  AceQLDriverLoader.getConnection(serverUrl, database, username, password);;
+	Connection connection =  AceQLDriverLoader.getConnection(serverUrl, database, username, password);
 	SqlMySqlClobSelectTest sqlMySqlClobSelectTest = new SqlMySqlClobSelectTest(connection, System.out);
 	sqlMySqlClobSelectTest.select();
 

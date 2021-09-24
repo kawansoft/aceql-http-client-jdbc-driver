@@ -60,6 +60,8 @@ public class AceQLDriverLoader {
 	info.put("user", user);
 	info.put("password", new String(password));
 	info.put("database", database);
+	
+	//info.put("clobCharset", "ISO-8859-1"); // Just for tests
 
 	// Open a connection
 	Connection connection = DriverManager.getConnection(url, info);
