@@ -36,7 +36,7 @@ import com.aceql.jdbc.commons.test.connection.AceQLDriverLoader;
  * @author Nicolas de Pomereu
  *
  */
-public class SqlMySqlClobSelectTest {
+public class SqlMySqlBlobSelectTest {
 
     public static boolean USE_BLOB_NATIVE_SYNTAX = true;
 
@@ -64,12 +64,12 @@ public class SqlMySqlClobSelectTest {
 	String database = "classicmodels";
 	
 	Connection connection =  AceQLDriverLoader.getConnection(serverUrl, database, username, password);
-	SqlMySqlClobSelectTest sqlMySqlClobSelectTest = new SqlMySqlClobSelectTest(connection, System.out);
-	sqlMySqlClobSelectTest.select();
+	SqlMySqlBlobSelectTest sqlMySqlBlobSelectTest = new SqlMySqlBlobSelectTest(connection, System.out);
+	sqlMySqlBlobSelectTest.select();
 
     }
     
-    public SqlMySqlClobSelectTest(Connection connection, PrintStream out) {
+    public SqlMySqlBlobSelectTest(Connection connection, PrintStream out) {
 	this.connection = connection;
 	this.out = out;
     }
