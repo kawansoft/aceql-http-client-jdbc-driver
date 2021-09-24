@@ -49,6 +49,7 @@ import com.aceql.jdbc.commons.main.http.AceQLHttpApi;
 import com.aceql.jdbc.commons.main.http.HttpManager;
 import com.aceql.jdbc.commons.main.util.AceQLConnectionUtil;
 import com.aceql.jdbc.commons.main.util.AceQLResultSetUtil;
+import com.aceql.jdbc.commons.main.util.ClobUtil;
 import com.aceql.jdbc.commons.main.util.EditionUtil;
 import com.aceql.jdbc.commons.main.util.SimpleClassCaller;
 import com.aceql.jdbc.commons.main.util.framework.FrameworkDebug;
@@ -294,7 +295,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	    return (InputStream) obj;
 	} catch (ClassNotFoundException e) {
 	    throw new UnsupportedOperationException(
-		    Tag.PRODUCT + " " + "ResultSet.getBinaryStream(int) or getBinaryStream(Sgring) call "
+		    Tag.PRODUCT + " " + "ResultSet.getBinaryStream(int) or getBinaryStream(String) call "
 			    + Tag.REQUIRES_ACEQL_JDBC_DRIVER_PROFESSIONAL_EDITION);
 	} catch (Exception e) {
 	    throw new SQLException(e);
@@ -551,9 +552,49 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	if (value == null || value.equals("NULL")) {
 	    return null;
 	}
+	
+	value = getClobContentIfClobId(value);
+	
 	return value;
     }
 
+    /**
+     * Is the string is a ClobId in format 6e91b35fe4d84420acc6e230607ebc37.clob.txt,
+     * return the content of corresponding downloaded file 
+     * @param value the value to analyze as  
+     * @return the value itself, or the content of the Clob if value is ClobId format
+     * @throws SQLException 
+     */
+    public String getClobContentIfClobId(String value) {
+	if (ClobUtil.isClobId(value)) {
+	    byte[] bytes;
+	    try {
+		bytes = getByteArray(value);
+	    } catch (SQLException e) {
+		// Better to trap errors than fail in tool? 
+		e.printStackTrace();
+		return value;
+	    }
+	    
+	    // Security test. Should not happen
+	    if (bytes == null) {
+		return value;
+	    }
+	    
+	    String s = new String(bytes);
+	    s = s.trim();
+	    if (s.equals("NULL_STREAM")) {
+		s = null;
+	    }
+	    return s;
+	}
+	else {
+	    return value;
+	}
+    }
+
+
+    
     /*
      * (non-Javadoc)
      * 
@@ -669,8 +710,12 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	if (value == null || value.equals("NULL")) {
 	    return null;
 	}
+	
+	value = getClobContentIfClobId(value);
+	
 	return value;
     }
+
 
     @Override
     public int getInt(int columnIndex) throws SQLException {
