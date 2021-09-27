@@ -48,7 +48,7 @@ import com.aceql.jdbc.commons.main.util.framework.Tag;
 
 public class AbstractConnection implements Connection {
 
-    public static final String FEATURE_NOT_SUPPORTED_IN_THIS_VERSION = Tag.METHOD_NOT_YET_IMPLEMENTED;
+    public static final String FEATURE_NOT_SUPPORTED_IN_THIS_VERSION = Tag.METHOD_NOT_YET_IMPLEMENTED_FOR_METHOD;
 
     /**
      * A constant indicating that transactions are not supported.

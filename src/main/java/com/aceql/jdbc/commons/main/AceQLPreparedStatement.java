@@ -752,7 +752,9 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
      */
     @Override
     public void setAsciiStream(int parameterIndex, InputStream x, int length) throws SQLException {
-	setBinaryStream(parameterIndex, x, length);
+	String methodName = new Object() {
+	}.getClass().getEnclosingMethod().getName();
+	throwExceptionIfCalled(methodName);
     }
 
     /*
@@ -815,9 +817,9 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
      */
     @Override
     public void setCharacterStream(int parameterIndex, Reader reader, int length) throws SQLException {
-	ConnectionInfo connectionInfo = aceQLConnection.getConnectionInfo();
-	InputStream in = new ReaderInputStream(reader, connectionInfo.getClobWriteCharset());
-	setBinaryStream(parameterIndex, in);
+	String methodName = new Object() {
+	}.getClass().getEnclosingMethod().getName();
+	throwExceptionIfCalled(methodName);
     }
 
     /*
@@ -827,9 +829,9 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
      */
     @Override
     public void setCharacterStream(int parameterIndex, Reader reader, long length) throws SQLException {
-	ConnectionInfo connectionInfo = aceQLConnection.getConnectionInfo();
-	InputStream in = new ReaderInputStream(reader, connectionInfo.getClobWriteCharset());
-	setBinaryStream(parameterIndex, in);
+	String methodName = new Object() {
+	}.getClass().getEnclosingMethod().getName();
+	throwExceptionIfCalled(methodName);
     }
 
     /*
@@ -1087,7 +1089,9 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
      */
     @Override
     public void setAsciiStream(int parameterIndex, InputStream x, long length) throws SQLException {
-	setBinaryStream(parameterIndex, x, length);
+	String methodName = new Object() {
+	}.getClass().getEnclosingMethod().getName();
+	throwExceptionIfCalled(methodName);
     }
 
     /*
