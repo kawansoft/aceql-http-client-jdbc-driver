@@ -504,7 +504,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
      */
     @Override
     public Blob getBlob(int i) throws SQLException {
-	String value = getString(i);
+	String value = getStringValue(i);
 
 	if (value == null || value.equals("NULL")) {
 	    return null;
@@ -520,7 +520,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
      */
     @Override
     public Blob getBlob(String colName) throws SQLException {
-	String value = getString(colName);
+	String value = getStringValue(colName);
 
 	if (value == null || value.equals("NULL")) {
 	    return null;
@@ -537,7 +537,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
      */
     @Override
     public InputStream getBinaryStream(int columnIndex) throws SQLException {
-	String value = getString(columnIndex);
+	String value = getStringValue(columnIndex);
 
 	if (value == null || value.equals("NULL")) {
 	    return null;
@@ -554,7 +554,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
      */
     @Override
     public InputStream getBinaryStream(String columnName) throws SQLException {
-	String value = getString(columnName);
+	String value = getStringValue(columnName);
 
 	if (value == null || value.equals("NULL")) {
 	    return null;
@@ -812,7 +812,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	} else {
 	    return value;
 	}
-
+	
     }
 
 
