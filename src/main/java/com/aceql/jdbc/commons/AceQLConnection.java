@@ -151,7 +151,7 @@ import com.aceql.jdbc.driver.free.AceQLDriver;
  * </pre>
  *
  * </blockquote> See the source code of <a href=
- * "https://docs.aceql.com/rest/soft_java_client/7.1/src/SqlProgressMonitorDemo.java"
+ * "https://docs.aceql.com/rest/soft_java_client/7.2/src/SqlProgressMonitorDemo.java"
  * >SqlProgressMonitorDemo.java</a> that demonstrates the use of atomic
  * variables when inserting a Blob. <br>
  * <br>
