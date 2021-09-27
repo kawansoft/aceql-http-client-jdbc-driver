@@ -35,7 +35,7 @@ import java.sql.SQLException;
 import com.aceql.jdbc.commons.main.util.EditionUtil;
 
 /**
- * Blob Test. Allows to insert a Blob, and read back the file.
+ * Blob TestMisc. Allows to insert a Blob, and read back the file.
  *
  * @author Nicolas de Pomereu
  *

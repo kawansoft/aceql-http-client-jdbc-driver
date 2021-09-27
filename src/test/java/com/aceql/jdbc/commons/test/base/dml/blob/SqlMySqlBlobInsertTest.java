@@ -21,6 +21,7 @@ package com.aceql.jdbc.commons.test.base.dml.blob;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
@@ -30,12 +31,14 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Date;
 
+import org.apache.commons.io.FileUtils;
+
 import com.aceql.jdbc.commons.main.util.EditionUtil;
 import com.aceql.jdbc.commons.test.connection.AceQLDriverLoader;
 import com.aceql.jdbc.commons.test.connection.ConnectionParms;
 
 /**
- * Blob Test with MySQL. Allows to insert a Blob with an Image.
+ * Blob TestMisc with MySQL. Allows to insert a Blob with an Image.
  *
  * @author Nicolas de Pomereu
  *
@@ -56,8 +59,10 @@ public class SqlMySqlBlobInsertTest {
 	SqlMySqlBlobInsertTest sqlMySqlBlobInsertTest = new SqlMySqlBlobInsertTest(connection, System.out);
 	sqlMySqlBlobInsertTest.deleteProductlines("Scooters");
 	
-	File fileUpload = new File(ConnectionParms.IN_DIRECTORY + File.separator + "username_koala.jpg");
-	sqlMySqlBlobInsertTest.blobUpload("Scooters", "Some Scooters", "Some Scooters in HTML", fileUpload);
+	File blobFile= new File(ConnectionParms.IN_DIRECTORY + File.separator + "username_koala.jpg");
+	File textFile = new File(ConnectionParms.IN_DIRECTORY + File.separator + "longtemps.txt");
+	
+	sqlMySqlBlobInsertTest.blobAndClob("Scooters", "Some Scooters", textFile, blobFile);
 	System.out.println(new Date() + " Done!");
     }
     
@@ -80,25 +85,35 @@ public class SqlMySqlBlobInsertTest {
 	return rows;
     }
 
-    public void blobUpload(String productLine, String textDescription, String htmlDescription, File file)
+    public void blobAndClob(String productLine, String textDescription, File textFile, File blobFile)
 	    throws SQLException, IOException {
 
 	// SELECT productLine, textDescription, htmlDescription, image FROM productlines
 	String sql = "insert into productlines values (?, ?, ?, ?)";
 	PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
-	int j = 1;
-	preparedStatement.setString(j++, productLine);
-	preparedStatement.setString(j++, textDescription);
-	preparedStatement.setString(j++, htmlDescription);
+	String htmlDescription = FileUtils.readFileToString(textFile, "UTF-8");
+	int i = 1;
+	preparedStatement.setString(i++, productLine);
+	preparedStatement.setString(i++, textDescription);
+	
+	boolean insertAsString = false;
+	
+	if (insertAsString) {
+	    preparedStatement.setString(i++, htmlDescription);
+	}
+	else {
+	    FileReader fileReader = new FileReader(textFile);
+	    preparedStatement.setCharacterStream(i++, fileReader);
+	}
 
 	if (EditionUtil.isProfessionalEdition(connection)) {
 	    out.println("BLOB UPLOAD USING DRIVER PRO!");
-	    InputStream in = new FileInputStream(file);
-	    preparedStatement.setBinaryStream(j++, in, file.length());
+	    InputStream in = new FileInputStream(blobFile);
+	    preparedStatement.setBinaryStream(i++, in, blobFile.length());
 	} else {
-	    byte[] bytes = Files.readAllBytes(file.toPath());
-	    preparedStatement.setBytes(j++, bytes);
+	    byte[] bytes = Files.readAllBytes(blobFile.toPath());
+	    preparedStatement.setBytes(i++, bytes);
 	}
 
 	preparedStatement.executeUpdate();

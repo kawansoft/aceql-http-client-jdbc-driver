@@ -193,7 +193,7 @@ public class AceQLBlob implements Blob {
 
     @Override
     public byte[] getBytes(long pos, int length) throws SQLException {
-	return getbytesStatic(pos, length, bytes);
+	return getBytesStatic(pos, length, bytes);
     }
 
     @Override
@@ -324,7 +324,7 @@ public class AceQLBlob implements Blob {
      * @param length
      * @return
      */
-    static byte[] getbytesStatic(long pos, int length, byte[] bytes) {
+    static byte[] getBytesStatic(long pos, int length, byte[] bytes) {
 	List<Byte> bytesList = new ArrayList<>();
 	for (int i = (int) pos - 1; i < length; i++) {
 	    bytesList.add(bytes[i]);

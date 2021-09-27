@@ -32,7 +32,7 @@ import com.aceql.jdbc.commons.test.base.schema.AceQLSchemaTest;
 import com.aceql.jdbc.commons.test.connection.ConnectionBuilder;
 
 /**
- * Test all SDK functions.
+ * TestMisc all SDK functions.
  * @author Nicolas de Pomereu
  *
  */

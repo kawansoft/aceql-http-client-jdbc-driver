@@ -19,7 +19,7 @@ import com.aceql.jdbc.commons.AceQLConnection;
  * <p>
  * Set the ResulSetMetaData Driver property to "on" or "off" to choose your
  * preferred behavior. Default value for a new {@link AceQLConnection} is
- * {@code EditionType.on}.
+ * {@code ResultSetMetaDataPolicy.on}.
  * <br>
  * <br>
  * Please note that this option is used only with AceQL JDBC Driver Professional Edition.

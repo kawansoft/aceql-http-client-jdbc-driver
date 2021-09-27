@@ -65,10 +65,10 @@ public class InternalWrapper {
 	    PasswordAuthentication authentication, boolean passwordIsSessionId, Proxy proxy,
 	    PasswordAuthentication proxyAuthentication, int connectTimeout, int readTimeout, boolean gzipResult,
 	    EditionType editionType, ResultSetMetaDataPolicy resultSetMetaDataPolicy,
-	    Map<String, String> requestProperties, String clobCharset) {
+	    Map<String, String> requestProperties, String clobReadCharset, String clobWriteCharset) {
 	ConnectionInfo connectionInfo = new ConnectionInfo(url, database, authentication, passwordIsSessionId, proxy,
 		proxyAuthentication, connectTimeout, readTimeout, gzipResult, editionType, resultSetMetaDataPolicy,
-		requestProperties, clobCharset);
+		requestProperties, clobReadCharset, clobWriteCharset);
 	return connectionInfo;
     }
 

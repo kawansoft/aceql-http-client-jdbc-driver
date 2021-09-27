@@ -610,14 +610,15 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	    ConnectionInfo connectionInfo = this.aceQLConnection.getConnectionInfo();
 	    String blobContent = null;
 
-	    if (connectionInfo.getClobCharset() == null) {
+	    String clobReadCharset = connectionInfo.getClobReadCharset();
+	    if (clobReadCharset == null) {
 		blobContent = new String(bytes);
 	    } else {
 		try {
-		    blobContent = new String(bytes, connectionInfo.getClobCharset());
+		    blobContent = new String(bytes, clobReadCharset);
 		} catch (UnsupportedEncodingException e) {
 		    throw new SQLException(
-			    "Invalid Driver property clobCharset value: " + connectionInfo.getClobCharset());
+			    "Invalid Driver property clobReadCharset value: " + clobReadCharset);
 		}
 	    }
 

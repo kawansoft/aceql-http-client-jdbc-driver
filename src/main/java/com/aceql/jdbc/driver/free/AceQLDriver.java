@@ -20,6 +20,7 @@ package com.aceql.jdbc.driver.free;
 
 import java.net.PasswordAuthentication;
 import java.net.Proxy;
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.DriverPropertyInfo;
 import java.sql.SQLException;
@@ -75,8 +76,8 @@ import com.aceql.jdbc.commons.main.util.framework.Tag;
  * timeout of zero is interpreted as an infinite timeout. Defaults to 0.
  * <li><b>gzipResult</b>: Boolean to say if the ResultSet is Gzipped before
  * download. Defaults to <code>true</code>.</li>
- * <li><b>clobCharset</b>: Name of the charset to use when
- * reading a CLOB content with the {@code ResultSet#getString()} methods. Defaults
+ * <li><b>clobReadCharset</b>: Name of the charset to use when
+ * reading a CLOB content with the {@code ResultSet} methods. Defaults
  * to {@code null}.</li>
  * </ul>
  * <p>
@@ -206,7 +207,7 @@ final public class AceQLDriver implements java.sql.Driver {
 	String proxyUsername = infoNew.getProperty("proxyUsername");
 	String proxyPassword = infoNew.getProperty("proxyPassword");
 	
-	String clobCharset = infoNew.getProperty("clobCharset");
+	String clobReadCharset = infoNew.getProperty("clobReadCharset");
 
 	boolean gzipResult = DriverUtil.getGzipResult(infoNew);
 	int connectTimeout = DriverUtil.getConnectTimeout(infoNew);
@@ -229,7 +230,7 @@ final public class AceQLDriver implements java.sql.Driver {
 
 	ConnectionInfo connectionInfo = InternalWrapper.connectionInfoBuilder(url, database, authentication,
 		passwordIsSessionId, proxy, proxyAuthentication, connectTimeout, readTimeout, gzipResult,
-		EditionType.Community, ResultSetMetaDataPolicy.off, requestProperties, clobCharset);
+		EditionType.Community, ResultSetMetaDataPolicy.off, requestProperties, clobReadCharset, StandardCharsets.UTF_8.name());
 
 	debug("infoNew       : " + infoNew);
 	debug("connectionInfo: " + connectionInfo);

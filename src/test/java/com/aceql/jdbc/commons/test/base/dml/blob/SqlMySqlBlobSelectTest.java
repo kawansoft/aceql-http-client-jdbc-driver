@@ -31,7 +31,7 @@ import com.aceql.jdbc.commons.main.util.HexUtil;
 import com.aceql.jdbc.commons.test.connection.AceQLDriverLoader;
 
 /**
- * Blob Test. Allows to insert a Blob, and read back the file.
+ * Blob TestMisc. Allows to insert a Blob, and read back the file.
  *
  * @author Nicolas de Pomereu
  *
@@ -86,12 +86,13 @@ public class SqlMySqlBlobSelectTest {
 	    out.println();
 	    out.println("productLine    : " + rs.getString(i++));
 	    out.println("textDescription: " + rs.getString(i++));
-	    out.println("htmlDescription: " + rs.getObject(i++)  +":");
+	    out.println("htmlDescription: " + rs.getString(i++)  +":");
 	    out.println("image          : " + rs.getBytes(i++)  +":");
 	}
 	
 	preparedStatement.close();
 	rs.close();
+	connection.close();
     }
 
 }
