@@ -22,9 +22,9 @@ AceQL Client JDBC Driver - Version 7.2 - 27-Sep-2021
 ----------------------------------------------------
 
 What's new:
-- ResultSet.getString() will now return automatically the content 
-  of the underlying CLOB.
-- The new clobCharEncoding Driver property allows to specify the 
+- ResultSet.getString() and ResultSet.getObject()  will now return
+  automatically the content of an underlying CLOB.
+- The new clobReadCharset Driver property allows to specify the 
   character encoding when reading a CLOB value with getString().
   
 Bugs fixed:
