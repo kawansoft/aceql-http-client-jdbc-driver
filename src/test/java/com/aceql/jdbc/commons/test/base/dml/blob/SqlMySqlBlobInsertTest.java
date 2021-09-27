@@ -52,7 +52,7 @@ public class SqlMySqlBlobInsertTest {
 	System.out.println(new Date() + " SqlMySqlBlobInsertTest Begin...");
 	String serverUrl = "http://localhost:9090/aceql";
 	String username = "user1";
-	char[] password = new String("password1").toCharArray();
+	char[] password = "password1".toCharArray();
 	String database = "classicmodels";
 	
 	Connection connection =  AceQLDriverLoader.getConnection(serverUrl, database, username, password);
