@@ -22,10 +22,17 @@ AceQL Client JDBC Driver - Version 7.2 - 28-Sep-2021
 ----------------------------------------------------
 
 What's new:
+- CLOB type is supported partially on both Free & Professional Editions.
 - ResultSet.getString() and ResultSet.getObject() methods will now 
   return automatically the content of an underlying CLOB.
+- The PreparedStatement.setCharacterStream() method allows
+  to create/upload a CLOB in streaming (Pro Edition only).
 - The new clobReadCharset Driver property allows to specify the 
   character encoding when reading a CLOB value with getString().
+- The new clobWriteCharset Driver property allows to specify the 
+  character encoding when writing a CLOB value with the 
+  PreparedStatement setters.  
+- Full CLOB support will be added in next version.
   
 Bugs fixed:
 - Internal AceQLResultSet.getInputStream() Exception message 
