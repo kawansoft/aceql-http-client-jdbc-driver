@@ -18,12 +18,12 @@ The AceQL Client JDBC Driver is licensed under the Apache 2.0
 License.
 
 
-AceQL Client JDBC Driver - Version 7.2 - 27-Sep-2021
+AceQL Client JDBC Driver - Version 7.2 - 28-Sep-2021
 ----------------------------------------------------
 
 What's new:
-- ResultSet.getString() and ResultSet.getObject()will now return
-  automatically the content of an underlying CLOB.
+- ResultSet.getString() and ResultSet.getObject() methods will now 
+  return automatically the content of an underlying CLOB.
 - The new clobReadCharset Driver property allows to specify the 
   character encoding when reading a CLOB value with getString().
   
