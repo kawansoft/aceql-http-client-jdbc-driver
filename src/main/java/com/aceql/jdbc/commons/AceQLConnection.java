@@ -98,7 +98,7 @@ import com.aceql.jdbc.driver.free.AceQLDriver;
  * calling {@link DriverManager#getConnection(String, Properties)}.</li>
  * <li>{@link #setProgress(AtomicInteger)}: Allows to pass a sharable progress
  * value. See below.</li>
- * <li> {@link #setCancelled(AtomicBoolean)}: Allows to pass a sharable canceled
+ * <li>{@link #setCancelled(AtomicBoolean)}: Allows to pass a sharable canceled
  * variable that will be used by the progress indicator to notify this instance
  * that the end user has cancelled the current Blob/Clob upload or download</li>
  * </ul>
@@ -151,7 +151,7 @@ import com.aceql.jdbc.driver.free.AceQLDriver;
  * </pre>
  *
  * </blockquote> See the source code of <a href=
- * "https://docs.aceql.com/rest/soft_java_client/7.1/src/SqlProgressMonitorDemo.java"
+ * "https://docs.aceql.com/rest/soft_java_client/7.2/src/SqlProgressMonitorDemo.java"
  * >SqlProgressMonitorDemo.java</a> that demonstrates the use of atomic
  * variables when inserting a Blob. <br>
  * <br>
@@ -323,7 +323,9 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     /*
      * (non-Javadoc)
      *
-     * @see com.aceql.jdbc.commons.main.abstracts.AbstractConnection#setSavepoint(String name)
+     * @see
+     * com.aceql.jdbc.commons.main.abstracts.AbstractConnection#setSavepoint(String
+     * name)
      */
     @Override
     public Savepoint setSavepoint(String name) throws SQLException {
@@ -341,7 +343,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     public void rollback(Savepoint savepoint) throws SQLException {
 	aceQLHttpApi.rollbback(savepoint);
     }
-    
+
     /*
      * (non-Javadoc)
      *
@@ -354,7 +356,6 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	aceQLHttpApi.releaseSavepoint(savepoint);
     }
 
-    
     /*
      * (non-Javadoc)
      *
@@ -397,8 +398,6 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	return aceQLHttpApi.getAutoCommit();
     }
 
-    
-    
     /*
      * (non-Javadoc)
      *
@@ -804,9 +803,6 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     public void setNetworkTimeout(Executor arg0, int arg1) throws SQLException {
 	// Do nothing for now. Future usage.
     }
-
-
-
 
     /*
      * (non-Javadoc)

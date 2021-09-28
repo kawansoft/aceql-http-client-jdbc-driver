@@ -31,11 +31,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.aceql.jdbc.commons.AceQLConnection;
-import com.aceql.jdbc.commons.EditionType;
+import com.aceql.jdbc.commons.main.util.EditionUtil;
 
 /**
- * Blob Test. Allows to insert a Blob, and read back the file.
+ * Blob TestMisc. Allows to insert a Blob, and read back the file.
  *
  * @author Nicolas de Pomereu
  *
@@ -46,15 +45,6 @@ public class SqlBlobExample {
 
     private Connection connection;
 
-
-    private boolean isDriverPro(Connection connection) {
-	if (!(connection instanceof AceQLConnection)) {
-	    return false;
-	}
-
-	AceQLConnection aceQLConnection = (AceQLConnection) connection;
-	return aceQLConnection.getConnectionInfo().getEditionType().equals(EditionType.Professional);
-    }
 
     public void blobUploadNativeSyntax(int customerId, int itemId, File file) throws SQLException, IOException {
 
@@ -71,7 +61,7 @@ public class SqlBlobExample {
 
 	Blob blob = connection.createBlob();
 
-	if (isDriverPro(connection)) {
+	if (EditionUtil.isProfessionalEdition(connection)) {
 	    OutputStream out = blob.setBinaryStream(1);
 	    Files.copy(file.toPath(), out);
 	    preparedStatement.setBlob(j++, blob);

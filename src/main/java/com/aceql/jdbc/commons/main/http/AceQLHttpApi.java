@@ -225,9 +225,9 @@ public class AceQLHttpApi {
     }
 
     /**
-     * Returns the {@code EditionType} in use.
+     * Returns the {@code ResultSetMetaDataPolicy} in use.
      *
-     * @return the {@code EditionType} in use.
+     * @return the {@code ResultSetMetaDataPolicy} in use.
      */
     public ResultSetMetaDataPolicy getResultSetMetaDataPolicy() {
 	return resultSetMetaDataPolicy;

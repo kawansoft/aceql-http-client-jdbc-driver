@@ -32,11 +32,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.aceql.jdbc.commons.AceQLConnection;
-import com.aceql.jdbc.commons.EditionType;
+import com.aceql.jdbc.commons.main.util.EditionUtil;
 
 /**
- * Blob Test. Allows to insert a Blob, and read back the file.
+ * Blob TestMisc. Allows to insert a Blob, and read back the file.
  *
  * @author Nicolas de Pomereu
  *
@@ -53,14 +52,6 @@ public class SqlBlobSelectTest {
 	this.out = out;
     }
 
-    private boolean isDriverPro(Connection connection) {
-	if (!(connection instanceof AceQLConnection)) {
-	    return false;
-	}
-
-	AceQLConnection aceQLConnection = (AceQLConnection) connection;
-	return aceQLConnection.getConnectionInfo().getEditionType().equals(EditionType.Professional);
-    }
 
     public void blobDownload(int customerId, int itemId, File file) throws SQLException, IOException {
 	String sql = "select * from orderlog where customer_id = ? and item_id = ?";
@@ -88,7 +79,7 @@ public class SqlBlobSelectTest {
 	    // }
 
 	    if (USE_BLOB_NATIVE_SYNTAX) {
-		if (isDriverPro(connection)) {
+		if (EditionUtil.isProfessionalEdition(connection)) {
 		    out.println("BLOB DOWNLOAD USING DRIVER PRO AND BLOB NATIVE SYNTAX!");
 		    Blob blob = rs.getBlob(i++);
 
@@ -108,7 +99,7 @@ public class SqlBlobSelectTest {
 		    }
 		}
 	    } else {
-		if (isDriverPro(connection)) {
+		if (EditionUtil.isProfessionalEdition(connection)) {
 		    out.println("BLOB DOWNLOAD USING DRIVER PRO!");
 		    try (InputStream in = rs.getBinaryStream(i++);) {
 			Files.copy(in, file.toPath(), StandardCopyOption.REPLACE_EXISTING);

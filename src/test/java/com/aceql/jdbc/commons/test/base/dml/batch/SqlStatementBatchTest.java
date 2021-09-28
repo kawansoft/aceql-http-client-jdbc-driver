@@ -80,7 +80,7 @@ public class SqlStatementBatchTest {
 	statement.close();
 
 	System.out.println(new Date() + " cpt : " + cpt);
-	System.out.println(new Date() + " size: " + sb.toString().length() / 1024 + " Kb");
+	System.out.println(new Date() + " size: " + sb.length() / 1024 + " Kb");
 
 	System.out.println(new Date() + " Done!");
     }

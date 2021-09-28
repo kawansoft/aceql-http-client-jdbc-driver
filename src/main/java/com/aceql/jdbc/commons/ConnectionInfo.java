@@ -29,8 +29,7 @@ import com.aceql.jdbc.commons.main.metadata.ResultSetMetaDataPolicy;
 
 /**
  * Allows to get all the info set and passed when creating an SQL
- * {@code Connection} to the remote AceQL Server.
- * <br>
+ * {@code Connection} to the remote AceQL Server. <br>
  * A {@code ConnectionInfo} instance is retrieved with the
  * {@link AceQLConnection#getConnectionInfo()} call: <br/>
  * 
@@ -64,9 +63,12 @@ public class ConnectionInfo {
     private EditionType editionType = EditionType.Community;
     private ResultSetMetaDataPolicy resultSetMetaDataPolicy = ResultSetMetaDataPolicy.off;
     private Map<String, String> requestProperties = new HashMap<>();
+    private String clobReadCharset;
+    private String clobWriteCharset;
 
     /**
      * Package protected constructor, Driver users can not instantiate the class.
+     * 
      * @param url
      * @param database
      * @param authentication
@@ -79,11 +81,13 @@ public class ConnectionInfo {
      * @param editionType
      * @param resultSetMetaDataPolicy
      * @param requestProperties
+     * @param clobReadCharset
+     * @param clobWriteCharset
      */
-    ConnectionInfo(String url, String database, PasswordAuthentication authentication,
-	    boolean passwordIsSessionId, Proxy proxy, PasswordAuthentication proxyAuthentication, int connectTimeout,
-	    int readTimeout, boolean gzipResult, EditionType editionType,
-	    ResultSetMetaDataPolicy resultSetMetaDataPolicy, Map<String, String> requestProperties) {
+    ConnectionInfo(String url, String database, PasswordAuthentication authentication, boolean passwordIsSessionId,
+	    Proxy proxy, PasswordAuthentication proxyAuthentication, int connectTimeout, int readTimeout,
+	    boolean gzipResult, EditionType editionType, ResultSetMetaDataPolicy resultSetMetaDataPolicy,
+	    Map<String, String> requestProperties, String clobReadCharset, String clobWriteCharset) {
 	this.url = url;
 	this.database = database;
 	this.authentication = authentication;
@@ -96,6 +100,8 @@ public class ConnectionInfo {
 	this.editionType = editionType;
 	this.resultSetMetaDataPolicy = resultSetMetaDataPolicy;
 	this.requestProperties = requestProperties;
+	this.clobReadCharset = clobReadCharset;
+	this.clobWriteCharset = clobWriteCharset;
     }
 
     /**
@@ -119,19 +125,21 @@ public class ConnectionInfo {
     /**
      * Gets the main authentication info against the AceQL server
      * 
-     * @return the main authentication info 
+     * @return the main authentication info
      */
     public PasswordAuthentication getAuthentication() {
 	return authentication;
     }
 
-    
     /**
-     * Says if the password is an AceQL Session ID. Applies only to Professional Edition.
-     * @return {@code true} if the password is an AceQL Session ID, else {@code false}
+     * Says if the password is an AceQL Session ID. Applies only to Professional
+     * Edition.
+     * 
+     * @return {@code true} if the password is an AceQL Session ID, else
+     *         {@code false}
      */
     public boolean isPasswordSessionId() {
-        return passwordIsSessionId;
+	return passwordIsSessionId;
     }
 
     /**
@@ -144,7 +152,8 @@ public class ConnectionInfo {
     }
 
     /**
-     * Gets the {@code Proxy} username and password. Returns null if no {@code Proxy} is in use.
+     * Gets the {@code Proxy} username and password. Returns null if no
+     * {@code Proxy} is in use.
      * 
      * @return the {@code Proxy} username and password.
      */
@@ -223,18 +232,44 @@ public class ConnectionInfo {
 	return requestProperties;
     }
 
+    /**
+     * Gets the charset name to use when reading a CLOB content with the
+     * {@code ResultSet#getString()} methods. Defaults to {@code null}.
+     * 
+     * @return the charset name to use when reading a CLOB content with the
+     *         {@code ResultSet#getString()} methods. Defaults to {@code null}.
+     */
+
+    public String getClobReadCharset() {
+        return clobReadCharset;
+    }
+
+
+    /**
+     * Gets the charset name to use when writing a CLOB content with
+     * {@code PreparedStatement} streaming methods. <br>
+     * This option is only used with the Professional Edition.
+     * 
+     * @return the charset name to use when writing a CLOB content with
+     *         {@code PreparedStatement} streaming methods.
+     */
+    public String getClobWriteCharset() {
+	return clobWriteCharset;
+    }
+
+
     @Override
     public String toString() {
-	
+
 	String username = authentication.getUserName();
-	String proxyUsername = proxyAuthentication != null ? proxyAuthentication.getUserName():null;
-	
+	String proxyUsername = proxyAuthentication != null ? proxyAuthentication.getUserName() : null;
+
 	return "ConnectionInfo [url=" + url + ", database=" + database + ", authentication=" + username
 		+ ", passwordIsSessionId=" + passwordIsSessionId + ", proxy=" + proxy + ", proxyAuthentication="
 		+ proxyUsername + ", connectTimeout=" + connectTimeout + ", readTimeout=" + readTimeout
 		+ ", gzipResult=" + gzipResult + ", editionType=" + editionType + ", resultSetMetaDataPolicy="
-		+ resultSetMetaDataPolicy + ", requestProperties=" + requestProperties + "]";
+		+ resultSetMetaDataPolicy + ", requestProperties=" + requestProperties + ", clobReadCharset="
+		+ clobReadCharset + ", clobWriteCharset=" + clobWriteCharset + "]";
     }
 
-   
 }

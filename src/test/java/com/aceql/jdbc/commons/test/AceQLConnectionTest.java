@@ -55,7 +55,7 @@ public class AceQLConnectionTest {
 
 
     /**
-     * Test main SQL orders.
+     * TestMisc main SQL orders.
      *
      * @throws SQLException
      * @throws AceQLException
@@ -71,7 +71,7 @@ public class AceQLConnectionTest {
 	
     }
     /**
-     * Test main SQL orders.
+     * TestMisc main SQL orders.
      *
      * @throws SQLException
      * @throws AceQLException

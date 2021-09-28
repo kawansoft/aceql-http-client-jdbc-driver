@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.sql.Array;
 import java.sql.Blob;
@@ -42,6 +43,7 @@ import org.apache.commons.io.FileUtils;
 
 import com.aceql.jdbc.commons.AceQLBlob;
 import com.aceql.jdbc.commons.AceQLConnection;
+import com.aceql.jdbc.commons.ConnectionInfo;
 import com.aceql.jdbc.commons.EditionType;
 import com.aceql.jdbc.commons.InternalWrapper;
 import com.aceql.jdbc.commons.main.abstracts.AbstractResultSet;
@@ -49,6 +51,7 @@ import com.aceql.jdbc.commons.main.http.AceQLHttpApi;
 import com.aceql.jdbc.commons.main.http.HttpManager;
 import com.aceql.jdbc.commons.main.util.AceQLConnectionUtil;
 import com.aceql.jdbc.commons.main.util.AceQLResultSetUtil;
+import com.aceql.jdbc.commons.main.util.BlobUtil;
 import com.aceql.jdbc.commons.main.util.EditionUtil;
 import com.aceql.jdbc.commons.main.util.SimpleClassCaller;
 import com.aceql.jdbc.commons.main.util.framework.FrameworkDebug;
@@ -63,6 +66,8 @@ import com.aceql.jdbc.commons.main.util.json.RowParser;
  *
  */
 public class AceQLResultSet extends AbstractResultSet implements ResultSet, Closeable {
+
+    private static final String NULL_STREAM = "NULL_STREAM";
 
     public boolean DEBUG = FrameworkDebug.isSet(AceQLResultSet.class);
 
@@ -294,7 +299,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	    return (InputStream) obj;
 	} catch (ClassNotFoundException e) {
 	    throw new UnsupportedOperationException(
-		    Tag.PRODUCT + " " + "ResultSet.getBinaryStream(int) or getBinaryStream(Sgring) call "
+		    Tag.PRODUCT + " " + "ResultSet.getBinaryStream(int) or getBinaryStream(String) call "
 			    + Tag.REQUIRES_ACEQL_JDBC_DRIVER_PROFESSIONAL_EDITION);
 	} catch (Exception e) {
 	    throw new SQLException(e);
@@ -436,12 +441,18 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
      */
     @Override
     public byte[] getBytes(int columnIndex) throws SQLException {
-	String value = getString(columnIndex);
+	String value = getStringValue(columnIndex);
 
 	if (value == null || value.equals("NULL")) {
 	    return null;
 	}
-	return getByteArray(value);
+	byte [] bytes =  getByteArray(value);
+	if (new String(bytes).trim().contains(NULL_STREAM)) {
+	    return null;
+	}
+	else {
+	    return bytes;
+	}
     }
 
     /*
@@ -451,12 +462,18 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
      */
     @Override
     public byte[] getBytes(String columnName) throws SQLException {
-	String value = getString(columnName);
+	String value = getStringValue(columnName);
 
 	if (value == null || value.equals("NULL")) {
 	    return null;
 	}
-	return getByteArray(value);
+	byte [] bytes =  getByteArray(value);
+	if (new String(bytes).trim().contains(NULL_STREAM)) {
+	    return null;
+	}
+	else {
+	    return bytes;
+	}
     }
 
     /**
@@ -474,7 +491,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	} else {
 	    // Keep for now: blob = new AceQLBlob(getInputStream(value),
 	    // EditionType.Professional);
-	    blob = InternalWrapper.blobBuilder(getByteArray(value), EditionType.Community);
+	    blob = InternalWrapper.blobBuilder(getInputStream(value), EditionType.Professional);
 	}
 
 	return blob;
@@ -487,7 +504,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
      */
     @Override
     public Blob getBlob(int i) throws SQLException {
-	String value = getString(i);
+	String value = getStringValue(i);
 
 	if (value == null || value.equals("NULL")) {
 	    return null;
@@ -503,7 +520,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
      */
     @Override
     public Blob getBlob(String colName) throws SQLException {
-	String value = getString(colName);
+	String value = getStringValue(colName);
 
 	if (value == null || value.equals("NULL")) {
 	    return null;
@@ -520,7 +537,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
      */
     @Override
     public InputStream getBinaryStream(int columnIndex) throws SQLException {
-	String value = getString(columnIndex);
+	String value = getStringValue(columnIndex);
 
 	if (value == null || value.equals("NULL")) {
 	    return null;
@@ -537,7 +554,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
      */
     @Override
     public InputStream getBinaryStream(String columnName) throws SQLException {
-	String value = getString(columnName);
+	String value = getStringValue(columnName);
 
 	if (value == null || value.equals("NULL")) {
 	    return null;
@@ -551,9 +568,102 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	if (value == null || value.equals("NULL")) {
 	    return null;
 	}
-	return value;
+	
+	if (BlobUtil.isClobId(value)) {
+	    value = getClobContentIfClobId(value);
+	    return value;
+	} else if (BlobUtil.isBlobId(value)) {
+	    byte[] bytes = getBlobContentIfBlobId(value);
+	    return bytes == null ? null : new String(bytes);
+	} else {
+	    return value;
+	}
+
     }
 
+    /**
+     * Is the string is a ClobId in format
+     * 6e91b35fe4d84420acc6e230607ebc37.clob.txt, return the content of
+     * corresponding downloaded file
+     * 
+     * @param value the value to analyze as
+     * @return the value itself, or the content of the Clob if value is ClobId
+     *         format
+     * @throws SQLException if Driver property
+     */
+    private String getClobContentIfClobId(String value) throws SQLException {
+	if (BlobUtil.isClobId(value)) {
+	    byte[] bytes;
+	    try {
+		bytes = getByteArray(value);
+	    } catch (SQLException e) {
+		// Better to trap errors than fail in tool? Think about it for next version...
+		e.printStackTrace();
+		return value;
+	    }
+
+	    // Security check. Should not happen
+	    if (bytes == null) {
+		return null;
+	    }
+
+	    ConnectionInfo connectionInfo = this.aceQLConnection.getConnectionInfo();
+	    String blobContent = null;
+
+	    String clobReadCharset = connectionInfo.getClobReadCharset();
+	    if (clobReadCharset == null) {
+		blobContent = new String(bytes);
+	    } else {
+		try {
+		    blobContent = new String(bytes, clobReadCharset);
+		} catch (UnsupportedEncodingException e) {
+		    throw new SQLException(
+			    "Invalid Driver property clobReadCharset value: " + clobReadCharset);
+		}
+	    }
+
+	    if (blobContent != null) { // Security check
+		blobContent = blobContent.trim(); // Trim only CLOB
+
+		if (blobContent.equals(NULL_STREAM)) {
+		    blobContent = null;
+		}
+	    }
+
+	    return blobContent;
+	} else {
+	    return value;
+	}
+    }
+
+    private byte[] getBlobContentIfBlobId(String value) {
+	if (BlobUtil.isBlobId(value)) {
+	    byte[] bytes;
+	    try {
+		bytes = getByteArray(value);
+	    } catch (SQLException e) {
+		// Better to trap errors than fail in tool? Think about it for next version...
+		e.printStackTrace();
+		return value.getBytes();
+	    }
+
+	    // Security check. Should not happen
+	    if (bytes == null) {
+		return null;
+	    }
+
+	    String blobContent = new String(bytes);
+	    blobContent = blobContent.trim();
+	    if (blobContent.contains(NULL_STREAM)) {
+		return null;
+	    }
+	    
+	    return bytes;
+	} else {
+	    return value.getBytes();
+	}
+    }
+    
     /*
      * (non-Javadoc)
      * 
@@ -565,8 +675,21 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	if (value == null || value.equals("NULL")) {
 	    return null;
 	}
-	return value;
+	
+	if (BlobUtil.isClobId(value)) {
+	    value = getClobContentIfClobId(value);
+	    return value;
+	}
+	else if (BlobUtil.isBlobId(value)) {
+	    byte [] bytes  = getBlobContentIfBlobId(value);
+	    return bytes;  
+	}
+	else {
+	    return value;
+	}
+
     }
+
 
     /*
      * (non-Javadoc)
@@ -581,7 +704,17 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	if (value == null || value.equals("NULL")) {
 	    return null;
 	}
-	return value;
+	
+	if (BlobUtil.isClobId(value)) {
+	    value = getClobContentIfClobId(value);
+	    return value;
+	} else if (BlobUtil.isBlobId(value)) {
+	    byte[] bytes = getBlobContentIfBlobId(value);
+	    return bytes;
+	} else {
+	    return value;
+	}
+
     }
 
     @Override
@@ -669,8 +802,19 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	if (value == null || value.equals("NULL")) {
 	    return null;
 	}
-	return value;
+	
+	if (BlobUtil.isClobId(value)) {
+	    value = getClobContentIfClobId(value);
+	    return value;
+	} else if (BlobUtil.isBlobId(value)) {
+	    byte[] bytes = getBlobContentIfBlobId(value);
+	    return bytes == null ? null : new String(bytes);
+	} else {
+	    return value;
+	}
+	
     }
+
 
     @Override
     public int getInt(int columnIndex) throws SQLException {

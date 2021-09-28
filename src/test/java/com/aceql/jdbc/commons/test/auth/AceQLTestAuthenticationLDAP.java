@@ -76,7 +76,7 @@ public class AceQLTestAuthenticationLDAP {
 	    SqlSelectTest sqlSelectTest = new SqlSelectTest(connection, System.out);
 	    sqlSelectTest.selectOneCustomerStatement();
 	} catch (Exception e) {
-	    System.out.println("Test with bad username & password: " + e.toString());
+	    System.out.println("TestMisc with bad username & password: " + e.toString());
 	    hasException = true;
 	}
 	Assert.assertEquals("hasException is not true", true, hasException);

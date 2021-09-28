@@ -67,7 +67,7 @@ public class AceQLHttpConnectionTest {
 
     }
 
-//    @Test
+//    @TestMisc
 //    public void testFailedQuery() {
 //	String sql = "select * from not_exist_table";
 //	try {
@@ -123,7 +123,7 @@ public class AceQLHttpConnectionTest {
     }
 
     
-//    @Test
+//    @TestMisc
 //    public void testTransactionIsolation() {
 //	try {
 //	    int originalState = getConnection().getTransactionIsolation();

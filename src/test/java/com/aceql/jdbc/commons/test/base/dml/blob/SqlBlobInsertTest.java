@@ -31,11 +31,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import com.aceql.jdbc.commons.AceQLConnection;
-import com.aceql.jdbc.commons.EditionType;
+import com.aceql.jdbc.commons.main.util.EditionUtil;
 
 /**
- * Blob Test. Allows to insert a Blob, and read back the file.
+ * Blob TestMisc. Allows to insert a Blob, and read back the file.
  *
  * @author Nicolas de Pomereu
  *
@@ -48,15 +47,6 @@ public class SqlBlobInsertTest {
     public SqlBlobInsertTest(Connection connection, PrintStream out) {
 	this.connection = connection;
 	this.out = out;
-    }
-
-    private boolean isDriverPro(Connection connection) {
-	if (!(connection instanceof AceQLConnection)) {
-	    return false;
-	}
-
-	AceQLConnection aceQLConnection = (AceQLConnection) connection;
-	return aceQLConnection.getConnectionInfo().getEditionType().equals(EditionType.Professional);
     }
 
     public void blobUpload(int customerId, int itemId, File file) throws SQLException, IOException {
@@ -74,7 +64,7 @@ public class SqlBlobInsertTest {
 
 	Blob blob = null;
 	if (SqlBlobSelectTest.USE_BLOB_NATIVE_SYNTAX) {
-	    if (isDriverPro(connection)) {
+	    if (EditionUtil.isProfessionalEdition(connection)) {
 		out.println("BLOB UPLOAD USING DRIVER PRO AND BLOB NATIVE SYNTAX!");
 		blob = connection.createBlob();
 		OutputStream out = blob.setBinaryStream(1);
@@ -87,7 +77,7 @@ public class SqlBlobInsertTest {
 		preparedStatement.setBlob(j++, blob);
 	    }
 	} else {
-	    if (isDriverPro(connection)) {
+	    if (EditionUtil.isProfessionalEdition(connection)) {
 		out.println("BLOB UPLOAD USING DRIVER PRO!");
 		InputStream in = new FileInputStream(file);
 		preparedStatement.setBinaryStream(j++, in, file.length());
