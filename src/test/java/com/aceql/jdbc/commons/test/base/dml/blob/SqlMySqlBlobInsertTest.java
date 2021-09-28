@@ -60,7 +60,7 @@ public class SqlMySqlBlobInsertTest {
 	sqlMySqlBlobInsertTest.deleteProductlines("Scooters");
 	
 	File blobFile= new File(ConnectionParms.IN_DIRECTORY + File.separator + "username_koala.jpg");
-	File textFile = new File(ConnectionParms.IN_DIRECTORY + File.separator + "longtemps.txt");
+	File textFile = new File(ConnectionParms.IN_DIRECTORY + File.separator + "longtemps2.txt");
 	
 	sqlMySqlBlobInsertTest.blobAndClob("Scooters", "Some Scooters", textFile, blobFile);
 	System.out.println(new Date() + " Done!");
@@ -97,7 +97,7 @@ public class SqlMySqlBlobInsertTest {
 	preparedStatement.setString(i++, productLine);
 	preparedStatement.setString(i++, textDescription);
 	
-	boolean insertAsString = false;
+	boolean insertAsString = true;
 	
 	if (insertAsString) {
 	    preparedStatement.setString(i++, htmlDescription);
