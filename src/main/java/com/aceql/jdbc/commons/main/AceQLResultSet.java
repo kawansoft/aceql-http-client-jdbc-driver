@@ -118,6 +118,16 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	    throw new SQLException(new FileNotFoundException("jsonFile does not exist: " + jsonFile));
 	}
 
+	if (DEBUG) {
+	    try {
+		String fileContent = FileUtils.readFileToString(jsonFile, "UTF-8");
+		debug(jsonFile.toString());
+		debug(fileContent);
+	    } catch (IOException e) {
+		throw new SQLException(e);
+	    }
+	}
+	
 	this.jsonFile = jsonFile;
 	this.statement = statement;
 
@@ -414,10 +424,9 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 			    + " in order to call ResultSetMetaData.getMetaData().");
 	}
 
-	if (!this.aceQLHttpApi.isFillResultSetMetaData()) {
+	if (!this.aceQLHttpApi.isFillResultSetMetaData() && EditionUtil.isProfessionalEdition(this.aceQLConnection)) {
 	    throw new SQLException(Tag.PRODUCT + ". "
-		    + "Cannot get Result.getMetata(). Call AceQLConnection.setResultSetMetaDataPolicy(EditionType.on) in order to activate"
-		    + " access to Result.getMetata(). Or add to AceQLDriver the property resultSetMetaDataPolicy=auto");
+		    + "Cannot get ResultSet.getMetaData(). Add to AceQL Driver the property resultSetMetaDataPolicy=on");
 	}
 
 	try {
