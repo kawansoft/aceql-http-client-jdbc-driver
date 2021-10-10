@@ -54,6 +54,7 @@ import com.aceql.jdbc.commons.main.util.AceQLResultSetUtil;
 import com.aceql.jdbc.commons.main.util.BlobUtil;
 import com.aceql.jdbc.commons.main.util.EditionUtil;
 import com.aceql.jdbc.commons.main.util.SimpleClassCaller;
+import com.aceql.jdbc.commons.main.util.TimestampUtil;
 import com.aceql.jdbc.commons.main.util.framework.FrameworkDebug;
 import com.aceql.jdbc.commons.main.util.framework.Tag;
 import com.aceql.jdbc.commons.main.util.json.RowParser;
@@ -578,6 +579,10 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	    return null;
 	}
 	
+	if (isTimestamp(columnLabel, value)) {
+	    return getTimestamp(columnLabel).toString();
+	}
+	
 	if (BlobUtil.isClobId(value)) {
 	    value = getClobContentIfClobId(value);
 	    return value;
@@ -587,9 +592,50 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	} else {
 	    return value;
 	}
+    }
+
+    /**
+     * Checks whether a string is a timestamp format 
+     * @param columnLabel
+     * @param value
+     * @return whether a string is a timestamp format 
+     * @throws SQLException
+     */
+    private boolean isTimestamp(String columnLabel, String value) throws SQLException {
+	
+	// Fast check
+	if (! TimestampUtil.isLong(value) || EditionUtil.isCommunityEdition(aceQLConnection)) {
+	    return false;
+	}
+	
+	// Deeper check
+	if (resultSetMetaData == null) {
+	    resultSetMetaData = getMetaData();
+	} 
+	
+	return TimestampUtil.isTimestamp(resultSetMetaData, columnLabel);
 
     }
 
+    /**
+     * Checks whether a string is a timestamp format 
+     * @param columnIndex
+     * @param value
+     * @return whether a string is a timestamp format 
+     * @throws SQLException
+     */
+    private boolean isTimestamp(int columnIndex, String value) throws SQLException {
+	// Fast check
+	if (! TimestampUtil.isLong(value) || EditionUtil.isCommunityEdition(aceQLConnection)) {
+	    return false;
+	}
+	// Deeper check
+	if (resultSetMetaData == null) {
+	    resultSetMetaData = getMetaData();
+	}
+	return TimestampUtil.isTimestamp(resultSetMetaData, columnIndex);    
+    }
+    
     /**
      * Is the string is a ClobId in format
      * 6e91b35fe4d84420acc6e230607ebc37.clob.txt, return the content of
@@ -685,6 +731,10 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	    return null;
 	}
 	
+	if (isTimestamp(columnIndex, value)) {
+	    return getTimestamp(columnIndex).toString();
+	}
+	
 	if (BlobUtil.isClobId(value)) {
 	    value = getClobContentIfClobId(value);
 	    return value;
@@ -714,6 +764,10 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	    return null;
 	}
 	
+	if (isTimestamp(columnName, value)) {
+	    return getTimestamp(columnName).toString();
+	}
+	
 	if (BlobUtil.isClobId(value)) {
 	    value = getClobContentIfClobId(value);
 	    return value;
@@ -723,7 +777,6 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	} else {
 	    return value;
 	}
-
     }
 
     @Override
@@ -812,6 +865,10 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	    return null;
 	}
 	
+	if (isTimestamp(columnIndex, value)) {
+	    return getTimestamp(columnIndex).toString();
+	}
+	
 	if (BlobUtil.isClobId(value)) {
 	    value = getClobContentIfClobId(value);
 	    return value;
@@ -823,6 +880,8 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	}
 	
     }
+
+
 
 
     @Override
