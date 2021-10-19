@@ -29,12 +29,13 @@ public class ConnectionParms {
     public static final String OUT_DIRECTORY = SystemUtils.USER_HOME + File.separator + "aceql_tests" + File.separator
 	    + "OUT";
 
-    public static final String serverUrlLocalhostEmbedded = "http://localhost:9090/aceql";
-    public static final String serverUrlLocalhostEmbeddedSsl = "https://localhost:9443/aceql";
-    public static final String serverUrlLocalhostTomcat = "http://localhost:8080/aceql-test/aceql";
-    public static final String serverUrlLocalhostTomcatPro = "http://localhost:8080/aceql-test-pro/aceql";
-    public static final String serverUrlUnix = "https://www.aceql.com:9443/aceql";
-    public static final String serverUrlUnixNoSSL = "http://www.aceql.com:8081/aceql";
+    public static String serverUrlLocalhostEmbedded = "http://localhost:9090/aceql";
+    public static String serverUrlLocalhostEmbedded8080 = "http://localhost:8080/aceql-test/aceql";
+    public static String serverUrlLocalhostEmbeddedSsl = "https://localhost:9443/aceql";
+    public static String serverUrlLocalhostTomcat = "http://localhost:8080/aceql-test/aceql";
+    public static String serverUrlLocalhostTomcatPro = "http://localhost:8080/aceql-test-pro/aceql";
+    public static String serverUrlUnix = "https://www.aceql.com:9443/aceql";
+    public static String serverUrlUnixNoSSL = "http://www.aceql.com:8081/aceql";
 
     public static final String database = "sampledb";
     public static final String username = "username";
