@@ -29,6 +29,7 @@ import java.sql.SQLException;
 import java.util.Objects;
 
 import com.aceql.jdbc.commons.main.util.framework.FrameworkFileUtil;
+import com.aceql.jdbc.commons.main.util.framework.Tag;
 import com.aceql.jdbc.commons.main.util.framework.UniqueIDBuilder;
 
 /**
@@ -38,7 +39,11 @@ import com.aceql.jdbc.commons.main.util.framework.UniqueIDBuilder;
 public class AceQLClob implements Clob {
 
     private EditionType editionType;
+    private String str;
+    
     private File file;
+    private Reader reader;
+    private Writer writer;
     
     public AceQLClob(EditionType editionType) {
 	this.editionType = Objects.requireNonNull(editionType, "editionType cannot be null!");
@@ -47,17 +52,20 @@ public class AceQLClob implements Clob {
 
     @Override
     public long length() throws SQLException {
-	return 0;
+	if (editionType.equals(EditionType.Professional)) {
+	    return -1;
+	} else {
+	    return str == null ? 0 : str.length();
+	}
     }
 
     @Override
     public String getSubString(long pos, int length) throws SQLException {
-	return null;
+	throw new UnsupportedOperationException(Tag.METHOD_NOT_YET_IMPLEMENTED);
     }
 
     @Override
     public Reader getCharacterStream() throws SQLException {
-
 	return null;
     }
 
@@ -79,12 +87,20 @@ public class AceQLClob implements Clob {
 
     @Override
     public int setString(long pos, String str) throws SQLException {
-	return 0;
+	if (pos != 1) {
+	    throw new SQLException(Tag.PRODUCT + " \"pos\" value can be 1 only.");
+	}
+	
+	this.str = str;
+	return str == null ? 0 : str.length();
     }
 
+    /**
+     * This method is not yet implemented in the AceQL JDBC Driver.
+     */
     @Override
     public int setString(long pos, String str, int offset, int len) throws SQLException {
-	return 0;
+	throw new UnsupportedOperationException(Tag.METHOD_NOT_YET_IMPLEMENTED);
     }
 
     @Override
@@ -99,7 +115,7 @@ public class AceQLClob implements Clob {
 
     @Override
     public void truncate(long len) throws SQLException {
-
+	throw new UnsupportedOperationException(Tag.METHOD_NOT_YET_IMPLEMENTED);
     }
 
     @Override
@@ -109,7 +125,6 @@ public class AceQLClob implements Clob {
 
     @Override
     public Reader getCharacterStream(long pos, long length) throws SQLException {
-
 	return null;
     }
 

@@ -142,11 +142,11 @@ import com.aceql.jdbc.commons.main.util.framework.UniqueIDBuilder;
  */
 public class AceQLBlob implements Blob {
 
-    private InputStream inputStream;
-    private byte[] bytes;
     private EditionType editionType;
-
+    private byte[] bytes;
+    
     private File file;
+    private InputStream inputStream;
     private OutputStream outputStream;
 
     /**
