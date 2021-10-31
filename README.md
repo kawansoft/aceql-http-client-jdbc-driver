@@ -42,9 +42,10 @@
       * [SQL Transactions and Connections modifiers](#sql-transactions-and-connections-modifiers)
       * [Batch management](#batch-management)
       * [BLOB management](#blob-management)
+         
          * [Standard syntax](#standard-syntax)
             * [BLOB creation with standard syntax](#blob-creation-with-standard-syntax)
-         * [BLOB reading](#blob-reading)
+            
             * [BLOB reading with standard syntax](#blob-reading-with-standard-syntax)
          * [Advanced syntax with streaming techniques (Professional Edition)](#advanced-syntax-with-streaming-techniques-professional-edition)
             * [BLOB creation with stream syntax](#blob-creation-with-stream-syntax)
@@ -429,10 +430,6 @@ Trivial or unrelated code is skipped with `//...` comments and `null` values are
     preparedStatement.executeUpdate();
 ```
 
-### BLOB reading 
-
-BLOB reading is supported through `ResultSet.getBinaryStream()`:
-
 ```java
     // BLOB Creation 
     // 2) Syntax with PreparedStatement.setBlob
@@ -447,6 +444,7 @@ BLOB reading is supported through `ResultSet.getBinaryStream()`:
     //...
     preparedStatement.executeUpdate();
 ```
+
 #### BLOB reading with standard syntax
 ```java
     // BLOB Reading
