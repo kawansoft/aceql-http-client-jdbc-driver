@@ -161,25 +161,24 @@ public class AceQLBlob implements Blob {
     /**
      * To be used with ResultSet. Package protected constructor to be used only for
      * Community Edition that does not support Streams
-     *
      * @param inputStream the input stream to use to build the Blob
      */
-    AceQLBlob(InputStream inputStream, EditionType editionType) {
+    AceQLBlob(EditionType editionType, InputStream inputStream) {
+	this.editionType = Objects.requireNonNull(editionType, "editionType cannot be null!");
 	this.inputStream = inputStream;
 	this.bytes = null;
-	this.editionType = Objects.requireNonNull(editionType, "editionType cannot be null!");
     }
 
     /**
      * To be used with ResultSet. Package protected constructor to be used only for
      * Community Edition & Professional Editions
-     *
-     * @param bytes the bye array to use to build the Blob
+     * @param bytes the byte array to use to build the Blob
      */
-    AceQLBlob(byte[] bytes, EditionType editionType) {
+    AceQLBlob(EditionType editionType, byte[] bytes) {
+	this.editionType = Objects.requireNonNull(editionType, "editionType cannot be null!");
 	this.bytes = bytes;
 	this.inputStream = null;
-	this.editionType = Objects.requireNonNull(editionType, "editionType cannot be null!");
+
     }
 
     @Override

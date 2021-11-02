@@ -23,10 +23,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.sql.Array;
 import java.sql.Blob;
+import java.sql.Clob;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -42,6 +45,7 @@ import java.util.Objects;
 import org.apache.commons.io.FileUtils;
 
 import com.aceql.jdbc.commons.AceQLBlob;
+import com.aceql.jdbc.commons.AceQLClob;
 import com.aceql.jdbc.commons.AceQLConnection;
 import com.aceql.jdbc.commons.ConnectionInfo;
 import com.aceql.jdbc.commons.EditionType;
@@ -487,6 +491,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
     }
 
     /**
+     * Build a Blob from 
      * @param value
      * @return
      * @throws SQLException
@@ -507,6 +512,37 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	return blob;
     }
 
+    /**
+     * @param value
+     * @return
+     * @throws SQLException
+     */
+    private Clob getClobFromClobId(String value) throws SQLException {
+	Objects.requireNonNull(value, "value cannot be nul!");
+	AceQLClob blob = null;
+	String clobReadCharset = this.aceQLConnection.getConnectionInfo().getClobReadCharset();
+	String clobWriteCharset = this.aceQLConnection.getConnectionInfo().getClobWriteCharset();
+	if (EditionUtil.isCommunityEdition(aceQLConnection)) {
+	    // Keep for now: blob = new AceQLBlob(getByteArray(value),
+	    // EditionType.Community);
+	    try {
+		blob = InternalWrapper.clobBuilder(getByteArray(value), EditionType.Community, clobReadCharset, clobWriteCharset);
+	    } catch (UnsupportedEncodingException e) {
+		throw new SQLException(e);
+	    }
+	} else {
+	    // Keep for now: blob = new AceQLBlob(getInputStream(value),
+	    // EditionType.Professional);
+	    try {
+		blob = InternalWrapper.blobBuilder(getInputStream(value), EditionType.Professional, clobReadCharset, clobWriteCharset);
+	    } catch (UnsupportedEncodingException e) {
+		throw new SQLException(e);		
+	    }
+	}
+
+	return blob;
+    }
+    
     /*
      * (non-Javadoc)
      *
@@ -542,6 +578,41 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
     /*
      * (non-Javadoc)
      *
+     * @see com.aceql.jdbc.commons.main.abstracts.AbstractResultSet#getClob(int)
+     */
+    @Override
+    public Clob getClob(int i) throws SQLException {
+	String value = getStringValue(i);
+
+	if (value == null || value.equals("NULL")) {
+	    return null;
+	}
+
+	return getClobFromClobId(value);
+    }
+    
+    /*
+     * (non-Javadoc)
+     *
+     * @see com.aceql.jdbc.commons.main.abstracts.AbstractResultSet#getClob(String)
+     */
+    @Override
+    public Clob getClob(String colName) throws SQLException {
+	String value = getStringValue(colName);
+
+	if (value == null || value.equals("NULL")) {
+	    return null;
+	}
+
+	return getClobFromClobId(value);
+    }
+    
+
+
+
+    /*
+     * (non-Javadoc)
+     *
      * @see
      * com.aceql.jdbc.commons.main.abstracts.AbstractResultSet#getBinaryStream(int)
      */
@@ -570,6 +641,39 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	    return null;
 	}
 	return getInputStream(value);
+    }
+
+    
+    
+    @Override
+    public Reader getCharacterStream(int columnIndex) throws SQLException {
+	String value = getStringValue(columnIndex);
+
+	if (value == null || value.equals("NULL")) {
+	    return null;
+	}
+	
+	try {
+	    Reader reader = new InputStreamReader(getInputStream(value), this.aceQLConnection.getConnectionInfo().getClobReadCharset());
+	    return reader;
+	} catch (UnsupportedEncodingException e) {
+	    throw new SQLException(e);
+	} 
+    }
+
+    @Override
+    public Reader getCharacterStream(String columnName) throws SQLException {
+	String value = getStringValue(columnName);
+
+	if (value == null || value.equals("NULL")) {
+	    return null;
+	}
+	try {
+	    Reader reader = new InputStreamReader(getInputStream(value), this.aceQLConnection.getConnectionInfo().getClobReadCharset());
+	    return reader;
+	} catch (UnsupportedEncodingException e) {
+	    throw new SQLException(e);
+	} 
     }
 
     @Override

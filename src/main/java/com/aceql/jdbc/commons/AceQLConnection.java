@@ -231,7 +231,8 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	if (isClosed()) {
 	    throw new SQLException(Tag.PRODUCT + " Can not created Clob because Connection is closed.");
 	}
-	AceQLClob clob = new AceQLClob(connectionInfo.getEditionType());
+	AceQLClob clob = new AceQLClob(connectionInfo.getEditionType(), this.connectionInfo.getClobReadCharset(),
+		this.connectionInfo.getClobWriteCharset());
 	return clob;
     }
 
