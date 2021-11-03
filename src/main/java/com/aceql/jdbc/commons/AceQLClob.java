@@ -114,6 +114,9 @@ public class AceQLClob implements Clob {
 	}
 	
 	this.str = new String(bytes, clobReadCharset);
+	
+	//System.out.println("str: " + str);
+	
 	this.reader = null;
 	this.editionType = Objects.requireNonNull(editionType, "editionType cannot be null!");
 	this.clobReadCharset = clobReadCharset;
@@ -149,7 +152,7 @@ public class AceQLClob implements Clob {
 	    if (str == null) {
 		return null;
 	    }
-
+	    
 	    StringReader stringReader = new StringReader(str);
 	    return stringReader;
 	}

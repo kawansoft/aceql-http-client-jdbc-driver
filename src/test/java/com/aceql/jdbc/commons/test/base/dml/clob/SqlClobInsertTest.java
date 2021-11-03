@@ -33,6 +33,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
 import com.aceql.jdbc.commons.main.util.EditionUtil;
@@ -48,6 +49,10 @@ import com.aceql.jdbc.commons.test.connection.ConnectionParms;
  */
 public class SqlClobInsertTest {
 
+
+    /** Universal and clean line separator */
+    private static String CR_LF = System.getProperty("line.separator");
+    
     private Connection connection;
     private PrintStream out;
 
@@ -63,7 +68,7 @@ public class SqlClobInsertTest {
 	File fileOut =  new File(ConnectionParms.OUT_DIRECTORY + File.separator + "longtemps2.txt");
 	SqlClobSelectTest sqlClobSelectTest = new SqlClobSelectTest(connection, System.out);
 	sqlClobSelectTest.clobDownload(1, fileOut);
-	System.out.println(new Date() + "Out Clob File created: " + fileOut);
+	System.out.println(new Date() + "Out Clob File created: " + CR_LF + fileOut);
     }
 
     /**
@@ -105,8 +110,8 @@ public class SqlClobInsertTest {
 	    } else {
 		out.println("CLOB UPLOAD USING DRIVER COMMUNITY AND CLOB NATIVE SYNTAX!");
 		clob = connection.createClob();
-		byte[] bytes = Files.readAllBytes (file.toPath());
-		clob.setString(1, new String(bytes, "UTF-8"));
+		String str = FileUtils.readFileToString(file, "UTF-8");
+		clob.setString(1, str);
 		preparedStatement.setClob(j++, clob);
 	    }
 	} else {

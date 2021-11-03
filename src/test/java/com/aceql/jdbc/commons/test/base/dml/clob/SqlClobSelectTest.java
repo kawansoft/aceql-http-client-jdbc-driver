@@ -21,11 +21,11 @@ package com.aceql.jdbc.commons.test.base.dml.clob;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
-import java.io.StringReader;
+import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.sql.Clob;
@@ -34,6 +34,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
 import com.aceql.jdbc.commons.main.util.EditionUtil;
@@ -81,8 +82,8 @@ public class SqlClobSelectTest {
 		    Clob clob = rs.getClob(i++);
 
 		    if (clob != null) {
-			try (InputStream in = clob.getAsciiStream()) {
-			    Files.copy(in, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+			try (Reader reader = clob.getCharacterStream()) {
+			    IOUtils.copy(reader, new FileOutputStream(file), "UTF-8");
 			}
 		    }
 
@@ -91,8 +92,9 @@ public class SqlClobSelectTest {
 
 		    if (clob != null) {
 			String str = clob.getSubString(1, 0);
-			FileWriter fileWriter = new FileWriter(file);
-			IOUtils.copy(new StringReader(str), fileWriter);
+			
+			System.out.println("str: " + str);
+			FileUtils.write(file, str, "UTF-8");
 		    }
 		}
 	    } else {
