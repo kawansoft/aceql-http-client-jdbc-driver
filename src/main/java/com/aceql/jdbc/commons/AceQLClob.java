@@ -32,6 +32,8 @@ import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.nio.charset.Charset;
 import java.sql.Clob;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Objects;
 
@@ -43,6 +45,104 @@ import com.aceql.jdbc.commons.main.util.framework.Tag;
 import com.aceql.jdbc.commons.main.util.framework.UniqueIDBuilder;
 
 /**
+ * Clob implementation. Allows to use {@link java.sql.Clob} objects for Clobs
+ * uploading {@code (INSERT/UPDATE)} and downloading {@code (SELECT)}.<br>
+ * <br>
+ * <b>{@code INSERT} example:</b> <br/>
+ * 
+ * <pre>
+ * File file = new File("/my/file/path");
+ *
+ * String sql = "insert into documentation values (?, ?)";
+ * PreparedStatement preparedStatement = connection.prepareStatement(sql);
+ *
+ * int i = 1;
+ * preparedStatement.setInt(i++, itemId);
+ *
+ * // Create the Clob instance using the current Connection:
+ * Clob clob = connection.createClob();
+ *
+ * // Free / Community Edition syntax using a String:
+ * clob = connection.createClob();
+ * String str = FileUtils.readFileToString(file, "UTF-8");
+ * clob.setString(1, str);
+ * preparedStatement.setClob(i++, clob);
+ *
+ * // Professional Edition syntax using a stream:
+ * clob = connection.createClob();
+ * Writer out = clob.setCharacterStream(1);
+ * IOUtils.copy(new FileInputStream(file), out, "UTF-8");
+ * preparedStatement.setClob(i++, clob);
+ *
+ * preparedStatement.executeUpdate();
+ * preparedStatement.close();
+ * </pre>
+ *
+ * <b>{@code SELECT} example for the Community Edition:</b> <br/>
+ * 
+ * <pre>
+ * String sql = "select * from documentation where item_id = ?";
+ * PreparedStatement preparedStatement = connection.prepareStatement(sql);
+ * preparedStatement.setInt(1, 1);
+ *
+ * ResultSet rs = preparedStatement.executeQuery();
+ *
+ * if (rs.next()) {
+ *     Clob clob = rs.getClob(2);
+ *
+ *     // Community Edition: Get the Clob string in memory and store them into a file
+ *     String str = clob.getSubString(1, 0);
+ *
+ *     File file = new File("/my/file/path");
+ *     FileUtils.write(file, str, "UTF-8");
+ * }
+ * preparedStatement.close();
+ * rs.close();
+ * </pre>
+ *
+ * <b>{@code SELECT} example for the Professional Edition:</b> <br/>
+ * 
+ * <pre>
+ * String sql = "select * from documentation where item_id = ?";
+ * PreparedStatement preparedStatement = connection.prepareStatement(sql);
+ * preparedStatement.setInt(1, 1);
+ *
+ * ResultSet rs = preparedStatement.executeQuery();
+ *
+ * if (rs.next()) {
+ *     Clob clob = rs.getClob(2);
+ *
+ *     File file = new File("/my/file/path");
+ *     // Professional Edition: Get the Reader stream from the Clob and copy into a file
+ *     try (Reader reader = clob.getCharacterStream()) {
+ * 	IOUtils.copy(reader, new FileOutputStream(file), "UTF-8");
+ *     }
+ * }
+ *
+ * preparedStatement.close();
+ * rs.close();
+ * </pre>
+ * 
+ * Note that Clobs can be updated or read without using a {@link java.sql.Clob}
+ * instance. <br>
+ * <br>
+ * {@code INSERT/UPDATE} can be done using:
+ * <ul>
+ * <li>{@link PreparedStatement#setString(int, String)} for the Community
+ * Edition.</li>
+ * <li>{@link PreparedStatement#setCharacterStream(int, Reader)} for the
+ * Professional Edition.</li>
+ * </ul>
+ * <br>
+ * {@code SELECT} can be done using:
+ * <ul>
+ * <li>{@link ResultSet#getString(int)} or {@link ResultSet#getString(String)} for
+ * the Community Edition.</li>
+ * <li>{@link ResultSet#getCharacterStream(int) or
+ * {@link ResultSet#getCharacterStream(String)} for the Professional Edition.</li>
+ * </ul>
+ * 
+ * @since 8.0
  * @author Nicolas de Pomereu
  *
  */
@@ -101,7 +201,7 @@ public class AceQLClob implements Clob {
      * To be used with ResultSet. Package protected constructor to be used only for
      * Community Edition & Professional Editions
      *
-     * @param bytes the bye array to use to build the Blob
+     * @param bytes the bye array to use to build the Clob
      * @throws UnsupportedEncodingException 
      */
     AceQLClob(byte [] bytes, EditionType editionType,  String clobReadCharset, String clobWriteCharset) throws UnsupportedEncodingException {
@@ -114,9 +214,7 @@ public class AceQLClob implements Clob {
 	}
 	
 	this.str = new String(bytes, clobReadCharset);
-	
-	//System.out.println("str: " + str);
-	
+		
 	this.reader = null;
 	this.editionType = Objects.requireNonNull(editionType, "editionType cannot be null!");
 	this.clobReadCharset = clobReadCharset;
@@ -175,11 +273,17 @@ public class AceQLClob implements Clob {
         return in;
     }
 
+    /**
+     * This method is not yet implemented in the AceQL JDBC Driver.
+     */
     @Override
     public long position(String searchstr, long start) throws SQLException {
 	throw new UnsupportedOperationException(Tag.METHOD_NOT_YET_IMPLEMENTED);
     }
 
+    /**
+     * This method is not yet implemented in the AceQL JDBC Driver.
+     */
     @Override
     public long position(Clob searchstr, long start) throws SQLException {
 	throw new UnsupportedOperationException(Tag.METHOD_NOT_YET_IMPLEMENTED);
@@ -233,6 +337,9 @@ public class AceQLClob implements Clob {
 	}
     }
 
+    /**
+     * This method is not yet implemented in the AceQL JDBC Driver.
+     */
     @Override
     public void truncate(long len) throws SQLException {
 	throw new UnsupportedOperationException(Tag.METHOD_NOT_YET_IMPLEMENTED);
@@ -262,7 +369,7 @@ public class AceQLClob implements Clob {
 
     /**
      * @return the file associated with the {@code OutputStream} created by
-     *         {@link AceQLBlob#setBinaryStream(long)}.
+     *         {@link AceQLClob#setCharacterStream(long)}.
      */
     File getFile() {
 	try {
