@@ -519,14 +519,14 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
      */
     private Clob getClobFromClobId(String value) throws SQLException {
 	Objects.requireNonNull(value, "value cannot be nul!");
-	AceQLClob blob = null;
+	AceQLClob clob = null;
 	String clobReadCharset = this.aceQLConnection.getConnectionInfo().getClobReadCharset();
 	String clobWriteCharset = this.aceQLConnection.getConnectionInfo().getClobWriteCharset();
 	if (EditionUtil.isCommunityEdition(aceQLConnection)) {
 	    // Keep for now: blob = new AceQLBlob(getByteArray(value),
 	    // EditionType.Community);
 	    try {
-		blob = InternalWrapper.clobBuilder(getByteArray(value), EditionType.Community, clobReadCharset, clobWriteCharset);
+		clob = InternalWrapper.clobBuilder(getByteArray(value), EditionType.Community, clobReadCharset, clobWriteCharset);
 	    } catch (UnsupportedEncodingException e) {
 		throw new SQLException(e);
 	    }
@@ -534,13 +534,13 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	    // Keep for now: blob = new AceQLBlob(getInputStream(value),
 	    // EditionType.Professional);
 	    try {
-		blob = InternalWrapper.blobBuilder(getInputStream(value), EditionType.Professional, clobReadCharset, clobWriteCharset);
+		clob = InternalWrapper.blobBuilder(getInputStream(value), EditionType.Professional, clobReadCharset, clobWriteCharset);
 	    } catch (UnsupportedEncodingException e) {
 		throw new SQLException(e);		
 	    }
 	}
 
-	return blob;
+	return clob;
     }
     
     /*

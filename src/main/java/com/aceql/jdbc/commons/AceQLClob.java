@@ -30,6 +30,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
+import java.nio.charset.Charset;
 import java.sql.Clob;
 import java.sql.SQLException;
 import java.util.Objects;
@@ -59,6 +60,14 @@ public class AceQLClob implements Clob {
     
     AceQLClob(EditionType editionType, String clobReadCharset, String clobWriteCharset) {
 	this.editionType = Objects.requireNonNull(editionType, "editionType cannot be null!");
+	
+	if (clobReadCharset == null) {
+	    clobReadCharset = Charset.defaultCharset().displayName();
+	}
+	if (clobWriteCharset == null) {
+	    clobWriteCharset = Charset.defaultCharset().displayName();
+	}
+	
 	this.clobReadCharset = clobReadCharset;
 	this.clobWriteCharset = clobWriteCharset;
 	this.file = createClobFile();
@@ -72,6 +81,14 @@ public class AceQLClob implements Clob {
      * @throws UnsupportedEncodingException 
      */
     AceQLClob(InputStream inputStream, EditionType editionType, String clobReadCharset, String clobWriteCharset) throws UnsupportedEncodingException {
+	
+	if (clobReadCharset == null) {
+	    clobReadCharset = Charset.defaultCharset().displayName();
+	}
+	if (clobWriteCharset == null) {
+	    clobWriteCharset = Charset.defaultCharset().displayName();
+	}
+	
 	this.reader = new InputStreamReader(inputStream, clobReadCharset);
 	this.str = null;
 	
@@ -88,6 +105,14 @@ public class AceQLClob implements Clob {
      * @throws UnsupportedEncodingException 
      */
     AceQLClob(byte [] bytes, EditionType editionType,  String clobReadCharset, String clobWriteCharset) throws UnsupportedEncodingException {
+	
+	if (clobReadCharset == null) {
+	    clobReadCharset = Charset.defaultCharset().displayName();
+	}
+	if (clobWriteCharset == null) {
+	    clobWriteCharset = Charset.defaultCharset().displayName();
+	}
+	
 	this.str = new String(bytes, clobReadCharset);
 	this.reader = null;
 	this.editionType = Objects.requireNonNull(editionType, "editionType cannot be null!");
@@ -106,7 +131,14 @@ public class AceQLClob implements Clob {
 
     @Override
     public String getSubString(long pos, int length) throws SQLException {
-	throw new UnsupportedOperationException(Tag.METHOD_NOT_YET_IMPLEMENTED);
+	if (pos != 1) {
+	    throw new SQLException(Tag.PRODUCT + " \"pos\" value can be 1 only.");
+	}
+	if (length != 0) {
+	    throw new SQLException(Tag.PRODUCT + " \"length\" value can be 0 only (meaning all bytes are returned).");
+	}
+	
+	return str;
     }
 
     @Override
