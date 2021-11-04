@@ -30,8 +30,8 @@ import java.util.Objects;
 import org.apache.commons.io.IOUtils;
 
 import com.aceql.jdbc.commons.AceQLConnection;
-import com.aceql.jdbc.commons.InternalWrapper;
 import com.aceql.jdbc.commons.AceQLException;
+import com.aceql.jdbc.commons.InternalWrapper;
 import com.aceql.jdbc.commons.main.http.AceQLHttpApi;
 import com.aceql.jdbc.commons.main.metadata.dto.JdbcDatabaseMetaDataDto;
 import com.aceql.jdbc.commons.main.metadata.dto.TableDto;
