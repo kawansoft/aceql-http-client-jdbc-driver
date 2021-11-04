@@ -138,7 +138,7 @@ import com.aceql.jdbc.commons.main.util.framework.UniqueIDBuilder;
  * <ul>
  * <li>{@link ResultSet#getString(int)} or {@link ResultSet#getString(String)} for
  * the Community Edition.</li>
- * <li>{@link ResultSet#getCharacterStream(int) or
+ * <li>{@link ResultSet#getCharacterStream(int)} or
  * {@link ResultSet#getCharacterStream(String)} for the Professional Edition.</li>
  * </ul>
  * 
