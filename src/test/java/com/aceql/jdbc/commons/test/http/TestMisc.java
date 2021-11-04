@@ -22,6 +22,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.charset.Charset;
+import java.time.Instant;
+import java.util.Date;
 
 import org.apache.commons.io.input.ReaderInputStream;
 
@@ -38,6 +40,10 @@ public class TestMisc {
      */
     public static void main(String[] args) throws IOException {
 
+	Instant instant = Instant.now();
+	System.out.println("instant: " + instant);
+	System.out.println("Date.from(instant);: " + Date.from(instant));
+	
 	System.out.println("Charset.defaultCharset(): " + Charset.defaultCharset());
 	
 	Reader reader = new FileReader("c:\\tmp\\mysqlsampledatabase.sql");

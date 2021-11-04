@@ -24,6 +24,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.PasswordAuthentication;
 import java.net.Proxy;
 import java.sql.SQLException;
+import java.time.Instant;
 import java.util.Map;
 
 import com.aceql.jdbc.commons.main.http.AceQLHttpApi;
@@ -85,6 +86,10 @@ public class InternalWrapper {
 		proxyAuthentication, connectTimeout, readTimeout, gzipResult, editionType, resultSetMetaDataPolicy,
 		requestProperties, clobReadCharset, clobWriteCharset);
 	return connectionInfo;
+    }
+
+    public static void setCreationDateTime(ConnectionInfo connectionInfo, Instant instant) {
+	connectionInfo.setCreationDateTime(instant);
     }
 
 }

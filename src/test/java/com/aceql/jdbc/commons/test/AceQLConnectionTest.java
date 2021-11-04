@@ -102,7 +102,7 @@ public class AceQLConnectionTest {
 
 	System.out
 		.println("aceQLConnection.getConnectionInfo(): " + ((AceQLConnection) connection).getConnectionInfo());
-
+	
 	System.out.println();
 	System.out.println("aceQLConnection.getAutoCommit() : " + connection.getAutoCommit());
 	System.out.println("aceQLConnection.isReadOnly()    : " + connection.isReadOnly());

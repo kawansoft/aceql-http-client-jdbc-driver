@@ -22,6 +22,7 @@ package com.aceql.jdbc.commons;
 import java.net.PasswordAuthentication;
 import java.net.Proxy;
 import java.net.URLConnection;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -53,6 +54,8 @@ public class ConnectionInfo {
     private String url;
     private String database;
     private PasswordAuthentication authentication;
+    private Instant creationDateTime;
+
     private boolean passwordIsSessionId;
     private Proxy proxy;
     private PasswordAuthentication proxyAuthentication;
@@ -241,9 +244,8 @@ public class ConnectionInfo {
      */
 
     public String getClobReadCharset() {
-        return clobReadCharset;
+	return clobReadCharset;
     }
-
 
     /**
      * Gets the charset name to use when writing a CLOB content with
@@ -257,6 +259,18 @@ public class ConnectionInfo {
 	return clobWriteCharset;
     }
 
+    void setCreationDateTime(Instant instant) {
+	this.creationDateTime = instant;
+    }
+
+    /**
+     * Gets the creation date and time of the Connection.
+     * 
+     * @return the creation date and time of the Connection.
+     */
+    public Instant getCreationDateTime() {
+	return creationDateTime;
+    }
 
     @Override
     public String toString() {
@@ -265,11 +279,11 @@ public class ConnectionInfo {
 	String proxyUsername = proxyAuthentication != null ? proxyAuthentication.getUserName() : null;
 
 	return "ConnectionInfo [url=" + url + ", database=" + database + ", authentication=" + username
-		+ ", passwordIsSessionId=" + passwordIsSessionId + ", proxy=" + proxy + ", proxyAuthentication="
-		+ proxyUsername + ", connectTimeout=" + connectTimeout + ", readTimeout=" + readTimeout
-		+ ", gzipResult=" + gzipResult + ", editionType=" + editionType + ", resultSetMetaDataPolicy="
-		+ resultSetMetaDataPolicy + ", requestProperties=" + requestProperties + ", clobReadCharset="
-		+ clobReadCharset + ", clobWriteCharset=" + clobWriteCharset + "]";
+		+ ", creationDateTime=" + creationDateTime + ", passwordIsSessionId=" + passwordIsSessionId + ", proxy="
+		+ proxy + ", proxyAuthentication=" + proxyUsername + ", connectTimeout=" + connectTimeout
+		+ ", readTimeout=" + readTimeout + ", gzipResult=" + gzipResult + ", editionType=" + editionType
+		+ ", resultSetMetaDataPolicy=" + resultSetMetaDataPolicy + ", requestProperties=" + requestProperties
+		+ ", clobReadCharset=" + clobReadCharset + ", clobWriteCharset=" + clobWriteCharset + "]";
     }
 
 }
