@@ -23,7 +23,7 @@ AceQL Client JDBC Driver - Version 8.0 - 04-Nov-2021
 
 What's new:
 - CLOB type is now fully supported on both Free & Professional Editions.
-- The ConnectionInfo class includes the new CreationDateTime property that 
+- The ConnectionInfo class includes the new getCreationDateTime() method that 
   indicates when the AceQL Connection with the remote server was established.
 
 Bugs fixed:
