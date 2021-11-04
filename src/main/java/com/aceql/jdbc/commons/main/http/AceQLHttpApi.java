@@ -28,6 +28,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.SQLException;
 import java.sql.Savepoint;
+import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -38,6 +39,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import com.aceql.jdbc.commons.AceQLException;
 import com.aceql.jdbc.commons.ConnectionInfo;
+import com.aceql.jdbc.commons.InternalWrapper;
 import com.aceql.jdbc.commons.main.AceQLSavepoint;
 import com.aceql.jdbc.commons.main.batch.UpdateCountsArrayDto;
 import com.aceql.jdbc.commons.main.metadata.ResultSetMetaDataPolicy;
@@ -152,6 +154,8 @@ public class AceQLHttpApi {
 
 		String result = httpManager.callWithPostReturnString(new URL(url), parameters);
 
+		InternalWrapper.setCreationDateTime(connectionInfo, Instant.now());
+		
 		trace("result: " + result);
 
 		ResultAnalyzer resultAnalyzer = new ResultAnalyzer(result, httpManager.getHttpStatusCode(),

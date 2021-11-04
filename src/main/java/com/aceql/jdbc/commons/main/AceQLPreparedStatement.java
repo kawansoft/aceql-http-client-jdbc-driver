@@ -876,9 +876,20 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
      */
     @Override
     public void setClob(int parameterIndex, Clob x) throws SQLException {
-	String methodName = new Object() {
-	}.getClass().getEnclosingMethod().getName();
-	throwExceptionIfCalled(methodName);
+	this.paramsContainBlob = true;
+	Connection connection = super.getConnection();
+	boolean professionalEdition = EditionUtil.isProfessionalEdition(connection);
+
+	String clobReadCharset = this.aceQLConnection.getConnectionInfo().getClobReadCharset();
+	if (professionalEdition) {
+	    AceQLClobUtil aceQLClobUtil = new AceQLClobUtil(x, clobReadCharset);
+	    InputStream in = aceQLClobUtil.getInputStreamFromClob();
+	    setBinaryStream(parameterIndex, in);
+	} else {
+	    AceQLClobUtil aceQLClobUtil = new AceQLClobUtil(x, clobReadCharset);
+	    String string= aceQLClobUtil.getStringFromClob();
+	    setString(parameterIndex, string);
+	}
     }
 
     /*

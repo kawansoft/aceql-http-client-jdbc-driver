@@ -20,9 +20,11 @@ package com.aceql.jdbc.commons;
 
 import java.io.File;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.PasswordAuthentication;
 import java.net.Proxy;
 import java.sql.SQLException;
+import java.time.Instant;
 import java.util.Map;
 
 import com.aceql.jdbc.commons.main.http.AceQLHttpApi;
@@ -41,14 +43,28 @@ public class InternalWrapper {
     public static AceQLConnection connectionBuilder(ConnectionInfo connectionInfo) throws SQLException {
 	return new AceQLConnection(connectionInfo);
     }
-   
 
     public static AceQLBlob blobBuilder(byte[] bytes, EditionType editionType) {
-	return new AceQLBlob(bytes, editionType);
+	return new AceQLBlob(editionType, bytes);
     }
 
     public static AceQLBlob blobBuilder(InputStream inputStream, EditionType editionType) {
-	return new AceQLBlob(inputStream, editionType);
+	return new AceQLBlob(editionType, inputStream);
+    }
+
+    public static AceQLClob clobBuilder(byte[] bytes, EditionType editionType, String clobReadCharset,
+	    String clobWriteCharset) throws UnsupportedEncodingException {
+	return new AceQLClob(bytes, editionType, clobReadCharset, clobWriteCharset);
+    }
+
+    public static AceQLClob blobBuilder(InputStream inputStream, EditionType editionType, String clobReadCharset,
+	    String clobWriteCharset) throws UnsupportedEncodingException {
+	return new AceQLClob(inputStream, editionType, clobReadCharset, clobWriteCharset);
+    }
+
+    public static File getFile(AceQLClob aceQLClob) {
+	File file = aceQLClob.getFile();
+	return file;
     }
 
     public static File getFile(AceQLBlob aceQLBlob) {
@@ -72,5 +88,8 @@ public class InternalWrapper {
 	return connectionInfo;
     }
 
+    public static void setCreationDateTime(ConnectionInfo connectionInfo, Instant instant) {
+	connectionInfo.setCreationDateTime(instant);
+    }
 
 }

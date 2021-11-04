@@ -116,6 +116,9 @@ public class ConnectionBuilder {
 		info.put("proxyUsername", myProxyInfo.getProxyUsername());
 		info.put("proxyPassword", new String(myProxyInfo.getProxyPassword()));
 		
+		//info.put("clobReadCharset", "ISO-8859-1"); // Just for tests
+		//info.put("clobWriteCharset", "ISO-8859-1"); // Just for tests
+		
 		// Open a connection
 		connection = DriverManager.getConnection(serverUrl, info);
 	    } catch (Exception e) {

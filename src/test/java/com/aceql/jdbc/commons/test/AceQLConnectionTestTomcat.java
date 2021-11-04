@@ -16,40 +16,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.aceql.jdbc.commons.test.http;
-
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
-import java.nio.charset.Charset;
-import java.time.Instant;
-import java.util.Date;
-
-import org.apache.commons.io.input.ReaderInputStream;
+package com.aceql.jdbc.commons.test;
 
 /**
  * @author Nicolas de Pomereu
  *
  */
-public class TestMisc {
-
-
+public class AceQLConnectionTestTomcat {
+    
     /**
      * @param args
-     * @throws IOException 
      */
-    public static void main(String[] args) throws IOException {
-
-	Instant instant = Instant.now();
-	System.out.println("instant: " + instant);
-	System.out.println("Date.from(instant);: " + Date.from(instant));
-	
-	System.out.println("Charset.defaultCharset(): " + Charset.defaultCharset());
-	
-	Reader reader = new FileReader("c:\\tmp\\mysqlsampledatabase.sql");
-
-	ReaderInputStream readerInputStream = new ReaderInputStream(reader, Charset.forName("UTF-8"));	
-	readerInputStream.close();
+    public static void main(String[] args) throws Exception {
+	AceQLConnectionTest.TEST_TOMCAT = true;
+	AceQLConnectionTest.doIt();
 
     }
 

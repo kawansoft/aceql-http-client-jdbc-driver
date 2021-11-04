@@ -23,10 +23,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.sql.Array;
 import java.sql.Blob;
+import java.sql.Clob;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -42,6 +45,7 @@ import java.util.Objects;
 import org.apache.commons.io.FileUtils;
 
 import com.aceql.jdbc.commons.AceQLBlob;
+import com.aceql.jdbc.commons.AceQLClob;
 import com.aceql.jdbc.commons.AceQLConnection;
 import com.aceql.jdbc.commons.ConnectionInfo;
 import com.aceql.jdbc.commons.EditionType;
@@ -54,6 +58,7 @@ import com.aceql.jdbc.commons.main.util.AceQLResultSetUtil;
 import com.aceql.jdbc.commons.main.util.BlobUtil;
 import com.aceql.jdbc.commons.main.util.EditionUtil;
 import com.aceql.jdbc.commons.main.util.SimpleClassCaller;
+import com.aceql.jdbc.commons.main.util.TimestampUtil;
 import com.aceql.jdbc.commons.main.util.framework.FrameworkDebug;
 import com.aceql.jdbc.commons.main.util.framework.Tag;
 import com.aceql.jdbc.commons.main.util.json.RowParser;
@@ -118,6 +123,16 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	    throw new SQLException(new FileNotFoundException("jsonFile does not exist: " + jsonFile));
 	}
 
+	if (DEBUG) {
+	    try {
+		String fileContent = FileUtils.readFileToString(jsonFile, "UTF-8");
+		debug(jsonFile.toString());
+		debug(fileContent);
+	    } catch (IOException e) {
+		throw new SQLException(e);
+	    }
+	}
+	
 	this.jsonFile = jsonFile;
 	this.statement = statement;
 
@@ -414,10 +429,9 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 			    + " in order to call ResultSetMetaData.getMetaData().");
 	}
 
-	if (!this.aceQLHttpApi.isFillResultSetMetaData()) {
+	if (!this.aceQLHttpApi.isFillResultSetMetaData() && EditionUtil.isProfessionalEdition(this.aceQLConnection)) {
 	    throw new SQLException(Tag.PRODUCT + ". "
-		    + "Cannot get Result.getMetata(). Call AceQLConnection.setResultSetMetaDataPolicy(EditionType.on) in order to activate"
-		    + " access to Result.getMetata(). Or add to AceQLDriver the property resultSetMetaDataPolicy=auto");
+		    + "Cannot get ResultSet.getMetaData(). Add to AceQL Driver the property resultSetMetaDataPolicy=on");
 	}
 
 	try {
@@ -477,6 +491,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
     }
 
     /**
+     * Build a Blob from 
      * @param value
      * @return
      * @throws SQLException
@@ -497,6 +512,37 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	return blob;
     }
 
+    /**
+     * @param value
+     * @return
+     * @throws SQLException
+     */
+    private Clob getClobFromClobId(String value) throws SQLException {
+	Objects.requireNonNull(value, "value cannot be nul!");
+	AceQLClob clob = null;
+	String clobReadCharset = this.aceQLConnection.getConnectionInfo().getClobReadCharset();
+	String clobWriteCharset = this.aceQLConnection.getConnectionInfo().getClobWriteCharset();
+	if (EditionUtil.isCommunityEdition(aceQLConnection)) {
+	    // Keep for now: blob = new AceQLBlob(getByteArray(value),
+	    // EditionType.Community);
+	    try {
+		clob = InternalWrapper.clobBuilder(getByteArray(value), EditionType.Community, clobReadCharset, clobWriteCharset);
+	    } catch (UnsupportedEncodingException e) {
+		throw new SQLException(e);
+	    }
+	} else {
+	    // Keep for now: blob = new AceQLBlob(getInputStream(value),
+	    // EditionType.Professional);
+	    try {
+		clob = InternalWrapper.blobBuilder(getInputStream(value), EditionType.Professional, clobReadCharset, clobWriteCharset);
+	    } catch (UnsupportedEncodingException e) {
+		throw new SQLException(e);		
+	    }
+	}
+
+	return clob;
+    }
+    
     /*
      * (non-Javadoc)
      *
@@ -532,6 +578,41 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
     /*
      * (non-Javadoc)
      *
+     * @see com.aceql.jdbc.commons.main.abstracts.AbstractResultSet#getClob(int)
+     */
+    @Override
+    public Clob getClob(int i) throws SQLException {
+	String value = getStringValue(i);
+
+	if (value == null || value.equals("NULL")) {
+	    return null;
+	}
+
+	return getClobFromClobId(value);
+    }
+    
+    /*
+     * (non-Javadoc)
+     *
+     * @see com.aceql.jdbc.commons.main.abstracts.AbstractResultSet#getClob(String)
+     */
+    @Override
+    public Clob getClob(String colName) throws SQLException {
+	String value = getStringValue(colName);
+
+	if (value == null || value.equals("NULL")) {
+	    return null;
+	}
+
+	return getClobFromClobId(value);
+    }
+    
+
+
+
+    /*
+     * (non-Javadoc)
+     *
      * @see
      * com.aceql.jdbc.commons.main.abstracts.AbstractResultSet#getBinaryStream(int)
      */
@@ -562,11 +643,48 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	return getInputStream(value);
     }
 
+    
+    
+    @Override
+    public Reader getCharacterStream(int columnIndex) throws SQLException {
+	String value = getStringValue(columnIndex);
+
+	if (value == null || value.equals("NULL")) {
+	    return null;
+	}
+	
+	try {
+	    Reader reader = new InputStreamReader(getInputStream(value), this.aceQLConnection.getConnectionInfo().getClobReadCharset());
+	    return reader;
+	} catch (UnsupportedEncodingException e) {
+	    throw new SQLException(e);
+	} 
+    }
+
+    @Override
+    public Reader getCharacterStream(String columnName) throws SQLException {
+	String value = getStringValue(columnName);
+
+	if (value == null || value.equals("NULL")) {
+	    return null;
+	}
+	try {
+	    Reader reader = new InputStreamReader(getInputStream(value), this.aceQLConnection.getConnectionInfo().getClobReadCharset());
+	    return reader;
+	} catch (UnsupportedEncodingException e) {
+	    throw new SQLException(e);
+	} 
+    }
+
     @Override
     public String getString(String columnLabel) throws SQLException {
 	String value = getStringValue(columnLabel);
 	if (value == null || value.equals("NULL")) {
 	    return null;
+	}
+	
+	if (isTimestamp(columnLabel, value)) {
+	    return getTimestamp(columnLabel).toString();
 	}
 	
 	if (BlobUtil.isClobId(value)) {
@@ -578,9 +696,50 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	} else {
 	    return value;
 	}
+    }
+
+    /**
+     * Checks whether a string is a timestamp format 
+     * @param columnLabel
+     * @param value
+     * @return whether a string is a timestamp format 
+     * @throws SQLException
+     */
+    private boolean isTimestamp(String columnLabel, String value) throws SQLException {
+	
+	// Fast check
+	if (! TimestampUtil.isLong(value) || EditionUtil.isCommunityEdition(aceQLConnection)) {
+	    return false;
+	}
+	
+	// Deeper check
+	if (resultSetMetaData == null) {
+	    resultSetMetaData = getMetaData();
+	} 
+	
+	return TimestampUtil.isTimestamp(resultSetMetaData, columnLabel);
 
     }
 
+    /**
+     * Checks whether a string is a timestamp format 
+     * @param columnIndex
+     * @param value
+     * @return whether a string is a timestamp format 
+     * @throws SQLException
+     */
+    private boolean isTimestamp(int columnIndex, String value) throws SQLException {
+	// Fast check
+	if (! TimestampUtil.isLong(value) || EditionUtil.isCommunityEdition(aceQLConnection)) {
+	    return false;
+	}
+	// Deeper check
+	if (resultSetMetaData == null) {
+	    resultSetMetaData = getMetaData();
+	}
+	return TimestampUtil.isTimestamp(resultSetMetaData, columnIndex);    
+    }
+    
     /**
      * Is the string is a ClobId in format
      * 6e91b35fe4d84420acc6e230607ebc37.clob.txt, return the content of
@@ -676,6 +835,10 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	    return null;
 	}
 	
+	if (isTimestamp(columnIndex, value)) {
+	    return getTimestamp(columnIndex).toString();
+	}
+	
 	if (BlobUtil.isClobId(value)) {
 	    value = getClobContentIfClobId(value);
 	    return value;
@@ -705,6 +868,10 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	    return null;
 	}
 	
+	if (isTimestamp(columnName, value)) {
+	    return getTimestamp(columnName).toString();
+	}
+	
 	if (BlobUtil.isClobId(value)) {
 	    value = getClobContentIfClobId(value);
 	    return value;
@@ -714,7 +881,6 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	} else {
 	    return value;
 	}
-
     }
 
     @Override
@@ -803,6 +969,10 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	    return null;
 	}
 	
+	if (isTimestamp(columnIndex, value)) {
+	    return getTimestamp(columnIndex).toString();
+	}
+	
 	if (BlobUtil.isClobId(value)) {
 	    value = getClobContentIfClobId(value);
 	    return value;
@@ -814,6 +984,8 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	}
 	
     }
+
+
 
 
     @Override

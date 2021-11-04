@@ -305,7 +305,7 @@ final public class AceQLDriver implements java.sql.Driver {
      */
     @Override
     public int getMajorVersion() {
-	return 7;
+	return 8;
     }
 
     /**
@@ -315,7 +315,7 @@ final public class AceQLDriver implements java.sql.Driver {
      */
     @Override
     public int getMinorVersion() {
-	return 2;
+	return 0;
     }
 
     /**
