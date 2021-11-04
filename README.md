@@ -42,14 +42,8 @@
       * [SQL Transactions and Connections modifiers](#sql-transactions-and-connections-modifiers)
       * [Batch management](#batch-management)
       * [BLOB management](#blob-management)
-<<<<<<< HEAD
-         
-=======
-        
->>>>>>> refs/heads/8.0
          * [Standard syntax](#standard-syntax)
             * [BLOB creation with standard syntax](#blob-creation-with-standard-syntax)
-            
             * [BLOB reading with standard syntax](#blob-reading-with-standard-syntax)
          * [Advanced syntax with streaming techniques (Professional Edition)](#advanced-syntax-with-streaming-techniques-professional-edition)
             * [BLOB creation with stream syntax](#blob-creation-with-stream-syntax)
