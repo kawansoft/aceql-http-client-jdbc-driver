@@ -27,7 +27,7 @@ What's new:
   indicates when the AceQL Connection with the remote server was established.
 
 Bugs fixed:
-- ResultSet.getMetaData(): fix type in error messages.
+- ResultSet.getMetaData(): fix typo in error messages.
 
 
 AceQL Client JDBC Driver - Version 7.2 - 28-Sep-2021
