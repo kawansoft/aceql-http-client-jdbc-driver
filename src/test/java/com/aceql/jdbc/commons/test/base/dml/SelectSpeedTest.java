@@ -41,9 +41,9 @@ public class SelectSpeedTest {
     }
 
     public void callSelectOneLine() throws SQLException {
-	System.out.println(new Date() + " Begin...");
+	out.println(new Date() + " Begin...");
 	if (connection instanceof AceQLConnection) {
-	    System.out.println("Using a remote AceQLConnection!");
+	    out.println("Using a remote AceQLConnection!");
 	}
 	long begin = new Date().getTime();
 	
@@ -61,8 +61,9 @@ public class SelectSpeedTest {
 	}
 	
 	long end = new Date().getTime();
-	System.out.println("Elapsed: " + (end - begin));
-	System.out.println(new Date() + " End.");
+	out.println();
+	out.println("Elapsed: " + (end - begin));
+	out.println(new Date() + " End.");
     }
     
     
