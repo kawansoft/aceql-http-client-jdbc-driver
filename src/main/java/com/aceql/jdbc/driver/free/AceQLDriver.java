@@ -315,7 +315,7 @@ final public class AceQLDriver implements java.sql.Driver {
      */
     @Override
     public int getMinorVersion() {
-	return 0;
+	return 1;
     }
 
     /**

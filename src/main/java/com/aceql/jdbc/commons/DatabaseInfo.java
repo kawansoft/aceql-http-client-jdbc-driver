@@ -25,7 +25,7 @@ import com.aceql.jdbc.commons.main.metadata.dto.DatabaseInfoDto;
 
 /**
  * 
- * A simple class that contains main remote database & JDBC info.
+ * A simple shortcut class that contains main remote database & JDBC info.
  * 
  * @author Nicolas de Pomereu
  * @since 8.1

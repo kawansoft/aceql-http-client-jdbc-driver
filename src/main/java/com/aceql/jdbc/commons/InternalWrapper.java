@@ -41,43 +41,130 @@ import com.aceql.jdbc.commons.main.metadata.dto.DatabaseInfoDto;
  */
 public class InternalWrapper {
 
+    /**
+     * This is an internal undocumented method that should not be used nor called by
+     * the users of the AceQL JDBC Driver APIs.
+     * 
+     * @param connectionInfo
+     * @return
+     * @throws SQLException
+     */
     public static AceQLConnection connectionBuilder(ConnectionInfo connectionInfo) throws SQLException {
 	return new AceQLConnection(connectionInfo);
     }
 
+    /**
+     * This is an internal undocumented method that should not be used nor called by
+     * the users of the AceQL JDBC Driver APIs.
+     * 
+     * @param bytes
+     * @param editionType
+     * @return
+     */
     public static AceQLBlob blobBuilder(byte[] bytes, EditionType editionType) {
 	return new AceQLBlob(editionType, bytes);
     }
 
+    /**
+     * This is an internal undocumented method that should not be used nor called by
+     * the users of the AceQL JDBC Driver APIs.
+     * 
+     * @param inputStream
+     * @param editionType
+     * @return
+     */
     public static AceQLBlob blobBuilder(InputStream inputStream, EditionType editionType) {
 	return new AceQLBlob(editionType, inputStream);
     }
 
+    /**
+     * * This is an internal undocumented method that should not be used nor called
+     * by the users of the AceQL JDBC Driver APIs.
+     * 
+     * @param bytes
+     * @param editionType
+     * @param clobReadCharset
+     * @param clobWriteCharset
+     * @return
+     * @throws UnsupportedEncodingException
+     */
     public static AceQLClob clobBuilder(byte[] bytes, EditionType editionType, String clobReadCharset,
 	    String clobWriteCharset) throws UnsupportedEncodingException {
 	return new AceQLClob(bytes, editionType, clobReadCharset, clobWriteCharset);
     }
 
+    /**
+     * This is an internal undocumented method that should not be used nor called by
+     * the users of the AceQL JDBC Driver APIs.
+     * 
+     * @param inputStream
+     * @param editionType
+     * @param clobReadCharset
+     * @param clobWriteCharset
+     * @return
+     * @throws UnsupportedEncodingException
+     */
     public static AceQLClob blobBuilder(InputStream inputStream, EditionType editionType, String clobReadCharset,
 	    String clobWriteCharset) throws UnsupportedEncodingException {
 	return new AceQLClob(inputStream, editionType, clobReadCharset, clobWriteCharset);
     }
 
+    /**
+     * This is an internal undocumented method that should not be used nor called by
+     * the users of the AceQL JDBC Driver APIs.
+     * 
+     * @param aceQLClob
+     * @return
+     */
     public static File getFile(AceQLClob aceQLClob) {
 	File file = aceQLClob.getFile();
 	return file;
     }
 
+    /**
+     * This is an internal undocumented method that should not be used nor called by
+     * the users of the AceQL JDBC Driver APIs.
+     * 
+     * @param aceQLBlob
+     * @return
+     */
     public static File getFile(AceQLBlob aceQLBlob) {
 	File file = aceQLBlob.getFile();
 	return file;
     }
 
+    /**
+     * This is an internal undocumented method that should not be used nor called by
+     * the users of the AceQL JDBC Driver APIs.
+     * 
+     * @param aceQLConnection
+     * @return
+     */
     public static AceQLHttpApi getAceQLHttpApi(AceQLConnection aceQLConnection) {
 	AceQLHttpApi aceQLHttpApi = aceQLConnection.aceQLHttpApi;
 	return aceQLHttpApi;
     }
 
+    /**
+     * This is an internal undocumented method that should not be used nor called by
+     * the users of the AceQL JDBC Driver APIs.
+     * 
+     * @param url
+     * @param database
+     * @param authentication
+     * @param passwordIsSessionId
+     * @param proxy
+     * @param proxyAuthentication
+     * @param connectTimeout
+     * @param readTimeout
+     * @param gzipResult
+     * @param editionType
+     * @param resultSetMetaDataPolicy
+     * @param requestProperties
+     * @param clobReadCharset
+     * @param clobWriteCharset
+     * @return
+     */
     public static ConnectionInfo connectionInfoBuilder(String url, String database,
 	    PasswordAuthentication authentication, boolean passwordIsSessionId, Proxy proxy,
 	    PasswordAuthentication proxyAuthentication, int connectTimeout, int readTimeout, boolean gzipResult,
@@ -89,10 +176,25 @@ public class InternalWrapper {
 	return connectionInfo;
     }
 
+    /**
+     * This is an internal undocumented method that should not be used nor called by
+     * the users of the AceQL JDBC Driver APIs.
+     * 
+     * @param connectionInfo
+     * @param instant
+     */
     public static void setCreationDateTime(ConnectionInfo connectionInfo, Instant instant) {
 	connectionInfo.setCreationDateTime(instant);
     }
-    
+
+    /**
+     * This is an internal undocumented method that should not be used nor called by
+     * the users of the AceQL JDBC Driver APIs.
+     * 
+     * @param aceQLHttpApi
+     * @return
+     * @throws AceQLException
+     */
     public static DatabaseInfo databaseInfoBuilder(AceQLHttpApi aceQLHttpApi) throws AceQLException {
 	DatabaseInfoDto databaseInfoDto = aceQLHttpApi.getDatabaseInfoDto();
 	DatabaseInfo databaseInfo = new DatabaseInfo(databaseInfoDto);
