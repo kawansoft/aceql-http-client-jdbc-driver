@@ -99,7 +99,9 @@ public class AceQLConnectionTest {
 	System.out.println("aceQLConnection.getServerVersion(): " + ((AceQLConnection) connection).getServerVersion());
 	System.out.println("aceQLConnection.getClientVersion(): " + ((AceQLConnection) connection).getClientVersion());
 	System.out.println();
-
+	System.out.println("aceQLConnection.getDatabaseInfo() : " + ((AceQLConnection) connection).getDatabaseInfo());
+	System.out.println();
+	
 	System.out
 		.println("aceQLConnection.getConnectionInfo(): " + ((AceQLConnection) connection).getConnectionInfo());
 	

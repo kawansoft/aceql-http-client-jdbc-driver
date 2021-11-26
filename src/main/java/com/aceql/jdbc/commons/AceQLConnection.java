@@ -218,7 +218,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	AceQLBlob blob = new AceQLBlob(connectionInfo.getEditionType());
 	return blob;
     }
-    
+
     /*
      * (non-Javadoc)
      *
@@ -691,7 +691,8 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     }
 
     /**
-     * Return remote database & JDBC Driver main info.
+     * A shortcut to remote database metadata which returns remote database and
+     * remote JDBC Driver main info.
      * 
      * @return remote database & JDBC Driver main info.
      * @throws AceQLException if any Exception occurs

@@ -22,8 +22,8 @@ AceQL Client JDBC Driver - Version 8.1 - 26-Nov-2021
 ----------------------------------------------------
 
 What's new:
-- The new AceQLConnection.getDatabaseInfo() API allows to easely
-  all info about remote database and JDBC Driver.
+- The new AceQLConnection.getDatabaseInfo() API allows to easily
+  get all info about the remote database and the remote DBC Driver.
 
 
 AceQL Client JDBC Driver - Version 8.0 - 04-Nov-2021
