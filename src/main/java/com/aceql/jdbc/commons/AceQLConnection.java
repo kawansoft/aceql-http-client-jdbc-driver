@@ -691,6 +691,17 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
     }
 
     /**
+     * Return remote database & JDBC Driver main info.
+     * 
+     * @return remote database & JDBC Driver main info.
+     * @throws AceQLException if any Exception occurs
+     */
+    public DatabaseInfo getDatabaseInfo() throws AceQLException {
+	DatabaseInfo databaseInfo = InternalWrapper.databaseInfoBuilder(aceQLHttpApi);
+	return databaseInfo;
+    }
+
+    /**
      * Returns the cancelled value set by the progress indicator
      *
      * @return the cancelled value set by the progress indicator

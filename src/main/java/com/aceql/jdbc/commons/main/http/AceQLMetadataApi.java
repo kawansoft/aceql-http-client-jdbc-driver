@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import com.aceql.jdbc.commons.AceQLException;
+import com.aceql.jdbc.commons.main.metadata.dto.DatabaseInfoDto;
 import com.aceql.jdbc.commons.main.metadata.dto.JdbcDatabaseMetaDataDto;
 import com.aceql.jdbc.commons.main.metadata.dto.TableDto;
 import com.aceql.jdbc.commons.main.metadata.dto.TableNamesDto;
@@ -153,6 +154,31 @@ public class AceQLMetadataApi {
 	    // If result is OK, it's a DTO
 	    TableDto tableDto = GsonWsUtil.fromJson(result, TableDto.class);
 	    return tableDto;
+	} 
+	catch (AceQLException e) {
+	    throw e;
+	}
+	catch (Exception e) {
+	    throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
+	}
+    }
+
+    public DatabaseInfoDto getDatabaseInfoDto() throws AceQLException {
+	try {
+	    String action = "get_database_info";
+	    String result = httpManager.callWithGet(url + action);
+
+	    ResultAnalyzer resultAnalyzer = new ResultAnalyzer(result, httpManager.getHttpStatusCode(),
+		    httpManager.getHttpStatusMessage());
+	    if (!resultAnalyzer.isStatusOk()) {
+		throw new AceQLException(resultAnalyzer.getErrorMessage(), resultAnalyzer.getErrorType(), null,
+			resultAnalyzer.getStackTrace(), httpManager.getHttpStatusCode());
+	    }
+
+	    // If result is OK, it's a DTO
+	    DatabaseInfoDto databaseInfoDto = GsonWsUtil.fromJson(result,
+		    DatabaseInfoDto.class);
+	    return databaseInfoDto;
 	} 
 	catch (AceQLException e) {
 	    throw e;
