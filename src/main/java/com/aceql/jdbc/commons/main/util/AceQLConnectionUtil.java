@@ -136,7 +136,7 @@ public class AceQLConnectionUtil {
     }
     
     /**
-     * Says if the current version 
+     * Says if the current version is OK , that is >= to the minimum required server version
      * @param rawServerVersion		the current server version
      * @param minServerVersion		the minimum version for feature execution
      * @return true if rawServerVersion is OK for execution
