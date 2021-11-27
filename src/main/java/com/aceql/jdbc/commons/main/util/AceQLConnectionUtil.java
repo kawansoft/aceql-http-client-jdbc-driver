@@ -40,10 +40,10 @@ public class AceQLConnectionUtil {
     public static final String META_DATA_CALLS_MIN_SERVER_VERSION = "6.0";
     
     // Minimum version for Statement.executeBatch() & PreparedStatement.executeBatch();
-    public static final String BATCH_MIN_SERVER_VERSION = "8.0";
-    
-    //
-    //public static final String META_DATA_CALLS_MIN_SERVER_VERSION = "6.0";
+    public static final String BATCH_MIN_SERVER_VERSION =  "8.0";
+
+    // Minimum version for Connection.getDatabaseInfo()
+    public static final String GET_DATABASE_INFO_MIN_SERVER_VERSION = "9.0";
     
     private static String SERVER_VERSION_NUMBER = null;
 
@@ -118,32 +118,35 @@ public class AceQLConnectionUtil {
     }
 
     /**
-     * Gets the raw server version as number.
-     * @param version	the full version string
-     * @return the raw server version as number
-     */
-    public static String getServerRawVersion(final String version) {
-	Objects.requireNonNull(version, "version cannot be null!");
-	String newVersion = StringUtils.substringBetween(version, " v", "-");
-	newVersion = version.trim();
-	return newVersion;
-    }
-    
-
-    /**
-     * Says it the server version supports batch callls. True if >= 8.0
+     * Gets the Rax server version as 
      * @param connection
-     * @return true if server version  >= 8.0
+     * @return
      * @throws AceQLException
      */
-    public static boolean isBatchSupported(Connection connection) throws SQLException {
+    public static String getServerRawVersion(Connection connection) throws AceQLException {
+	Objects.requireNonNull(connection, "version cannot be null!");
+	
 	AceQLConnection aceqlConnection = (AceQLConnection)connection;
 	if (SERVER_VERSION_NUMBER == null) {
 	    SERVER_VERSION_NUMBER =  aceqlConnection.getServerVersion();
 	}
-
-	String rawServerVersion = getServerRawVersion(SERVER_VERSION_NUMBER);
-	return rawServerVersion.compareToIgnoreCase(BATCH_MIN_SERVER_VERSION) >= 0 ;
+	
+	String newVersion = StringUtils.substringBetween(SERVER_VERSION_NUMBER, "v", "-");
+	return newVersion.trim();
+    }
+    
+    /**
+     * Says if the current version 
+     * @param rawServerVersion		the current server version
+     * @param minServerVersion		the minimum version for feature execution
+     * @return true if rawServerVersion is OK for execution
+     * @throws NumberFormatException
+     */
+    public static boolean isCurrentVersionOk(String rawServerVersion, String minServerVersion)
+	    throws NumberFormatException {
+	Double rawServerVersionDouble = Double.valueOf(rawServerVersion);
+	Double minServerVersionDouble =  Double.valueOf(minServerVersion);
+	return rawServerVersionDouble >= minServerVersionDouble;
     }
     
     /**
@@ -153,14 +156,31 @@ public class AceQLConnectionUtil {
      * @throws AceQLException
      */
     public static boolean isJdbcMetaDataSupported(Connection connection) throws SQLException {
-	AceQLConnection aceqlConnection = (AceQLConnection)connection;
-	if (SERVER_VERSION_NUMBER == null) {
-	    SERVER_VERSION_NUMBER =  aceqlConnection.getServerVersion();
-	}
-
-	String rawServerVersion = getServerRawVersion(SERVER_VERSION_NUMBER);
-	return rawServerVersion.compareToIgnoreCase(META_DATA_CALLS_MIN_SERVER_VERSION) >= 0 ;
+	String rawServerVersion = getServerRawVersion(connection);
+	return isCurrentVersionOk(rawServerVersion, META_DATA_CALLS_MIN_SERVER_VERSION);
     }
+
+    /**
+     * Says it the server version supports batch callls. True if >= 8.0
+     * @param connection
+     * @return true if server version  >= 8.0
+     * @throws AceQLException
+     */
+    public static boolean isBatchSupported(Connection connection) throws SQLException {
+	String rawServerVersion = getServerRawVersion(connection);
+	return isCurrentVersionOk(rawServerVersion, BATCH_MIN_SERVER_VERSION);
+    }
+
+    /**
+     * Says it the server version supports getDatabaseInfo calls.
+     * @return true if server version  >= 9.0
+     * @throws AceQLException
+     */
+    public static boolean isGetDatabaseInfoSupported(Connection connection) throws SQLException {
+	String rawServerVersion = getServerRawVersion(connection);
+	return isCurrentVersionOk(rawServerVersion, GET_DATABASE_INFO_MIN_SERVER_VERSION);
+    }
+    
 
 
 

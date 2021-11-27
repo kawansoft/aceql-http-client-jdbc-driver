@@ -695,9 +695,15 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      * remote JDBC Driver main info.
      * 
      * @return remote database & JDBC Driver main info.
-     * @throws AceQLException if any Exception occurs
+     * @throws SQLException 
      */
-    public DatabaseInfo getDatabaseInfo() throws AceQLException {
+    public DatabaseInfo getDatabaseInfo() throws SQLException {
+	
+	if (!AceQLConnectionUtil.isGetDatabaseInfoSupported(this)) {
+	    throw new SQLException("AceQL Server version must be >= " + AceQLConnectionUtil.GET_DATABASE_INFO_MIN_SERVER_VERSION
+		    + " in order to call getDatabaseInfo().");
+	}
+	
 	DatabaseInfo databaseInfo = InternalWrapper.databaseInfoBuilder(aceQLHttpApi);
 	return databaseInfo;
     }

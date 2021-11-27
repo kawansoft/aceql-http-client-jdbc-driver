@@ -18,7 +18,6 @@
  */
 package com.aceql.jdbc.commons;
 
-import java.sql.SQLException;
 import java.util.Objects;
 
 import com.aceql.jdbc.commons.main.metadata.dto.DatabaseInfoDto;
@@ -42,21 +41,19 @@ public class DatabaseInfo {
     private String driverVersion;
     
     /**
-     * Package protected Constructor
-     * @param databaseInfoDtothe DatabaseInfo container
-     * @throws SQLException
+     * Package protected Constructor.
+     * @param databaseInfoDto The database DTO rransfered from server
      */
-     DatabaseInfo(DatabaseInfoDto databaseInfoDto) {
+    DatabaseInfo(DatabaseInfoDto databaseInfoDto) {
 	Objects.requireNonNull(databaseInfoDto, "databaseInfoDto cannot be null!");
-	DatabaseInfo theDatabaseInfo = databaseInfoDto.getDatabaseInfo();
-	datatabaseMajorVersion = theDatabaseInfo.getDatatabaseMajorVersion();
-	databaseMinorVersion = theDatabaseInfo.getDatabaseMinorVersion();
-	databaseProductName = theDatabaseInfo.getDatabaseProductName();
-	databaseProductVersion = theDatabaseInfo.getDatabaseProductVersion();
-	driverMajorVersion = theDatabaseInfo.getDriverMajorVersion();
-	driverMinorVersion = theDatabaseInfo.getDriverMinorVersion();
-	driverName = theDatabaseInfo.getDriverName();
-	driverVersion = theDatabaseInfo.getDriverVersion();
+	datatabaseMajorVersion = databaseInfoDto.getDatatabaseMajorVersion();
+	databaseMinorVersion = databaseInfoDto.getDatabaseMinorVersion();
+	databaseProductName = databaseInfoDto.getDatabaseProductName();
+	databaseProductVersion = databaseInfoDto.getDatabaseProductVersion();
+	driverMajorVersion = databaseInfoDto.getDriverMajorVersion();
+	driverMinorVersion = databaseInfoDto.getDriverMinorVersion();
+	driverName = databaseInfoDto.getDriverName();
+	driverVersion = databaseInfoDto.getDriverVersion();
     }
 
     /**
@@ -130,7 +127,4 @@ public class DatabaseInfo {
 		+ databaseProductVersion + ", driverMajorVersion=" + driverMajorVersion + ", driverMinorVersion="
 		+ driverMinorVersion + ", driverName=" + driverName + ", driverVersion=" + driverVersion + "]";
     }
-
-
-    
 }

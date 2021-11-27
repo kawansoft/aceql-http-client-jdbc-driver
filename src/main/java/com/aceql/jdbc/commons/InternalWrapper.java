@@ -196,8 +196,8 @@ public class InternalWrapper {
      * @throws AceQLException
      */
     public static DatabaseInfo databaseInfoBuilder(AceQLHttpApi aceQLHttpApi) throws AceQLException {
-	DatabaseInfoDto databaseInfoDto = aceQLHttpApi.getDatabaseInfoDto();
-	DatabaseInfo databaseInfo = new DatabaseInfo(databaseInfoDto);
+	DatabaseInfoDto databaseInfoDto = aceQLHttpApi.getDatabaseInfoDto();	
+	DatabaseInfo databaseInfo = new DatabaseInfo(databaseInfoDto) ;
 	return databaseInfo;
     }
 
