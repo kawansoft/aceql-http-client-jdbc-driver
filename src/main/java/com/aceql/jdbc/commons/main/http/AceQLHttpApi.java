@@ -42,7 +42,6 @@ import com.aceql.jdbc.commons.ConnectionInfo;
 import com.aceql.jdbc.commons.InternalWrapper;
 import com.aceql.jdbc.commons.main.AceQLSavepoint;
 import com.aceql.jdbc.commons.main.batch.UpdateCountsArrayDto;
-import com.aceql.jdbc.commons.main.metadata.ResultSetMetaDataPolicy;
 import com.aceql.jdbc.commons.main.metadata.dto.DatabaseInfoDto;
 import com.aceql.jdbc.commons.main.metadata.dto.JdbcDatabaseMetaDataDto;
 import com.aceql.jdbc.commons.main.metadata.dto.TableDto;
@@ -51,6 +50,7 @@ import com.aceql.jdbc.commons.main.metadata.util.GsonWsUtil;
 import com.aceql.jdbc.commons.main.util.UserLoginStore;
 import com.aceql.jdbc.commons.main.util.json.SqlParameter;
 import com.aceql.jdbc.commons.main.version.VersionValues;
+import com.aceql.jdbc.commons.metadata.ResultSetMetaDataPolicy;
 
 /**
  * @author Nicolas de Pomereu

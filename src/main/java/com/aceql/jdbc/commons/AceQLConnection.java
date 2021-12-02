@@ -44,11 +44,11 @@ import com.aceql.jdbc.commons.main.AceQLPreparedStatement;
 import com.aceql.jdbc.commons.main.AceQLStatement;
 import com.aceql.jdbc.commons.main.abstracts.AbstractConnection;
 import com.aceql.jdbc.commons.main.http.AceQLHttpApi;
-import com.aceql.jdbc.commons.main.metadata.RemoteDatabaseMetaData;
 import com.aceql.jdbc.commons.main.util.AceQLConnectionUtil;
 import com.aceql.jdbc.commons.main.util.SimpleClassCaller;
 import com.aceql.jdbc.commons.main.util.framework.Tag;
 import com.aceql.jdbc.commons.main.version.Version;
+import com.aceql.jdbc.commons.metadata.RemoteDatabaseMetaData;
 import com.aceql.jdbc.driver.free.AceQLDriver;
 
 /**

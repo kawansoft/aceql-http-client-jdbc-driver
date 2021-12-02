@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.aceql.jdbc.commons.main.metadata;
+package com.aceql.jdbc.commons.metadata;
 
 /**
  * A SQL Foreign Key.

@@ -32,8 +32,8 @@ import org.apache.commons.lang3.SystemUtils;
 
 import com.aceql.jdbc.commons.AceQLConnection;
 import com.aceql.jdbc.commons.AceQLException;
-import com.aceql.jdbc.commons.main.metadata.RemoteDatabaseMetaData;
-import com.aceql.jdbc.commons.main.metadata.Table;
+import com.aceql.jdbc.commons.metadata.RemoteDatabaseMetaData;
+import com.aceql.jdbc.commons.metadata.Table;
 import com.aceql.jdbc.commons.test.connection.ConnectionBuilder;
 
 /**

@@ -28,8 +28,8 @@ import java.time.Instant;
 import java.util.Map;
 
 import com.aceql.jdbc.commons.main.http.AceQLHttpApi;
-import com.aceql.jdbc.commons.main.metadata.ResultSetMetaDataPolicy;
 import com.aceql.jdbc.commons.main.metadata.dto.DatabaseInfoDto;
+import com.aceql.jdbc.commons.metadata.ResultSetMetaDataPolicy;
 
 /**
  * A internal wrapper for Java package protected calls. <br>

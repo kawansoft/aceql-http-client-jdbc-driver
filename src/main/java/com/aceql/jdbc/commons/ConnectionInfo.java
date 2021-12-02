@@ -26,7 +26,7 @@ import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.aceql.jdbc.commons.main.metadata.ResultSetMetaDataPolicy;
+import com.aceql.jdbc.commons.metadata.ResultSetMetaDataPolicy;
 
 /**
  * Allows to get all the info set and passed when creating an SQL

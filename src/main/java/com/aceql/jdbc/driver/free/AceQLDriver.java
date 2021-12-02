@@ -38,10 +38,10 @@ import com.aceql.jdbc.commons.EditionType;
 import com.aceql.jdbc.commons.InternalWrapper;
 import com.aceql.jdbc.commons.driver.util.DriverPropertyInfoBuilder;
 import com.aceql.jdbc.commons.driver.util.DriverUtil;
-import com.aceql.jdbc.commons.main.metadata.ResultSetMetaDataPolicy;
 import com.aceql.jdbc.commons.main.util.framework.FrameworkDebug;
 import com.aceql.jdbc.commons.main.util.framework.JdbcUrlHeader;
 import com.aceql.jdbc.commons.main.util.framework.Tag;
+import com.aceql.jdbc.commons.metadata.ResultSetMetaDataPolicy;
 
 /**
  *

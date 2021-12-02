@@ -733,7 +733,7 @@ The [JdbcDatabaseMetaData](https://docs.aceql.com/rest/soft_java_client/8.1/java
 
 ### Getting Details of Tables and Columns
 
-See the [javadoc](https://docs.aceql.com/rest/soft_java_client/8.1/javadoc/com/aceql/jdbc/commons/main/metadata/package-summary.html) of the `com.aceql.jdbc.commons.main.metadata` package: 
+See the [javadoc](https://docs.aceql.com/rest/soft_java_client/8.1/javadoc/com/aceql/jdbc/commons/main/metadata/package-summary.html) of the `com.aceql.jdbc.commons.metadata` package: 
 
 ```java
     System.out.println("Get the table names:");
