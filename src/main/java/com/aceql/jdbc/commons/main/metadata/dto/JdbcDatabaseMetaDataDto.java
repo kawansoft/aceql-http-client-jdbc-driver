@@ -18,7 +18,7 @@
  */
 package com.aceql.jdbc.commons.main.metadata.dto;
 
-import com.aceql.jdbc.commons.main.metadata.JdbcDatabaseMetaData;
+import com.aceql.jdbc.commons.metadata.JdbcDatabaseMetaData;
 
 public class JdbcDatabaseMetaDataDto {
 

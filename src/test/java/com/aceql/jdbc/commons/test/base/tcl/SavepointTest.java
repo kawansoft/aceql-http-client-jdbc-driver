@@ -11,8 +11,8 @@ import java.sql.Savepoint;
 import java.sql.Statement;
 
 import com.aceql.jdbc.commons.AceQLConnection;
-import com.aceql.jdbc.commons.main.metadata.JdbcDatabaseMetaData;
-import com.aceql.jdbc.commons.main.metadata.RemoteDatabaseMetaData;
+import com.aceql.jdbc.commons.metadata.JdbcDatabaseMetaData;
+import com.aceql.jdbc.commons.metadata.RemoteDatabaseMetaData;
 import com.aceql.jdbc.commons.test.base.dml.SqlDeleteTest;
 import com.aceql.jdbc.commons.test.base.dml.SqlInsertTest;
 

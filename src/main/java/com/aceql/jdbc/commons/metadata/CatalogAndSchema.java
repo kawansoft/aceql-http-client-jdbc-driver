@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package com.aceql.jdbc.commons.main.metadata;
+package com.aceql.jdbc.commons.metadata;
 
 /**
  * Parent of all metadata of objects: they all belong to a catalog and schema.

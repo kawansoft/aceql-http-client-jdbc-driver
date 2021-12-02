@@ -18,7 +18,7 @@
  */
 package com.aceql.jdbc.commons.main.metadata.dto;
 
-import com.aceql.jdbc.commons.main.metadata.Table;
+import com.aceql.jdbc.commons.metadata.Table;
 
 /**
  * Contains the list of tables of the database.

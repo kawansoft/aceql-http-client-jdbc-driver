@@ -19,6 +19,8 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.SystemUtils;
 
+import com.aceql.jdbc.commons.main.metadata.dto.DatabaseInfoDto;
+
 /**
  * @author Nicolas de Pomereu
  *
@@ -45,7 +47,7 @@ public class PythonClassDumper {
 	classes.add(Index.class);
 	classes.add(PrimaryKey.class);
 	*/
-	classes.add(ConnectionOptions.class);
+	classes.add(DatabaseInfoDto.class);
 
 	File baseDir = new File(SystemUtils.USER_HOME + File.separator + "tmp");
 	baseDir.mkdirs();

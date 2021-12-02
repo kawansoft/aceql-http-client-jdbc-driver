@@ -50,7 +50,7 @@ import com.aceql.jdbc.commons.test.connection.ConnectionParms;
 public class AceQLConnectionTest {
 
     public static boolean TEST_TOMCAT = false;
-    
+
     public static void main(String[] args) throws Exception {
 	doIt();
     }
@@ -96,13 +96,13 @@ public class AceQLConnectionTest {
 	boolean doSelectOnRegions = false;
 	boolean doInsertOnRegions = false;
 
-	System.out.println("aceQLConnection.getServerVersion(): " + ((AceQLConnection) connection).getServerVersion());
-	System.out.println("aceQLConnection.getClientVersion(): " + ((AceQLConnection) connection).getClientVersion());
+	System.out.println("aceQLConnection.getServerVersion() : " + ((AceQLConnection) connection).getServerVersion());
+	System.out.println("aceQLConnection.getClientVersion() : " + ((AceQLConnection) connection).getClientVersion());
 	System.out.println();
-
+	System.out.println("aceQLConnection.getDatabaseInfo()  : " + ((AceQLConnection) connection).getDatabaseInfo());
 	System.out
 		.println("aceQLConnection.getConnectionInfo(): " + ((AceQLConnection) connection).getConnectionInfo());
-	
+
 	System.out.println();
 	System.out.println("aceQLConnection.getAutoCommit() : " + connection.getAutoCommit());
 	System.out.println("aceQLConnection.isReadOnly()    : " + connection.isReadOnly());

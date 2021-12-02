@@ -44,11 +44,11 @@ import com.aceql.jdbc.commons.main.AceQLPreparedStatement;
 import com.aceql.jdbc.commons.main.AceQLStatement;
 import com.aceql.jdbc.commons.main.abstracts.AbstractConnection;
 import com.aceql.jdbc.commons.main.http.AceQLHttpApi;
-import com.aceql.jdbc.commons.main.metadata.RemoteDatabaseMetaData;
 import com.aceql.jdbc.commons.main.util.AceQLConnectionUtil;
 import com.aceql.jdbc.commons.main.util.SimpleClassCaller;
 import com.aceql.jdbc.commons.main.util.framework.Tag;
 import com.aceql.jdbc.commons.main.version.Version;
+import com.aceql.jdbc.commons.metadata.RemoteDatabaseMetaData;
 import com.aceql.jdbc.driver.free.AceQLDriver;
 
 /**
@@ -152,7 +152,7 @@ import com.aceql.jdbc.driver.free.AceQLDriver;
  * </pre>
  *
  * </blockquote> See the source code of <a href=
- * "https://docs.aceql.com/rest/soft_java_client/7.2/src/SqlProgressMonitorDemo.java"
+ * "https://docs.aceql.com/rest/soft_java_client/8.1/src/SqlProgressMonitorDemo.java"
  * >SqlProgressMonitorDemo.java</a> that demonstrates the use of atomic
  * variables when inserting a Blob. <br>
  * <br>
@@ -218,7 +218,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	AceQLBlob blob = new AceQLBlob(connectionInfo.getEditionType());
 	return blob;
     }
-    
+
     /*
      * (non-Javadoc)
      *
@@ -688,6 +688,24 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      */
     public String getServerVersion() throws AceQLException {
 	return aceQLHttpApi.getServerVersion();
+    }
+
+    /**
+     * A shortcut to remote database metadata which returns remote database and
+     * remote JDBC Driver main info.
+     * 
+     * @return remote database and JDBC Driver main info.
+     * @throws SQLException if any Exception occurs
+     */
+    public DatabaseInfo getDatabaseInfo() throws SQLException {
+	
+	if (!AceQLConnectionUtil.isGetDatabaseInfoSupported(this)) {
+	    throw new SQLException("AceQL Server version must be >= " + AceQLConnectionUtil.GET_DATABASE_INFO_MIN_SERVER_VERSION
+		    + " in order to call getDatabaseInfo().");
+	}
+	
+	DatabaseInfo databaseInfo = InternalWrapper.databaseInfoBuilder(aceQLHttpApi);
+	return databaseInfo;
     }
 
     /**

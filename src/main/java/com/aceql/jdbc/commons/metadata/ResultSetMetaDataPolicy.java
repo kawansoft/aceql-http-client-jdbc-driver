@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.aceql.jdbc.commons.main.metadata;
+package com.aceql.jdbc.commons.metadata;
 
 import com.aceql.jdbc.commons.AceQLConnection;
 

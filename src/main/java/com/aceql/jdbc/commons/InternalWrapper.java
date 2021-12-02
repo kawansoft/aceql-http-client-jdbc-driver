@@ -28,7 +28,8 @@ import java.time.Instant;
 import java.util.Map;
 
 import com.aceql.jdbc.commons.main.http.AceQLHttpApi;
-import com.aceql.jdbc.commons.main.metadata.ResultSetMetaDataPolicy;
+import com.aceql.jdbc.commons.main.metadata.dto.DatabaseInfoDto;
+import com.aceql.jdbc.commons.metadata.ResultSetMetaDataPolicy;
 
 /**
  * A internal wrapper for Java package protected calls. <br>
@@ -90,6 +91,12 @@ public class InternalWrapper {
 
     public static void setCreationDateTime(ConnectionInfo connectionInfo, Instant instant) {
 	connectionInfo.setCreationDateTime(instant);
+    }
+
+    public static DatabaseInfo databaseInfoBuilder(AceQLHttpApi aceQLHttpApi) throws AceQLException {
+	DatabaseInfoDto databaseInfoDto = aceQLHttpApi.getDatabaseInfoDto();
+	DatabaseInfo databaseInfo = new DatabaseInfo(databaseInfoDto);
+	return databaseInfo;
     }
 
 }
