@@ -33,7 +33,7 @@ import com.aceql.jdbc.commons.main.metadata.dto.DatabaseInfoDto;
  * // Casts the current Connection to get an AceQLConnection object
  * AceQLConnection aceqlConnection = (AceQLConnection) connection;
  * 
- * DatabaseInfo databaseInfo = aceqlConnection.getDatabaseInfo()
+ * DatabaseInfo databaseInfo = aceqlConnection.getDatabaseInfo();
  * System.out.println("Database Product Name   : " + databaseInfo.getDatabaseProductName());
  * System.out.println("Database Product Version: " + databaseInfo.getDatabaseProductVersion());
  * // Etc.
