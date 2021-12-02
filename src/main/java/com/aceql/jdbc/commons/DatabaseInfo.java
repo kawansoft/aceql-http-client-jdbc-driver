@@ -24,24 +24,39 @@ import com.aceql.jdbc.commons.main.metadata.dto.DatabaseInfoDto;
 
 /**
  * 
- * A simple shortcut class that contains main remote database & JDBC info.
+ * A simple shortcut class that contains main remote database & JDBC info. <br>
+ * A {@code DatabaseInfo} instance is retrieved with the
+ * {@link AceQLConnection#getDatabaseInfo()} call: <br/>
+ * 
+ * <pre>
+ * <code>
+ * // Casts the current Connection to get an AceQLConnection object
+ * AceQLConnection aceqlConnection = (AceQLConnection) connection;
+ * 
+ * DatabaseInfo databaseInfo = aceqlConnection.getDatabaseInfo()
+ * System.out.println("Database Product Name   : " + databaseInfo.getDatabaseProductName());
+ * System.out.println("Database Product Version: " + databaseInfo.getDatabaseProductVersion());
+ * // Etc.
+ * </code>
+ * </pre>
  * 
  * @author Nicolas de Pomereu
  * @since 8.1
  */
 public class DatabaseInfo {
-    
+
     private int datatabaseMajorVersion;
     private int databaseMinorVersion;
-    private String  databaseProductName;
+    private String databaseProductName;
     private String databaseProductVersion;
     private int driverMajorVersion;
     private int driverMinorVersion;
     private String driverName;
     private String driverVersion;
-    
+
     /**
      * Package protected Constructor.
+     * 
      * @param databaseInfoDto The database DTO rransfered from server
      */
     DatabaseInfo(DatabaseInfoDto databaseInfoDto) {
@@ -57,67 +72,75 @@ public class DatabaseInfo {
     }
 
     /**
-     * Gets the database major version 
-     * @return the database major version 
+     * Gets the database major version
+     * 
+     * @return the database major version
      */
     public int getDatatabaseMajorVersion() {
-        return datatabaseMajorVersion;
+	return datatabaseMajorVersion;
     }
 
     /**
-     * Gets the database minor version 
-     * @return the database minor version 
+     * Gets the database minor version
+     * 
+     * @return the database minor version
      */
     public int getDatabaseMinorVersion() {
-        return databaseMinorVersion;
+	return databaseMinorVersion;
     }
 
     /**
      * Gets the database product name
+     * 
      * @return the database product name
      */
     public String getDatabaseProductName() {
-        return databaseProductName;
+	return databaseProductName;
     }
 
     /**
      * Gets the database product version
+     * 
      * @return the database product version
      */
     public String getDatabaseProductVersion() {
-        return databaseProductVersion;
+	return databaseProductVersion;
     }
 
     /**
-     * Gets the driver major version 
-     * @return the driver major version 
+     * Gets the driver major version
+     * 
+     * @return the driver major version
      */
     public int getDriverMajorVersion() {
-        return driverMajorVersion;
+	return driverMajorVersion;
     }
 
     /**
-     * Gets the driver minor version 
-     * @return the driver minor version 
+     * Gets the driver minor version
+     * 
+     * @return the driver minor version
      */
     public int getDriverMinorVersion() {
-        return driverMinorVersion;
+	return driverMinorVersion;
     }
 
     /**
-     * Gets the driver name 
+     * Gets the driver name
+     * 
      * @return the driver name
      */
     public String getDriverName() {
-        return driverName;
+	return driverName;
     }
 
     /**
-     * Gets the driver version 
-     * @return the driver version 
+     * Gets the driver version
+     * 
+     * @return the driver version
      */
     public String getDriverVersion() {
-        return driverVersion;
+	return driverVersion;
     }
 
     @Override
