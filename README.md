@@ -100,8 +100,6 @@ The AceQL Client JDBC Driver comes in two Editions:
 
 This comparison matrix describes the differences between the two Editions:
 
-
-
 | Professional Edition<br>&nbsp;                               | Free - Community Edition<br>&nbsp;                           |
 | :----------------------------------------------------------- | :----------------------------------------------------------- |
 | <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Works as a real [JDBC Driver](https://docs.oracle.com/javase/tutorial/jdbc/basics/connecting.html) <br/>Plug & play without source code edition | <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Works as a  real [JDBC Driver](https://docs.oracle.com/javase/tutorial/jdbc/basics/connecting.html) <br/>Plug & play without source code edition |

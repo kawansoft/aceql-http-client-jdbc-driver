@@ -694,8 +694,8 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      * A shortcut to remote database metadata which returns remote database and
      * remote JDBC Driver main info.
      * 
-     * @return remote database & JDBC Driver main info.
-     * @throws SQLException 
+     * @return remote database and JDBC Driver main info.
+     * @throws SQLException if any Exception occurs
      */
     public DatabaseInfo getDatabaseInfo() throws SQLException {
 	
