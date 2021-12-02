@@ -7,9 +7,9 @@
 
 # AceQL HTTP 
 
-## AceQL Client JDBC Driver v8.0 - User Guide
+## AceQL Client JDBC Driver v8.1 - User Guide
 
-## November 4, 2021
+## December 2, 2021
 
 <img src="https://docs.aceql.com/img/AceQL-Schema-min.jpg" alt="AceQL Draw"/>
 
@@ -94,7 +94,7 @@ The AceQL Client JDBC Driver comes in two Editions:
 | Edition Name         | Description / Summary                                        | License                                                      |
 | -------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | Community Edition    | Packaged as a real JDBC Driver, with major databases support.<br/>Includes main JDBC options, SQL transactions and BLOB support. <br/>Free and fully open source with a liberal license. | [Apache 2.0 License](https://www.apache.org/licenses/LICENSE-2.0) |
-| Professional Edition | Packaged as a real JDBC Driver, includes DB2 support . <br/>Includes advanced JDBC options: Arrays, Stored Procedures, JDBC native Metadata API, large BLOB.<br/>Includes advanced security options and professional support  (4H GRT).<br/>The software may be [tried for free](https://www.aceql.com/trial.html) or bought in our [online shop](https://sowl.co/VxAsp). | [Commercial License](https://docs.aceql.com/rest/soft_java_client/8.0/legal/license.rtf)<br/>Per year and Per developer.<br/>**No runtime fees** |
+| Professional Edition | Packaged as a real JDBC Driver, includes DB2 support . <br/>Includes advanced JDBC options: Arrays, Stored Procedures, JDBC native Metadata API, large BLOB.<br/>Includes advanced security options and professional support  (4H GRT).<br/>The software may be [tried for free](https://www.aceql.com/trial.html) or bought in our [online shop](https://sowl.co/VxAsp). | [Commercial License](https://docs.aceql.com/rest/soft_java_client/9.0/legal/license.rtf)<br/>Per year and Per developer.<br/>**No runtime fees** |
 
 ### Differences between the Community Edition & the Professional Edition
 
@@ -132,7 +132,7 @@ This comparison matrix describes the differences between the two Editions:
 <dependency>
     <groupId>com.aceql</groupId>
     <artifactId>aceql-http-client-jdbc-driver</artifactId>
-    <version>8.0</version>
+    <version>8.1</version>
 </dependency>
 ```
 ### Single Jar 
@@ -148,7 +148,7 @@ You may download the Professional Edition through either :
 1. [The Free 30-Trial Web Page](https://www.aceql.com/trial.html): the download link and the trial key license file will be sent by email.
 2. [The Online Shop](https://sowl.co/VxAsp): the download link and the product key license file will be sent by email.
 
-Extract from the archive the `aceql-http-client-jdbc-driver-pro-8.0.jar`  jar file and add it to your CLASSPATH.
+Extract from the archive the `aceql-http-client-jdbc-driver-pro-8.1.jar`  jar file and add it to your CLASSPATH.
 
 ### Defining the path to the Aceql license key file
 
@@ -208,7 +208,7 @@ Note that AceQL is optimized as much as possible:
 
 We will use the same `sampledb` database for all our code samples. 
 
-The schema is available here: [sampledb.txt](http://docs.aceql.com/rest/soft_java_client/8.0/src/sampledb.txt). 
+The schema is available here: [sampledb.txt](http://docs.aceql.com/rest/soft_java_client/8.1/src/sampledb.txt). 
 
 ## Connection creation
 
@@ -307,7 +307,7 @@ Sample code:
 
 ## Handling Exceptions
 
-Except for `NullPointerException`, exceptions thrown are always an instance of [AceQLException.](https://docs.aceql.com/rest/soft_java_client/8.0/javadoc/com/aceql/jdbc/commons/AceQLConnection.html)
+Except for `NullPointerException`, exceptions thrown are always an instance of [AceQLException.](https://docs.aceql.com/rest/soft_java_client/8.1/javadoc/com/aceql/jdbc/commons/AceQLConnection.html)
 
 The `AceQLException` contains 5 pieces of information :
 
@@ -555,8 +555,8 @@ The atomic variables values will be shared by AceQL download/upload processes an
 
 The values are to be initialized and passed to `AceQLConnection` before the JDBC actions with the static setters:
 
-- [AceQLConnection.setProgress(AtomicInteger progress)](https://docs.aceql.com/rest/soft_java_client/8.0/javadoc/com/aceql/jdbc/commons/AceQLConnection.html#setProgress(java.util.concurrent.atomic.AtomicInteger))
-- [AceQLConnection.setCancelled(AtomicBoolean cancelled)](https://docs.aceql.com/rest/soft_java_client/8.0/javadoc/com/aceql/jdbc/commons/AceQLConnection.html#setCancelled(java.util.concurrent.atomic.AtomicBoolean))
+- [AceQLConnection.setProgress(AtomicInteger progress)](https://docs.aceql.com/rest/soft_java_client/8.1/javadoc/com/aceql/jdbc/commons/AceQLConnection.html#setProgress(java.util.concurrent.atomic.AtomicInteger))
+- [AceQLConnection.setCancelled(AtomicBoolean cancelled)](https://docs.aceql.com/rest/soft_java_client/8.1/javadoc/com/aceql/jdbc/commons/AceQLConnection.html#setCancelled(java.util.concurrent.atomic.AtomicBoolean))
 
 
 Values will then be updated and read:
@@ -679,7 +679,7 @@ Assuming hat you want to display a progress indicator using `SwingWorker`, you w
 	}
 ```
 
-A complete example is available in [SqlProgressMonitorDemo.java](http://docs.aceql.com/rest/soft_java_client/8.0/src/SqlProgressMonitorDemo.java) and [BlobExample.java](https://docs.aceql.com/rest/soft_java_client/8.0/src/BlobExample.java) 
+A complete example is available in [SqlProgressMonitorDemo.java](http://docs.aceql.com/rest/soft_java_client/8.1/src/SqlProgressMonitorDemo.java) and [BlobExample.java](https://docs.aceql.com/rest/soft_java_client/8.1/src/BlobExample.java) 
 
 ## HTTP session options 
 
@@ -711,18 +711,18 @@ First step is to get an instance of `RemoteDatabaseMetaData`:
 
 ### Downloading database schema into a file
 
-Downloading a schema into a Java `File` is done through the method. See the `RemoteDatabaseMetaData` [javadoc](https://docs.aceql.com/rest/soft_java_client/8.0/javadoc/com/aceql/jdbc/commons/main/metadata/RemoteDatabaseMetaData.html).
+Downloading a schema into a Java `File` is done through the method. See the `RemoteDatabaseMetaData` [javadoc](https://docs.aceql.com/rest/soft_java_client/8.1/javadoc/com/aceql/jdbc/commons/main/metadata/RemoteDatabaseMetaData.html).
 
 ```java
     File file = new File("db_schema.out.html");
     remoteDatabaseMetaData.dbSchemaDownload(file);
 ```
 
-See an example of the built HTML schema:  [db_schema.out.html](https://docs.aceql.com/rest/soft_java_client/8.0/src/db_schema.out.html)
+See an example of the built HTML schema:  [db_schema.out.html](https://docs.aceql.com/rest/soft_java_client/8.1/src/db_schema.out.html)
 
 ### Accessing remote database main properties
 
-The [JdbcDatabaseMetaData](https://docs.aceql.com/rest/soft_java_client/8.0/javadoc/com/aceql/jdbc/commons/main/metadata/JdbcDatabaseMetaData.html) class wraps instance the main value retrieved by a remote JDBC call to `Connection.getMetaData`(): 
+The [JdbcDatabaseMetaData](https://docs.aceql.com/rest/soft_java_client/8.1/javadoc/com/aceql/jdbc/commons/main/metadata/JdbcDatabaseMetaData.html) class wraps instance the main value retrieved by a remote JDBC call to `Connection.getMetaData`(): 
 
 ```java
     JdbcDatabaseMetaData jdbcDatabaseMetaData = remoteDatabaseMetaData.getJdbcDatabaseMetaData();
@@ -733,7 +733,7 @@ The [JdbcDatabaseMetaData](https://docs.aceql.com/rest/soft_java_client/8.0/java
 
 ### Getting Details of Tables and Columns
 
-See the [javadoc](https://docs.aceql.com/rest/soft_java_client/8.0/javadoc/com/aceql/jdbc/commons/main/metadata/package-summary.html) of the `com.aceql.jdbc.commons.main.metadata` package: 
+See the [javadoc](https://docs.aceql.com/rest/soft_java_client/8.1/javadoc/com/aceql/jdbc/commons/main/metadata/package-summary.html) of the `com.aceql.jdbc.commons.main.metadata` package: 
 
 ```java
     System.out.println("Get the table names:");
@@ -873,9 +873,9 @@ Example code that passes two request headers `token-1` & `token-2`:
 
     Connection connection = DriverManager.getConnection(url, info);
 ```
-The request headers will be intercepted on the server side by the `validate` method of your Java class that implements the [RequestHeadersAuthenticator](https://docs.aceql.com/rest/soft/8.0/javadoc/org/kawanfw/sql/api/server/auth/headers/RequestHeadersAuthenticator.html) interface.
+The request headers will be intercepted on the server side by the `validate` method of your Java class that implements the [RequestHeadersAuthenticator](https://docs.aceql.com/rest/soft/9.0/javadoc/org/kawanfw/sql/api/server/auth/headers/RequestHeadersAuthenticator.html) interface.
 
-See also the Headers Authentication sub-section in the [aceql-server.properties](https://docs.aceql.com/rest/soft/8.0/src/aceql-server.properties) file for details about declaring your `RequestHeadersAuthenticator` concrete implementation on server side.
+See also the Headers Authentication sub-section in the [aceql-server.properties](https://docs.aceql.com/rest/soft/9.0/src/aceql-server.properties) file for details about declaring your `RequestHeadersAuthenticator` concrete implementation on server side.
 
 # Limitations 
 
