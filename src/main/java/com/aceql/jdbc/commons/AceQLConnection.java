@@ -472,6 +472,16 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	return aceQLHttpApi.getSchema();
     }
 
+
+    /**
+     * Creates a {@code CallableServerQuery} object for calling a remote {@code ServerQueryExecutor}
+     * @return a new default {@code CallableServerQuery} object
+     */
+    public CallableServerQuery createCallableServerQuery() {
+	CallableServerQuery callableServerQuery = new CallableServerQuery(this);
+	return callableServerQuery;
+    }
+    
     /*
      * (non-Javadoc)
      *
@@ -879,5 +889,6 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	return "AceQLConnection [getClientVersion()=" + getClientVersion() + ", getConnectionInfo()="
 		+ getConnectionInfo() + "]";
     }
+
 
 }

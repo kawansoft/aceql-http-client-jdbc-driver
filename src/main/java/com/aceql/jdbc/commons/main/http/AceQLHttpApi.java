@@ -29,6 +29,7 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.sql.Savepoint;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -44,6 +45,8 @@ import com.aceql.jdbc.commons.main.AceQLSavepoint;
 import com.aceql.jdbc.commons.main.batch.UpdateCountsArrayDto;
 import com.aceql.jdbc.commons.main.metadata.dto.DatabaseInfoDto;
 import com.aceql.jdbc.commons.main.metadata.dto.JdbcDatabaseMetaDataDto;
+import com.aceql.jdbc.commons.main.metadata.dto.ServerQueryExecutorDto;
+import com.aceql.jdbc.commons.main.metadata.dto.ServerQueryExecutorDtoBuilder;
 import com.aceql.jdbc.commons.main.metadata.dto.TableDto;
 import com.aceql.jdbc.commons.main.metadata.dto.TableNamesDto;
 import com.aceql.jdbc.commons.main.metadata.util.GsonWsUtil;
@@ -156,7 +159,7 @@ public class AceQLHttpApi {
 		String result = httpManager.callWithPostReturnString(new URL(url), parameters);
 
 		InternalWrapper.setCreationDateTime(connectionInfo, Instant.now());
-		
+
 		trace("result: " + result);
 
 		ResultAnalyzer resultAnalyzer = new ResultAnalyzer(result, httpManager.getHttpStatusCode(),
@@ -441,9 +444,10 @@ public class AceQLHttpApi {
     public void rollback() throws AceQLException {
 	callApiNoResult("rollback", null);
     }
-    
+
     /**
      * Sets an unnamed Savepoint. Number will be generated on the server side
+     * 
      * @return an unnamed Savepoint
      * @throws AceQLException if any Exception occurs
      */
@@ -453,16 +457,16 @@ public class AceQLHttpApi {
 	    URL theUrl = new URL(url + "set_savepoint");
 	    String result = httpManager.callWithGet(theUrl.toString());
 
-	    //Keep for debug:
-	    //System.out.println(result);
-	    
+	    // Keep for debug:
+	    // System.out.println(result);
+
 	    ResultAnalyzer resultAnalyzer = new ResultAnalyzer(result, httpManager.getHttpStatusCode(),
 		    httpManager.getHttpStatusMessage());
 	    if (!resultAnalyzer.isStatusOk()) {
 		throw new AceQLException(resultAnalyzer.getErrorMessage(), resultAnalyzer.getErrorType(), null,
 			resultAnalyzer.getStackTrace(), httpManager.getHttpStatusCode());
 	    }
-	    
+
 	    // If result is OK, it's a DTO
 	    SavepointDto savepointDto = GsonWsUtil.fromJson(result, SavepointDto.class);
 	    AceQLSavepoint savepoint = new AceQLSavepoint(savepointDto.getId(), savepointDto.getName());
@@ -472,9 +476,10 @@ public class AceQLHttpApi {
 	    throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
 	}
     }
-    
+
     /**
      * Sets a named Savepoint
+     * 
      * @param name
      * @return
      * @throws AceQLException
@@ -483,22 +488,22 @@ public class AceQLHttpApi {
 	try {
 	    Objects.requireNonNull(name, "Savepoint name cannot be null!");
 	    name = name.trim();
-	    
+
 	    Map<String, String> parametersMap = new HashMap<String, String>();
 	    parametersMap.put("name", "" + name);
 
 	    URL theUrl = new URL(url + "set_named_savepoint");
 	    String result = httpManager.callWithPostReturnString(theUrl, parametersMap);
 
-	    //Keep for debug:System.out.println(result);
-	    
+	    // Keep for debug:System.out.println(result);
+
 	    ResultAnalyzer resultAnalyzer = new ResultAnalyzer(result, httpManager.getHttpStatusCode(),
 		    httpManager.getHttpStatusMessage());
 	    if (!resultAnalyzer.isStatusOk()) {
 		throw new AceQLException(resultAnalyzer.getErrorMessage(), resultAnalyzer.getErrorType(), null,
 			resultAnalyzer.getStackTrace(), httpManager.getHttpStatusCode());
 	    }
-	    
+
 	    // If result is OK, it's a DTO
 	    SavepointDto savepointDto = GsonWsUtil.fromJson(result, SavepointDto.class);
 	    AceQLSavepoint savepoint = new AceQLSavepoint(savepointDto.getId(), savepointDto.getName());
@@ -508,10 +513,10 @@ public class AceQLHttpApi {
 	    throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
 	}
     }
-    
-    
+
     /**
      * Roolbacks a Savepoint.
+     * 
      * @param savepoint
      * @throws AceQLException
      */
@@ -519,9 +524,10 @@ public class AceQLHttpApi {
 	String action = "rollback_savepoint";
 	callSavepointAction(action, savepoint);
     }
-    
+
     /**
      * Roolbacks a Savepoint.
+     * 
      * @param savepoint
      * @throws AceQLException
      */
@@ -529,7 +535,7 @@ public class AceQLHttpApi {
 	String action = "release_savepoint";
 	callSavepointAction(action, savepoint);
     }
-    
+
     /**
      * @param action
      * @param savepoint
@@ -539,25 +545,23 @@ public class AceQLHttpApi {
 	try {
 	    Objects.requireNonNull(savepoint, "savepoint cannot be null!");
 	    Map<String, String> parametersMap = new HashMap<String, String>();
-	    
+
 	    int id = -1; // value if savepoint is named
 	    String name = ""; // value is savepoint is unnamed.
-	    
+
 	    // We try to get the id and the name
 	    try {
 		id = savepoint.getSavepointId();
+	    } catch (Exception ignore) {
+
 	    }
-	    catch (Exception ignore) {
-		
-	    }
-	    
+
 	    try {
 		name = savepoint.getSavepointName();
+	    } catch (Exception ignore) {
+
 	    }
-	    catch (Exception ignore) {
-		
-	    }
-	    
+
 	    parametersMap.put("id", "" + id);
 	    parametersMap.put("name", "" + name);
 
@@ -576,7 +580,6 @@ public class AceQLHttpApi {
 	}
     }
 
-    
     /**
      * Calls /set_transaction_isolation_level API
      *
@@ -737,7 +740,7 @@ public class AceQLHttpApi {
 
 	    URL theUrl = new URL(url + action);
 	    debug("execute url: " + url);
-	    
+
 	    InputStream in = httpManager.callWithPost(theUrl, parametersMap);
 	    return in;
 
@@ -826,10 +829,10 @@ public class AceQLHttpApi {
 	try {
 	    Objects.requireNonNull(batchFileSqlOrders, "batchFileSqlOrders cannot be null!");
 
-	    if (! batchFileSqlOrders.exists()) {
+	    if (!batchFileSqlOrders.exists()) {
 		throw new FileNotFoundException("batchFileSqlOrders does not exist anymore: " + batchFileSqlOrders);
 	    }
-	    
+
 	    String blobId = batchFileSqlOrders.getName();
 	    try (InputStream in = new BufferedInputStream(new FileInputStream(batchFileSqlOrders));) {
 		BlobUploader blobUploader = new BlobUploader(this);
@@ -851,26 +854,25 @@ public class AceQLHttpApi {
 		throw new AceQLException(resultAnalyzer.getErrorMessage(), resultAnalyzer.getErrorType(), null,
 			resultAnalyzer.getStackTrace(), httpManager.getHttpStatusCode());
 	    }
-	    
+
 	    UpdateCountsArrayDto updateCountsArrayDto = GsonWsUtil.fromJson(result, UpdateCountsArrayDto.class);
-	    int [] updateCountsArray = updateCountsArrayDto.getUpdateCountsArray();
+	    int[] updateCountsArray = updateCountsArrayDto.getUpdateCountsArray();
 	    return updateCountsArray;
-	    
+
 	} catch (Exception e) {
 	    throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
 	}
     }
-    
-    public int[] executePreparedStatementBatch(String sql,
-	    File batchFileParameters) throws AceQLException {
+
+    public int[] executePreparedStatementBatch(String sql, File batchFileParameters) throws AceQLException {
 	try {
 	    Objects.requireNonNull(sql, "sql cannot be null!");
 	    Objects.requireNonNull(batchFileParameters, "batchFileSqlOrders cannot be null!");
 
-	    if (! batchFileParameters.exists()) {
+	    if (!batchFileParameters.exists()) {
 		throw new FileNotFoundException("batchFileParameters does not exist anymore: " + batchFileParameters);
 	    }
-	    
+
 	    String action = "prepared_statement_execute_batch";
 	    URL theUrl = new URL(url + action);
 
@@ -881,10 +883,10 @@ public class AceQLHttpApi {
 	    }
 
 	    Map<String, String> parametersMap = new HashMap<String, String>();
-	    parametersMap.put("sql", sql);	    
+	    parametersMap.put("sql", sql);
 	    parametersMap.put("blob_id", blobId);
-	    debug("blobId: " + blobId);	
-	    
+	    debug("blobId: " + blobId);
+
 	    String result = httpManager.callWithPostReturnString(theUrl, parametersMap);
 
 	    ResultAnalyzer resultAnalyzer = new ResultAnalyzer(result, httpManager.getHttpStatusCode(),
@@ -893,17 +895,63 @@ public class AceQLHttpApi {
 		throw new AceQLException(resultAnalyzer.getErrorMessage(), resultAnalyzer.getErrorType(), null,
 			resultAnalyzer.getStackTrace(), httpManager.getHttpStatusCode());
 	    }
-	    
+
 	    UpdateCountsArrayDto updateCountsArrayDto = GsonWsUtil.fromJson(result, UpdateCountsArrayDto.class);
-	    int [] updateCountsArray = updateCountsArrayDto.getUpdateCountsArray();
+	    int[] updateCountsArray = updateCountsArrayDto.getUpdateCountsArray();
 	    return updateCountsArray;
-	    
+
 	} catch (Exception e) {
 	    throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
 	}
     }
-    
-    
+
+    /**
+     * Calls /execute_server_query API
+     * 
+     * @param serverQueryExecutorClassName	the class name to execute
+     * @param params				the parameters to pass to the class name only method 
+     * @return the input stream containing either an error, or the result set in
+     *         JSON format. See user documentation.
+     * @throws AceQLException
+     */
+    public InputStream executeServerQuery(String serverQueryExecutorClassName, List<Object> params)
+	    throws AceQLException {
+
+	try {
+	    if (serverQueryExecutorClassName == null) {
+		Objects.requireNonNull(serverQueryExecutorClassName, "serverQueryExecutorClassName cannot be null!");
+	    }
+
+	    if (params == null) {
+		params = new ArrayList<>();
+	    }
+
+	    ServerQueryExecutorDto serverQueryExecutorDto = ServerQueryExecutorDtoBuilder
+		    .build(serverQueryExecutorClassName, params);
+	    String jsonString = GsonWsUtil.getJSonStringNotPretty(serverQueryExecutorDto);
+
+	    String action = "execute_server_query";
+
+	    Map<String, String> parametersMap = new HashMap<String, String>();
+	    parametersMap.put("gzip_result", "" + connectionInfo.isGzipResult());
+	    parametersMap.put("fill_result_set_meta_data", "" + fillResultSetMetaData);
+	    parametersMap.put("pretty_printing", "" + prettyPrinting);
+	    parametersMap.put("server_query_executor_dto", jsonString);
+
+	    trace("serverQueryExecutorClassName: " + serverQueryExecutorClassName);
+	    trace("params                      : " + params.toArray());
+
+	    URL theUrl = new URL(url + action);
+	    debug("executeQuery url: " + url);
+
+	    InputStream in = httpManager.callWithPost(theUrl, parametersMap);
+	    return in;
+
+	} catch (Exception e) {
+	    throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
+	}
+    }
+
     /**
      * Calls /execute_query API
      *
@@ -949,7 +997,7 @@ public class AceQLHttpApi {
 
 	    URL theUrl = new URL(url + action);
 	    debug("executeQuery url: " + url);
-	    
+
 	    InputStream in = httpManager.callWithPost(theUrl, parametersMap);
 	    return in;
 
@@ -1142,7 +1190,7 @@ public class AceQLHttpApi {
 	AceQLMetadataApi aceQLMetadataApi = new AceQLMetadataApi(httpManager, url);
 	return aceQLMetadataApi.getDbMetadata();
     }
-    
+
     public DatabaseInfoDto getDatabaseInfoDto() throws AceQLException {
 	AceQLMetadataApi aceQLMetadataApi = new AceQLMetadataApi(httpManager, url);
 	return aceQLMetadataApi.getDatabaseInfoDto();
@@ -1190,17 +1238,10 @@ public class AceQLHttpApi {
 	}
     }
 
-
     private void debug(String s) {
 	if (DEBUG) {
 	    System.out.println(new Date() + " " + s);
 	}
     }
-
-
-
-
-
-
 
 }
