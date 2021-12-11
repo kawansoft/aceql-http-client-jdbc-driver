@@ -50,8 +50,6 @@ import com.aceql.jdbc.commons.main.util.AceQLStatementUtil;
 import com.aceql.jdbc.commons.main.util.SimpleTimer;
 import com.aceql.jdbc.commons.main.util.TimeUtil;
 import com.aceql.jdbc.commons.main.util.framework.FrameworkDebug;
-import com.aceql.jdbc.commons.main.util.framework.FrameworkFileUtil;
-import com.aceql.jdbc.commons.main.util.framework.UniqueIDBuilder;
 import com.aceql.jdbc.commons.main.util.json.StreamResultAnalyzer;
 
 /**
@@ -332,9 +330,7 @@ public class AceQLStatement extends AbstractStatement implements Statement {
     * @return
     */
    static File buildtResultSetFile() {
-	File file = new File(FrameworkFileUtil.getKawansoftTempDir() + File.separator + "pc-result-set-"
-		+ UniqueIDBuilder.getUniqueId() + ".txt");
-	return file;
+       return AceQLStatementUtil.buildtResultSetFile();
     }
 
     /*

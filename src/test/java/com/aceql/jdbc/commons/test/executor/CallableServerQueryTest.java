@@ -78,10 +78,18 @@ public class CallableServerQueryTest {
 	CallableServerQuery callableServerQuery = aceQLConnection.createCallableServerQuery();
 	
 	// Parameters
-	String serverQueryExecutorClassName ="myClass";
+	String serverQueryExecutorClassName ="org.kawanfw.test.api.server.executor.MyServerQueryExecutor";
 	List<Object> params = new ArrayList<>();
 	
 	ResultSet rs = callableServerQuery.executeQuery(serverQueryExecutorClassName, params);
+	
+	while (rs.next()) {
+	    out.println();
+	    out.println("customer_id   : " + rs.getInt("customer_id"));
+	    out.println("customer_title: " + rs.getString("customer_title"));
+	    out.println("fname         : " + rs.getString("fname"));
+	}
+	rs.close(); // Necessary to delete temp file
 	
     }
 

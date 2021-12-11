@@ -38,8 +38,6 @@ import com.aceql.jdbc.commons.main.AceQLResultSet;
 import com.aceql.jdbc.commons.main.AceQLStatement;
 import com.aceql.jdbc.commons.main.http.AceQLHttpApi;
 import com.aceql.jdbc.commons.main.util.AceQLStatementUtil;
-import com.aceql.jdbc.commons.main.util.framework.FrameworkFileUtil;
-import com.aceql.jdbc.commons.main.util.framework.UniqueIDBuilder;
 import com.aceql.jdbc.commons.main.util.json.StreamResultAnalyzer;
 
 /**
@@ -64,7 +62,7 @@ public class CallableServerQuery {
     }
 
     /**
-     * Executes a server query.
+     * Executes a server query by calling a remote AceQL  ServerQueryExecutor interface concrete implementation
      * 
      * @param serverQueryExecutorClassName	the remote ServerQueryExecutor interface implementation name with package info
      * @param params				the parameters to pass to the remote ServerQueryExecutor.executeQuery() implementation
@@ -78,7 +76,7 @@ public class CallableServerQuery {
 	AceQLHttpApi aceQLHttpApi = this.aceQLConnection.aceQLHttpApi;
 	try {
 
-	    File file = buildtResultSetFile();
+	    File file = AceQLStatementUtil.buildtResultSetFile();
 
 	    try (InputStream in = aceQLHttpApi.executeServerQuery(serverQueryExecutorClassName, params);
 		    OutputStream out = new BufferedOutputStream(new FileOutputStream(file))) {
@@ -118,17 +116,6 @@ public class CallableServerQuery {
 	} catch (Exception e) {
 	    throw new AceQLException(e.getMessage(), 0, e, null, aceQLHttpApi.getHttpStatusCode());
 	}
-    }
-
-    /**
-     * Builds the the Result Set file with a unique name
-     * 
-     * @return
-     */
-    static File buildtResultSetFile() {
-	File file = new File(FrameworkFileUtil.getKawansoftTempDir() + File.separator + "pc-result-set-"
-		+ UniqueIDBuilder.getUniqueId() + ".txt");
-	return file;
     }
 
 }
