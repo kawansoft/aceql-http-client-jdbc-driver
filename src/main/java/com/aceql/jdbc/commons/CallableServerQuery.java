@@ -27,7 +27,6 @@ import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.List;
 import java.util.Objects;
 
@@ -93,7 +92,7 @@ public class CallableServerQuery {
 	    
 	    if (AceQLStatement.DUMP_FILE_DEBUG) {
 		System.out.println("STATEMENT_FILE_BEGIN");
-		System.out.println(FileUtils.readFileToString(file, Charset.defaultCharset()));
+		System.out.println(FileUtils.readFileToString(file, Charset.forName("UTF-8")));
 		System.out.println("STATEMENT_FILE_END");
 	    }
 
@@ -107,8 +106,7 @@ public class CallableServerQuery {
 	    }
 
 	    int rowCount = streamResultAnalyzer.getRowCount();
-	    Statement statement = null;
-	    AceQLResultSet aceQLResultSet = new AceQLResultSet(file, statement, rowCount);
+	    AceQLResultSet aceQLResultSet = new AceQLResultSet(file, this.aceQLConnection, rowCount);
 	    return aceQLResultSet;
 
 	} catch (AceQLException aceQlException) {

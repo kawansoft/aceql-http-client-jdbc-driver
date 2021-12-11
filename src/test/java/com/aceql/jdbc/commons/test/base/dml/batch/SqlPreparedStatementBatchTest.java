@@ -45,8 +45,8 @@ public class SqlPreparedStatementBatchTest {
 	    int j = 1;
 	    statement.setInt(j++, i);
 	    statement.setString(j++, "Sir");
-	    statement.setString(j++, "Doe" + i);
 	    statement.setString(j++, "André" + i);
+	    statement.setString(j++, "Doe" + i);
 	    statement.setString(j++, "1600 Pennsylvania Ave NW" + i);
 	    statement.setString(j++, "Washington" + i);
 	    statement.setString(j++, "DC 20500" + i);

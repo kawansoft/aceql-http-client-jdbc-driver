@@ -62,6 +62,7 @@ public class SqlSelectTest {
 	    out.println("customer_id   : " + rs.getInt("customer_id"));
 	    out.println("customer_title: " + rs.getString("customer_title"));
 	    out.println("fname         : " + rs.getString("fname"));
+	    out.println("lname         : " + rs.getString("lname"));
 	}
 
 	statement.close();
@@ -78,6 +79,7 @@ public class SqlSelectTest {
 	    out.println("customer_id   : " + rs.getInt("customer_id"));
 	    out.println("customer_title: " + rs.getString("customer_title"));
 	    out.println("fname         : " + rs.getString("fname"));
+	    out.println("lname         : " + rs.getString("lname"));
 	}
 
 	preparedStatement.close();
@@ -96,6 +98,7 @@ public class SqlSelectTest {
 	    out.println("customer_id   : " + rs.getInt("customer_id"));
 	    out.println("customer_title: " + rs.getString("customer_title"));
 	    out.println("fname         : " + rs.getString("fname"));
+	    out.println("lname         : " + rs.getString("lname"));
 	}
 
 	preparedStatement.close();

@@ -25,10 +25,13 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.aceql.jdbc.commons.AceQLConnection;
 import com.aceql.jdbc.commons.CallableServerQuery;
+import com.aceql.jdbc.commons.ConnectionInfo;
+import com.aceql.jdbc.commons.main.AceQLStatement;
 import com.aceql.jdbc.commons.test.connection.ConnectionBuilder;
 
 /**
@@ -48,7 +51,12 @@ public class CallableServerQueryTest {
      * @param args
      */
     public static void main(String[] args) throws Exception {
+	
+	AceQLStatement.DUMP_FILE_DEBUG = true;
 	Connection connection = ConnectionBuilder.createOnConfig();
+	
+	ConnectionInfo connectionInfo = ((AceQLConnection)connection).getConnectionInfo();
+	System.out.println(new Date() + " ConnectionInfo: " + connectionInfo);
 	CallableServerQueryTest callableServerQueryTest = new CallableServerQueryTest(connection, System.out);
 	callableServerQueryTest.test();
     }
@@ -88,6 +96,7 @@ public class CallableServerQueryTest {
 	    out.println("customer_id   : " + rs.getInt("customer_id"));
 	    out.println("customer_title: " + rs.getString("customer_title"));
 	    out.println("fname         : " + rs.getString("fname"));
+	    out.println("lname         : " + rs.getString("lname"));
 	}
 	rs.close(); // Necessary to delete temp file
 	

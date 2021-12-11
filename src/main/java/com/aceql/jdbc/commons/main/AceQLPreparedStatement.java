@@ -643,7 +643,7 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
 
 	    if (DUMP_FILE_DEBUG) {
 		System.out.println("STATEMENT_FILE_BEGIN");
-		System.out.println(FileUtils.readFileToString(file, Charset.defaultCharset()));
+		System.out.println(FileUtils.readFileToString(file, Charset.forName("UTF-8")));
 		System.out.println("STATEMENT_FILE_END");
 	    }
 
