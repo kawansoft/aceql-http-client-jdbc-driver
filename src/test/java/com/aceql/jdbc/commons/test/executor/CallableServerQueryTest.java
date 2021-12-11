@@ -20,7 +20,6 @@ package com.aceql.jdbc.commons.test.executor;
 
 import java.io.IOException;
 import java.io.PrintStream;
-import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -31,7 +30,6 @@ import java.util.List;
 import com.aceql.jdbc.commons.AceQLConnection;
 import com.aceql.jdbc.commons.CallableServerQuery;
 import com.aceql.jdbc.commons.ConnectionInfo;
-import com.aceql.jdbc.commons.main.AceQLStatement;
 import com.aceql.jdbc.commons.test.connection.ConnectionBuilder;
 
 /**
@@ -52,7 +50,7 @@ public class CallableServerQueryTest {
      */
     public static void main(String[] args) throws Exception {
 	
-	AceQLStatement.DUMP_FILE_DEBUG = true;
+	//AceQLStatement.DUMP_FILE_DEBUG = false;
 	Connection connection = ConnectionBuilder.createOnConfig();
 	
 	ConnectionInfo connectionInfo = ((AceQLConnection)connection).getConnectionInfo();
@@ -73,12 +71,9 @@ public class CallableServerQueryTest {
     }
 
     /**
-     * Do a full sequence of INSERT / SELECT / UPDATE / SELECT and test at each
-     * action that attended values are OK with Junit.
-     * 
+     * Call a remote SELECT done in a ServerQueryExecutor implementation
      * @throws SQLException
      * @throws IOException
-     * @throws NoSuchAlgorithmException
      */
     public void test() throws SQLException, IOException {
 

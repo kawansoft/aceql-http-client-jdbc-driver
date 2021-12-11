@@ -61,8 +61,6 @@ public class AceQLDriverLoader {
 	info.put("password", new String(password));
 	info.put("database", database);
 	
-	//HACK TEMP
-	info.put("gzipResult", "false");
 	
 	info.put("clobReadCharset", "ISO-8859-1"); // Just for tests
 
