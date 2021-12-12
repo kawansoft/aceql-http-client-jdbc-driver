@@ -51,6 +51,7 @@ import com.aceql.jdbc.commons.main.metadata.dto.TableDto;
 import com.aceql.jdbc.commons.main.metadata.dto.TableNamesDto;
 import com.aceql.jdbc.commons.main.metadata.util.GsonWsUtil;
 import com.aceql.jdbc.commons.main.util.UserLoginStore;
+import com.aceql.jdbc.commons.main.util.framework.FrameworkDebug;
 import com.aceql.jdbc.commons.main.util.json.SqlParameter;
 import com.aceql.jdbc.commons.main.version.VersionValues;
 import com.aceql.jdbc.commons.metadata.ResultSetMetaDataPolicy;
@@ -67,7 +68,7 @@ import com.aceql.jdbc.commons.metadata.ResultSetMetaDataPolicy;
 public class AceQLHttpApi {
 
     public static boolean TRACE_ON;
-    public static boolean DEBUG;
+    public static boolean DEBUG = FrameworkDebug.isSet(AceQLHttpApi.class);
 
     // private values
     private String serverUrl;
