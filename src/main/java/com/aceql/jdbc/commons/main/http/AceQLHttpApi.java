@@ -930,6 +930,8 @@ public class AceQLHttpApi {
 		    .build(serverQueryExecutorClassName, params);
 	    String jsonString = GsonWsUtil.getJSonStringNotPretty(serverQueryExecutorDto);
 
+	    debug("executeServerQuery jsonString: " + jsonString);
+	    
 	    String action = "execute_server_query";
 
 	    Map<String, String> parametersMap = new HashMap<String, String>();
