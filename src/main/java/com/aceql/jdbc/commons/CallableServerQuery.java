@@ -61,7 +61,7 @@ public class CallableServerQuery {
     }
 
     /**
-     * Executes a server query by calling a remote AceQL  ServerQueryExecutor interface concrete implementation
+     * Executes a server query by calling a remote AceQL ServerQueryExecutor interface concrete implementation
      * 
      * @param serverQueryExecutorClassName	the remote ServerQueryExecutor interface implementation name with package info
      * @param params				the parameters to pass to the remote ServerQueryExecutor.executeQuery() implementation
