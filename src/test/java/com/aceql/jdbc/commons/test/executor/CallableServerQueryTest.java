@@ -84,7 +84,7 @@ public class CallableServerQueryTest {
 	String serverQueryExecutorClassName ="org.kawanfw.test.api.server.executor.MyServerQueryExecutor";
 	List<Object> params = new ArrayList<>();
 	
-	ResultSet rs = callableServerQuery.executeQuery(serverQueryExecutorClassName, params);
+	ResultSet rs = callableServerQuery.executeServerQuery(serverQueryExecutorClassName, params);
 	
 	while (rs.next()) {
 	    out.println();

@@ -69,7 +69,7 @@ public class CallableServerQuery {
      * @throws AceQLException
      * @throws IOException
      */
-    public ResultSet executeQuery(String serverQueryExecutorClassName, List<Object> params)
+    public ResultSet executeServerQuery(String serverQueryExecutorClassName, List<Object> params)
 	    throws SQLException, IOException {
 
 	AceQLHttpApi aceQLHttpApi = this.aceQLConnection.aceQLHttpApi;
