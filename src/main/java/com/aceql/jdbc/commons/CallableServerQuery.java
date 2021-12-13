@@ -41,8 +41,37 @@ import com.aceql.jdbc.commons.main.util.json.StreamResultAnalyzer;
 
 /**
  * The object used for executing a remote server class that implements
- * {@code org.kawanfw.sql.api.server.executor.ServerQueryExecutor} and returns a
- * {@code ResultSet} and returning the results it produces.
+ * {@code org.kawanfw.sql.api.server.executor.ServerQueryExecutor} and returns
+ * the produced {@code ResultSet}. <br>
+ * <br>
+ * Code sample:
+ * 
+ * <pre>
+ * <code>
+// Create the CallableServerQuery instance:
+AceQLConnection aceQLConnection = (AceQLConnection) connection;
+CallableServerQuery callableServerQuery = aceQLConnection.createCallableServerQuery();
+
+// The serverQueryExecutorClassName class implements the ServerQueryExecutor interface and is run
+// in the CLASSPATH of the AceQL Server:
+String serverQueryExecutorClassName ="org.kawanfw.test.api.server.executor.MyServerQueryExecutor";
+
+// Parameters to pass to MyServerQueryExecutor. We pass only one int parameter:
+List<Object> params = new ArrayList<>();
+params.add(5);
+
+// Call the execution of the server class and get directly a Result Set:
+ResultSet rs = callableServerQuery.executeServerQuery(serverQueryExecutorClassName, params);
+
+while (rs.next()) {
+    out.println();
+    out.println("customer_id   : " + rs.getInt("customer_id"));
+    out.println("customer_title: " + rs.getString("customer_title"));
+    out.println("fname         : " + rs.getString("fname"));
+    out.println("lname         : " + rs.getString("lname"));
+}
+rs.close(); 
+ * </code></pref
  * 
  * @author Nicolas de Pomereu
  * @since 8.2
@@ -61,11 +90,16 @@ public class CallableServerQuery {
     }
 
     /**
-     * Executes a server query by calling a remote AceQL ServerQueryExecutor interface concrete implementation
+     * Executes a server query by calling a remote AceQL ServerQueryExecutor
+     * interface concrete implementation
      * 
-     * @param serverQueryExecutorClassName	the remote ServerQueryExecutor interface implementation name with package info
-     * @param params				the parameters to pass to the remote ServerQueryExecutor.executeQuery() implementation
-     * @return	the {@code ResultSet} returned by  {@code serverQueryExecutorClassName}
+     * @param serverQueryExecutorClassName the remote ServerQueryExecutor interface
+     *                                     implementation name with package info
+     * @param params                       the parameters to pass to the remote
+     *                                     ServerQueryExecutor.executeQuery()
+     *                                     implementation
+     * @return the {@code ResultSet} returned by
+     *         {@code serverQueryExecutorClassName}
      * @throws AceQLException
      * @throws IOException
      */
@@ -89,7 +123,7 @@ public class CallableServerQuery {
 		    IOUtils.copy(inFinal, out);
 		}
 	    }
-	    
+
 	    if (AceQLStatement.DUMP_FILE_DEBUG) {
 		System.out.println("STATEMENT_FILE_BEGIN");
 		System.out.println(FileUtils.readFileToString(file, Charset.forName("UTF-8")));

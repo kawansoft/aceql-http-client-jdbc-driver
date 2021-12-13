@@ -80,8 +80,10 @@ public class CallableServerQueryTest {
 	AceQLConnection aceQLConnection = (AceQLConnection) connection;
 	CallableServerQuery callableServerQuery = aceQLConnection.createCallableServerQuery();
 	
-	// Parameters
+	// The serverQueryExecutorClassName implements the ServerQueryExecutor interface and is runned
+	// in the CLASSPATH of the AceQL Server.
 	String serverQueryExecutorClassName ="org.kawanfw.test.api.server.executor.MyServerQueryExecutor";
+	// Parameters to pass to MyServerQueryExecutor. We pass only one int paramaeter.
 	List<Object> params = new ArrayList<>();
 	params.add(5);
 	
@@ -94,7 +96,8 @@ public class CallableServerQueryTest {
 	    out.println("fname         : " + rs.getString("fname"));
 	    out.println("lname         : " + rs.getString("lname"));
 	}
-	rs.close(); // Necessary to delete temp file
+	rs.close(); 
+	
 	
     }
 
