@@ -85,7 +85,7 @@ public class CallableServerQueryTest {
 	String serverQueryExecutorClassName ="org.kawanfw.test.api.server.executor.MyServerQueryExecutor";
 	// Parameters to pass to MyServerQueryExecutor. We pass only one int paramaeter.
 	List<Object> params = new ArrayList<>();
-	params.add(5);
+	params.add(1);
 	
 	ResultSet rs = callableServerQuery.executeServerQuery(serverQueryExecutorClassName, params);
 	
