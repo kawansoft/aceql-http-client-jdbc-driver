@@ -37,6 +37,11 @@ public class AuthenticationConnections {
 
     }
 
+    public static Connection getJdbcConnection(String username, String password) throws Exception {
+	Connection connection = AceQLDriverLoader.getConnection("http://localhost:9098/aceql", "sampledb", username, password.toCharArray());
+	return connection;
+    }
+    
     public static Connection getLDAPConnection(String username, String password) throws Exception {
 	Connection connection = AceQLDriverLoader.getConnection("http://localhost:9092/aceql", "sampledb", username, password.toCharArray());
 	return connection;

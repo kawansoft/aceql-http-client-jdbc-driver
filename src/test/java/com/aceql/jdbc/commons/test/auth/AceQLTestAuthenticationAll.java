@@ -45,6 +45,7 @@ public class AceQLTestAuthenticationAll {
      * @throws SQLException
      */
     public static void doIt() throws Exception {
+	AceQLTestAuthenticationJdbc.doIt();
 	AceQLTestAuthenticationLDAP.doIt();
 	AceQLTestAuthenticationSSH.doIt();
 	AceQLTestAuthenticationWebService.doIt();
