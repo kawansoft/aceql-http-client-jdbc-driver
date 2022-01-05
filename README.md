@@ -709,7 +709,7 @@ First step is to get an instance of `RemoteDatabaseMetaData`:
 
 ### Downloading database schema into a file
 
-Downloading a schema into a Java `File` is done through the method. See the `RemoteDatabaseMetaData` [javadoc](https://docs.aceql.com/rest/soft_java_client/8.1/javadoc/com/aceql/jdbc/commons/main/metadata/RemoteDatabaseMetaData.html).
+Downloading a schema into a Java `File` is done through the method. See the `RemoteDatabaseMetaData` [javadoc](https://docs.aceql.com/rest/soft_java_client/8.1/javadoc/com/aceql/jdbc/commons/metadata/RemoteDatabaseMetaData.html).
 
 ```java
     File file = new File("db_schema.out.html");
@@ -720,7 +720,7 @@ See an example of the built HTML schema:  [db_schema.out.html](https://docs.aceq
 
 ### Accessing remote database main properties
 
-The [JdbcDatabaseMetaData](https://docs.aceql.com/rest/soft_java_client/8.1/javadoc/com/aceql/jdbc/commons/main/metadata/JdbcDatabaseMetaData.html) class wraps instance the main value retrieved by a remote JDBC call to `Connection.getMetaData`(): 
+The [JdbcDatabaseMetaData](https://docs.aceql.com/rest/soft_java_client/8.1/javadoc/com/aceql/jdbc/commons/metadata/JdbcDatabaseMetaData.html) class wraps instance the main value retrieved by a remote JDBC call to `Connection.getMetaData`(): 
 
 ```java
     JdbcDatabaseMetaData jdbcDatabaseMetaData = remoteDatabaseMetaData.getJdbcDatabaseMetaData();
@@ -731,7 +731,7 @@ The [JdbcDatabaseMetaData](https://docs.aceql.com/rest/soft_java_client/8.1/java
 
 ### Getting Details of Tables and Columns
 
-See the [javadoc](https://docs.aceql.com/rest/soft_java_client/8.1/javadoc/com/aceql/jdbc/commons/main/metadata/package-summary.html) of the `com.aceql.jdbc.commons.metadata` package: 
+See the [javadoc](https://docs.aceql.com/rest/soft_java_client/8.1/javadoc/com/aceql/jdbc/commons/metadata/package-summary.html) of the `com.aceql.jdbc.commons.metadata` package: 
 
 ```java
     System.out.println("Get the table names:");
@@ -755,7 +755,7 @@ See the [javadoc](https://docs.aceql.com/rest/soft_java_client/8.1/javadoc/com/a
 
 ### Code Sample
 
-Standard JDBC [DatabaseMetadata](https://docs.oracle.com/javase/8/docs/api/java/sql/DatabaseMetaData.html)  and [ResultSetMetadata](https://docs.oracle.com/javase/8/docs/api/java/sql/ResultSetMetaData.html) calls are fully supported in Professional Edition.
+Standard JDBC [DatabaseMetadata](https://docs.aceql.com/rest/soft_java_client/8.1/javadoc/com/aceql/jdbc/commons/metadata/JdbcDatabaseMetaData.html)  and [ResultSetMetadata](https://docs.oracle.com/javase/8/docs/api/java/sql/ResultSetMetaData.html) calls are fully supported in Professional Edition.
 
 `DatabaseMetaData` example:
 
@@ -871,9 +871,9 @@ Example code that passes two request headers `token-1` & `token-2`:
 
     Connection connection = DriverManager.getConnection(url, info);
 ```
-The request headers will be intercepted on the server side by the `validate` method of your Java class that implements the [RequestHeadersAuthenticator](https://docs.aceql.com/rest/soft/9.0/javadoc/org/kawanfw/sql/api/server/auth/headers/RequestHeadersAuthenticator.html) interface.
+The request headers will be intercepted on the server side by the `validate` method of your Java class that implements the [RequestHeadersAuthenticator](https://docs.aceql.com/rest/soft/10.1/javadoc/org/kawanfw/sql/api/server/auth/headers/RequestHeadersAuthenticator.html) interface.
 
-See also the Headers Authentication sub-section in the [aceql-server.properties](https://docs.aceql.com/rest/soft/9.0/src/aceql-server.properties) file for details about declaring your `RequestHeadersAuthenticator` concrete implementation on server side.
+See also the Headers Authentication sub-section in the [aceql-server.properties](https://docs.aceql.com/rest/soft/10.1/src/aceql-server.properties) file for details about declaring your `RequestHeadersAuthenticator` concrete implementation on server side.
 
 # Limitations 
 
