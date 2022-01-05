@@ -206,7 +206,7 @@ Note that AceQL is optimized as much as possible:
 
 We will use the same `sampledb` database for all our code samples. 
 
-The schema is available here: [sampledb.txt](http://docs.aceql.com/rest/soft_java_client/8.1/src/sampledb.txt). 
+The schema is available here: [sampledb.txt](https://docs.aceql.com/rest/soft_java_client/8.1/src/sampledb.txt). 
 
 ## Connection creation
 
@@ -677,7 +677,7 @@ Assuming hat you want to display a progress indicator using `SwingWorker`, you w
 	}
 ```
 
-A complete example is available in [SqlProgressMonitorDemo.java](http://docs.aceql.com/rest/soft_java_client/8.1/src/SqlProgressMonitorDemo.java) and [BlobExample.java](https://docs.aceql.com/rest/soft_java_client/8.1/src/BlobExample.java) 
+A complete example is available in [SqlProgressMonitorDemo.java](https://docs.aceql.com/rest/soft_java_client/8.1/src/SqlProgressMonitorDemo.java) and [BlobExample.java](https://docs.aceql.com/rest/soft_java_client/8.1/src/BlobExample.java) 
 
 ## HTTP session options 
 
