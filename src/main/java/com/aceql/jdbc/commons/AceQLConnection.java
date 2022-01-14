@@ -474,7 +474,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 
 
     /**
-     * Creates a {@code CallableServerQuery} object for calling a remote {@code ServerQueryExecutor}
+     * Creates a {@code CallableServerQuery} object for calling a remote {@code ServerQueryExecutor} implementation.
      * @return a new default {@code CallableServerQuery} object
      */
     public CallableServerQuery createCallableServerQuery() {

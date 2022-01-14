@@ -54,23 +54,22 @@ CallableServerQuery callableServerQuery = aceQLConnection.createCallableServerQu
 
 // The serverQueryExecutorClassName class implements the ServerQueryExecutor interface and is run
 // in the CLASSPATH of the AceQL Server:
-String serverQueryExecutorClassName ="org.kawanfw.test.api.server.executor.MyServerQueryExecutor";
+String serverQueryExecutorClassName = "com.mycompany.MyServerQueryExecutor";
 
 // Parameters to pass to MyServerQueryExecutor. We pass only one int parameter:
 List<Object> params = new ArrayList<>();
 params.add(5);
 
 // Call the execution of the server class and get directly a Result Set:
-ResultSet rs = callableServerQuery.executeServerQuery(serverQueryExecutorClassName, params);
-
-while (rs.next()) {
-    out.println();
-    out.println("customer_id   : " + rs.getInt("customer_id"));
-    out.println("customer_title: " + rs.getString("customer_title"));
-    out.println("fname         : " + rs.getString("fname"));
-    out.println("lname         : " + rs.getString("lname"));
+try (ResultSet rs = callableServerQuery.executeServerQuery(serverQueryExecutorClassName, params);) {
+    while (rs.next()) {
+    	out.println();
+    	out.println("customer_id   : " + rs.getInt("customer_id"));
+	out.println("customer_title: " + rs.getString("customer_title"));
+	out.println("fname         : " + rs.getString("fname"));
+	out.println("lname         : " + rs.getString("lname"));
+    }
 }
-rs.close(); 
  * </code></pref
  * 
  * @author Nicolas de Pomereu
@@ -91,7 +90,7 @@ public class CallableServerQuery {
 
     /**
      * Executes a server query by calling a remote AceQL ServerQueryExecutor
-     * interface concrete implementation
+     * interface concrete implementation.
      * 
      * @param serverQueryExecutorClassName the remote ServerQueryExecutor interface
      *                                     implementation name with package info
