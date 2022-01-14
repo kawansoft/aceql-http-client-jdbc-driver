@@ -33,8 +33,7 @@ import com.aceql.jdbc.commons.ConnectionInfo;
 import com.aceql.jdbc.commons.test.connection.ConnectionBuilder;
 
 /**
- * Calls a a remote server query.
- * action that attended values are OK with Junit.
+ * Calls a a remote server query. action that attended values are OK with Junit.
  * 
  * @author Nicolas de Pomereu
  *
@@ -44,21 +43,20 @@ public class CallableServerQueryTest {
     private Connection connection;
     private PrintStream out;
 
-
     /**
      * @param args
      */
     public static void main(String[] args) throws Exception {
-	
-	//AceQLStatement.DUMP_FILE_DEBUG = false;
+
+	// AceQLStatement.DUMP_FILE_DEBUG = false;
 	Connection connection = ConnectionBuilder.createOnConfig();
-	
-	ConnectionInfo connectionInfo = ((AceQLConnection)connection).getConnectionInfo();
+
+	ConnectionInfo connectionInfo = ((AceQLConnection) connection).getConnectionInfo();
 	System.out.println(new Date() + " ConnectionInfo: " + connectionInfo);
 	CallableServerQueryTest callableServerQueryTest = new CallableServerQueryTest(connection, System.out);
 	callableServerQueryTest.test();
     }
-    
+
     /**
      * Constructor
      * 
@@ -72,6 +70,7 @@ public class CallableServerQueryTest {
 
     /**
      * Call a remote SELECT done in a ServerQueryExecutor implementation
+     * 
      * @throws SQLException
      * @throws IOException
      */
@@ -79,27 +78,25 @@ public class CallableServerQueryTest {
 
 	AceQLConnection aceQLConnection = (AceQLConnection) connection;
 	CallableServerQuery callableServerQuery = aceQLConnection.createCallableServerQuery();
-	
-	// The serverQueryExecutorClassName implements the ServerQueryExecutor interface and is runned
+
+	// The serverQueryExecutorClassName implements the ServerQueryExecutor interface
+	// and is runned
 	// in the CLASSPATH of the AceQL Server.
-	String serverQueryExecutorClassName ="org.kawanfw.test.api.server.executor.MyServerQueryExecutor";
+	String serverQueryExecutorClassName = "com.mycompany.MyServerQueryExecutor";
 	// Parameters to pass to MyServerQueryExecutor. We pass only one int paramaeter.
 	List<Object> params = new ArrayList<>();
 	params.add(1);
-	
-	ResultSet rs = callableServerQuery.executeServerQuery(serverQueryExecutorClassName, params);
-	
-	while (rs.next()) {
-	    out.println();
-	    out.println("customer_id   : " + rs.getInt("customer_id"));
-	    out.println("customer_title: " + rs.getString("customer_title"));
-	    out.println("fname         : " + rs.getString("fname"));
-	    out.println("lname         : " + rs.getString("lname"));
+
+	try (ResultSet rs = callableServerQuery.executeServerQuery(serverQueryExecutorClassName, params);) {
+	    while (rs.next()) {
+		out.println();
+		out.println("customer_id   : " + rs.getInt("customer_id"));
+		out.println("customer_title: " + rs.getString("customer_title"));
+		out.println("fname         : " + rs.getString("fname"));
+		out.println("lname         : " + rs.getString("lname"));
+	    }
 	}
-	rs.close(); 
-	
-	
+
     }
 
-  
 }
