@@ -48,29 +48,34 @@ import com.aceql.jdbc.commons.main.util.json.StreamResultAnalyzer;
  * 
  * <pre>
  * <code>
-// Create the CallableServerQuery instance:
-AceQLConnection aceQLConnection = (AceQLConnection) connection;
-CallableServerQuery callableServerQuery = aceQLConnection.createCallableServerQuery();
+ // Create the CallableServerQuery instance:
+ AceQLConnection aceQLConnection = (AceQLConnection) connection;
+ CallableServerQuery callableServerQuery = aceQLConnection.createCallableServerQuery();
 
-// The serverQueryExecutorClassName class implements the ServerQueryExecutor interface and is run
-// in the CLASSPATH of the AceQL Server:
-String serverQueryExecutorClassName = "com.mycompany.MyServerQueryExecutor";
+ // The serverQueryExecutorClassName class implements the ServerQueryExecutor interface and is run
+ // in the CLASSPATH of the AceQL Server:
+ String serverQueryExecutorClassName = "com.mycompany.MyServerQueryExecutor";
 
-// Parameters to pass to MyServerQueryExecutor. We pass only one int parameter:
-List<Object> params = new ArrayList<>();
-params.add(5);
+ // Parameters to pass to MyServerQueryExecutor. We pass only one int parameter:
+ List<Object> params = new ArrayList<>();
+ params.add(5);
 
-// Call the execution of the server class and get directly a Result Set:
-try (ResultSet rs = callableServerQuery.executeServerQuery(serverQueryExecutorClassName, params);) {
-    while (rs.next()) {
-    	out.println();
-    	out.println("customer_id   : " + rs.getInt("customer_id"));
-	out.println("customer_title: " + rs.getString("customer_title"));
-	out.println("fname         : " + rs.getString("fname"));
-	out.println("lname         : " + rs.getString("lname"));
-    }
-}
- * </code></pref
+ // Call the execution of the server class and get directly a Result Set:
+ try (ResultSet rs = callableServerQuery.executeServerQuery(serverQueryExecutorClassName, params);) {
+     while (rs.next()) {
+         out.println();
+    	 out.println("customer_id   : " + rs.getInt("customer_id"));
+	 out.println("customer_title: " + rs.getString("customer_title"));
+	 out.println("fname         : " + rs.getString("fname"));
+	 out.println("lname         : " + rs.getString("lname"));
+     }
+ }
+ * </code>
+ * </pre>
+ * 
+ * The code of {@code com.mycompany.MyServerQueryExecutor} server side sample is available <a href=
+ * "https://docs.aceql.com/rest/soft_java_client/8.2/src/MyServerQueryExecutor.java">here</a>.
+ * <br>
  * 
  * @author Nicolas de Pomereu
  * @since 8.2
