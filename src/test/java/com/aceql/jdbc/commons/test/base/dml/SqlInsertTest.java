@@ -78,7 +78,7 @@ public class SqlInsertTest {
 	String sql;
 	Statement statement;
 	sql = "insert into customer values (" + records
-		+ ", 'Sir', 'Doe', 'André', '1600 Pennsylvania Ave NW', 'Washington', 'DC 20500', NULL)";
+		+ ", 'Sir', 'Doe', 'AndrÃ©', '1600 Pennsylvania Ave NW', 'Washington', 'DC 20500', NULL)";
 	statement = connection.createStatement();
 	int rows = statement.executeUpdate(sql);
 	out.println("Executed. Rows: " + rows + " (" + sql + "");

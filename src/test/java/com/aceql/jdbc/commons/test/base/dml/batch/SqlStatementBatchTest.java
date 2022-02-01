@@ -36,12 +36,14 @@ public class SqlStatementBatchTest {
     }
 
     private static void insertWithBatch(Connection connection) throws SQLException {
+	System.out.println("SqlStatementBatchTest insertWithBatch BEGIN");
 	final String sql = "insert into customer values ({0}, 'Sir', 'Doe', 'André', '1600 Pennsylvania Ave NW', 'Washington', 'DC 20500', NULL)";
 
 	Statement statement = connection.createStatement();
 	for (int i = 1; i < 11; i++) {
 	    String sqlLine = sql;
 	    sqlLine = sql.replace("{0}", i + "");
+	    //sqlLine = sqlLine.replace("{1}", HtmlConverter.fromHtml("Andr&eacute;"));
 	    statement.addBatch(sqlLine);
 	}
 	int[] rc = statement.executeBatch();
@@ -49,6 +51,7 @@ public class SqlStatementBatchTest {
 	for (int i : rc) {
 	    System.out.print(i + " ");
 	}
+	System.out.println("SqlStatementBatchTest insertWithBatch END");
 	System.out.println();
     }
 

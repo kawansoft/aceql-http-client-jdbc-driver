@@ -170,6 +170,7 @@ public class AceQLConnectionTest {
 	SavepointTest savepointTest = new SavepointTest(connection, System.out);
 	savepointTest.doIt();
 
+	
 	// Batch with Statement
 	SqlStatementBatchTest.callInsertFlow(connection);
 

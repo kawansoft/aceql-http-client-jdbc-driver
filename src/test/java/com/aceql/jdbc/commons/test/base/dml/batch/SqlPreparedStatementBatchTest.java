@@ -37,7 +37,8 @@ public class SqlPreparedStatementBatchTest {
     }
 
     private static void insertWithBatch(Connection connection) throws SQLException {
-	//final String sql = "insert into customer values ({0}, 'Sir', 'Doe', 'André', '1600 Pennsylvania Ave NW', 'Washington', 'DC 20500', NULL)";
+	System.out.println("SqlPreparedStatementBatchTest insertWithBatch BEGIN");
+	//final String sql = "insert into customer values ({0}, 'Sir', 'Doe', 'Andr2', '1600 Pennsylvania Ave NW', 'Washington', 'DC 20500', NULL)";
 	final String sql = "insert into customer values (?, ?, ?, ?, ?, ?, ?, ?)";
 	 
 	PreparedStatement statement = connection.prepareStatement(sql);
@@ -58,6 +59,7 @@ public class SqlPreparedStatementBatchTest {
 	for (int i : rc) {
 	    System.out.print(i + " ");
 	}
+	System.out.println("SqlPreparedStatementBatchTest insertWithBatch END");
 	System.out.println();
     }
 
