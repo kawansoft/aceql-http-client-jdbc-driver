@@ -73,9 +73,9 @@ import com.aceql.jdbc.commons.main.util.json.StreamResultAnalyzer;
  * </code>
  * </pre>
  * 
- * The code of {@code com.mycompany.MyServerQueryExecutor} server side sample is available <a href=
- * "https://docs.aceql.com/rest/soft_java_client/8.2/src/MyServerQueryExecutor.java">here</a>.
- * <br>
+ * The code of {@code com.mycompany.MyServerQueryExecutor} server side sample is
+ * available here: <a href=
+ * "https://docs.aceql.com/rest/soft_java_client/8.2/src/MyServerQueryExecutor.java">MyServerQueryExecutor.java</a>.
  * 
  * @author Nicolas de Pomereu
  * @since 8.2
