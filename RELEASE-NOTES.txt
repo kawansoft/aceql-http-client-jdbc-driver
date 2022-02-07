@@ -18,13 +18,14 @@ The AceQL Client JDBC Driver is licensed under the Apache 2.0
 License.
 
 
-AceQL Client JDBC Driver - Version 8.2 - 14-Jan-2022
+AceQL Client JDBC Driver - Version 8.2 - 07-Feb-2022
 ----------------------------------------------------
 
 What's new:
 - The new AceQLConnection.createCallableServerQuery method allows
   calling a remote server class that returns directly a ResultSet.
-  See AceQLConnection & CallableServerQuery Javadoc.
+  See com.aceql.jdbc.commons.AceQLConnection.createCallableServerQuery() & 
+  com.aceql.jdbc.commons.CallableServerQuery Javadoc.
  
 
 AceQL Client JDBC Driver - Version 8.1 - 02-Dec-2021
