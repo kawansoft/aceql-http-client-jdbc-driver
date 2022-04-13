@@ -31,8 +31,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.aceql.jdbc.commons.main.util.EditionUtil;
-
 /**
  * Blob TestMisc. Allows to insert a Blob, and read back the file.
  *
@@ -61,15 +59,19 @@ public class SqlBlobExample {
 
 	Blob blob = connection.createBlob();
 
-	if (EditionUtil.isProfessionalEdition(connection)) {
-	    OutputStream out = blob.setBinaryStream(1);
-	    Files.copy(file.toPath(), out);
-	    preparedStatement.setBlob(j++, blob);
-	} else {
-	    byte[] bytes = Files.readAllBytes(file.toPath());
-	    blob.setBytes(1, bytes);
-	    preparedStatement.setBlob(j++, blob);
-	}
+//	if (EditionUtil.isProfessionalEdition(connection)) {
+//	    OutputStream out = blob.setBinaryStream(1);
+//	    Files.copy(file.toPath(), out);
+//	    preparedStatement.setBlob(j++, blob);
+//	} else {
+//	    byte[] bytes = Files.readAllBytes(file.toPath());
+//	    blob.setBytes(1, bytes);
+//	    preparedStatement.setBlob(j++, blob);
+//	}
+
+	OutputStream out = blob.setBinaryStream(1);
+	Files.copy(file.toPath(), out);
+	preparedStatement.setBlob(j++, blob);
 
 	preparedStatement.setInt(j++, customerId);
 	preparedStatement.setInt(j++, itemId * 1000);

@@ -38,6 +38,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.aceql.jdbc.commons.main.util.framework.FrameworkDebug;
 import com.aceql.jdbc.commons.main.util.framework.JdbcUrlHeader;
 import com.aceql.jdbc.commons.main.util.framework.Tag;
+import com.aceql.jdbc.commons.metadata.ResultSetMetaDataPolicy;
 
 /**
  *
@@ -54,6 +55,8 @@ public class DriverUtil {
     /** IP pattern */
     private static final Pattern PATTERN = Pattern
 	    .compile("^(([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.){3}([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
+
+    public static final String REQUEST_PROPERTY = "request-property-";
 
     /**
      * No constructor
@@ -314,6 +317,76 @@ public class DriverUtil {
 	if (database == null) {
 	    throw new SQLException(Tag.PRODUCT + " database not set. Please provide a database.");
 	}
+    }
+
+    /**
+     * Check that required values are not null.
+     *
+     * @param username
+     * @param password
+     * @param database
+     * @param sessionId
+     * @throws SQLException
+     */
+    public static void checkNonNullValues(String username, String password, String database, String sessionId)
+            throws SQLException {
+        if (username == null) {
+            throw new SQLException(Tag.PRODUCT + " user not set. Please provide a user.");
+        }
+    
+        if (password == null && sessionId == null) {
+            throw new SQLException(
+        	    Tag.PRODUCT + " password or sessionId not set. Please provide a password or a sessionId.");
+        }
+    
+        if (database == null) {
+            throw new SQLException(Tag.PRODUCT + " database not set. Please provide a database.");
+        }
+    }
+
+    public static Map<String, String> getRequestProperties(Properties info) {
+        Objects.requireNonNull(info, "info cannot be null");
+        Set<?> set = info.keySet();
+    
+        Map<String, String> requestProperties = new HashMap<>();
+        for (Object object : set) {
+            String key = (String) object;
+    
+            if (key.startsWith(REQUEST_PROPERTY)) {
+        	String mapKey = StringUtils.substringAfter(key, REQUEST_PROPERTY);
+        	String value = info.getProperty(key);
+        	requestProperties.put(mapKey, value);
+            }
+        }
+    
+        return requestProperties;
+    }
+
+    /**
+     * @param info
+     * @return
+     * @throws SQLException
+     */
+    public static ResultSetMetaDataPolicy getResultSetMetaDataPolicy(Properties info) throws SQLException {
+        String resultSetMetaDataPolicyStr = info.getProperty("resultSetMetaDataPolicy");
+    
+        if (resultSetMetaDataPolicyStr == null) {
+            resultSetMetaDataPolicyStr = "on";
+        }
+    
+        if (!resultSetMetaDataPolicyStr.equals(ResultSetMetaDataPolicy.on.toString())
+        	&& !resultSetMetaDataPolicyStr.equals(ResultSetMetaDataPolicy.off.toString())) {
+            throw new SQLException("Invalid resultSetMetaDataPolicy: " + resultSetMetaDataPolicyStr
+        	    + ". Possible values are \"on\", \"off\".");
+        }
+    
+        ResultSetMetaDataPolicy resultSetMetaDataPolicy = null;
+        if (resultSetMetaDataPolicyStr.equals("on")) {
+            resultSetMetaDataPolicy = ResultSetMetaDataPolicy.on;
+        } else {
+            resultSetMetaDataPolicy = ResultSetMetaDataPolicy.off;
+        }
+        return resultSetMetaDataPolicy;
     }
 
 }

@@ -49,7 +49,7 @@ class AceQLClobUtil {
     }
 
     /**
-     * Gets the InputStream of Blob for Professional Edition
+     * Gets the InputStream of Blob
      *
      * @param x
      * @param connection
@@ -63,7 +63,7 @@ class AceQLClobUtil {
 
 	if (x instanceof AceQLClob) {
 	    AceQLClob clob = (AceQLClob) x;
-	    InputStream input = getInputStreamFroProEdition(clob);
+	    InputStream input = getInputStreamForClob(clob);
 	    return input;
 	}
 	else {
@@ -97,7 +97,7 @@ class AceQLClobUtil {
      * @return
      * @throws SQLException
      */
-    private static InputStream getInputStreamFroProEdition(AceQLClob clob) throws SQLException {
+    private static InputStream getInputStreamForClob(AceQLClob clob) throws SQLException {
 	// Keep for now:File file = blob.getFile();
 	File file =  InternalWrapper.getFile(clob);
 	if (file == null) {

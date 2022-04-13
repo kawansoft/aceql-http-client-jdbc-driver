@@ -1,25 +1,7 @@
-/*
- * This file is part of AceQL JDBC Driver.
- * AceQL JDBC Driver: Remote JDBC access over HTTP with AceQL HTTP.
- * Copyright (C) 2021,  KawanSoft SAS
- * (http://www.kawansoft.com). All rights reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.aceql.jdbc.commons.driver.util;
 
 import java.sql.DriverPropertyInfo;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
@@ -38,6 +20,10 @@ public class DriverPropertyInfoBuilder {
     public static final String TIMEOUT_VALUE_IN_MILLISECONDS = "Timeout value, in milliseconds, to be used when opening a communications link to the remote server. If the timeout expires before the connection can be established, a java.net.SocketTimeoutExceptionis raised. A timeout of zero is interpreted as an infinite timeout.";
     public static final String GZIP_RESULT = "Boolean to say if the ResultSet is Gzipped before download. Defaults to true.";
     public static final String CLOB_CHARSET = "Name of the charset  to use when reading a CLOB content with the ResultSet methods. Defaults to null.";
+
+    
+    public static final String DEFINES_THE_RESULT_SET_META_DATA_POLICY = "Defines the ResultSet MetaData policy. Says if the ResultSet MetaData is to be downloaded along with the ResultSet. Possible values are \"on\" and \"off\". Defaults to \"on\".";
+    private static final String CLOB_WRITE_CHARSET = "Name of the charset to use when writing a CLOB content with the PreparedStatement streaming methods. Defaults to \"UTF-8\".";
 
     /**
      * Build a new DriverPropertyInfo with the passed property
@@ -125,12 +111,27 @@ public class DriverPropertyInfoBuilder {
 	driverPropertyInfo.value = "0";
 	driverPropertyInfo.required = false;
 	driverPropertyInfoList.add(driverPropertyInfo);
-	
+
 	driverPropertyInfo = getNewDriverPropertyInfo("clobReadCharset", info);
 	driverPropertyInfo.description = CLOB_CHARSET;
 	driverPropertyInfo.required = false;
 	driverPropertyInfoList.add(driverPropertyInfo);
+
+	driverPropertyInfo = getNewDriverPropertyInfo("clobWriteCharset", info);
+	driverPropertyInfo.description = CLOB_WRITE_CHARSET;
+	driverPropertyInfo.required = false;
+	driverPropertyInfoList.add(driverPropertyInfo);
 	
+	List<String> list = new ArrayList<>();
+	list.add("on");
+	list.add("off");
+
+	driverPropertyInfo = getNewDriverPropertyInfo("resultSetMetaDataPolicy", info);
+	driverPropertyInfo.description = DEFINES_THE_RESULT_SET_META_DATA_POLICY;
+	driverPropertyInfo.choices = list.toArray(new String[0]);
+	driverPropertyInfo.value = "on";
+	driverPropertyInfo.required = false;
+	driverPropertyInfoList.add(driverPropertyInfo);
 
 	return driverPropertyInfoList;
     }

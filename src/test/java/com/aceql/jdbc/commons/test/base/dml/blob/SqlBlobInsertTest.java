@@ -31,8 +31,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import com.aceql.jdbc.commons.main.util.EditionUtil;
-
 /**
  * Blob TestMisc. Allows to insert a Blob, and read back the file.
  *
@@ -64,27 +62,40 @@ public class SqlBlobInsertTest {
 
 	Blob blob = null;
 	if (SqlBlobSelectTest.USE_BLOB_NATIVE_SYNTAX) {
-	    if (EditionUtil.isProfessionalEdition(connection)) {
-		out.println("BLOB UPLOAD USING DRIVER PRO AND BLOB NATIVE SYNTAX!");
-		blob = connection.createBlob();
-		OutputStream out = blob.setBinaryStream(1);
-		Files.copy(file.toPath(), out);
-		preparedStatement.setBlob(j++, blob);
-	    } else {
-		blob = connection.createBlob();
-		byte[] bytes = Files.readAllBytes(file.toPath());
-		blob.setBytes(1, bytes);
-		preparedStatement.setBlob(j++, blob);
-	    }
+	    
+//	    if (EditionUtil.isProfessionalEdition(connection)) {
+//		out.println("BLOB UPLOAD USING DRIVER PRO AND BLOB NATIVE SYNTAX!");
+//		blob = connection.createBlob();
+//		OutputStream out = blob.setBinaryStream(1);
+//		Files.copy(file.toPath(), out);
+//		preparedStatement.setBlob(j++, blob);
+//	    } else {
+//		blob = connection.createBlob();
+//		byte[] bytes = Files.readAllBytes(file.toPath());
+//		blob.setBytes(1, bytes);
+//		preparedStatement.setBlob(j++, blob);
+//	    }
+
+	    out.println("BLOB UPLOAD USING BLOB NATIVE SYNTAX!");
+	    blob = connection.createBlob();
+	    OutputStream out = blob.setBinaryStream(1);
+	    Files.copy(file.toPath(), out);
+	    preparedStatement.setBlob(j++, blob);
+	    
 	} else {
-	    if (EditionUtil.isProfessionalEdition(connection)) {
-		out.println("BLOB UPLOAD USING DRIVER PRO!");
-		InputStream in = new FileInputStream(file);
-		preparedStatement.setBinaryStream(j++, in, file.length());
-	    } else {
-		byte[] bytes = Files.readAllBytes(file.toPath());
-		preparedStatement.setBytes(j++, bytes);
-	    }
+	    
+//	    if (EditionUtil.isProfessionalEdition(connection)) {
+//		out.println("BLOB UPLOAD USING DRIVER PRO!");
+//		InputStream in = new FileInputStream(file);
+//		preparedStatement.setBinaryStream(j++, in, file.length());
+//	    } else {
+//		byte[] bytes = Files.readAllBytes(file.toPath());
+//		preparedStatement.setBytes(j++, bytes);
+//	    }
+	    
+	    out.println("BLOB UPLOAD USING CLASSICAL SYNTAX!");
+	    InputStream in = new FileInputStream(file);
+	    preparedStatement.setBinaryStream(j++, in, file.length());
 	}
 
 	preparedStatement.setInt(j++, customerId);

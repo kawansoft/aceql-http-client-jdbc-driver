@@ -23,6 +23,6 @@ package com.aceql.jdbc.commons.main.version;
  */
 
 public class VersionValues {
-    public static final String VERSION = "v8.2";
-    public static final String DATE = "07-Feb-2022";
+    public static final String VERSION = "v9.0";
+    public static final String DATE = "13-Apr-2022";
 }

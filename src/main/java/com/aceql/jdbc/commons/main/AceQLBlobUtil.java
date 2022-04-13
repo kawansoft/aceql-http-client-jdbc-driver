@@ -47,7 +47,7 @@ class AceQLBlobUtil {
     }
 
     /**
-     * Gets the InputStream of Blob for Professional Edition
+     * Gets the InputStream of Blob
      *
      * @param x
      * @param connection

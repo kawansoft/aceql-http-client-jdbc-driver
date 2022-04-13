@@ -37,8 +37,6 @@ import java.sql.SQLException;
 import java.sql.SQLWarning;
 import java.sql.Statement;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -48,16 +46,15 @@ import com.aceql.jdbc.commons.AceQLBlob;
 import com.aceql.jdbc.commons.AceQLClob;
 import com.aceql.jdbc.commons.AceQLConnection;
 import com.aceql.jdbc.commons.ConnectionInfo;
-import com.aceql.jdbc.commons.EditionType;
 import com.aceql.jdbc.commons.InternalWrapper;
 import com.aceql.jdbc.commons.main.abstracts.AbstractResultSet;
+import com.aceql.jdbc.commons.main.advanced.caller.ArrayGetter;
+import com.aceql.jdbc.commons.main.advanced.caller.ResultSetInputStreamGetter;
+import com.aceql.jdbc.commons.main.advanced.caller.ResultSetMetaDataGetter;
 import com.aceql.jdbc.commons.main.http.AceQLHttpApi;
-import com.aceql.jdbc.commons.main.http.HttpManager;
 import com.aceql.jdbc.commons.main.util.AceQLConnectionUtil;
 import com.aceql.jdbc.commons.main.util.AceQLResultSetUtil;
 import com.aceql.jdbc.commons.main.util.BlobUtil;
-import com.aceql.jdbc.commons.main.util.EditionUtil;
-import com.aceql.jdbc.commons.main.util.SimpleClassCaller;
 import com.aceql.jdbc.commons.main.util.TimestampUtil;
 import com.aceql.jdbc.commons.main.util.framework.FrameworkDebug;
 import com.aceql.jdbc.commons.main.util.framework.Tag;
@@ -293,32 +290,9 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	return bytes;
     }
 
-    private InputStream getInputStream(String blobId) throws SQLException {
-
-	List<Class<?>> params = new ArrayList<>();
-	List<Object> values = new ArrayList<>();
-
-	params.add(HttpManager.class);
-	params.add(String.class);
-	params.add(String.class);
-
-	values.add(aceQLHttpApi.getHttpManager());
-	values.add(aceQLHttpApi.getUrl());
-	values.add(blobId);
-
-	try {
-	    SimpleClassCaller simpleClassCaller = new SimpleClassCaller(
-		    SimpleClassCaller.DRIVER_PRO_REFLECTION_PACKAGE + ".ResultSetInputStreamGetter");
-
-	    Object obj = simpleClassCaller.callMehod("getInputStream", params, values);
-	    return (InputStream) obj;
-	} catch (ClassNotFoundException e) {
-	    throw new UnsupportedOperationException(
-		    Tag.PRODUCT + " " + "ResultSet.getBinaryStream(int) or getBinaryStream(String) call "
-			    + Tag.REQUIRES_ACEQL_JDBC_DRIVER_PROFESSIONAL_EDITION);
-	} catch (Exception e) {
-	    throw new SQLException(e);
-	}
+    private InputStream getBlobInputStream(String blobId) throws SQLException {	
+	ResultSetInputStreamGetter resultSetInputStreamGetter = new ResultSetInputStreamGetter();
+	return resultSetInputStreamGetter.getInputStream(aceQLHttpApi.getHttpManager(), aceQLHttpApi.getUrl(), blobId);
     }
 
     /*
@@ -417,35 +391,20 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
     @Override
     public ResultSetMetaData getMetaData() throws SQLException {
 
-	List<Class<?>> params = new ArrayList<>();
-	List<Object> values = new ArrayList<>();
-
-	params.add(File.class);
-	values.add(this.jsonFile);
-
 	if (!AceQLConnectionUtil.isJdbcMetaDataSupported(this.aceQLConnection)) {
 	    throw new SQLException(
 		    "AceQL Server version must be >= " + AceQLConnectionUtil.META_DATA_CALLS_MIN_SERVER_VERSION
 			    + " in order to call ResultSetMetaData.getMetaData().");
 	}
 
-	if (!this.aceQLHttpApi.isFillResultSetMetaData() && EditionUtil.isProfessionalEdition(this.aceQLConnection)) {
+	if (!this.aceQLHttpApi.isFillResultSetMetaData()) {
 	    throw new SQLException(Tag.PRODUCT + ". "
 		    + "Cannot get ResultSet.getMetaData(). Add to AceQL Driver the property resultSetMetaDataPolicy=on");
 	}
 
-	try {
-	    SimpleClassCaller simpleClassCaller = new SimpleClassCaller(
-		    SimpleClassCaller.DRIVER_PRO_REFLECTION_PACKAGE + ".ResultSetMetaDataGetter");
+	ResultSetMetaDataGetter resultSetMetaDataGetter = new ResultSetMetaDataGetter();
+	return resultSetMetaDataGetter.getMetaData(this.jsonFile);
 
-	    Object obj = simpleClassCaller.callMehod("getMetaData", params, values);
-	    return (ResultSetMetaData) obj;
-	} catch (ClassNotFoundException e) {
-	    throw new UnsupportedOperationException(Tag.PRODUCT + " " + "ResultSet.getMetaData() call "
-		    + Tag.REQUIRES_ACEQL_JDBC_DRIVER_PROFESSIONAL_EDITION);
-	} catch (Exception e) {
-	    throw new SQLException(e);
-	}
     }
 
     /*
@@ -498,17 +457,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
      */
     private Blob getBlobFromBlobId(String value) throws SQLException {
 	Objects.requireNonNull(value, "value cannot be nul!");
-	AceQLBlob blob = null;
-	if (EditionUtil.isCommunityEdition(aceQLConnection)) {
-	    // Keep for now: blob = new AceQLBlob(getByteArray(value),
-	    // EditionType.Community);
-	    blob = InternalWrapper.blobBuilder(getByteArray(value), EditionType.Community);
-	} else {
-	    // Keep for now: blob = new AceQLBlob(getInputStream(value),
-	    // EditionType.Professional);
-	    blob = InternalWrapper.blobBuilder(getInputStream(value), EditionType.Professional);
-	}
-
+	AceQLBlob blob = InternalWrapper.blobBuilder(getBlobInputStream(value));
 	return blob;
     }
 
@@ -522,22 +471,11 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	AceQLClob clob = null;
 	String clobReadCharset = this.aceQLConnection.getConnectionInfo().getClobReadCharset();
 	String clobWriteCharset = this.aceQLConnection.getConnectionInfo().getClobWriteCharset();
-	if (EditionUtil.isCommunityEdition(aceQLConnection)) {
-	    // Keep for now: blob = new AceQLBlob(getByteArray(value),
-	    // EditionType.Community);
-	    try {
-		clob = InternalWrapper.clobBuilder(getByteArray(value), EditionType.Community, clobReadCharset, clobWriteCharset);
-	    } catch (UnsupportedEncodingException e) {
-		throw new SQLException(e);
-	    }
-	} else {
-	    // Keep for now: blob = new AceQLBlob(getInputStream(value),
-	    // EditionType.Professional);
-	    try {
-		clob = InternalWrapper.blobBuilder(getInputStream(value), EditionType.Professional, clobReadCharset, clobWriteCharset);
-	    } catch (UnsupportedEncodingException e) {
-		throw new SQLException(e);		
-	    }
+
+	try {
+	    clob = InternalWrapper.blobBuilder(getBlobInputStream(value), clobReadCharset, clobWriteCharset);
+	} catch (UnsupportedEncodingException e) {
+	    throw new SQLException(e);
 	}
 
 	return clob;
@@ -623,7 +561,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	if (value == null || value.equals("NULL")) {
 	    return null;
 	}
-	return getInputStream(value);
+	return getBlobInputStream(value);
     }
 
     /*
@@ -640,7 +578,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	if (value == null || value.equals("NULL")) {
 	    return null;
 	}
-	return getInputStream(value);
+	return getBlobInputStream(value);
     }
 
     
@@ -654,7 +592,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	}
 	
 	try {
-	    Reader reader = new InputStreamReader(getInputStream(value), this.aceQLConnection.getConnectionInfo().getClobReadCharset());
+	    Reader reader = new InputStreamReader(getBlobInputStream(value), this.aceQLConnection.getConnectionInfo().getClobReadCharset());
 	    return reader;
 	} catch (UnsupportedEncodingException e) {
 	    throw new SQLException(e);
@@ -669,7 +607,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	    return null;
 	}
 	try {
-	    Reader reader = new InputStreamReader(getInputStream(value), this.aceQLConnection.getConnectionInfo().getClobReadCharset());
+	    Reader reader = new InputStreamReader(getBlobInputStream(value), this.aceQLConnection.getConnectionInfo().getClobReadCharset());
 	    return reader;
 	} catch (UnsupportedEncodingException e) {
 	    throw new SQLException(e);
@@ -708,7 +646,11 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
     private boolean isTimestamp(String columnLabel, String value) throws SQLException {
 	
 	// Fast check
-	if (! TimestampUtil.isLong(value) || EditionUtil.isCommunityEdition(aceQLConnection)) {
+//	if (! TimestampUtil.isLong(value) || EditionUtil.isCommunityEdition(aceQLConnection)) {
+//	    return false;
+//	}
+	
+	if (! TimestampUtil.isLong(value)) {
 	    return false;
 	}
 	
@@ -730,9 +672,14 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
      */
     private boolean isTimestamp(int columnIndex, String value) throws SQLException {
 	// Fast check
-	if (! TimestampUtil.isLong(value) || EditionUtil.isCommunityEdition(aceQLConnection)) {
+//	if (! TimestampUtil.isLong(value) || EditionUtil.isCommunityEdition(aceQLConnection)) {
+//	    return false;
+//	}
+	
+	if (! TimestampUtil.isLong(value)) {
 	    return false;
 	}
+	
 	// Deeper check
 	if (resultSetMetaData == null) {
 	    resultSetMetaData = getMetaData();
@@ -1144,25 +1091,9 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
 	    throw new SQLException("AceQL Server version must be >= "
 		    + AceQLConnectionUtil.META_DATA_CALLS_MIN_SERVER_VERSION + " in order to call getArray().");
 	}
-
-	List<Class<?>> params = new ArrayList<>();
-	List<Object> values = new ArrayList<>();
-
-	params.add(String.class);
-	values.add(value);
-
-	try {
-	    SimpleClassCaller simpleClassCaller = new SimpleClassCaller(
-		    SimpleClassCaller.DRIVER_PRO_REFLECTION_PACKAGE + ".ArrayGetter");
-
-	    Object obj = simpleClassCaller.callMehod("getArray", params, values);
-	    return (Array) obj;
-	} catch (ClassNotFoundException e) {
-	    throw new UnsupportedOperationException(Tag.PRODUCT + " " + "ResultSet.getArray() call "
-		    + Tag.REQUIRES_ACEQL_JDBC_DRIVER_PROFESSIONAL_EDITION);
-	} catch (Exception e) {
-	    throw new SQLException(e);
-	}
+	
+	ArrayGetter arrayGetter = new ArrayGetter();
+	return arrayGetter.getArray(value);
 
     }
 

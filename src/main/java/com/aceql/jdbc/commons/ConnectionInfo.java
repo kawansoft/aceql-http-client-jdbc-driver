@@ -63,7 +63,6 @@ public class ConnectionInfo {
     private int connectTimeout = 0;
     private int readTimeout = 0;
     private boolean gzipResult;
-    private EditionType editionType = EditionType.Community;
     private ResultSetMetaDataPolicy resultSetMetaDataPolicy = ResultSetMetaDataPolicy.off;
     private Map<String, String> requestProperties = new HashMap<>();
     private String clobReadCharset;
@@ -81,7 +80,6 @@ public class ConnectionInfo {
      * @param connectTimeout
      * @param readTimeout
      * @param gzipResult
-     * @param editionType
      * @param resultSetMetaDataPolicy
      * @param requestProperties
      * @param clobReadCharset
@@ -89,8 +87,8 @@ public class ConnectionInfo {
      */
     ConnectionInfo(String url, String database, PasswordAuthentication authentication, boolean passwordIsSessionId,
 	    Proxy proxy, PasswordAuthentication proxyAuthentication, int connectTimeout, int readTimeout,
-	    boolean gzipResult, EditionType editionType, ResultSetMetaDataPolicy resultSetMetaDataPolicy,
-	    Map<String, String> requestProperties, String clobReadCharset, String clobWriteCharset) {
+	    boolean gzipResult, ResultSetMetaDataPolicy resultSetMetaDataPolicy, Map<String, String> requestProperties,
+	    String clobReadCharset, String clobWriteCharset) {
 	this.url = url;
 	this.database = database;
 	this.authentication = authentication;
@@ -100,7 +98,6 @@ public class ConnectionInfo {
 	this.connectTimeout = connectTimeout;
 	this.readTimeout = readTimeout;
 	this.gzipResult = gzipResult;
-	this.editionType = editionType;
 	this.resultSetMetaDataPolicy = resultSetMetaDataPolicy;
 	this.requestProperties = requestProperties;
 	this.clobReadCharset = clobReadCharset;
@@ -135,8 +132,7 @@ public class ConnectionInfo {
     }
 
     /**
-     * Says if the password is an AceQL Session ID. Applies only to Professional
-     * Edition.
+     * Says if the password is an AceQL Session ID.
      * 
      * @return {@code true} if the password is an AceQL Session ID, else
      *         {@code false}
@@ -201,20 +197,9 @@ public class ConnectionInfo {
     }
 
     /**
-     * Gets the AceQL Client JDBC Driver Edition: Community of Professional.
-     *
-     * @return the Edition Type: Community of Professional.
-     */
-    public EditionType getEditionType() {
-	return editionType;
-    }
-
-    /**
      * Gets the {@link ResultSetMetaDataPolicy}. Defines the {@code ResultSet}
      * Metadata policy. Says if the {@code ResultSet} Metadata is to be downloaded
-     * along with the {@code ResultSet}. <br>
-     * <br>
-     * This option is only used with the Professional Edition.
+     * along with the {@code ResultSet}.
      *
      * @return the {@code ResultSet} Metadata policy
      */
@@ -224,9 +209,7 @@ public class ConnectionInfo {
 
     /**
      * Gets all the request properties that are set to the underlying
-     * {@code HttpURLConnection} for each http call. <br>
-     * <br>
-     * This option is only used with the Professional Edition.
+     * {@code HttpURLConnection} for each http call.
      *
      * @return the request properties that are set to the underlying
      *         {@code HttpURLConnection} for each http call.
@@ -249,8 +232,7 @@ public class ConnectionInfo {
 
     /**
      * Gets the charset name to use when writing a CLOB content with
-     * {@code PreparedStatement} streaming methods. <br>
-     * This option is only used with the Professional Edition.
+     * {@code PreparedStatement} streaming methods.
      * 
      * @return the charset name to use when writing a CLOB content with
      *         {@code PreparedStatement} streaming methods.
@@ -281,7 +263,7 @@ public class ConnectionInfo {
 	return "ConnectionInfo [url=" + url + ", database=" + database + ", authentication=" + username
 		+ ", creationDateTime=" + creationDateTime + ", passwordIsSessionId=" + passwordIsSessionId + ", proxy="
 		+ proxy + ", proxyAuthentication=" + proxyUsername + ", connectTimeout=" + connectTimeout
-		+ ", readTimeout=" + readTimeout + ", gzipResult=" + gzipResult + ", editionType=" + editionType
+		+ ", readTimeout=" + readTimeout + ", gzipResult=" + gzipResult 
 		+ ", resultSetMetaDataPolicy=" + resultSetMetaDataPolicy + ", requestProperties=" + requestProperties
 		+ ", clobReadCharset=" + clobReadCharset + ", clobWriteCharset=" + clobWriteCharset + "]";
     }

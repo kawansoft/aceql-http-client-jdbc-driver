@@ -20,6 +20,7 @@
 package com.aceql.jdbc.commons;
 
 import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -35,7 +36,6 @@ import java.sql.Clob;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Objects;
 
 import org.apache.commons.io.input.ReaderInputStream;
 import org.apache.commons.io.output.WriterOutputStream;
@@ -62,13 +62,13 @@ import com.aceql.jdbc.commons.main.util.framework.UniqueIDBuilder;
  * // Create the Clob instance using the current Connection:
  * Clob clob = connection.createClob();
  *
- * // Free / Community Edition syntax using a String:
+ * // Syntax using a String:
  * clob = connection.createClob();
  * String str = FileUtils.readFileToString(file, "UTF-8");
  * clob.setString(1, str);
  * preparedStatement.setClob(i++, clob);
  *
- * // Professional Edition syntax using a stream:
+ * // Syntax using a stream:
  * clob = connection.createClob();
  * Writer out = clob.setCharacterStream(1);
  * IOUtils.copy(new FileInputStream(file), out, "UTF-8");
@@ -78,7 +78,7 @@ import com.aceql.jdbc.commons.main.util.framework.UniqueIDBuilder;
  * preparedStatement.close();
  * </pre>
  *
- * <b>{@code SELECT} example for the Community Edition:</b> <br/>
+ * <b>{@code SELECT} example using a String</b> <br/>
  * 
  * <pre>
  * String sql = "select * from documentation where item_id = ?";
@@ -100,7 +100,7 @@ import com.aceql.jdbc.commons.main.util.framework.UniqueIDBuilder;
  * rs.close();
  * </pre>
  *
- * <b>{@code SELECT} example for the Professional Edition:</b> <br/>
+ * <b>{@code SELECT} example using a File:</b> <br/>
  * 
  * <pre>
  * String sql = "select * from documentation where item_id = ?";
@@ -113,7 +113,7 @@ import com.aceql.jdbc.commons.main.util.framework.UniqueIDBuilder;
  *     Clob clob = rs.getClob(2);
  *
  *     File file = new File("/my/file/path");
- *     // Professional Edition: Get the Reader stream from the Clob and copy into a file
+ *     // Get the Reader stream from the Clob and copy into a file
  *     try (Reader reader = clob.getCharacterStream()) {
  * 	IOUtils.copy(reader, new FileOutputStream(file), "UTF-8");
  *     }
@@ -128,18 +128,15 @@ import com.aceql.jdbc.commons.main.util.framework.UniqueIDBuilder;
  * <br>
  * {@code INSERT/UPDATE} can be done using:
  * <ul>
- * <li>{@link PreparedStatement#setString(int, String)} for the Community
- * Edition.</li>
- * <li>{@link PreparedStatement#setCharacterStream(int, Reader)} for the
- * Professional Edition.</li>
+ * <li>{@link PreparedStatement#setString(int, String)}.</li>
+ * <li>{@link PreparedStatement#setCharacterStream(int, Reader)}.</li>
  * </ul>
  * <br>
  * {@code SELECT} can be done using:
  * <ul>
- * <li>{@link ResultSet#getString(int)} or {@link ResultSet#getString(String)} for
- * the Community Edition.</li>
+ * <li>{@link ResultSet#getString(int)} or {@link ResultSet#getString(String)}.</li>
  * <li>{@link ResultSet#getCharacterStream(int)} or
- * {@link ResultSet#getCharacterStream(String)} for the Professional Edition.</li>
+ * {@link ResultSet#getCharacterStream(String)}.</li>
  * </ul>
  * 
  * @since 8.0
@@ -148,7 +145,6 @@ import com.aceql.jdbc.commons.main.util.framework.UniqueIDBuilder;
  */
 public class AceQLClob implements Clob {
 
-    private EditionType editionType;
     private String str;
     
     private File file;
@@ -158,8 +154,7 @@ public class AceQLClob implements Clob {
     private String clobReadCharset;
     private String clobWriteCharset;
     
-    AceQLClob(EditionType editionType, String clobReadCharset, String clobWriteCharset) {
-	this.editionType = Objects.requireNonNull(editionType, "editionType cannot be null!");
+    AceQLClob(String clobReadCharset, String clobWriteCharset) {
 	
 	if (clobReadCharset == null) {
 	    clobReadCharset = Charset.defaultCharset().displayName();
@@ -180,7 +175,7 @@ public class AceQLClob implements Clob {
      * @param inputStream the input stream to use to build the Clob
      * @throws UnsupportedEncodingException 
      */
-    AceQLClob(InputStream inputStream, EditionType editionType, String clobReadCharset, String clobWriteCharset) throws UnsupportedEncodingException {
+    AceQLClob(InputStream inputStream, String clobReadCharset, String clobWriteCharset) throws UnsupportedEncodingException {
 	
 	if (clobReadCharset == null) {
 	    clobReadCharset = Charset.defaultCharset().displayName();
@@ -191,20 +186,17 @@ public class AceQLClob implements Clob {
 	
 	this.reader = new InputStreamReader(inputStream, clobReadCharset);
 	this.str = null;
-	
-	this.editionType = Objects.requireNonNull(editionType, "editionType cannot be null!");
 	this.clobReadCharset = clobReadCharset;
 	this.clobWriteCharset = clobWriteCharset;
     }
 
     /**
-     * To be used with ResultSet. Package protected constructor to be used only for
-     * Community Edition & Professional Editions
+     * To be used with ResultSet. Package protected constructor.
      *
      * @param bytes the bye array to use to build the Clob
      * @throws UnsupportedEncodingException 
      */
-    AceQLClob(byte [] bytes, EditionType editionType,  String clobReadCharset, String clobWriteCharset) throws UnsupportedEncodingException {
+    AceQLClob(byte [] bytes, String clobReadCharset,  String clobWriteCharset) throws UnsupportedEncodingException {
 	
 	if (clobReadCharset == null) {
 	    clobReadCharset = Charset.defaultCharset().displayName();
@@ -216,18 +208,24 @@ public class AceQLClob implements Clob {
 	this.str = new String(bytes, clobReadCharset);
 		
 	this.reader = null;
-	this.editionType = Objects.requireNonNull(editionType, "editionType cannot be null!");
 	this.clobReadCharset = clobReadCharset;
 	this.clobWriteCharset = clobWriteCharset;
     }
     
     @Override
     public long length() throws SQLException {
-	if (editionType.equals(EditionType.Professional)) {
-	    return -1;
-	} else {
-	    return str == null ? 0 : str.length();
+//	if (editionType.equals(EditionType.Professional)) {
+//	    return -1;
+//	} else {
+//	    return str == null ? 0 : str.length();
+//	}
+	
+	if (str != null) {
+	    return str.length();
 	}
+	
+	return -1;
+	
     }
 
     @Override
@@ -244,16 +242,23 @@ public class AceQLClob implements Clob {
 
     @Override
     public Reader getCharacterStream() throws SQLException {
-	if (editionType.equals(EditionType.Professional)) {
-	    return reader;
-	} else {
-	    if (str == null) {
-		return null;
-	    }
-	    
+//	if (editionType.equals(EditionType.Professional)) {
+//	    return reader;
+//	} else {
+//	    if (str == null) {
+//		return null;
+//	    }
+//	    
+//	    StringReader stringReader = new StringReader(str);
+//	    return stringReader;
+//	}
+	
+	if (str != null) {
 	    StringReader stringReader = new StringReader(str);
 	    return stringReader;
 	}
+	
+	return reader;
     }
 
     @Override
@@ -269,6 +274,16 @@ public class AceQLClob implements Clob {
     
     @Override
     public InputStream getAsciiStream() throws SQLException {
+	
+	if (str != null) {
+            // get a sequence of bytes from the given string
+            byte[] bytes = str.getBytes(Charset.forName(clobReadCharset));
+ 
+            // Creates a `ByteArrayInputStream` from the input buffer
+            InputStream in = new ByteArrayInputStream(bytes);
+            return in;
+	}
+	
         InputStream in = new ReaderInputStream(reader, clobReadCharset);
         return in;
     }
@@ -320,11 +335,6 @@ public class AceQLClob implements Clob {
 	    throw new SQLException(Tag.PRODUCT + " \"pos\" value can be 1 only.");
 	}
 
-	if (editionType.equals(EditionType.Community)) {
-	    throw new UnsupportedOperationException(Tag.PRODUCT + " " + "Blob.setBinaryStream(long) call "
-		    + Tag.REQUIRES_ACEQL_JDBC_DRIVER_PROFESSIONAL_EDITION);
-	}
-
 	if (file == null) {
 	    throw new SQLException(Tag.PRODUCT + " Can not call setBinaryStream() when reading a Blob file.");
 	}
@@ -347,14 +357,22 @@ public class AceQLClob implements Clob {
 
     @Override
     public void free() throws SQLException {
-	if (editionType.equals(EditionType.Professional) && reader != null) {
+//	if (editionType.equals(EditionType.Professional) && reader != null) {
+//	    try {
+//		reader.close();
+//	    } catch (IOException e) {
+//		throw new SQLException(e);
+//	    }
+//	}
+
+	if (reader != null) {
 	    try {
 		reader.close();
 	    } catch (IOException e) {
 		throw new SQLException(e);
 	    }
 	}
-
+	
 	if (file != null) {
 	    file.delete();
 	}

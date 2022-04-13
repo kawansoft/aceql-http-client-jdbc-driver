@@ -21,8 +21,6 @@ import com.aceql.jdbc.commons.AceQLConnection;
  * preferred behavior. Default value for a new {@link AceQLConnection} is
  * {@code ResultSetMetaDataPolicy.on}.
  * <br>
- * <br>
- * Please note that this option is used only with AceQL JDBC Driver Professional Edition.
  * @since 6.0
  * @author Nicolas de Pomereu
  *

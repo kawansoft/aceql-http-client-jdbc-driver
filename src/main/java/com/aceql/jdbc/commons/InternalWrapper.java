@@ -45,22 +45,20 @@ public class InternalWrapper {
 	return new AceQLConnection(connectionInfo);
     }
 
-    public static AceQLBlob blobBuilder(byte[] bytes, EditionType editionType) {
-	return new AceQLBlob(editionType, bytes);
+    public static AceQLBlob blobBuilder(byte[] bytes) {
+	return new AceQLBlob(bytes);
     }
 
-    public static AceQLBlob blobBuilder(InputStream inputStream, EditionType editionType) {
-	return new AceQLBlob(editionType, inputStream);
+    public static AceQLBlob blobBuilder(InputStream inputStream) {
+	return new AceQLBlob(inputStream);
     }
 
-    public static AceQLClob clobBuilder(byte[] bytes, EditionType editionType, String clobReadCharset,
-	    String clobWriteCharset) throws UnsupportedEncodingException {
-	return new AceQLClob(bytes, editionType, clobReadCharset, clobWriteCharset);
+    public static AceQLClob clobBuilder(byte[] bytes, String clobReadCharset, String clobWriteCharset) throws UnsupportedEncodingException {
+	return new AceQLClob(bytes, clobReadCharset, clobWriteCharset);
     }
 
-    public static AceQLClob blobBuilder(InputStream inputStream, EditionType editionType, String clobReadCharset,
-	    String clobWriteCharset) throws UnsupportedEncodingException {
-	return new AceQLClob(inputStream, editionType, clobReadCharset, clobWriteCharset);
+    public static AceQLClob blobBuilder(InputStream inputStream, String clobReadCharset, String clobWriteCharset) throws UnsupportedEncodingException {
+	return new AceQLClob(inputStream, clobReadCharset, clobWriteCharset);
     }
 
     public static File getFile(AceQLClob aceQLClob) {
@@ -81,11 +79,11 @@ public class InternalWrapper {
     public static ConnectionInfo connectionInfoBuilder(String url, String database,
 	    PasswordAuthentication authentication, boolean passwordIsSessionId, Proxy proxy,
 	    PasswordAuthentication proxyAuthentication, int connectTimeout, int readTimeout, boolean gzipResult,
-	    EditionType editionType, ResultSetMetaDataPolicy resultSetMetaDataPolicy,
-	    Map<String, String> requestProperties, String clobReadCharset, String clobWriteCharset) {
+	    ResultSetMetaDataPolicy resultSetMetaDataPolicy, Map<String, String> requestProperties,
+	    String clobReadCharset, String clobWriteCharset) {
 	ConnectionInfo connectionInfo = new ConnectionInfo(url, database, authentication, passwordIsSessionId, proxy,
-		proxyAuthentication, connectTimeout, readTimeout, gzipResult, editionType, resultSetMetaDataPolicy,
-		requestProperties, clobReadCharset, clobWriteCharset);
+		proxyAuthentication, connectTimeout, readTimeout, gzipResult, resultSetMetaDataPolicy, requestProperties,
+		clobReadCharset, clobWriteCharset);
 	return connectionInfo;
     }
 

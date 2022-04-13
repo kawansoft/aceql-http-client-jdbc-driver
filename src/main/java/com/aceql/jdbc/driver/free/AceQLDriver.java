@@ -1,20 +1,26 @@
 /*
- * This file is part of AceQL JDBC Driver.
- * AceQL JDBC Driver: Remote JDBC access over HTTP with AceQL HTTP.
- * Copyright (C) 2021,  KawanSoft SAS
+ * This file is part of AceQL.
+ * AceQL: Remote JDBC access over HTTP.
+ * Copyright (C) 2015,  KawanSoft SAS
  * (http://www.kawansoft.com). All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * AceQL is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * AceQL is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301  USA
+ *
+ * Any modifications to this file must keep this entire header
+ * intact.
  */
 package com.aceql.jdbc.driver.free;
 
@@ -26,7 +32,6 @@ import java.sql.DriverPropertyInfo;
 import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -34,7 +39,6 @@ import java.util.logging.Logger;
 
 import com.aceql.jdbc.commons.AceQLConnection;
 import com.aceql.jdbc.commons.ConnectionInfo;
-import com.aceql.jdbc.commons.EditionType;
 import com.aceql.jdbc.commons.InternalWrapper;
 import com.aceql.jdbc.commons.driver.util.DriverPropertyInfoBuilder;
 import com.aceql.jdbc.commons.driver.util.DriverUtil;
@@ -66,9 +70,8 @@ import com.aceql.jdbc.commons.metadata.ResultSetMetaDataPolicy;
  * <li><b>proxyPassword</b>: Proxy credential password.</li>
  * <li><b>connectTimeout</b>: Timeout value, in milliseconds, to be used when
  * opening a communications link to the remote server. If the timeout expires
- * before the connection can be established, a java.net.SocketTimeoutException
- * is raised. A timeout of zero is interpreted as an infinite timeout. Defaults
- * to 0.</li>
+ * before the connection can be established, a java.net.SocketTimeoutException is
+ * raised. A timeout of zero is interpreted as an infinite timeout. Defaults to 0.</li>
  * <li><b>readTimeout</b>: Read timeout to a specified timeout, in milliseconds.
  * A non-zero value specifies the timeout when reading from Input stream when a
  * connection is established to a resource. If the timeout expires before there
@@ -76,27 +79,32 @@ import com.aceql.jdbc.commons.metadata.ResultSetMetaDataPolicy;
  * timeout of zero is interpreted as an infinite timeout. Defaults to 0.
  * <li><b>gzipResult</b>: Boolean to say if the ResultSet is Gzipped before
  * download. Defaults to <code>true</code>.</li>
+ * <li><b>resultSetMetaDataPolicy</b>: Defines the {@code ResultSet} metadata
+ * policy. Says if the {@code ResultSet} metadata is to be downloaded along with
+ * the ResultSet. Possible values are "on" and "off". Defaults to "on".</li>
  * <li><b>clobReadCharset</b>: Name of the charset to use when
  * reading a CLOB content with the {@code ResultSet} methods. Defaults
  * to {@code null}.</li>
+ * <li><b>clobWriteCharset</b>: Name of the charset to use when
+ * writing a CLOB content with the {@code PreparedStatement} streaming methods. Defaults
+ * to "{@code UTF-8}".</li>
  * </ul>
  * <p>
- *
- * Usage of the AceQL Driver is straightforward:
+ * Usage of the AceQL JDBC Driver is straightforward:
  *
  * <pre>
  * // Define URL of the path to the AceQL Manager Servlet
  * // We will use a secure SSL/TLS session. All uploads/downloads of SQL
  * // commands and data will be encrypted.
- * String url = "https://www.acme.org:9443/aceql";
+ * String url = "http://localhost:9090/aceql";
  *
  * // The login info for strong authentication on server side.
  * // These are *not* the username/password of the remote JDBC Driver,
  * // but are the auth info checked by remote server
  * // UserAuthenticator.login(username, password) method.
- * String database = "my_database";
- * String user = "my_username";
- * String password = "my_password";
+ * String database = "sampledb";
+ * String user = "user1";
+ * String password = "password1";
  *
  * // Register and Load the Driver
  * DriverManager.registerDriver(new AceQLDriver());
@@ -108,48 +116,53 @@ import com.aceql.jdbc.commons.metadata.ResultSetMetaDataPolicy;
  * info.put("user", user);
  * info.put("password", password);
  * info.put("database", database);
+ *
  * Connection connection = DriverManager.getConnection(url, info);
+ * return connection;
  * </pre>
  * <p>
  * An alternate way of passing connection info is to add them as request
  * parameters to the URL:
- * 
- * <pre>
+ * <br/>
+ * <pre><code>
  * // Define URL of the path to the AceQL Manager Servlet, with all properties
- * // passed as request parameters
+ * // passed as request parameters.
+ * // (We presume that the aceql_license_key.txt is installed in user.dir.)
  * String url = "http://localhost:9090/aceql?user=user1&amp;password=password1&amp;database=sampledb";
  *
- * // Register and Load the Driver
+ * // Register and Load the Driver 
  * DriverManager.registerDriver(new AceQLDriver());
  * String driverClassName = AceQLDriver.class.getName();
  * Class.forName(driverClassName);
  *
  * // Attempts to establish a connection to the remote database:
  * Connection connection = DriverManager.getConnection(url, new Properties());
- * </pre>
- * 
+ * </code></pre>
+ *
  * The {@code Connection} returned is now ready to be used as a regular or
  * classic {@link java.sql.Connection}:
  *
- * <pre>
+ * <pre><code>
  * String sql = "select * from customer where customer_id >= 1 order by customer_id";
  * Statement statement = connection.createStatement();
  * statement.execute(sql);
  *
  * ResultSet rs = statement.getResultSet();
  * // Etc.
- * </pre>
- * 
+ * </code></pre>
+ *
  * The built {@code Connection} is an instance of {@code AceQLConnection} that
- * contains some specific method. <br>
- * See {@link AceQLConnection} for more info. <br>
+ * contains some specific method. See {@link AceQLConnection} for more info.
  * <br>
- * 
+ * <br>
+ *
  * @since 6.0
  * @author Nicolas de Pomereu
  */
 
 final public class AceQLDriver implements java.sql.Driver {
+
+    static int LICENSE_INFO;
 
     /** The debug flag */
     private static boolean DEBUG = FrameworkDebug.isSet(AceQLDriver.class);
@@ -179,7 +192,7 @@ final public class AceQLDriver implements java.sql.Driver {
      * @exception SQLException if a database access error occurs
      */
     @Override
-    public Connection connect(String url, final Properties info) throws SQLException {
+    public Connection connect(String url, Properties info) throws SQLException {
 
 	if (url == null) {
 	    throw new SQLException("url not set. Please provide an url.");
@@ -190,31 +203,43 @@ final public class AceQLDriver implements java.sql.Driver {
 	}
 
 	// Properties may be passed in URL
-	Properties infoNew = DriverUtil.addPropertiesFromUrl(url, info);
+	info = DriverUtil.addPropertiesFromUrl(url, info);
 
 	// Remove "aceql:jdbc" prefix & all parameters
 	url = DriverUtil.trimUrl(url);
 
-	String username = infoNew.getProperty("user");
-	String password = infoNew.getProperty("password");
-	String database = infoNew.getProperty("database");
-	DriverUtil.checkNonNullValues(username, password, database);
+	String username = info.getProperty("user");
+	String password = info.getProperty("password");
+	String sessionId = info.getProperty("sessionId");
+	String database = info.getProperty("database");
+	
+	DriverUtil.checkNonNullValues(username, password, database, sessionId);
 
 	// Add proxy lookup
-	String proxyType = infoNew.getProperty("proxyType");
-	String proxyHostname = infoNew.getProperty("proxyHostname");
-	String proxyPort = infoNew.getProperty("proxyPort"); // Can be String or Integer
-	String proxyUsername = infoNew.getProperty("proxyUsername");
-	String proxyPassword = infoNew.getProperty("proxyPassword");
+	String proxyType = info.getProperty("proxyType");
+	String proxyHostname = info.getProperty("proxyHostname");
+	String proxyPort = info.getProperty("proxyPort");
+	String proxyUsername = info.getProperty("proxyUsername");
+	String proxyPassword = info.getProperty("proxyPassword");
+
+	String clobReadCharset = info.getProperty("clobReadCharset");
+	String clobWriteCharset = info.getProperty("clobWriteCharset");
+		
+	if (clobWriteCharset == null) {
+	    clobWriteCharset = StandardCharsets.UTF_8.name();
+	}
 	
-	String clobReadCharset = infoNew.getProperty("clobReadCharset");
+	debug("info.getProperty(\"clobReadCharset\") : " + clobReadCharset);
+	debug("info.getProperty(\"clobWriteCharset\"): " + clobWriteCharset);
+	
+	boolean gzipResult = DriverUtil.getGzipResult(info);
+	int connectTimeout = DriverUtil.getConnectTimeout(info);
+	int readTimeout = DriverUtil.getReadTimeout(info);
+	ResultSetMetaDataPolicy resultSetMetaDataPolicy = DriverUtil.getResultSetMetaDataPolicy(info);
 
-	boolean gzipResult = DriverUtil.getGzipResult(infoNew);
-	int connectTimeout = DriverUtil.getConnectTimeout(infoNew);
-	int readTimeout = DriverUtil.getReadTimeout(infoNew);
 	Proxy proxy = DriverUtil.buildProxy(proxyType, proxyHostname, proxyPort);
-
-	PasswordAuthentication authentication = new PasswordAuthentication(username, password.toCharArray());
+	Map<String, String> requestProperties = DriverUtil.getRequestProperties(info);
+	debug("requestProperties: " + requestProperties);
 
 	PasswordAuthentication proxyAuthentication = null;
 	if (proxy != null && proxyUsername != null) {
@@ -224,17 +249,22 @@ final public class AceQLDriver implements java.sql.Driver {
 	    }
 	    proxyAuthentication = new PasswordAuthentication(proxyUsername, proxyPassword.toCharArray());
 	}
-
-	boolean passwordIsSessionId = false; // Not used in Community Edition
-	Map<String, String> requestProperties = new HashMap<>(); // Not set in Community Edition
-
-	ConnectionInfo connectionInfo = InternalWrapper.connectionInfoBuilder(url, database, authentication,
-		passwordIsSessionId, proxy, proxyAuthentication, connectTimeout, readTimeout, gzipResult,
-		EditionType.Community, ResultSetMetaDataPolicy.off, requestProperties, clobReadCharset, StandardCharsets.UTF_8.name());
-
-	debug("infoNew       : " + infoNew);
-	debug("connectionInfo: " + connectionInfo);
-
+	
+	PasswordAuthentication authentication = null;
+	boolean passwordIsSessionId = false;
+	if (sessionId == null) {
+	    authentication = new PasswordAuthentication(username, password.toCharArray());
+	    passwordIsSessionId = false;
+	}
+	else {
+	    authentication = new PasswordAuthentication(username, sessionId.toCharArray());
+	    passwordIsSessionId = true;
+	}
+		
+	ConnectionInfo connectionInfo = InternalWrapper.connectionInfoBuilder(url, database, authentication, passwordIsSessionId,
+		proxy, proxyAuthentication, connectTimeout, readTimeout, gzipResult,
+		resultSetMetaDataPolicy, requestProperties, clobReadCharset, clobWriteCharset);
+	
 	AceQLConnection connection = InternalWrapper.connectionBuilder(connectionInfo);
 	return connection;
     }
@@ -305,7 +335,7 @@ final public class AceQLDriver implements java.sql.Driver {
      */
     @Override
     public int getMajorVersion() {
-	return 8;
+	return 9;
     }
 
     /**
@@ -315,7 +345,7 @@ final public class AceQLDriver implements java.sql.Driver {
      */
     @Override
     public int getMinorVersion() {
-	return 2;
+	return 0;
     }
 
     /**

@@ -25,7 +25,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
-import java.nio.file.Files;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -33,7 +32,6 @@ import java.util.Date;
 
 import org.apache.commons.io.FileUtils;
 
-import com.aceql.jdbc.commons.main.util.EditionUtil;
 import com.aceql.jdbc.commons.test.connection.AceQLDriverLoader;
 import com.aceql.jdbc.commons.test.connection.ConnectionParms;
 
@@ -107,15 +105,19 @@ public class SqlMySqlBlobInsertTest {
 	    preparedStatement.setCharacterStream(i++, fileReader);
 	}
 
-	if (EditionUtil.isProfessionalEdition(connection)) {
-	    out.println("BLOB UPLOAD USING DRIVER PRO!");
-	    InputStream in = new FileInputStream(blobFile);
-	    preparedStatement.setBinaryStream(i++, in, blobFile.length());
-	} else {
-	    byte[] bytes = Files.readAllBytes(blobFile.toPath());
-	    preparedStatement.setBytes(i++, bytes);
-	}
+//	if (EditionUtil.isProfessionalEdition(connection)) {
+//	    out.println("BLOB UPLOAD USING DRIVER PRO!");
+//	    InputStream in = new FileInputStream(blobFile);
+//	    preparedStatement.setBinaryStream(i++, in, blobFile.length());
+//	} else {
+//	    byte[] bytes = Files.readAllBytes(blobFile.toPath());
+//	    preparedStatement.setBytes(i++, bytes);
+//	}
 
+	out.println("BLOB UPLOAD!");
+	InputStream in = new FileInputStream(blobFile);
+	preparedStatement.setBinaryStream(i++, in, blobFile.length());
+	    
 	preparedStatement.executeUpdate();
 	preparedStatement.close();
     }

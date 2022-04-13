@@ -32,8 +32,6 @@ import java.sql.SQLException;
 import java.sql.SQLWarning;
 import java.sql.Savepoint;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
 import java.util.concurrent.Executor;
@@ -43,9 +41,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 import com.aceql.jdbc.commons.main.AceQLPreparedStatement;
 import com.aceql.jdbc.commons.main.AceQLStatement;
 import com.aceql.jdbc.commons.main.abstracts.AbstractConnection;
+import com.aceql.jdbc.commons.main.advanced.caller.DatabaseMetaDataGetter;
+import com.aceql.jdbc.commons.main.advanced.caller.PrepareCallGetter;
 import com.aceql.jdbc.commons.main.http.AceQLHttpApi;
 import com.aceql.jdbc.commons.main.util.AceQLConnectionUtil;
-import com.aceql.jdbc.commons.main.util.SimpleClassCaller;
 import com.aceql.jdbc.commons.main.util.framework.Tag;
 import com.aceql.jdbc.commons.main.version.Version;
 import com.aceql.jdbc.commons.metadata.RemoteDatabaseMetaData;
@@ -75,12 +74,9 @@ import com.aceql.jdbc.driver.free.AceQLDriver;
  * <code>PreparedStatement</code> and <code>Statement</code>, and to navigate
  * through your <code>ResultSet</code>.
  * <p>
- * Check the user documentation or the Javadoc of your AceQL JDBC Driver Edition
- * for more info:
- * <ul>
- * <li>{@link AceQLDriver} for the Community Edition.</li>
- * <li>{@code AceQLDriverPro} for the Professional Edition.</li>
- * </ul>
+ * Check the user documentation or the Javadoc of the AceQL JDBC Driver
+ * for more info: {@link AceQLDriver}.
+
  * <p>
  * All thrown exceptions are of type {@link AceQLException}. Use
  * {@link SQLException#getCause()} to get the original wrapped Exception.<br>
@@ -215,7 +211,7 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	if (isClosed()) {
 	    throw new SQLException(Tag.PRODUCT + " Can not create Blob because Connection is closed.");
 	}
-	AceQLBlob blob = new AceQLBlob(connectionInfo.getEditionType());
+	AceQLBlob blob = new AceQLBlob();
 	return blob;
     }
 
@@ -229,30 +225,15 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	if (isClosed()) {
 	    throw new SQLException(Tag.PRODUCT + " Can not create Clob because Connection is closed.");
 	}
-	AceQLClob clob = new AceQLClob(connectionInfo.getEditionType(), this.connectionInfo.getClobReadCharset(),
-		this.connectionInfo.getClobWriteCharset());
+	AceQLClob clob = new AceQLClob(this.connectionInfo.getClobReadCharset(), this.connectionInfo.getClobWriteCharset());
 	return clob;
     }
 
     @Override
     public DatabaseMetaData getMetaData() throws SQLException {
-	List<Class<?>> params = new ArrayList<>();
-	List<Object> values = new ArrayList<>();
-
-	params.add(AceQLConnection.class);
-	values.add(this);
-
-	try {
-	    SimpleClassCaller simpleClassCaller = new SimpleClassCaller(
-		    SimpleClassCaller.DRIVER_PRO_REFLECTION_PACKAGE + ".DatabaseMetaDataGetter");
-	    Object obj = simpleClassCaller.callMehod("getMetaData", params, values);
-	    return (DatabaseMetaData) obj;
-	} catch (ClassNotFoundException e) {
-	    throw new UnsupportedOperationException(Tag.PRODUCT + " " + "Connection.getMetaData() call "
-		    + Tag.REQUIRES_ACEQL_JDBC_DRIVER_PROFESSIONAL_EDITION);
-	} catch (Exception e) {
-	    throw new SQLException(e);
-	}
+		
+	DatabaseMetaDataGetter databaseMetaDataGetter = new DatabaseMetaDataGetter();
+	return databaseMetaDataGetter.getMetaData(this);
     }
 
     /**
@@ -607,31 +588,9 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      * lang. String)
      */
     @Override
-    public CallableStatement prepareCall(String sql) throws SQLException {
-	// AceQLCallableStatement aceQLCallableStatement = new
-	// AceQLCallableStatement(this, sql);
-	// return aceQLCallableStatement;
-
-	List<Class<?>> params = new ArrayList<>();
-	List<Object> values = new ArrayList<>();
-
-	params.add(AceQLConnection.class);
-	values.add(this);
-
-	params.add(String.class);
-	values.add(sql);
-
-	try {
-	    SimpleClassCaller simpleClassCaller = new SimpleClassCaller(
-		    SimpleClassCaller.DRIVER_PRO_REFLECTION_PACKAGE + ".PrepareCallGetter");
-	    Object obj = simpleClassCaller.callMehod("prepareCall", params, values);
-	    return (CallableStatement) obj;
-	} catch (ClassNotFoundException e) {
-	    throw new UnsupportedOperationException(Tag.PRODUCT + " " + "Connection.prepareCall() call "
-		    + Tag.REQUIRES_ACEQL_JDBC_DRIVER_PROFESSIONAL_EDITION);
-	} catch (Exception e) {
-	    throw new SQLException(e);
-	}
+    public CallableStatement prepareCall(String sql) throws SQLException {	
+	PrepareCallGetter prepareCallGetter = new PrepareCallGetter();
+	return prepareCallGetter.prepareCall(this, sql);
     }
 
     /*
@@ -667,26 +626,28 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      */
     public String getClientVersion() {
 
-	if (connectionInfo.getEditionType().equals(EditionType.Community)) {
-	    return Version.getVersion();
-	}
+//	if (connectionInfo.getEditionType().equals(EditionType.Community)) {
+//	    return Version.getVersion();
+//	}
+//
+//	else {
+//	    try {
+//		SimpleClassCaller simpleClassCaller = new SimpleClassCaller(
+//			"com.aceql.jdbc.pro.main.version.ProVersion");
+//
+//		List<Class<?>> params = new ArrayList<>();
+//		List<Object> values = new ArrayList<>();
+//
+//		Object obj = simpleClassCaller.callMehod("getVersion", params, values);
+//		String clientVersion = (String) obj;
+//		return clientVersion;
+//	    } catch (Exception e) {
+//		throw new IllegalArgumentException(e);
+//	    }
+//	}
 
-	else {
-	    try {
-		SimpleClassCaller simpleClassCaller = new SimpleClassCaller(
-			"com.aceql.jdbc.pro.main.version.ProVersion");
-
-		List<Class<?>> params = new ArrayList<>();
-		List<Object> values = new ArrayList<>();
-
-		Object obj = simpleClassCaller.callMehod("getVersion", params, values);
-		String clientVersion = (String) obj;
-		return clientVersion;
-	    } catch (Exception e) {
-		throw new IllegalArgumentException(e);
-	    }
-	}
-
+	return Version.getVersion();
+	
     }
 
     /**

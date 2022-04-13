@@ -32,7 +32,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -59,12 +58,12 @@ import com.aceql.jdbc.commons.main.util.framework.UniqueIDBuilder;
  * // Create the Blob instance using the current Connection:
  * Blob blob = connection.createBlob();
  *
- * // Free / Community Edition syntax using a byte array:
+ * // Syntax using a byte array:
  * byte[] bytes = Files.readAllBytes(file.toPath());
  * blob.setBytes(1, bytes);
  * preparedStatement.setBlob(i++, blob);
  *
- * // Professional Edition syntax using a stream:
+ * // Syntax using a stream:
  * OutputStream out = blob.setBinaryStream(1);
  * Files.copy(file.toPath(), out);
  * preparedStatement.setBlob(i++, blob);
@@ -74,7 +73,7 @@ import com.aceql.jdbc.commons.main.util.framework.UniqueIDBuilder;
  * preparedStatement.close();
  * </pre>
  *
- * <b>{@code SELECT} example for the Community Edition:</b>
+ * <b>{@code SELECT} example using bytes:</b>
  * <br/>
  * <pre>
  * String sql = "select jpeg_image from orderlog where customer_id = ? and item_id = ?";
@@ -99,7 +98,7 @@ import com.aceql.jdbc.commons.main.util.framework.UniqueIDBuilder;
  * rs.close();
  * </pre>
  *
- * <b>{@code SELECT} example for the Professional Edition:</b>
+ * <b>{@code SELECT} example using streams :</b>
  * <br/>
  * <pre>
  * String sql = "select jpeg_image from orderlog where customer_id = ? and item_id = ?";
@@ -113,7 +112,7 @@ import com.aceql.jdbc.commons.main.util.framework.UniqueIDBuilder;
  *     Blob blob = rs.getBlob(1);
  *
  *     File file = new File("/my/file/path");
- *     // Professional Edition: Get the stream from the Blob and copy into a file
+ *     // Get the stream from the Blob and copy into a file
  *     try (InputStream in = blob.getBinaryStream()) {
  * 	Files.copy(in, file.toPath());
  *     }
@@ -127,14 +126,14 @@ import com.aceql.jdbc.commons.main.util.framework.UniqueIDBuilder;
  * <br>
  * {@code INSERT/UPDATE} can be done using:
  * <ul>
- * <li>{@link PreparedStatement#setBytes(int, byte[])} for the Community Edition.</li>
- * <li>{@link PreparedStatement#setBinaryStream(int, InputStream)} for the Professional Edition.</li>
+ * <li>{@link PreparedStatement#setBytes(int, byte[])}.</li>
+ * <li>{@link PreparedStatement#setBinaryStream(int, InputStream)}.</li>
  * </ul>
  * <br>
  * {@code SELECT} can be done using:
  * <ul>
- * <li>{@link ResultSet#getBytes(int)} or {@link ResultSet#getBytes(String)} for the Community Edition.</li>
- * <li>{@link ResultSet#getBinaryStream(int)} or {@link ResultSet#getBinaryStream(String)} for the Professional Edition.</li>
+ * <li>{@link ResultSet#getBytes(int)} or {@link ResultSet#getBytes(String)} using bytes.</li>
+ * <li>{@link ResultSet#getBinaryStream(int)} or {@link ResultSet#getBinaryStream(String)} using streams.</li>
  * </ul>
  * @since 6.0
  * @author Nicolas de Pomereu
@@ -142,7 +141,7 @@ import com.aceql.jdbc.commons.main.util.framework.UniqueIDBuilder;
  */
 public class AceQLBlob implements Blob {
 
-    private EditionType editionType;
+    //private EditionType editionType;
     private byte[] bytes;
     
     private File file;
@@ -153,8 +152,7 @@ public class AceQLBlob implements Blob {
      * Protected constructor to be used only for upload by
      * {@code Connection#createBlob()}. {@code AceQLConnection.createBlob()}
      */
-    AceQLBlob(EditionType editionType) {
-	this.editionType = Objects.requireNonNull(editionType, "editionType cannot be null!");
+    AceQLBlob() {
 	this.file = createBlobFile();
     }
 
@@ -163,19 +161,16 @@ public class AceQLBlob implements Blob {
      * Community Edition that does not support Streams
      * @param inputStream the input stream to use to build the Blob
      */
-    AceQLBlob(EditionType editionType, InputStream inputStream) {
-	this.editionType = Objects.requireNonNull(editionType, "editionType cannot be null!");
+    AceQLBlob(InputStream inputStream) {
 	this.inputStream = inputStream;
 	this.bytes = null;
     }
 
     /**
-     * To be used with ResultSet. Package protected constructor to be used only for
-     * Community Edition & Professional Editions
+     * To be used with ResultSet. (bytes usage)
      * @param bytes the byte array to use to build the Blob
      */
-    AceQLBlob(EditionType editionType, byte[] bytes) {
-	this.editionType = Objects.requireNonNull(editionType, "editionType cannot be null!");
+    AceQLBlob(byte[] bytes) {
 	this.bytes = bytes;
 	this.inputStream = null;
 
@@ -183,11 +178,17 @@ public class AceQLBlob implements Blob {
 
     @Override
     public long length() throws SQLException {
-	if (editionType.equals(EditionType.Professional)) {
-	    return -1;
-	} else {
-	    return bytes == null ? 0 : bytes.length;
+//	if (editionType.equals(EditionType.Professional)) {
+//	    return -1;
+//	} else {
+//	    return bytes == null ? 0 : bytes.length;
+//	}
+	
+	if (bytes != null ) {
+	    return bytes.length;
 	}
+	
+	return -1;
     }
 
     @Override
@@ -197,16 +198,23 @@ public class AceQLBlob implements Blob {
 
     @Override
     public InputStream getBinaryStream() throws SQLException {
-	if (editionType.equals(EditionType.Professional)) {
-	    return inputStream;
-	} else {
-	    if (bytes == null) {
-		return null;
-	    }
-
+//	if (editionType.equals(EditionType.Professional)) {
+//	    return inputStream;
+//	} else {
+//	    if (bytes == null) {
+//		return null;
+//	    }
+//
+//	    ByteArrayInputStream arrayInputStream = new ByteArrayInputStream(bytes);
+//	    return arrayInputStream;
+//	}
+	
+	if (bytes != null) {
 	    ByteArrayInputStream arrayInputStream = new ByteArrayInputStream(bytes);
-	    return arrayInputStream;
+	    return arrayInputStream;	    
 	}
+	
+	return inputStream;
     }
 
     /**
@@ -249,12 +257,7 @@ public class AceQLBlob implements Blob {
 	if (pos != 1) {
 	    throw new SQLException(Tag.PRODUCT + " \"pos\" value can be 1 only.");
 	}
-
-	if (editionType.equals(EditionType.Community)) {
-	    throw new UnsupportedOperationException(Tag.PRODUCT + " " + "Blob.setBinaryStream(long) call "
-		    + Tag.REQUIRES_ACEQL_JDBC_DRIVER_PROFESSIONAL_EDITION);
-	}
-
+	
 	if (file == null) {
 	    throw new SQLException(Tag.PRODUCT + " Can not call setBinaryStream() when reading a Blob file.");
 	}
@@ -277,7 +280,17 @@ public class AceQLBlob implements Blob {
 
     @Override
     public void free() throws SQLException {
+	/*
 	if (editionType.equals(EditionType.Professional) && inputStream != null) {
+	    try {
+		inputStream.close();
+	    } catch (IOException e) {
+		throw new SQLException(e);
+	    }
+	}
+	*/
+	
+	if (inputStream != null) {
 	    try {
 		inputStream.close();
 	    } catch (IOException e) {

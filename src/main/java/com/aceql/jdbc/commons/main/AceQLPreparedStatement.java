@@ -34,7 +34,6 @@ import java.nio.charset.Charset;
 import java.sql.Array;
 import java.sql.Blob;
 import java.sql.Clob;
-import java.sql.Connection;
 import java.sql.Date;
 import java.sql.NClob;
 import java.sql.ParameterMetaData;
@@ -60,6 +59,7 @@ import com.aceql.jdbc.commons.AceQLConnection;
 import com.aceql.jdbc.commons.AceQLException;
 import com.aceql.jdbc.commons.ConnectionInfo;
 import com.aceql.jdbc.commons.main.abstracts.AbstractConnection;
+import com.aceql.jdbc.commons.main.advanced.caller.BlobStreamParamsManagerCaller;
 import com.aceql.jdbc.commons.main.batch.PrepStatementParamsHolder;
 import com.aceql.jdbc.commons.main.http.BlobUploader;
 import com.aceql.jdbc.commons.main.http.HttpManager;
@@ -67,8 +67,6 @@ import com.aceql.jdbc.commons.main.metadata.util.GsonWsUtil;
 import com.aceql.jdbc.commons.main.util.AceQLConnectionUtil;
 import com.aceql.jdbc.commons.main.util.AceQLStatementUtil;
 import com.aceql.jdbc.commons.main.util.AceQLTypes;
-import com.aceql.jdbc.commons.main.util.EditionUtil;
-import com.aceql.jdbc.commons.main.util.SimpleClassCaller;
 import com.aceql.jdbc.commons.main.util.framework.FrameworkDebug;
 import com.aceql.jdbc.commons.main.util.framework.FrameworkFileUtil;
 import com.aceql.jdbc.commons.main.util.framework.Tag;
@@ -398,32 +396,8 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
 	    // BlobStreamParamsManager.update(blobParamsHolder, blobId, inputStream,
 	    // length);
 
-	    List<Class<?>> params = new ArrayList<>();
-	    List<Object> values = new ArrayList<>();
-
-	    params.add(BlobParamsHolder.class);
-	    values.add(blobParamsHolder);
-
-	    params.add(String.class);
-	    values.add(blobId);
-
-	    params.add(InputStream.class);
-	    values.add(inputStream);
-
-	    params.add(long.class);
-	    values.add(length);
-
-	    try {
-		SimpleClassCaller simpleClassCaller = new SimpleClassCaller(
-			SimpleClassCaller.DRIVER_PRO_REFLECTION_PACKAGE + ".BlobStreamParamsManagerCaller");
-		@SuppressWarnings("unused")
-		Object obj = simpleClassCaller.callMehod("update", params, values);
-	    } catch (ClassNotFoundException e) {
-		throw new UnsupportedOperationException(Tag.PRODUCT + " " + "PreparedStatement.setBinaryStream() call "
-			+ Tag.REQUIRES_ACEQL_JDBC_DRIVER_PROFESSIONAL_EDITION);
-	    } catch (Exception e) {
-		throw new SQLException(e);
-	    }
+	    BlobStreamParamsManagerCaller blobStreamParamsManagerCaller = new BlobStreamParamsManagerCaller();
+	    blobStreamParamsManagerCaller.update(blobParamsHolder, blobId, inputStream, length);
 
 	} else {
 	    builder.setInParameter(parameterIndex, AceQLTypes.BLOB, null);
@@ -855,18 +829,10 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
     public void setBlob(int parameterIndex, Blob x) throws SQLException {
 
 	this.paramsContainBlob = true;
-	Connection connection = super.getConnection();
-	boolean professionalEdition = EditionUtil.isProfessionalEdition(connection);
-
-	if (professionalEdition) {
-	    AceQLBlobUtil aceQLBlobUtil = new AceQLBlobUtil(x);
-	    InputStream in = aceQLBlobUtil.getInputStreamFromBlob();
-	    setBinaryStream(parameterIndex, in);
-	} else {
-	    AceQLBlobUtil aceQLBlobUtil = new AceQLBlobUtil(x);
-	    byte[] bytes = aceQLBlobUtil.getBytesFromBlob();
-	    setBytes(parameterIndex, bytes);
-	}
+		
+	AceQLBlobUtil aceQLBlobUtil = new AceQLBlobUtil(x);
+	InputStream in = aceQLBlobUtil.getInputStreamFromBlob();
+	setBinaryStream(parameterIndex, in);
     }
 
     /*
@@ -877,19 +843,11 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
     @Override
     public void setClob(int parameterIndex, Clob x) throws SQLException {
 	this.paramsContainBlob = true;
-	Connection connection = super.getConnection();
-	boolean professionalEdition = EditionUtil.isProfessionalEdition(connection);
 
 	String clobReadCharset = this.aceQLConnection.getConnectionInfo().getClobReadCharset();
-	if (professionalEdition) {
-	    AceQLClobUtil aceQLClobUtil = new AceQLClobUtil(x, clobReadCharset);
-	    InputStream in = aceQLClobUtil.getInputStreamFromClob();
-	    setBinaryStream(parameterIndex, in);
-	} else {
-	    AceQLClobUtil aceQLClobUtil = new AceQLClobUtil(x, clobReadCharset);
-	    String string= aceQLClobUtil.getStringFromClob();
-	    setString(parameterIndex, string);
-	}
+	AceQLClobUtil aceQLClobUtil = new AceQLClobUtil(x, clobReadCharset);
+	InputStream in = aceQLClobUtil.getInputStreamFromClob();
+	setBinaryStream(parameterIndex, in);
     }
 
     /*

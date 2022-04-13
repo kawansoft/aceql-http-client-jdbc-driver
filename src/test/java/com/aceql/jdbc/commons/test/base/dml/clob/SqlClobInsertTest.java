@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.io.Writer;
-import java.nio.file.Files;
 import java.sql.Clob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -33,10 +32,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
-import com.aceql.jdbc.commons.main.util.EditionUtil;
 import com.aceql.jdbc.commons.test.base.dml.blob.SqlBlobSelectTest;
 import com.aceql.jdbc.commons.test.connection.ConnectionBuilder;
 import com.aceql.jdbc.commons.test.connection.ConnectionParms;
@@ -101,28 +98,41 @@ public class SqlClobInsertTest {
 	Clob clob = null;
 	
 	if (SqlBlobSelectTest.USE_BLOB_NATIVE_SYNTAX) {
-	    if (EditionUtil.isProfessionalEdition(connection)) {
-		out.println("CLOB UPLOAD USING DRIVER PRO AND CLOB NATIVE SYNTAX!");
-		clob = connection.createClob();
-		Writer out = clob.setCharacterStream(j);
-		IOUtils.copy(new FileInputStream(file), out, "UTF-8");
-		preparedStatement.setClob(j++, clob);
-	    } else {
-		out.println("CLOB UPLOAD USING DRIVER COMMUNITY AND CLOB NATIVE SYNTAX!");
-		clob = connection.createClob();
-		String str = FileUtils.readFileToString(file, "UTF-8");
-		clob.setString(1, str);
-		preparedStatement.setClob(j++, clob);
-	    }
+	    
+//	    if (EditionUtil.isProfessionalEdition(connection)) {
+//		out.println("CLOB UPLOAD USING DRIVER PRO AND CLOB NATIVE SYNTAX!");
+//		clob = connection.createClob();
+//		Writer out = clob.setCharacterStream(j);
+//		IOUtils.copy(new FileInputStream(file), out, "UTF-8");
+//		preparedStatement.setClob(j++, clob);
+//	    } else {
+//		out.println("CLOB UPLOAD USING DRIVER COMMUNITY AND CLOB NATIVE SYNTAX!");
+//		clob = connection.createClob();
+//		String str = FileUtils.readFileToString(file, "UTF-8");
+//		clob.setString(1, str);
+//		preparedStatement.setClob(j++, clob);
+//	    }
+	    
+	    out.println("CLOB UPLOAD USING CLOB NATIVE SYNTAX!");
+	    clob = connection.createClob();
+	    Writer out = clob.setCharacterStream(j);
+	    IOUtils.copy(new FileInputStream(file), out, "UTF-8");
+	    preparedStatement.setClob(j++, clob);
+		
 	} else {
-	    if (EditionUtil.isProfessionalEdition(connection)) {
-		out.println("BLOB UPLOAD USING DRIVER PRO!");
-		InputStream in = new FileInputStream(file);
-		preparedStatement.setBinaryStream(j++, in, file.length());
-	    } else {
-		byte[] bytes = Files.readAllBytes(file.toPath());
-		preparedStatement.setBytes(j++, bytes);
-	    }
+	    
+//	    if (EditionUtil.isProfessionalEdition(connection)) {
+//		out.println("BLOB UPLOAD USING DRIVER PRO!");
+//		InputStream in = new FileInputStream(file);
+//		preparedStatement.setBinaryStream(j++, in, file.length());
+//	    } else {
+//		byte[] bytes = Files.readAllBytes(file.toPath());
+//		preparedStatement.setBytes(j++, bytes);
+//	    }
+	    
+	    out.println("CLOB UPLOAD USING CLOB CLASSICAL SYNTAX!");
+	    InputStream in = new FileInputStream(file);
+	    preparedStatement.setBinaryStream(j++, in, file.length());
 	}
 
 	preparedStatement.executeUpdate();

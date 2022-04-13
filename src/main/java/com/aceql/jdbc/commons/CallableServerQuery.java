@@ -57,7 +57,7 @@ import com.aceql.jdbc.commons.main.util.json.StreamResultAnalyzer;
  String serverQueryExecutorClassName = "com.mycompany.MyServerQueryExecutor";
 
  // Parameters to pass to MyServerQueryExecutor. We pass only one int parameter:
- List<Object> params = new ArrayList<>();
+ List&lt;Object&gt; params = new ArrayList&lt;&gt;();
  params.add(5);
 
  // Call the execution of the server class and get directly a Result Set:
@@ -104,8 +104,8 @@ public class CallableServerQuery {
      *                                     implementation
      * @return the {@code ResultSet} returned by
      *         {@code serverQueryExecutorClassName}
-     * @throws AceQLException
-     * @throws IOException
+     * @throws SQLException if any SQLException occurs
+     * @throws IOException if any IOException occurs
      */
     public ResultSet executeServerQuery(String serverQueryExecutorClassName, List<Object> params)
 	    throws SQLException, IOException {

@@ -19,7 +19,6 @@
 
 package com.aceql.jdbc.commons.test.base.dml.clob;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -34,10 +33,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-
-import com.aceql.jdbc.commons.main.util.EditionUtil;
 
 /**
  * Blob TestMisc. Allows to insert a Blob, and read back the file.
@@ -76,40 +72,56 @@ public class SqlClobSelectTest {
 	    // IOUtils.copy(input, output);
 	    // }
 
+//	    if (USE_BLOB_NATIVE_SYNTAX) {
+//		if (EditionUtil.isProfessionalEdition(connection)) {
+//		    out.println("BLOB DOWNLOAD USING DRIVER PRO AND BLOB NATIVE SYNTAX!");
+//		    Clob clob = rs.getClob(i++);
+//
+//		    if (clob != null) {
+//			try (Reader reader = clob.getCharacterStream()) {
+//			    IOUtils.copy(reader, new FileOutputStream(file), "UTF-8");
+//			}
+//		    }
+//
+//		} else {
+//		    Clob clob = rs.getClob(i++);
+//
+//		    if (clob != null) {
+//			String str = clob.getSubString(1, 0);
+//			
+//			System.out.println("str: " + str);
+//			FileUtils.write(file, str, "UTF-8");
+//		    }
+//		}
+//	    } else {
+//		if (EditionUtil.isProfessionalEdition(connection)) {
+//		    out.println("BLOB DOWNLOAD USING DRIVER PRO!");
+//		    try (InputStream in = rs.getBinaryStream(i++);) {
+//			Files.copy(in, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+//		    }
+//		} else {
+//		    byte[] bytes = rs.getBytes(i++);
+//		    InputStream in = new ByteArrayInputStream(bytes);
+//		    Files.copy(in, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+//		}
+//	    }
+	    
 	    if (USE_BLOB_NATIVE_SYNTAX) {
-		if (EditionUtil.isProfessionalEdition(connection)) {
-		    out.println("BLOB DOWNLOAD USING DRIVER PRO AND BLOB NATIVE SYNTAX!");
-		    Clob clob = rs.getClob(i++);
+		out.println("BLOB DOWNLOAD USING BLOB NATIVE SYNTAX!");
+		Clob clob = rs.getClob(i++);
 
-		    if (clob != null) {
-			try (Reader reader = clob.getCharacterStream()) {
-			    IOUtils.copy(reader, new FileOutputStream(file), "UTF-8");
-			}
-		    }
-
-		} else {
-		    Clob clob = rs.getClob(i++);
-
-		    if (clob != null) {
-			String str = clob.getSubString(1, 0);
-			
-			System.out.println("str: " + str);
-			FileUtils.write(file, str, "UTF-8");
+		if (clob != null) {
+		    try (Reader reader = clob.getCharacterStream()) {
+			IOUtils.copy(reader, new FileOutputStream(file), "UTF-8");
 		    }
 		}
 	    } else {
-		if (EditionUtil.isProfessionalEdition(connection)) {
-		    out.println("BLOB DOWNLOAD USING DRIVER PRO!");
-		    try (InputStream in = rs.getBinaryStream(i++);) {
-			Files.copy(in, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
-		    }
-		} else {
-		    byte[] bytes = rs.getBytes(i++);
-		    InputStream in = new ByteArrayInputStream(bytes);
+		out.println("BLOB DOWNLOAD USING BLOB CLASSICAL SYNTAX!");
+		try (InputStream in = rs.getBinaryStream(i++);) {
 		    Files.copy(in, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
 		}
 	    }
-
+	    
 	}
 	preparedStatement.close();
 	rs.close();

@@ -18,6 +18,17 @@ The AceQL Client JDBC Driver is licensed under the Apache 2.0
 License.
 
 
+AceQL Client JDBC Driver - Version 9.0 - 13-Apr-2022
+----------------------------------------------------
+
+What's new:
+- Features of the previous Professional Edition are merged
+  into this unique Community Edition. See User Documentation.
+- The new HealthCheck API allows checkingthe remote server's
+  availability & response time. It will be enhanced in future
+  versions. See com.aceql.jdbc.commons.HealthCheck javadoc.
+
+
 AceQL Client JDBC Driver - Version 8.2 - 07-Feb-2022
 ----------------------------------------------------
 
