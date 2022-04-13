@@ -24,7 +24,7 @@ AceQL Client JDBC Driver - Version 9.0 - 13-Apr-2022
 What's new:
 - Features of the previous Professional Edition are merged
   into this unique Community Edition. See User Documentation.
-- The new HealthCheck API allows checkingthe remote server's
+- The new HealthCheck API allows checking the remote server's
   availability & response time. It will be enhanced in future
   versions. See com.aceql.jdbc.commons.HealthCheck javadoc.
 
