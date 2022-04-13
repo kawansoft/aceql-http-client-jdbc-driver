@@ -7,32 +7,26 @@
 
 # AceQL HTTP 
 
-## AceQL Client JDBC Driver v8.2 - User Guide
+## AceQL Client JDBC Driver v9.0 - User Guide
 
-## February 7, 2022
+## April 13, 2022
 
 <img src="https://docs.aceql.com/img/AceQL-Schema-min.jpg" alt="AceQL Draw"/>
 
-  * [Fundamentals](#fundamentals)
+ * [Fundamentals](#fundamentals)
       * [Technical operating environment](#technical-operating-environment)
       * [AceQL Server side compatibility](#aceql-server-side-compatibility)
-      * [The AceQL Client JDBC Driver Editions](#the-aceql-client-jdbc-driver-editions)
-         * [Differences between the Community Edition &amp; the Professional Edition](#differences-between-the-community-edition--the-professional-edition)
-      * [Community Edition Installation](#community-edition-installation)
+         * [Main features](#main-features)
+      * [Installation](#installation)
          * [Maven](#maven)
          * [Single Jar](#single-jar)
-      * [Professional Edition Installation](#professional-edition-installation)
-         * [Download](#download)
-         * [Defining the path to the Aceql license key file](#defining-the-path-to-the-aceql-license-key-file)
-      * [Android Project settings (Both Editions)](#android-project-settings-both-editions)
+      * [Android Project settings](#android-project-settings)
       * [Data transport](#data-transport)
          * [Transport format](#transport-format)
          * [Content streaming and memory management](#content-streaming-and-memory-management)
       * [Best practices for fast response time](#best-practices-for-fast-response-time)
    * [Using the AceQL Client JDBC Driver](#using-the-aceql-client-jdbc-driver)
       * [Connection creation](#connection-creation)
-         * [Community Edition](#community-edition)
-         * [Professional Edition](#professional-edition)
       * [Using a Proxy](#using-a-proxy)
       * [Handling Exceptions](#handling-exceptions)
          * [The error type](#the-error-type)
@@ -45,7 +39,7 @@
          * [Standard syntax](#standard-syntax)
             * [BLOB creation with standard syntax](#blob-creation-with-standard-syntax)
             * [BLOB reading with standard syntax](#blob-reading-with-standard-syntax)
-         * [Advanced syntax with streaming techniques (Professional Edition)](#advanced-syntax-with-streaming-techniques-professional-edition)
+         * [Advanced syntax with streaming techniques](#advanced-syntax-with-streaming-techniques)
             * [BLOB creation with stream syntax](#blob-creation-with-stream-syntax)
             * [BLOB reading with stream syntax](#blob-reading-with-stream-syntax)
             * [Using Progress Bars with Blobs](#using-progress-bars-with-blobs)
@@ -54,13 +48,15 @@
          * [Downloading database schema into a file](#downloading-database-schema-into-a-file)
          * [Accessing remote database main properties](#accessing-remote-database-main-properties)
          * [Getting Details of Tables and Columns](#getting-details-of-tables-and-columns)
-      * [Using the native JDBC Metadata Query API (Professional Edition)](#using-the-native-jdbc-metadata-query-api-professional-edition)
+      * [Using the native JDBC Metadata Query API](#using-the-native-jdbc-metadata-query-api)
          * [Code Sample](#code-sample)
          * [Using Database viewers with the AceQL Client JDBC Driver](#using-database-viewers-with-the-aceql-client-jdbc-driver)
          * [Disabling JDBC MetaData calls when not required](#disabling-jdbc-metadata-calls-when-not-required)
-      * [Using outer authentication without a password and with an AceQL Session ID (Professional Edition)](#using-outer-authentication-without-a-password-and-with-an-aceql-session-id-professional-edition)
-      * [Passing request headers for validation on server side (Professional Edition)](#passing-request-headers-for-validation-on-server-side-professional-edition)
+      * [Using outer authentication without a password and with an AceQL Session ID](#using-outer-authentication-without-a-password-and-with-an-aceql-session-id)
+      * [Passing request headers for validation on server side](#passing-request-headers-for-validation-on-server-side)
    * [Limitations](#limitations)
+
+
 
 # Fundamentals 
 
@@ -87,42 +83,32 @@ The only required third party installation is a recent JVM:
 
 The Client JDBC Driver version is compatible with AceQL HTTP server side v6.2+.  Batch commands usage require AceQL HTTP server side v8.0+.
 
-## The AceQL Client JDBC Driver Editions
+## 
 
-The AceQL Client JDBC Driver comes in two Editions:
-
-| Edition Name         | Description / Summary                                        | License                                                      |
-| -------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| Community Edition    | Packaged as a real JDBC Driver, with major databases support.<br/>Includes main JDBC options, SQL transactions and BLOB support. <br/>Free and fully open source with a liberal license. | [Apache 2.0 License](https://www.apache.org/licenses/LICENSE-2.0) |
-| Professional Edition | Packaged as a real JDBC Driver, includes DB2 support . <br/>Includes advanced JDBC options: Arrays, Stored Procedures, JDBC native Metadata API, large BLOB.<br/>Includes advanced security options and professional support  (4H GRT).<br/>The software may be [tried for free](https://www.aceql.com/trial.html) or bought in our [online shop](https://sowl.co/VxAsp). | [Commercial License](https://docs.aceql.com/rest/soft_java_client/8.2/legal/license.rtf)<br/>Per year and Per developer.<br/>**No runtime fees** |
-
-### Differences between the Community Edition & the Professional Edition
+### Main features
 
 This comparison matrix describes the differences between the two Editions:
 
-| Professional Edition<br>&nbsp;                               | Free - Community Edition<br>&nbsp;                           |
-| :----------------------------------------------------------- | :----------------------------------------------------------- |
-| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Works as a real [JDBC Driver](https://docs.oracle.com/javase/tutorial/jdbc/basics/connecting.html) <br/>Plug & play without source code edition | <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Works as a  real [JDBC Driver](https://docs.oracle.com/javase/tutorial/jdbc/basics/connecting.html) <br/>Plug & play without source code edition |
-| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>Commercial License per developer and per year.<br/>**Unlimited deployment without runtime fees.** | <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>Apache 2.0 License.<br/>Unlimited deployment without any constraints. |
-| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Main SQL types<br/>`Boolean`, `Integer`, `Short`, `Double`, `Float`, `BigDecimal`, `Long`, `String`, `Date`, `Time`, `Timestamp` | <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Main SQL types<br/>`Boolean`, `Integer`, `Short`, `Double`, `Float`, `BigDecimal`, `Long`, `String`, `Date`, `Time`, `Timestamp` |
-| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Connection  through HTTP Proxy | <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Connection  through HTTP Proxy |
-| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;SQL Transactions<br/>`Connection.commit()`, `Connection.rollback()`, `Connection.setAutocomit(boolean autoCommit)`.<br/>[Savepoints](https://docs.oracle.com/javase/tutorial/jdbc/basics/transactions.html#set_roll_back_savepoints) are also fully supported: | <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;SQL Transactions<br/>`Connection.commit()`, `Connection.rollback()`, `Connection.setAutocomit()`.<br/>[Savepoints](https://docs.oracle.com/javase/tutorial/jdbc/basics/transactions.html#set_roll_back_savepoints) are also fully supported. |
-| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>Batch methods for `Statement` <br>and `PreparedStatement` | <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>Batch methods for `Statement` <br>and `PreparedStatement` |
-| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Open Source Databases<br/>MySQL, PostgreSQL, MariaDB | <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Open Source Databases<br/>MySQL, PostgreSQL, MariaDB |
-| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;MS SQL Server | <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;MS SQL Server |
-| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Oracle Database | <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Oracle Database |
-| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Community  Support | <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Community  Support |
-| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;[BLOB](https://docs.oracle.com/javase/tutorial/jdbc/basics/blob.html) Type - Size up to 4GB | BLOB type - *Size limited to 16MB*                           |
-| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;IBM DB2 Database | <img src="https://download.aceql.com/images/delete_20.png" alt="check!"/> |
-| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;[Array](https://docs.oracle.com/en/java/javase/11/docs/api/java.sql/java/sql/Array.html) Type | <img src="https://download.aceql.com/images/delete_20.png" alt="check!"/> |
-| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;[Stored Procedures](https://docs.oracle.com/javase/tutorial/jdbc/basics/storedprocedures.html) | <img src="https://download.aceql.com/images/delete_20.png" alt="check!"/> |
-| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;JDBC API Metadata<br/>`Connection.getMetadata()`, `ResultSet.getMetaData()` | <img src="https://download.aceql.com/images/delete_20.png" alt="check!"/> |
-| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;JDBC Clients Tools & GUI <br/>[DBeaver](https://dbeaver.io/), [DbVisualizer](https://www.dbvis.com/), [JetBrains DataGrip](https://www.jetbrains.com/datagrip/), [RazorSQL](https://razorsql.com/), [SQuirreL SQL](http://squirrel-sql.sourceforge.net/) | <img src="https://download.aceql.com/images/delete_20.png" alt="check!"/> |
-| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/> [Allows outer authentication without a password](#using-outer-authentication-without-a-password-and-with-an-aceql-session-id-professional-edition) | <img src="https://download.aceql.com/images/delete_20.png" alt="check!"/> |
-| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/> [Allows passing request headers for validation on server](#passing-request-headers-for-validation-on-server-side-professional-edition) | <img src="https://download.aceql.com/images/delete_20.png" alt="check!"/> |
-| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Enterprise Support (Slack & Email)<br/>4H Guaranteed Response Time | <img src="https://download.aceql.com/images/delete_20.png" alt="check!"/> |
+| AceQL Client JDBC Driver v9.0<br>Main Features               |
+| :----------------------------------------------------------- |
+| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Works as a real [JDBC Driver](https://docs.oracle.com/javase/tutorial/jdbc/basics/connecting.html) <br/>Plug & play without source code edition |
+| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Main SQL types<br/>`Boolean`, `Integer`, `Short`, `Double`, `Float`, `BigDecimal`, `Long`, `String`, `Date`, `Time`, `Timestamp` |
+| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Connection  through HTTP Proxy |
+| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;SQL Transactions<br/>`Connection.commit()`, `Connection.rollback()`, `Connection.setAutocomit(boolean autoCommit)`.<br/>[Savepoints](https://docs.oracle.com/javase/tutorial/jdbc/basics/transactions.html#set_roll_back_savepoints) are also fully supported: |
+| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>Batch methods for `Statement` <br>and `PreparedStatement` |
+| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Open Source Databases<br/>MySQL, PostgreSQL, MariaDB |
+| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;MS SQL Server |
+| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Oracle Database |
+| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;[BLOB](https://docs.oracle.com/javase/tutorial/jdbc/basics/blob.html) Type - Size up to 4GB |
+| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;IBM DB2 Database |
+| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;[Array](https://docs.oracle.com/en/java/javase/11/docs/api/java.sql/java/sql/Array.html) Type |
+| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;[Stored Procedures](https://docs.oracle.com/javase/tutorial/jdbc/basics/storedprocedures.html) |
+| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;JDBC API Metadata<br/>`Connection.getMetadata()`, `ResultSet.getMetaData()` |
+| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;JDBC Clients Tools & GUI <br/>[DBeaver](https://dbeaver.io/), [DbVisualizer](https://www.dbvis.com/), [JetBrains DataGrip](https://www.jetbrains.com/datagrip/), [RazorSQL](https://razorsql.com/), [SQuirreL SQL](http://squirrel-sql.sourceforge.net/) |
+| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/> [Allows outer authentication without a password](#using-outer-authentication-without-a-password-and-with-an-aceql-session-id) |
+| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/> [Allows passing request headers for validation on server](#passing-request-headers-for-validation-on-server-side) |
 
-## Community Edition Installation
+## Installation
 
 ### Maven
 
@@ -130,32 +116,14 @@ This comparison matrix describes the differences between the two Editions:
 <dependency>
     <groupId>com.aceql</groupId>
     <artifactId>aceql-http-client-jdbc-driver</artifactId>
-    <version>8.2</version>
+    <version>9.0</version>
 </dependency>
 ```
 ### Single Jar 
 
 For non Maven users: a single jar with all dependencies is available on the [download page](https://www.aceql.com/aceql-download-page.html).
 
-## Professional Edition Installation
-
-### Download
-
-You may download the Professional Edition through either :
-
-1. [The Free 30-Trial Web Page](https://www.aceql.com/trial.html): the download link and the trial key license file will be sent by email.
-2. [The Online Shop](https://sowl.co/VxAsp): the download link and the product key license file will be sent by email.
-
-Extract from the archive the `aceql-http-client-jdbc-driver-pro-8.2.jar`  jar file and add it to your CLASSPATH.
-
-### Defining the path to the Aceql license key file
-
-There a two ways to precise the path of the `aceql_license_key.txt` file:
-
-1. **Default**: Put the `aceql_license_key.txt` file into the  `user.dir` directory of your Desktop application.
-2. **Using the `licenseKeyFolder` JDBC Driver property**: Define the JDBC Driver `licenseKeyFolder` property and set the value of the folder that contains the `aceql_license_key.txt` file.  See [Using the AceQL Client JDBC Driver](#using-the-aceql-client-jdbc-driver) for implementation.
-
-## Android Project settings (Both Editions)
+## Android Project settings
 
  Add the following 3 lines to your `AndroidManifest.xml`:
 
@@ -206,15 +174,13 @@ Note that AceQL is optimized as much as possible:
 
 We will use the same `sampledb` database for all our code samples. 
 
-The schema is available here: [sampledb.txt](https://docs.aceql.com/rest/soft_java_client/8.2/src/sampledb.txt). 
+The schema is available here: [sampledb.txt](https://docs.aceql.com/rest/soft_java_client/9.0/src/sampledb.txt). 
 
 ## Connection creation
 
 Usage of the AceQL Client JDBC Driver is straightforward: it just requires to create a `Connection` as you would do with any other JDBC Driver. There 
 
 The  `Connection` to the remote database is created using the standard [DriverManager.getConnection(String url, Properties info)](https://docs.oracle.com/javase/8/docs/api/java/sql/DriverManager.html#getConnection-java.lang.String-java.util.Properties-) JDBC method and passing the URL of the `ServerSqlManager` Servlet of your server configuration:
-
-### Community Edition
 
 ```java
     // The URL of the AceQL Server servlet
@@ -239,41 +205,6 @@ The  `Connection` to the remote database is created using the standard [DriverMa
 
     Connection connection = DriverManager.getConnection(url, info);
 ```
-### Professional Edition
-
-Creating a Connection with the Professional Edition is slightly different: 
-
-1. The Driver class name is `AceQLDriverPro`
-2. The Driver requires to know the folder that contains the Aceql license key file (`aceql_license_key.txt` ). This is done by defining the folder path in the `licenseKeyFolder` property.
-
-```java
-    // The URL of the AceQL Server servlet
-    // Port number is the port number used to start the Web Server:
-    String url = "https://www.acme.com:9443/aceql";
-
-    // The remote database to use:
-    String database = "sampledb";
-
-    // (user, password) for authentication on server side
-    String user = "MyUsername";
-    String password = "MySecret";
-
-    // Register the Professional Edition Driver
-    DriverManager.registerDriver(new AceQLDriverPro());
-    Class.forName(AceQLDriverPro.class.getName());
-
-    Properties info = new Properties();
-    info.put("user", user);
-    info.put("password", password);
-    info.put("database", database);
-
-    // c:\\myFolder contains the aceql_license_key.txt file.
-    // If not set, will default to user.dir resolved at runtime
-    info.put("licenseKeyFolder", "c:\\myFolder"); 
-
-    Connection connection = DriverManager.getConnection(url, info);
-```
-
 From now on, you can use the connection to execute updates and queries on the remote database, using standard and unmodified JDBC calls. 
 
 ## Using a Proxy
@@ -305,7 +236,7 @@ Sample code:
 
 ## Handling Exceptions
 
-Except for `NullPointerException`, exceptions thrown are always an instance of [AceQLException.](https://docs.aceql.com/rest/soft_java_client/8.2/javadoc/com/aceql/jdbc/commons/AceQLConnection.html)
+Except for `NullPointerException`, exceptions thrown are always an instance of [AceQLException.](https://docs.aceql.com/rest/soft_java_client/9.0/javadoc/com/aceql/jdbc/commons/AceQLConnection.html)
 
 The `AceQLException` contains 5 pieces of information :
 
@@ -391,7 +322,7 @@ The following Connections modifiers calls are supported in this version for all 
 
 ## Batch management
 
-[Statement.executeBatch()](https://docs.oracle.com/javase/8/docs/api/java/sql/Statement.html#executeBatch--)  is supported on both Editions.  `Statement` and `PreparedStatement` implementations are both supported.
+[Statement.executeBatch()](https://docs.oracle.com/javase/8/docs/api/java/sql/Statement.html#executeBatch--)  is supported.  `Statement` and `PreparedStatement` implementations are both supported.
 
 Batch commands processing is optimized in order to run as fast as possible and consume fewer possible resources:
 
@@ -473,7 +404,7 @@ Trivial or unrelated code is skipped with `//...` comments and `null` values are
         Files.copy(in, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
     }
 ```
-### Advanced syntax with streaming techniques (Professional Edition)
+### Advanced syntax with streaming techniques
 
 The advanced syntax allows keeping memory consumption low on server side while uploading very large files (> 2 Gb).
 
@@ -553,8 +484,8 @@ The atomic variables values will be shared by AceQL download/upload processes an
 
 The values are to be initialized and passed to `AceQLConnection` before the JDBC actions with the static setters:
 
-- [AceQLConnection.setProgress(AtomicInteger progress)](https://docs.aceql.com/rest/soft_java_client/8.2/javadoc/com/aceql/jdbc/commons/AceQLConnection.html#setProgress(java.util.concurrent.atomic.AtomicInteger))
-- [AceQLConnection.setCancelled(AtomicBoolean cancelled)](https://docs.aceql.com/rest/soft_java_client/8.2/javadoc/com/aceql/jdbc/commons/AceQLConnection.html#setCancelled(java.util.concurrent.atomic.AtomicBoolean))
+- [AceQLConnection.setProgress(AtomicInteger progress)](https://docs.aceql.com/rest/soft_java_client/9.0/javadoc/com/aceql/jdbc/commons/AceQLConnection.html#setProgress(java.util.concurrent.atomic.AtomicInteger))
+- [AceQLConnection.setCancelled(AtomicBoolean cancelled)](https://docs.aceql.com/rest/soft_java_client/9.0/javadoc/com/aceql/jdbc/commons/AceQLConnection.html#setCancelled(java.util.concurrent.atomic.AtomicBoolean))
 
 
 Values will then be updated and read:
@@ -677,7 +608,7 @@ Assuming hat you want to display a progress indicator using `SwingWorker`, you w
 	}
 ```
 
-A complete example is available in [SqlProgressMonitorDemo.java](https://docs.aceql.com/rest/soft_java_client/8.2/src/SqlProgressMonitorDemo.java) and [BlobExample.java](https://docs.aceql.com/rest/soft_java_client/8.2/src/BlobExample.java) 
+A complete example is available in [SqlProgressMonitorDemo.java](https://docs.aceql.com/rest/soft_java_client/9.0/src/SqlProgressMonitorDemo.java) and [BlobExample.java](https://docs.aceql.com/rest/soft_java_client/9.0/src/BlobExample.java) 
 
 ## HTTP session options 
 
@@ -690,7 +621,7 @@ You can set the http timeout values with the properties to pass at `Connection` 
 
 ## Using the AceQL Metadata Query API 
 
-The AceQL Metadata Query API is supported in both Community and Professional Editions. It's an helper API that allows:
+The AceQL Metadata Query API is an helper API that allows:
 
 - downloading a remote database schema
   in HTML or text format,
@@ -709,18 +640,18 @@ First step is to get an instance of `RemoteDatabaseMetaData`:
 
 ### Downloading database schema into a file
 
-Downloading a schema into a Java `File` is done through the method. See the `RemoteDatabaseMetaData` [javadoc](https://docs.aceql.com/rest/soft_java_client/8.2/javadoc/com/aceql/jdbc/commons/metadata/RemoteDatabaseMetaData.html).
+Downloading a schema into a Java `File` is done through the method. See the `RemoteDatabaseMetaData` [javadoc](https://docs.aceql.com/rest/soft_java_client/9.0/javadoc/com/aceql/jdbc/commons/metadata/RemoteDatabaseMetaData.html).
 
 ```java
     File file = new File("db_schema.out.html");
     remoteDatabaseMetaData.dbSchemaDownload(file);
 ```
 
-See an example of the built HTML schema:  [db_schema.out.html](https://docs.aceql.com/rest/soft_java_client/8.2/src/db_schema.out.html)
+See an example of the built HTML schema:  [db_schema.out.html](https://docs.aceql.com/rest/soft_java_client/9.0/src/db_schema.out.html)
 
 ### Accessing remote database main properties
 
-The [JdbcDatabaseMetaData](https://docs.aceql.com/rest/soft_java_client/8.2/javadoc/com/aceql/jdbc/commons/metadata/JdbcDatabaseMetaData.html) class wraps instance the main value retrieved by a remote JDBC call to `Connection.getMetaData`(): 
+The [JdbcDatabaseMetaData](https://docs.aceql.com/rest/soft_java_client/9.0/javadoc/com/aceql/jdbc/commons/metadata/JdbcDatabaseMetaData.html) class wraps instance the main value retrieved by a remote JDBC call to `Connection.getMetaData`(): 
 
 ```java
     JdbcDatabaseMetaData jdbcDatabaseMetaData = remoteDatabaseMetaData.getJdbcDatabaseMetaData();
@@ -731,7 +662,7 @@ The [JdbcDatabaseMetaData](https://docs.aceql.com/rest/soft_java_client/8.2/java
 
 ### Getting Details of Tables and Columns
 
-See the [javadoc](https://docs.aceql.com/rest/soft_java_client/8.2/javadoc/com/aceql/jdbc/commons/metadata/package-summary.html) of the `com.aceql.jdbc.commons.metadata` package: 
+See the [javadoc](https://docs.aceql.com/rest/soft_java_client/9.0/javadoc/com/aceql/jdbc/commons/metadata/package-summary.html) of the `com.aceql.jdbc.commons.metadata` package: 
 
 ```java
     System.out.println("Get the table names:");
@@ -751,11 +682,11 @@ See the [javadoc](https://docs.aceql.com/rest/soft_java_client/8.2/javadoc/com/a
     }
 ```
 
-## Using the native JDBC Metadata Query API (Professional Edition)
+## Using the native JDBC Metadata Query API
 
 ### Code Sample
 
-Standard JDBC [DatabaseMetadata](https://docs.aceql.com/rest/soft_java_client/8.2/javadoc/com/aceql/jdbc/commons/metadata/JdbcDatabaseMetaData.html)  and [ResultSetMetadata](https://docs.oracle.com/javase/8/docs/api/java/sql/ResultSetMetaData.html) calls are fully supported in Professional Edition.
+Standard JDBC [DatabaseMetadata](https://docs.aceql.com/rest/soft_java_client/9.0/javadoc/com/aceql/jdbc/commons/metadata/JdbcDatabaseMetaData.html)  and [ResultSetMetadata](https://docs.oracle.com/javase/8/docs/api/java/sql/ResultSetMetaData.html) calls are fully supported.
 
 `DatabaseMetaData` example:
 
@@ -839,7 +770,7 @@ If your application never calls `ResultSet.getMetaData()`, it's better to disall
     Connection connection = DriverManager.getConnection(url, info);
 ```
 
-## Using outer authentication without a password and with an AceQL Session ID (Professional Edition)
+## Using outer authentication without a password and with an AceQL Session ID
 
 Some working environments (Intranet, etc.) require that the client user authenticates himself *without* a password. Thus, it is not possible for this users to authenticate though the AceQL Client JDBC Driver.
 
@@ -859,7 +790,7 @@ The `session_id` value will be passed to the dedicated `sessionId` property:
     Connection connection = DriverManager.getConnection(url, info);
 ```
 
-## Passing request headers for validation on server side (Professional Edition)
+## Passing request headers for validation on server side
 
 You may pass any request headers to the AceQL server side for a validation process: just prefix the header name with the `request-property-` prefix and pass it as as a property to `DriverManager.getConnection(url, info)`. 
 
@@ -877,7 +808,7 @@ See also the Headers Authentication sub-section in the [aceql-server.properties]
 
 # Limitations 
 
-The following JDBC features are not supported nor implemented in this version Community  Edition nor in the Professional Edition. They will be added in future versions: 
+The following JDBC features are not supported nor implemented in this version. They will be added in future versions: 
 
 
 - `ROWID` are not supported.
