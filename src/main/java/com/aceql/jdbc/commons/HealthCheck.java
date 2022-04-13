@@ -27,7 +27,7 @@ import com.aceql.jdbc.commons.main.http.HttpManager;
 import com.aceql.jdbc.commons.main.http.ResultAnalyzer;
 
 /**
- * Allows to test if the remote AceQL servlet is accessible with a ping, and to
+ * Allows testing if the remote AceQL servlet is accessible with a ping, and to
  * check database access response time.
  * 
  * @author Nicolas de Pomereu
