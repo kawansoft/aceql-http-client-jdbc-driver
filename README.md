@@ -83,15 +83,11 @@ The only required third party installation is a recent JVM:
 
 The Client JDBC Driver version is compatible with AceQL HTTP server side v6.2+.  Batch commands usage require AceQL HTTP server side v8.0+.
 
-## 
-
 ### Main features
-
-This comparison matrix describes the differences between the two Editions:
 
 | AceQL Client JDBC Driver v9.0<br>Main Features               |
 | :----------------------------------------------------------- |
-| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Works as a real [JDBC Driver](https://docs.oracle.com/javase/tutorial/jdbc/basics/connecting.html) <br/>Plug & play without source code edition |
+| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Works as a real [JDBC Driver](https://docs.oracle.com/javase/tutorial/jdbc/basics/connecting.html) <br/>Plug & play without editing your app source code. |
 | <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Main SQL types<br/>`Boolean`, `Integer`, `Short`, `Double`, `Float`, `BigDecimal`, `Long`, `String`, `Date`, `Time`, `Timestamp` |
 | <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Connection  through HTTP Proxy |
 | <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;SQL Transactions<br/>`Connection.commit()`, `Connection.rollback()`, `Connection.setAutocomit(boolean autoCommit)`.<br/>[Savepoints](https://docs.oracle.com/javase/tutorial/jdbc/basics/transactions.html#set_roll_back_savepoints) are also fully supported: |
@@ -194,7 +190,7 @@ The  `Connection` to the remote database is created using the standard [DriverMa
     String user = "MyUsername";
     String password = "MySecret";
 
-    // Register the Community Edition Driver
+    // Register Driver
     DriverManager.registerDriver(new AceQLDriver());
     Class.forName(AceQLDriver.class.getName());
 
@@ -312,7 +308,7 @@ The AceQL Client JDBC Driver support SQL transactions with:
 - `Connection.rollback()`
 - Connection.`setAutoCommit(boolean autoCommit)`
 
-The following Connections modifiers calls are supported in this version for all Editions:
+The following Connections modifiers calls are supported in this version:
 
 - `Connection.setHoldability(int holdability)`
 

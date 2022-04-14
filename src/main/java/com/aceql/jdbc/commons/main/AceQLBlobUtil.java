@@ -61,7 +61,7 @@ class AceQLBlobUtil {
 
 	if (x instanceof AceQLBlob) {
 	    AceQLBlob blob = (AceQLBlob) x;
-	    InputStream input = getInputStreamFroProEdition(blob);
+	    InputStream input = getInputStreamFromBlob(blob);
 	    return input;
 	}
 	else {
@@ -70,7 +70,7 @@ class AceQLBlobUtil {
     }
 
     /**
-     * Gets the byte array for all Editions.
+     * Gets the byte array
      *
      * @return
      * @throws SQLException
@@ -87,7 +87,7 @@ class AceQLBlobUtil {
      * @return
      * @throws SQLException
      */
-    private static InputStream getInputStreamFroProEdition(AceQLBlob blob) throws SQLException {
+    private static InputStream getInputStreamFromBlob(AceQLBlob blob) throws SQLException {
 	// Keep for now:File file = blob.getFile();
 	File file =  InternalWrapper.getFile(blob);
 	if (file == null) {

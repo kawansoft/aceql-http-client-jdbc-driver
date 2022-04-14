@@ -626,26 +626,6 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      */
     public String getClientVersion() {
 
-//	if (connectionInfo.getEditionType().equals(EditionType.Community)) {
-//	    return Version.getVersion();
-//	}
-//
-//	else {
-//	    try {
-//		SimpleClassCaller simpleClassCaller = new SimpleClassCaller(
-//			"com.aceql.jdbc.pro.main.version.ProVersion");
-//
-//		List<Class<?>> params = new ArrayList<>();
-//		List<Object> values = new ArrayList<>();
-//
-//		Object obj = simpleClassCaller.callMehod("getVersion", params, values);
-//		String clientVersion = (String) obj;
-//		return clientVersion;
-//	    } catch (Exception e) {
-//		throw new IllegalArgumentException(e);
-//	    }
-//	}
-
 	return Version.getVersion();
 	
     }

@@ -646,10 +646,6 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
     private boolean isTimestamp(String columnLabel, String value) throws SQLException {
 	
 	// Fast check
-//	if (! TimestampUtil.isLong(value) || EditionUtil.isCommunityEdition(aceQLConnection)) {
-//	    return false;
-//	}
-	
 	if (! TimestampUtil.isLong(value)) {
 	    return false;
 	}
@@ -671,11 +667,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
      * @throws SQLException
      */
     private boolean isTimestamp(int columnIndex, String value) throws SQLException {
-	// Fast check
-//	if (! TimestampUtil.isLong(value) || EditionUtil.isCommunityEdition(aceQLConnection)) {
-//	    return false;
-//	}
-	
+	// Fast check	
 	if (! TimestampUtil.isLong(value)) {
 	    return false;
 	}

@@ -86,7 +86,7 @@ import com.aceql.jdbc.commons.main.util.framework.UniqueIDBuilder;
  * if (rs.next()) {
  *     Blob blob = rs.getBlob(1);
  *
- *     // Community Edition: Get the Blob bytes in memory and store them into a file
+ *     // Get the Blob bytes in memory and store them into a file
  *     byte[] bytes = blob.getBytes(1, (int) blob.length());
  *
  *     File file = new File("/my/file/path");
@@ -141,7 +141,6 @@ import com.aceql.jdbc.commons.main.util.framework.UniqueIDBuilder;
  */
 public class AceQLBlob implements Blob {
 
-    //private EditionType editionType;
     private byte[] bytes;
     
     private File file;
@@ -157,8 +156,7 @@ public class AceQLBlob implements Blob {
     }
 
     /**
-     * To be used with ResultSet. Package protected constructor to be used only for
-     * Community Edition that does not support Streams
+     * To be used with ResultSet. Package protected constructor.
      * @param inputStream the input stream to use to build the Blob
      */
     AceQLBlob(InputStream inputStream) {

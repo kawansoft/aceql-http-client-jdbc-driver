@@ -219,9 +219,9 @@ public class AceQLHttpApi {
     }
 
     /**
-     * Sets the {@code EditionType} to use.
+     * Sets the Meta Data Policy to use.
      *
-     * @param resultSetMetaDataPolicy the {@code EditionType} to use
+     * @param resultSetMetaDataPolicy the Meta Data Policy to use.
      */
     public void setResultSetMetaDataPolicy(ResultSetMetaDataPolicy resultSetMetaDataPolicy) {
 	this.resultSetMetaDataPolicy = resultSetMetaDataPolicy;
