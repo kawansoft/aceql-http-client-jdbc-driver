@@ -60,12 +60,8 @@ public class TimestampUtil {
 
     public static boolean isTimestamp(ResultSetMetaData resultSetMetaData, int columnIndex)
 	    throws SQLException {
-	int columnType = resultSetMetaData.getColumnType(columnIndex);
-	if (columnType == Types.TIMESTAMP || columnType == Types.TIMESTAMP_WITH_TIMEZONE) {
-	    return true;
-	} else {
-	    return false;
-	}
+	int columnType = resultSetMetaData.getColumnType(columnIndex);	
+	return (columnType == Types.TIMESTAMP || columnType == Types.TIMESTAMP_WITH_TIMEZONE);
     }
 
 }

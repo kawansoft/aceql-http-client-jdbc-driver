@@ -110,6 +110,9 @@ public class CallableServerQuery {
     public ResultSet executeServerQuery(String serverQueryExecutorClassName, List<Object> params)
 	    throws SQLException, IOException {
 
+	Objects.requireNonNull(serverQueryExecutorClassName, "serverQueryExecutorClassName cannot be null!");
+	Objects.requireNonNull(params, "params cannot be null!");
+	
 	AceQLHttpApi aceQLHttpApi = this.aceQLConnection.aceQLHttpApi;
 	try {
 

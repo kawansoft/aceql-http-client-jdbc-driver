@@ -122,13 +122,10 @@ public class DatabaseMetaDataCaller {
 		throw new IllegalArgumentException(
 			"Unsupported return type for DatabaseMetaData." + methodName + ": " + returnType);
 	    }
-
+	} catch (AceQLException aceQlException) {
+	    throw aceQlException;
 	} catch (Exception e) {
-	    if (e instanceof AceQLException) {
-		throw (AceQLException) e;
-	    } else {
-		throw new AceQLException(e.getMessage(), 0, e, null, aceQLHttpApi.getHttpStatusCode());
-	    }
+	    throw new AceQLException(e.getMessage(), 0, e, null, aceQLHttpApi.getHttpStatusCode());
 	}
 
     }

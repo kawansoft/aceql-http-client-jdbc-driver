@@ -367,7 +367,7 @@ public class AceQLArray implements Array {
      */
     @Override
     public void free() throws SQLException {
-
+	// Do nothing
     }
 
     /* (non-Javadoc)

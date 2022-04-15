@@ -29,7 +29,6 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.sql.Savepoint;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -919,13 +918,9 @@ public class AceQLHttpApi {
 	    throws AceQLException {
 
 	try {
-	    if (serverQueryExecutorClassName == null) {
-		Objects.requireNonNull(serverQueryExecutorClassName, "serverQueryExecutorClassName cannot be null!");
-	    }
 
-	    if (params == null) {
-		params = new ArrayList<>();
-	    }
+	    Objects.requireNonNull(serverQueryExecutorClassName, "serverQueryExecutorClassName cannot be null!");
+	    Objects.requireNonNull(params, "params cannot be null!");
 
 	    ServerQueryExecutorDto serverQueryExecutorDto = ServerQueryExecutorDtoBuilder
 		    .build(serverQueryExecutorClassName, params);
