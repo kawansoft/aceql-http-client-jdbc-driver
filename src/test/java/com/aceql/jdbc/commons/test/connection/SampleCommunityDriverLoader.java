@@ -64,7 +64,7 @@ public class SampleCommunityDriverLoader {
 	String user = "MyUsername";
 	String password = "MySecret";
 
-	// Register the Community Edition Driver
+	// Register the Driver
 	DriverManager.registerDriver(new AceQLDriver());
 	Class.forName(AceQLDriver.class.getName());
 
@@ -95,7 +95,7 @@ public class SampleCommunityDriverLoader {
 	String user = "MyUsername";
 	String password = "MySecret";
 
-	// Register the Community Edition Driver
+	// Register the Driver
 	DriverManager.registerDriver(new AceQLDriver());
 	Class.forName(AceQLDriver.class.getName());
 

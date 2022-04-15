@@ -92,7 +92,7 @@ public class SqlBlobExample {
 	if (rs.next()) {
 	    Blob blob = rs.getBlob(1);
 
-	    // Community Edition: Get the Blob bytes in memory and store them into a file
+	    // Get the Blob bytes in memory and store them into a file
 	    byte[] bytes = blob.getBytes(1, (int) blob.length());
 
 	    File file = new File("/my/file/path");
@@ -116,7 +116,7 @@ public class SqlBlobExample {
 	    Blob blob = rs.getBlob(1);
 
 	    File file = new File("/my/file/path");
-	    // Professional Edition: Get the stream from the Blob and copy into a file
+	    // Get the stream from the Blob and copy into a file
 	    try (InputStream in = blob.getBinaryStream()) {
 		Files.copy(in, file.toPath());
 	    }
