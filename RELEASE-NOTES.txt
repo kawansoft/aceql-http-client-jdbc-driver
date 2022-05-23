@@ -17,6 +17,12 @@ they would for a local database.
 The AceQL Client JDBC Driver is licensed under the Apache 2.0
 License.
 
+AceQL Client JDBC Driver - Version 9.1 - 23-May-2022
+----------------------------------------------------
+
+What's new:
+- Gson base libraries have been upgraded to 2.8.9 for 
+  security reasons. TO BE DONE.
 
 AceQL Client JDBC Driver - Version 9.0 - 15-Apr-2022
 ----------------------------------------------------
