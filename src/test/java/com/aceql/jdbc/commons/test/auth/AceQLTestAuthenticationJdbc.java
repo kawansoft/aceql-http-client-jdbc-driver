@@ -77,6 +77,8 @@ public class AceQLTestAuthenticationJdbc {
      */
     public static void testJdbcOK() throws Exception {
 	System.out.println(new Date() + " Testing JDBC Authentication...");
+	// To insert in aceql_user:
+	// insert into aceql_user values ('username', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8')
 	Connection connection = AuthenticationConnections.getJdbcConnection("username", "password");
 	SqlSelectTest sqlSelectTest = new SqlSelectTest(connection, System.out);
 	sqlSelectTest.selectOneCustomerStatement();
