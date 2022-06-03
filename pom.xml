@@ -65,6 +65,7 @@
         </roles>
     </developer>        
   </developers> 
+
   <name>AceQL HTTP Client JDBC Driver Free</name>
   <url>http://www.aceql.com</url>
   <scm>
