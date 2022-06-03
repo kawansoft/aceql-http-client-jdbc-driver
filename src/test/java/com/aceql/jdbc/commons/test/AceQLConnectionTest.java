@@ -145,10 +145,10 @@ public class AceQLConnectionTest {
 	connection.commit();
 
 	sqlSelectTest.selectOrderlogStatement();
-	connection.setAutoCommit(true);
-
+	connection.setAutoCommit(true);	
+	
 	sqlSelectTest.selectCustomerPreparedStatement();
-
+	
 	File fileUpload = new File(ConnectionParms.IN_DIRECTORY + File.separator + "username_koala.jpg");
 	File fileDownload = new File(ConnectionParms.OUT_DIRECTORY + File.separator + "username_koala.jpg");
 	int customerId = 1;
@@ -170,7 +170,6 @@ public class AceQLConnectionTest {
 	SavepointTest savepointTest = new SavepointTest(connection, System.out);
 	savepointTest.doIt();
 
-	
 	// Batch with Statement
 	SqlStatementBatchTest.callInsertFlow(connection);
 
