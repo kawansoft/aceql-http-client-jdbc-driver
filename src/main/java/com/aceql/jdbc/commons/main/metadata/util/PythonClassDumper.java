@@ -19,7 +19,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.SystemUtils;
 
-import com.aceql.jdbc.commons.main.metadata.dto.DatabaseInfoDto;
+import com.aceql.jdbc.commons.metadata.Index;
 
 /**
  * @author Nicolas de Pomereu
@@ -47,18 +47,22 @@ public class PythonClassDumper {
 	classes.add(Index.class);
 	classes.add(PrimaryKey.class);
 	*/
-	classes.add(DatabaseInfoDto.class);
-
+	classes.add(Index.class);
+	//classes.add(DatabaseInfoDto.class);
+	
 	File baseDir = new File(SystemUtils.USER_HOME + File.separator + "tmp");
 	baseDir.mkdirs();
 	
 	for (Class<?> clazz : classes) {
 	    //System.out.println(new Date() + " " + clazz.getSimpleName());
 	    String pyfileName = baseDir + File.separator + clazz.getSimpleName().toLowerCase() + ".py";
-	    System.out.println(new Date() + "Py File created: " + pyfileName);
+	    System.out.println(new Date() + " Python File created: " + pyfileName);
 	    try (PrintWriter out = new PrintWriter(new OutputStreamWriter(new FileOutputStream(pyfileName)));) {
 		printPythonClass(clazz, printHeader, out);
 	    }
+
+	    System.out.println();
+	    //java.awt.Desktop.getDesktop().edit(new File(pyfileName));
 
 	}
 	//System.out.println("Generated: " + classes);
@@ -68,7 +72,7 @@ public class PythonClassDumper {
     /**
      * @param clazz
      * @param printHeader
-     * @param out         TODO
+     * @param out        
      * @throws SecurityException
      * @throws IOException
      */
