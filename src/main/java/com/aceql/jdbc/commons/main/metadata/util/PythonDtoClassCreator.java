@@ -136,7 +136,7 @@ public class PythonDtoClassCreator {
 	out.println();
 	out.println("@dataclass");
 	out.println("class " + clazz.getSimpleName() + ":");
-	out.println("    \"\"\" Generated on " + timestamp + " from " + clazz.getSimpleName() + ".java  translation\"\"\" ");
+	out.println("    \"\"\" Generated on " + timestamp + " from " + clazz.getName() + ".java translation\"\"\" ");
 
 	/*
 	 * Header getURL: str isReadOnly: bool allProceduresAreCallable: bool
