@@ -38,17 +38,18 @@ import org.apache.commons.lang3.SystemUtils;
 import com.aceql.jdbc.commons.metadata.Column;
 
 /**
- * A Translator of Java DTP to Python DTO.
+ * A Translator for Java DTO to Python DTO using Java reflection.
+ * All Fields of Java class are translated to Python fields.
  * 
  * @author Nicolas de Pomereu
  *
  */
 public class PythonDtoClassCreator {
 
-    private static final String PYTHON_HEADERS_FILE = "I:\\_dev_awake\\aceql-http-main\\aceql-http-client-jdbc-driver\\src\\main\\java\\com\\aceql\\jdbc\\commons\\main\\metadata\\util\\python_header.txt";
     private static final String FOUR_BLANKS = "    ";
 
     /**
+     * Main method for easy calls with a List
      * @param args
      */
     public static void main(String[] args) throws Exception {
@@ -58,7 +59,7 @@ public class PythonDtoClassCreator {
 	List<Class<?>> classes = new ArrayList<Class<?>>();
 	classes.add(Column.class);
 
-	//PythonDtoClassUtil.addOthersDto(classes);
+	// PythonDtoClassUtil.addOthersDto(classes);
 
 	PythonDtoClassCreator pythonDtoClassCreator = new PythonDtoClassCreator();
 	pythonDtoClassCreator.generatePythonClasses(printHeader, classes);
@@ -82,12 +83,13 @@ public class PythonDtoClassCreator {
 	for (Class<?> clazz : classes) {
 	    String timestamp = PythonDtoClassUtil.getTimestamp();
 	    String pyfileName = baseDir + File.separator + clazz.getSimpleName().toLowerCase() + ".py";
-	    System.out.println(
-		    timestamp + " Python File created from Java class " + clazz.getSimpleName() + ".java translation: " + pyfileName);
+	    System.out.println(timestamp + " Python File created from Java class " + clazz.getSimpleName()
+		    + ".java translation: " + pyfileName);
 	    try (PrintWriter out = new PrintWriter(new OutputStreamWriter(new FileOutputStream(pyfileName)));) {
 		generatePythonClass(clazz, includeHeader, out);
 	    }
 
+	    // Edit Python class on screen
 	    Runtime runtime = Runtime.getRuntime();
 	    runtime.exec(new String[] { "C:\\Program Files (x86)\\Notepad++\\notepad++.exe", pyfileName });
 
@@ -96,7 +98,6 @@ public class PythonDtoClassCreator {
 	String timestamp = PythonDtoClassUtil.getTimestamp();
 	System.out.println(timestamp + " Done.");
     }
-
 
     /**
      * Create a Python file translarted from a Java class
@@ -111,8 +112,11 @@ public class PythonDtoClassCreator {
 	    throws SecurityException, IOException {
 	Field[] fields = clazz.getDeclaredFields();
 
-	String header = FileUtils.readFileToString(new File(PYTHON_HEADERS_FILE), Charset.defaultCharset());
-	out.println(header);
+	if (printHeader) {
+	    String header = FileUtils.readFileToString(new File(PythonDtoClassUtil.PYTHON_HEADERS_FILE),
+		    Charset.defaultCharset());
+	    out.println(header);
+	}
 
 	String timestamp = PythonDtoClassUtil.getTimestamp();
 
@@ -130,11 +134,9 @@ public class PythonDtoClassCreator {
 	out.println("class " + clazz.getSimpleName() + ":");
 	out.println("    \"\"\" Generated on " + timestamp + " from " + clazz.getName() + ".java translation\"\"\" ");
 
-	/*
-	 * Header getURL: str isReadOnly: bool allProceduresAreCallable: bool
-	 * allTablesAreSelectable: bool
-	 */
-	if (printHeader) {
+	String superClass = clazz.getSuperclass().getName();
+	
+	if (superClass != null && superClass.contains("CatalogAndSchema")) {
 	    out.println(FOUR_BLANKS + "catalog: Optional[str]");
 	    out.println(FOUR_BLANKS + "schema: Optional[str]");
 	}
@@ -160,7 +162,6 @@ public class PythonDtoClassCreator {
 
 	    out.println(FOUR_BLANKS + field.getName() + ": " + type);
 	    names.add(field.getName());
-
 	}
 
 	out.println();
@@ -170,6 +171,16 @@ public class PythonDtoClassCreator {
 
 	out.println();
 
+	generatePythonToString(clazz, out, names);
+    }
+
+    /**
+     * Generate the Python toString() equivalent: __str__ method
+     * @param clazz	the Java class
+     * @param out	the output to write on
+     * @param names	the field names to put on the Python method __str__
+     */
+    public void generatePythonToString(Class<?> clazz, PrintWriter out, List<String> names) {
 	/**
 	 * def __str__(self): """ The string representation.""" return str(self.name) +
 	 * ", " + str(self.buildings)
@@ -188,6 +199,5 @@ public class PythonDtoClassCreator {
 
 	out.println(stringValue);
     }
-
 
 }
