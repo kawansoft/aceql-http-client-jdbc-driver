@@ -44,7 +44,7 @@ import com.aceql.jdbc.commons.metadata.Column;
  * @author Nicolas de Pomereu
  *
  */
-public class PythonDtoClassCreator {
+public class PythonDataClassCreator {
 
     private static final String FOUR_BLANKS = "    ";
 
@@ -61,8 +61,8 @@ public class PythonDtoClassCreator {
 
 	// PythonDtoClassUtil.addOthersDto(classes);
 
-	PythonDtoClassCreator pythonDtoClassCreator = new PythonDtoClassCreator();
-	pythonDtoClassCreator.generatePythonClasses(printHeader, classes);
+	PythonDataClassCreator pythonDataClassCreator = new PythonDataClassCreator();
+	pythonDataClassCreator.generatePythonClasses(printHeader, classes);
 
     }
 
