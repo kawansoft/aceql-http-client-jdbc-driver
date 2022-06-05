@@ -99,7 +99,6 @@ public class StreamResultAnalyzer {
 
 	try {
 	    try {
-		//reader = new InputStreamReader(new FileInputStream(jsonFile), "UTF-8");
 		reader = new BufferedReader(new InputStreamReader(new FileInputStream(jsonFile), "UTF-8"));
 	    } catch (Exception e) {
 		throw new SQLException(e);
