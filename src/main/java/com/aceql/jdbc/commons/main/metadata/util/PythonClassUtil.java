@@ -31,11 +31,14 @@ import com.aceql.jdbc.commons.metadata.Index;
 import com.aceql.jdbc.commons.metadata.PrimaryKey;
 
 /**
+ * Utility class for Java to Python class translator PythonDataClassCreator.
  * @author Nicolas de Pomereu
  *
  */
 public class PythonClassUtil {
 
+    static final String PYTHON_HEADERS_FILE = "I:\\_dev_awake\\aceql-http-main\\aceql-http-client-jdbc-driver\\src\\main\\java\\com\\aceql\\jdbc\\commons\\main\\metadata\\util\\python_header.txt";
+    
     /**
      * @return a timestamp in human readable format
      */
@@ -56,6 +59,6 @@ public class PythonClassUtil {
         classes.add(DatabaseInfoDto.class);
     }
 
-    static final String PYTHON_HEADERS_FILE = "I:\\_dev_awake\\aceql-http-main\\aceql-http-client-jdbc-driver\\src\\main\\java\\com\\aceql\\jdbc\\commons\\main\\metadata\\util\\python_header.txt";
+    
 
 }
