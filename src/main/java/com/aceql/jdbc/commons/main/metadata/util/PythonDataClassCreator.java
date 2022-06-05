@@ -53,13 +53,13 @@ public class PythonDataClassCreator {
      * @param args
      */
     public static void main(String[] args) throws Exception {
-	System.out.println(PythonClassUtil.getTimestamp() + " Begin...");
+	System.out.println(PythonDataClassUtil.getTimestamp() + " Begin...");
 	boolean printHeader = true;
 
 	List<Class<?>> classes = new ArrayList<Class<?>>();
 	classes.add(Column.class);
 
-	// PythonClassUtil.addOthersDto(classes);
+	// PythonDataClassUtil.addOthersDto(classes);
 
 	PythonDataClassCreator pythonDataClassCreator = new PythonDataClassCreator();
 	pythonDataClassCreator.generatePythonClasses(printHeader, classes);
@@ -84,7 +84,7 @@ public class PythonDataClassCreator {
 	List<String> pythonFiles = new ArrayList<>();
 	
 	for (Class<?> clazz : classes) {
-	    String timestamp = PythonClassUtil.getTimestamp();
+	    String timestamp = PythonDataClassUtil.getTimestamp();
 	    String pyfileName = baseDir + File.separator + clazz.getSimpleName().toLowerCase() + ".py";
 	    System.out.println(timestamp + " Python File created from Java class " + clazz.getSimpleName()
 		    + ".java translation: " + pyfileName);
@@ -95,7 +95,7 @@ public class PythonDataClassCreator {
 	    pythonFiles.add(pyfileName);
 	}
 
-	String timestamp = PythonClassUtil.getTimestamp();
+	String timestamp = PythonDataClassUtil.getTimestamp();
 	System.out.println(timestamp + " Done.");
 	
 	Thread.sleep(750);
@@ -108,7 +108,7 @@ public class PythonDataClassCreator {
     }
 
     /**
-     * Create a Python file translarted from a Java class
+     * Create a Python file translated from a Java class
      * 
      * @param clazz         the Java class to translate
      * @param includeHeader if true, include the header PYTHON_HEADERS_FILE
@@ -121,12 +121,12 @@ public class PythonDataClassCreator {
 	Field[] fields = clazz.getDeclaredFields();
 
 	if (printHeader) {
-	    String header = FileUtils.readFileToString(new File(PythonClassUtil.PYTHON_HEADERS_FILE),
+	    String header = FileUtils.readFileToString(new File(PythonDataClassUtil.PYTHON_HEADERS_FILE),
 		    Charset.defaultCharset());
 	    out.println(header);
 	}
 
-	String timestamp = PythonClassUtil.getTimestamp();
+	String timestamp = PythonDataClassUtil.getTimestamp();
 
 	/**
 	 * from dataclasses import dataclass import marshmallow_dataclass
