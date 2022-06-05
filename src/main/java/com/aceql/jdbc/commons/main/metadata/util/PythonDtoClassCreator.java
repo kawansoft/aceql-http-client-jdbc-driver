@@ -29,7 +29,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
@@ -53,20 +52,13 @@ public class PythonDtoClassCreator {
      * @param args
      */
     public static void main(String[] args) throws Exception {
-	System.out.println(new Date() + " Begin...");
+	System.out.println(PythonDtoClassUtil.getTimestamp() + " Begin...");
 	boolean printHeader = true;
 
 	List<Class<?>> classes = new ArrayList<Class<?>>();
-	/*
-	 * classes.add(Column.class); 
-	 * classes.add(ExportedKey.class);
-	 * classes.add(ForeignKey.class); 
-	 * classes.add(ImportedKey.class);
-	 * classes.add(Index.class); 
-	 * classes.add(PrimaryKey.class);
-	 * classes.add(DatabaseInfoDto.class);
-	 */
 	classes.add(Column.class);
+
+	//PythonDtoClassUtil.addOthersDto(classes);
 
 	PythonDtoClassCreator pythonDtoClassCreator = new PythonDtoClassCreator();
 	pythonDtoClassCreator.generatePythonClasses(printHeader, classes);
@@ -74,7 +66,7 @@ public class PythonDtoClassCreator {
     }
 
     /**
-     * Generate Python files from a List of Java classes translated to Python
+     * Generate Python class files from a List of Java classes translated to Python
      * 
      * @param includeHeader if true, include the header PYTHON_HEADERS_FILE
      * @param classes       the Java classes list to r
@@ -93,7 +85,7 @@ public class PythonDtoClassCreator {
 	    System.out.println(
 		    timestamp + " Python File created from Java class " + clazz.getSimpleName() + ".java translation: " + pyfileName);
 	    try (PrintWriter out = new PrintWriter(new OutputStreamWriter(new FileOutputStream(pyfileName)));) {
-		createPythonFile(clazz, includeHeader, out);
+		generatePythonClass(clazz, includeHeader, out);
 	    }
 
 	    Runtime runtime = Runtime.getRuntime();
@@ -115,7 +107,7 @@ public class PythonDtoClassCreator {
      * @throws SecurityException
      * @throws IOException
      */
-    private void createPythonFile(Class<?> clazz, boolean printHeader, PrintWriter out)
+    private void generatePythonClass(Class<?> clazz, boolean printHeader, PrintWriter out)
 	    throws SecurityException, IOException {
 	Field[] fields = clazz.getDeclaredFields();
 

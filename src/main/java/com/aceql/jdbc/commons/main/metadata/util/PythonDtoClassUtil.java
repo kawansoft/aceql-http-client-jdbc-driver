@@ -18,9 +18,17 @@
  */
 package com.aceql.jdbc.commons.main.metadata.util;
 
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 
+import com.aceql.jdbc.commons.main.metadata.dto.DatabaseInfoDto;
 import com.aceql.jdbc.commons.main.util.TimeUtil;
+import com.aceql.jdbc.commons.metadata.ExportedKey;
+import com.aceql.jdbc.commons.metadata.ForeignKey;
+import com.aceql.jdbc.commons.metadata.ImportedKey;
+import com.aceql.jdbc.commons.metadata.Index;
+import com.aceql.jdbc.commons.metadata.PrimaryKey;
 
 /**
  * @author Nicolas de Pomereu
@@ -33,6 +41,19 @@ public class PythonDtoClassUtil {
      */
     public static String getTimestamp() {
 	return StringUtils.substringBeforeLast(TimeUtil.getCurrentTimeStamp(), ".");
+    }
+
+    /**
+     * Add others DTO
+     * @param classes	the List to add DTO to
+     */
+    public static void addOthersDto(List<Class<?>> classes) {
+        classes.add(ExportedKey.class);
+        classes.add(ForeignKey.class);
+        classes.add(ImportedKey.class);
+        classes.add(Index.class);
+        classes.add(PrimaryKey.class);
+        classes.add(DatabaseInfoDto.class);
     }
 
 }
