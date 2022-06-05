@@ -74,12 +74,15 @@ public class PythonDtoClassCreator {
      * @throws SecurityException
      * @throws IOException
      * @throws FileNotFoundException
+     * @throws InterruptedException 
      */
     public void generatePythonClasses(boolean includeHeader, List<Class<?>> classes)
-	    throws SecurityException, IOException, FileNotFoundException {
+	    throws SecurityException, IOException, FileNotFoundException, InterruptedException {
 	File baseDir = new File(SystemUtils.USER_HOME + File.separator + "tmp");
 	baseDir.mkdirs();
 
+	List<String> pythonFiles = new ArrayList<>();
+	
 	for (Class<?> clazz : classes) {
 	    String timestamp = PythonDtoClassUtil.getTimestamp();
 	    String pyfileName = baseDir + File.separator + clazz.getSimpleName().toLowerCase() + ".py";
@@ -89,14 +92,19 @@ public class PythonDtoClassCreator {
 		generatePythonClass(clazz, includeHeader, out);
 	    }
 
-	    // Edit Python class on screen
-	    Runtime runtime = Runtime.getRuntime();
-	    runtime.exec(new String[] { "C:\\Program Files (x86)\\Notepad++\\notepad++.exe", pyfileName });
-
+	    pythonFiles.add(pyfileName);
 	}
 
 	String timestamp = PythonDtoClassUtil.getTimestamp();
 	System.out.println(timestamp + " Done.");
+	
+	Thread.sleep(750);
+	for (String pythonFile : pythonFiles) {
+	    // Edit Python class on screen
+	    Runtime runtime = Runtime.getRuntime();
+	    runtime.exec(new String[] { "C:\\Program Files (x86)\\Notepad++\\notepad++.exe", pythonFile });
+	}
+	
     }
 
     /**
@@ -132,7 +140,7 @@ public class PythonDtoClassCreator {
 	out.println();
 	out.println("@dataclass");
 	out.println("class " + clazz.getSimpleName() + ":");
-	out.println("    \"\"\" Generated on " + timestamp + " from " + clazz.getName() + ".java translation\"\"\" ");
+	out.println("    \"\"\" Generated on " + timestamp + " from " + clazz.getName() + ".java translation \"\"\" ");
 
 	String superClass = clazz.getSuperclass().getName();
 	
