@@ -34,7 +34,7 @@ import com.aceql.jdbc.commons.metadata.PrimaryKey;
  * @author Nicolas de Pomereu
  *
  */
-public class PythonDtoClassUtil {
+public class PythonClassUtil {
 
     /**
      * @return a timestamp in human readable format
