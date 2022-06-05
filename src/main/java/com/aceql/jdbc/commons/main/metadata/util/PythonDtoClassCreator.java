@@ -91,7 +91,7 @@ public class PythonDtoClassCreator {
 	    String timestamp = PythonDtoClassUtil.getTimestamp();
 	    String pyfileName = baseDir + File.separator + clazz.getSimpleName().toLowerCase() + ".py";
 	    System.out.println(
-		    timestamp + " Python File created from Java class " + clazz.getSimpleName() + ".java : " + pyfileName);
+		    timestamp + " Python File created from Java class " + clazz.getSimpleName() + ".java translation: " + pyfileName);
 	    try (PrintWriter out = new PrintWriter(new OutputStreamWriter(new FileOutputStream(pyfileName)));) {
 		createPythonFile(clazz, includeHeader, out);
 	    }
