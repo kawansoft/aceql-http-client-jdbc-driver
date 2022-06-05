@@ -112,7 +112,7 @@ public class PythonDataClassCreator {
      * 
      * @param clazz         the Java class to translate
      * @param includeHeader if true, include the header PYTHON_HEADERS_FILE
-     * @param out           the write destination
+     * @param out           the output to write on
      * @throws SecurityException
      * @throws IOException
      */
@@ -126,21 +126,7 @@ public class PythonDataClassCreator {
 	    out.println(header);
 	}
 
-	String timestamp = PythonDataClassUtil.getTimestamp();
-
-	/**
-	 * from dataclasses import dataclass import marshmallow_dataclass
-	 * 
-	 * @dataclass class JdbcDatabaseMetaData:
-	 */
-	out.println("from dataclasses import dataclass");
-	out.println("from typing import Optional");
-	out.println("import marshmallow_dataclass");
-	out.println();
-	out.println();
-	out.println("@dataclass");
-	out.println("class " + clazz.getSimpleName() + ":");
-	out.println("    \"\"\" Generated on " + timestamp + " from " + clazz.getName() + ".java translation \"\"\" ");
+	generatePythonClassTop(clazz, out);
 
 	String superClass = clazz.getSuperclass().getName();
 	
@@ -180,6 +166,29 @@ public class PythonDataClassCreator {
 	out.println();
 
 	generatePythonToString(clazz, out, names);
+    }
+
+    /**
+     * Generates the top of the Python class with import clauses & class declaration
+     * @param clazz	the Java class to translation
+     * @param out	the output to write on
+     */
+    public void generatePythonClassTop(Class<?> clazz, PrintWriter out) {
+	String timestamp = PythonDataClassUtil.getTimestamp();
+
+	/**
+	 * from dataclasses import dataclass import marshmallow_dataclass
+	 * 
+	 * @dataclass class JdbcDatabaseMetaData:
+	 */
+	out.println("from dataclasses import dataclass");
+	out.println("from typing import Optional");
+	out.println("import marshmallow_dataclass");
+	out.println();
+	out.println();
+	out.println("@dataclass");
+	out.println("class " + clazz.getSimpleName() + ":");
+	out.println("    \"\"\" Generated on " + timestamp + " from " + clazz.getName() + ".java translation \"\"\" ");
     }
 
     /**
