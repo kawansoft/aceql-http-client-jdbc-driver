@@ -35,7 +35,15 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.SystemUtils;
 
+import com.aceql.jdbc.commons.main.metadata.dto.DatabaseInfoDto;
 import com.aceql.jdbc.commons.metadata.Column;
+import com.aceql.jdbc.commons.metadata.ExportedKey;
+import com.aceql.jdbc.commons.metadata.ForeignKey;
+import com.aceql.jdbc.commons.metadata.ImportedKey;
+import com.aceql.jdbc.commons.metadata.Index;
+import com.aceql.jdbc.commons.metadata.JdbcDatabaseMetaData;
+import com.aceql.jdbc.commons.metadata.PrimaryKey;
+import com.aceql.jdbc.commons.metadata.Table;
 
 /**
  * A Translator for Java DTO to Python DTO using Java reflection.
@@ -58,8 +66,10 @@ public class PythonDataClassCreator {
 
 	List<Class<?>> classes = new ArrayList<Class<?>>();
 	classes.add(Column.class);
-
-	// PythonDataClassUtil.addOthersDto(classes);
+	
+	//classes.add(Column.class);
+	//classes.add(JdbcDatabaseMetaData.class);
+	//PythonDataClassCreator.addAllDataClasses(classes);
 
 	PythonDataClassCreator pythonDataClassCreator = new PythonDataClassCreator();
 	pythonDataClassCreator.generatePythonClasses(printHeader, classes);
@@ -177,7 +187,9 @@ public class PythonDataClassCreator {
 	String timestamp = PythonDataClassUtil.getTimestamp();
 
 	/**
-	 * from dataclasses import dataclass import marshmallow_dataclass
+	 * 
+	 * from dataclasses import dataclass 
+	 * import marshmallow_dataclass
 	 * 
 	 * @dataclass class JdbcDatabaseMetaData:
 	 */
@@ -215,6 +227,21 @@ public class PythonDataClassCreator {
 	stringValue += " + \"]\"";
 
 	out.println(stringValue);
+    }
+
+    /**
+     * Add others DTO
+     * @param classes	the List to add DTO to
+     */
+    public static void addAllDataClasses(List<Class<?>> classes) {
+        classes.add(ExportedKey.class);
+        classes.add(ForeignKey.class);
+        classes.add(ImportedKey.class);
+        classes.add(Index.class);
+        classes.add(PrimaryKey.class);
+        classes.add(DatabaseInfoDto.class);
+        classes.add(Table.class);
+        classes.add(JdbcDatabaseMetaData.class);
     }
 
 }
