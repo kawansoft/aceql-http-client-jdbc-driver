@@ -29,6 +29,9 @@ import com.aceql.jdbc.commons.main.util.TimeUtil;
  */
 public class PythonDataClassUtil {
 
+    /** Universal and clean line separator */
+    protected static String CR_LF = System.getProperty("line.separator");
+    
     static final String PYTHON_HEADERS_FILE = "I:\\_dev_awake\\aceql-http-main\\aceql-http-client-jdbc-driver\\src\\main\\java\\com\\aceql\\jdbc\\commons\\main\\metadata\\util\\python_header.txt";
     
     /**

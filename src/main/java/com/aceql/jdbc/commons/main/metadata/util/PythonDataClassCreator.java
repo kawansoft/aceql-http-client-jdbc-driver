@@ -36,7 +36,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.SystemUtils;
 
 import com.aceql.jdbc.commons.main.metadata.dto.DatabaseInfoDto;
-import com.aceql.jdbc.commons.metadata.Column;
 import com.aceql.jdbc.commons.metadata.ExportedKey;
 import com.aceql.jdbc.commons.metadata.ForeignKey;
 import com.aceql.jdbc.commons.metadata.ImportedKey;
@@ -65,7 +64,7 @@ public class PythonDataClassCreator {
 	boolean printHeader = true;
 
 	List<Class<?>> classes = new ArrayList<Class<?>>();
-	classes.add(Column.class);
+	classes.add(JdbcDatabaseMetaData.class);
 	
 	//classes.add(Column.class);
 	//classes.add(JdbcDatabaseMetaData.class);
@@ -220,7 +219,14 @@ public class PythonDataClassCreator {
 	String stringValue = FOUR_BLANKS + FOUR_BLANKS + "return " + "\"" + clazz.getSimpleName() + " [";
 
 	for (String name : names) {
-	    stringValue += name + "=\" + str(self." + name + ")" + " + \", ";
+	    //stringValue += name + "=\" + str( " + "self." + name + ")" + " + \", ";
+	    stringValue += name + "=\" + str( ";
+	    
+	    if (stringValue.length() > 110) {
+		stringValue += PythonDataClassUtil.CR_LF + FOUR_BLANKS + FOUR_BLANKS + FOUR_BLANKS;
+	    }
+	    
+	    stringValue += "self." + name + ")" + " + \", ";
 	}
 
 	stringValue = StringUtils.substringBeforeLast(stringValue, "+");
