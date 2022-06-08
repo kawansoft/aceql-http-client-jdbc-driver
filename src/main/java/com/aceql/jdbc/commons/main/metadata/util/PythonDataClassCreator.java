@@ -66,10 +66,6 @@ public class PythonDataClassCreator {
 	List<Class<?>> classes = new ArrayList<Class<?>>();
 	classes.add(JdbcDatabaseMetaData.class);
 	
-	//classes.add(Column.class);
-	//classes.add(JdbcDatabaseMetaData.class);
-	//PythonDataClassCreator.addAllDataClasses(classes);
-
 	PythonDataClassCreator pythonDataClassCreator = new PythonDataClassCreator();
 	pythonDataClassCreator.generatePythonClasses(printHeader, classes);
 
