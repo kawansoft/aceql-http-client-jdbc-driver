@@ -195,7 +195,7 @@ public class PythonDataClassCreator {
 	out.println();
 	out.println("@dataclass");
 	out.println("class " + clazz.getSimpleName() + ":");
-	out.println("    \"\"\" Generated on " + timestamp + " from " + clazz.getName() + ".java translation \"\"\" ");
+	out.println("    \"\"\" Generated on " + timestamp + PythonDataClassUtil.CR_LF + "    from " + clazz.getName() + ".java translation \"\"\" ");
     }
 
     /**
