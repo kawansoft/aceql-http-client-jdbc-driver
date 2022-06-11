@@ -18,10 +18,12 @@ The AceQL Client JDBC Driver is licensed under the Apache 2.0
 License.
 
 
-AceQL Client JDBC Driver - Version 9.1 - 09-Jun-2022
+AceQL Client JDBC Driver - Version 9.1 - 11-Jun-2022
 ----------------------------------------------------
 
 What's new:
+- Maven is nows used to generate the runnable jar and
+  the sources jar.
 - Gson base libraries have been upgraded to 2.8.9 for 
   security reasons.
 
