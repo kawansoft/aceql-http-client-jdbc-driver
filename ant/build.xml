@@ -1,5 +1,7 @@
 <?xml version="1.0"?>
 
+<!-- As of version 9.1: not used anymore ==> maven:install --> 
+
 <project name="Buildfile for common LGPL and Commercial aceql-http-client-jdbc-driver-${version}.jar" default="all" basedir=".">
 
     <property name="version"                        value="9.1"/>
