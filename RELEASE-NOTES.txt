@@ -22,11 +22,11 @@ AceQL Client JDBC Driver - Version 9.1 - 13-Jun-2022
 ----------------------------------------------------
 
 What's new:
-- Maven maven-source-plugin is now used to build 
+- The Maven maven-source-plugin is now used to build 
   the runnable jar and the sources jar.
-- Generated aceql-http-client-jdbc-driver-9.1-sources.jar
+- The generated aceql-http-client-jdbc-driver-9.1-sources.jar
   is cleaner.
-- Gson base libraries have been upgraded to 2.8.9 for 
+- The Gson base libraries have been upgraded to 2.8.9 for 
   security reasons.
 
 
