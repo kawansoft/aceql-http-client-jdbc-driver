@@ -798,9 +798,9 @@ Example code that passes two request headers `token-1` & `token-2`:
 
     Connection connection = DriverManager.getConnection(url, info);
 ```
-The request headers will be intercepted on the server side by the `validate` method of your Java class that implements the [RequestHeadersAuthenticator](https://docs.aceql.com/rest/soft/10.1/javadoc/org/kawanfw/sql/api/server/auth/headers/RequestHeadersAuthenticator.html) interface.
+The request headers will be intercepted on the server side by the `validate` method of your Java class that implements the [RequestHeadersAuthenticator](https://docs.aceql.com/rest/soft/11.0/javadoc/org/kawanfw/sql/api/server/auth/headers/RequestHeadersAuthenticator.html) interface.
 
-See also the Headers Authentication sub-section in the [aceql-server.properties](https://docs.aceql.com/rest/soft/10.1/src/aceql-server.properties) file for details about declaring your `RequestHeadersAuthenticator` concrete implementation on server side.
+See also the Headers Authentication sub-section in the [aceql-server.properties](https://docs.aceql.com/rest/soft/11.0/src/aceql-server.properties) file for details about declaring your `RequestHeadersAuthenticator` concrete implementation on server side.
 
 # Limitations 
 
