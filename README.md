@@ -9,7 +9,7 @@
 
 ## AceQL Client JDBC Driver v9.1 - User Guide
 
-## June 11, 2022
+## June 13, 2022
 
 <img src="https://docs.aceql.com/img/AceQL-Schema-min.jpg" alt="AceQL Draw"/>
 
