@@ -28,33 +28,7 @@ public class HealthCheckInfo {
     private long initMemory = -1;
     private long usedMemory = -1;
     private long maxMemory = -1;
-    private long commitedMemory = -1;
-    
-    /**
-     * @return the initMemory
-     */
-    public long getInitMemory() {
-        return initMemory;
-    }
-    /**
-     * @return the usedMemory
-     */
-    public long getUsedMemory() {
-        return usedMemory;
-    }
-    /**
-     * @return the maxMemory
-     */
-    public long getMaxMemory() {
-        return maxMemory;
-    }
-    /**
-     * @return the commitedMemory
-     */
-    public long getCommitedMemory() {
-        return commitedMemory;
-    }
-    
+    private long committedMemory = -1;
     /**
      * @param initMemory the initMemory to set
      */
@@ -74,16 +48,40 @@ public class HealthCheckInfo {
         this.maxMemory = maxMemory;
     }
     /**
-     * @param commitedMemory the commitedMemory to set
+     * @param committedMemory the committedMemory to set
      */
-    void setCommitedMemory(long commitedMemory) {
-        this.commitedMemory = commitedMemory;
+     void setCommittedMemory(long committedMemory) {
+        this.committedMemory = committedMemory;
+    }
+    /**
+     * @return the initMemory
+     */
+    public long getInitMemory() {
+        return initMemory;
+    }
+    /**
+     * @return the usedMemory
+     */
+    public long getUsedMemory() {
+        return usedMemory;
+    }
+    /**
+     * @return the maxMemory
+     */
+    public long getMaxMemory() {
+        return maxMemory;
+    }
+    /**
+     * @return the committedMemory
+     */
+    public long getCommittedMemory() {
+        return committedMemory;
     }
     @Override
     public String toString() {
-	return "HealthCheckInfo [initMemory=" + initMemory + ", usedMemory=" + usedMemory + ", maxMemory="
-		+ maxMemory + ", commitedMemory=" + commitedMemory + "]";
+	return "HealthCheckInfo [initMemory=" + initMemory + ", usedMemory=" + usedMemory + ", maxMemory=" + maxMemory
+		+ ", committedMemory=" + committedMemory + "]";
     }
     
-   
+
 }

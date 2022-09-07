@@ -132,7 +132,7 @@ public class HealthCheck {
 	try {
 	    HealthCheckInfoDto healthCheckInfoDto = aceQLHttpApi.getHealthCheckInfo();
 
-	    healthCheckInfo.setCommitedMemory(healthCheckInfoDto.getCommitedMemory());
+	    healthCheckInfo.setCommittedMemory(healthCheckInfoDto.getCommittedMemory());
 	    healthCheckInfo.setInitMemory(healthCheckInfoDto.getInitMemory());
 	    healthCheckInfo.setMaxMemory(healthCheckInfoDto.getMaxMemory());
 	    healthCheckInfo.setUsedMemory(healthCheckInfoDto.getUsedMemory());

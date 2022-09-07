@@ -11,11 +11,9 @@
  */
 package com.aceql.jdbc.commons.main.metadata.dto;
 
-import java.lang.management.ManagementFactory;
-import java.lang.management.MemoryMXBean;
-
 /**
  * Contains the health check info to send to client side.
+ * 
  * @author Nicolas de Pomereu
  *
  */
@@ -26,55 +24,82 @@ public class HealthCheckInfoDto {
     private long initMemory;
     private long usedMemory;
     private long maxMemory;
-    private long commitedMemory;
-    
+    private long committedMemory;
+
     /**
-     * Constructor
+     * @return the status
      */
-    public HealthCheckInfoDto() {
-	MemoryMXBean memoryMXBean = ManagementFactory.getMemoryMXBean();
-	initMemory = memoryMXBean.getHeapMemoryUsage().getInit();
-	usedMemory = memoryMXBean.getHeapMemoryUsage().getUsed();
-	maxMemory = memoryMXBean.getHeapMemoryUsage().getMax();
-	commitedMemory = memoryMXBean.getHeapMemoryUsage().getCommitted();
+    public String getStatus() {
+	return status;
     }
 
-    public String getStatus() {
-        return status;
+    /**
+     * @param status the status to set
+     */
+    public void setStatus(String status) {
+	this.status = status;
     }
 
     /**
      * @return the initMemory
      */
     public long getInitMemory() {
-        return initMemory;
+	return initMemory;
+    }
+
+    /**
+     * @param initMemory the initMemory to set
+     */
+    public void setInitMemory(long initMemory) {
+	this.initMemory = initMemory;
     }
 
     /**
      * @return the usedMemory
      */
     public long getUsedMemory() {
-        return usedMemory;
+	return usedMemory;
+    }
+
+    /**
+     * @param usedMemory the usedMemory to set
+     */
+    public void setUsedMemory(long usedMemory) {
+	this.usedMemory = usedMemory;
     }
 
     /**
      * @return the maxMemory
      */
     public long getMaxMemory() {
-        return maxMemory;
+	return maxMemory;
     }
 
     /**
-     * @return the commitedMemory
+     * @param maxMemory the maxMemory to set
      */
-    public long getCommitedMemory() {
-        return commitedMemory;
+    public void setMaxMemory(long maxMemory) {
+	this.maxMemory = maxMemory;
+    }
+
+    /**
+     * @return the committedMemory
+     */
+    public long getCommittedMemory() {
+	return committedMemory;
+    }
+
+    /**
+     * @param committedMemory the committedMemory to set
+     */
+    public void setCommittedMemory(long committedMemory) {
+	this.committedMemory = committedMemory;
     }
 
     @Override
     public String toString() {
 	return "HealthCheckInfoDto [status=" + status + ", initMemory=" + initMemory + ", usedMemory=" + usedMemory
-		+ ", maxMemory=" + maxMemory + ", commitedMemory=" + commitedMemory + "]";
+		+ ", maxMemory=" + maxMemory + ", committedMemory=" + committedMemory + "]";
     }
-    
+
 }
