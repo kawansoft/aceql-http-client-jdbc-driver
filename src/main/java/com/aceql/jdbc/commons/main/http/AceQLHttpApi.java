@@ -43,6 +43,7 @@ import com.aceql.jdbc.commons.InternalWrapper;
 import com.aceql.jdbc.commons.main.AceQLSavepoint;
 import com.aceql.jdbc.commons.main.batch.UpdateCountsArrayDto;
 import com.aceql.jdbc.commons.main.metadata.dto.DatabaseInfoDto;
+import com.aceql.jdbc.commons.main.metadata.dto.HealthCheckInfoDto;
 import com.aceql.jdbc.commons.main.metadata.dto.JdbcDatabaseMetaDataDto;
 import com.aceql.jdbc.commons.main.metadata.dto.ServerQueryExecutorDto;
 import com.aceql.jdbc.commons.main.metadata.dto.ServerQueryExecutorDtoBuilder;
@@ -1209,6 +1210,12 @@ public class AceQLHttpApi {
 	return aceQLMetadataApi.callDatabaseMetaDataMethod(jsonDatabaseMetaDataMethodCallDTO);
     }
 
+    public HealthCheckInfoDto getHealthCheckInfo() throws AceQLException {
+	AceQLHealthCheckInfoApi aceQLHealthCheckInfoApi = new AceQLHealthCheckInfoApi(httpManager, url);
+	HealthCheckInfoDto HealthCheckInfoDto = aceQLHealthCheckInfoApi.getHealthCheckInfoDto();
+	return HealthCheckInfoDto;
+    }
+    
     public int getHttpStatusCode() {
 	return httpManager.getHttpStatusCode();
     }

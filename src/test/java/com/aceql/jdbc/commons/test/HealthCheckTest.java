@@ -42,8 +42,9 @@ public class HealthCheckTest {
 	AceQLConnection aceQLConnection = (AceQLConnection) connection;
 
 	HealthCheck healthCheck = new HealthCheck(aceQLConnection);
-	System.out.println("healthCheck.ping()            : " + healthCheck.ping());
-	System.out.println("healthCheck.getResponseTime() : " + healthCheck.getResponseTime());
+	System.out.println("healthCheck.ping()               : " + healthCheck.ping());
+	System.out.println("healthCheck.getResponseTime()    : " + healthCheck.getResponseTime());
+	System.out.println("healthCheck.getHealthCheckInfo() : " + healthCheck.getHealthCheckInfo());
     }
 
 }

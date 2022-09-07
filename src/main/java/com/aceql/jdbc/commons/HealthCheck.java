@@ -25,6 +25,8 @@ import java.util.Objects;
 import com.aceql.jdbc.commons.main.http.AceQLHttpApi;
 import com.aceql.jdbc.commons.main.http.HttpManager;
 import com.aceql.jdbc.commons.main.http.ResultAnalyzer;
+import com.aceql.jdbc.commons.main.metadata.dto.HealthCheckInfoDto;
+import com.aceql.jdbc.commons.main.util.AceQLConnectionUtil;
 
 /**
  * Allows testing if the remote AceQL servlet is accessible with a ping, and to
@@ -45,6 +47,7 @@ public class HealthCheck {
      */
     public HealthCheck(AceQLConnection connection) {
 	this.connection = Objects.requireNonNull(connection, "connection cannot be null!");
+
     }
 
     /**
@@ -106,6 +109,40 @@ public class HealthCheck {
 
 	long endTime = System.currentTimeMillis();
 	return (endTime - startTime);
+    }
+
+    /**
+     * Gets health check info from server
+     * 
+     * @return health check info from server
+     * @throws SQLException if any SQL Exception occurs
+     */
+    public HealthCheckInfo getHealthCheckInfo() throws SQLException {
+	
+	if (!AceQLConnectionUtil.isCheckHealthInfoSupported(connection)) {
+	    throw new SQLException("AceQL Server version must be >= " + AceQLConnectionUtil.GET_HEALTH_CHECK_INFO_MIN_SERVER_VERSION
+		    + " in order to call getHealthCheckInfo().");
+	}
+	
+	AceQLHttpApi aceQLHttpApi = connection.aceQLHttpApi;
+	HttpManager httpManager = aceQLHttpApi.getHttpManager();
+
+	HealthCheckInfo healthCheckInfo = new HealthCheckInfo();
+
+	try {
+	    HealthCheckInfoDto healthCheckInfoDto = aceQLHttpApi.getHealthCheckInfo();
+
+	    healthCheckInfo.setCommitedMemory(healthCheckInfoDto.getCommitedMemory());
+	    healthCheckInfo.setInitMemory(healthCheckInfoDto.getInitMemory());
+	    healthCheckInfo.setMaxMemory(healthCheckInfoDto.getMaxMemory());
+	    healthCheckInfo.setUsedMemory(healthCheckInfoDto.getUsedMemory());
+
+	} catch (AceQLException e) {
+	    this.aceQLException = new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
+	}
+
+	return healthCheckInfo;
+
     }
 
     /**
