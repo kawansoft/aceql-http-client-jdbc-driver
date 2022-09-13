@@ -81,8 +81,8 @@ public class AceQLTestAuthenticationWindows {
      */
     public static void testWindowsOK() throws Exception {
 	System.out.println(new Date() + " Testing Windows Authentication...");
-	String username = "user1";
-	String password = FileUtils.readFileToString(new File("I:\\__NDP\\_MyPasswords\\login_user1.txt"), "UTF-8");
+	String username = "user2";
+	String password = FileUtils.readFileToString(new File("I:\\__NDP\\_MyPasswords\\login_user2.txt"), "UTF-8");
 	Connection connection = AuthenticationConnections.getWindowsConnection(username, password);
 	SqlSelectTest sqlSelectTest = new SqlSelectTest(connection, System.out);
 	sqlSelectTest.selectOneCustomerStatement();
