@@ -122,7 +122,7 @@ public class AceQLConnectionTestFourDbs {
      */
     public static void testOracle()
 	    throws Exception{
-	Connection connection = FourDbConnections.getSqlServerConnection();
+	Connection connection = FourDbConnections.getOracleConnection();
 	AceQLConnectionTest.doItPassConnection(connection);
 	connection.close();
     }
