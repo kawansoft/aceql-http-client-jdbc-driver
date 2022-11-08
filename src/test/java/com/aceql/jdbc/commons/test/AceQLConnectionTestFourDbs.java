@@ -34,7 +34,7 @@ import com.aceql.jdbc.commons.test.connection.FourDbConnections;
  */
 public class AceQLConnectionTestFourDbs {
 
-    public static final boolean DO_TEST_ORACLE = false;
+    public static final boolean DO_TEST_ORACLE = true;
 
 
     /**

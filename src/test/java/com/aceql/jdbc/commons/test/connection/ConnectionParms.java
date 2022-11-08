@@ -40,7 +40,7 @@ public class ConnectionParms {
     public static final String database = "sampledb";
     public static final String username = "username";
     public static final char[] password = { 'p', 'a', 's', 's', 'w', 'o', 'r', 'd' };
-
+    
     public static final String usernameLdap1 = "cn=read-only-admin,dc=example,dc=com";
     public static final String usernameLdap2 = "CN=L. Eagle,O=Sue\\2C Grabbit and Runn,C=GB";
 

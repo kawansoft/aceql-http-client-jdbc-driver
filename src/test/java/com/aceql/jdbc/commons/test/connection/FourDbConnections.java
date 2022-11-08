@@ -34,7 +34,7 @@ public class FourDbConnections {
     private static String databasePostgreSQL= "sampledb";
     private static String databaseMySQL= "sampledb_mysql";
     private static String databaseSqlServer= "sampledb_sql_server";
-    private static String databaseOracle= "sampledb_oracle";
+    private static String databaseOracle= "XE";
 
 
     /**
@@ -60,6 +60,7 @@ public class FourDbConnections {
     }
 
     public static Connection getOracleConnection() throws Exception {
+	
 	Connection connection = AceQLDriverLoader.getConnection(serverUrl, databaseOracle, username, password.toCharArray());
 	return connection;
     }
