@@ -5,6 +5,7 @@ package com.aceql.jdbc.commons.test;
 
 import java.sql.Connection;
 
+import com.aceql.jdbc.commons.test.base.schema.AceQLSchemaTest;
 import com.aceql.jdbc.commons.test.connection.AceQLDriverLoader;
 
 /**
@@ -30,7 +31,7 @@ public class TestAceQLOracleDb {
 	    throw new IllegalArgumentException(
 		    "AceQL Oracle Connection is null after driver.connect(url, properties)!");
 	}
-	
+	AceQLSchemaTest.doIt(connection);
 	AceQLConnectionTest.doItPassConnection(connection);
 	connection.close();
 

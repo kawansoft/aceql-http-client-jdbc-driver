@@ -74,7 +74,7 @@ public class AceQLTestAuthenticationWebService {
 
 	hasException = false;
 	try {
-	    Connection connection = AuthenticationConnections.getLDAPConnection("username", "password");
+	    Connection connection = AuthenticationConnections.getWebConnection("username", "password");
 	    SqlSelectTest sqlSelectTest = new SqlSelectTest(connection, System.out);
 	    sqlSelectTest.selectOneCustomerStatement();
 	} catch (Exception e) {
