@@ -96,7 +96,6 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
     private boolean wasNull = false;
 
     // Futur usage
-    @SuppressWarnings("unused")
     private ResultSetMetaData resultSetMetaData;
 
     private int fetchSize = 0;
