@@ -641,7 +641,9 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
 	     * Charset.forName("UTF-8")); debug(fileContent); }
 	     */
 
-	    int rowCount = streamResultAnalyzer.getRowCount();
+	    int rowCount = streamResultAnalyzer.getRowCountWithParse();
+	    debug("rowCount: " + rowCount);
+	    
 	    AceQLResultSet aceQLResultSet = new AceQLResultSet(file, this, rowCount);
 	    return aceQLResultSet;
 

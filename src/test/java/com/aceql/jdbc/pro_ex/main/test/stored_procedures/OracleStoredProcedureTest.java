@@ -22,17 +22,16 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Types;
-import java.util.Objects;
 
-import com.aceql.jdbc.commons.AceQLConnection;
+import com.aceql.jdbc.commons.main.AceQLStatement;
 import com.aceql.jdbc.commons.test.connection.AceQLDriverLoader;
 
 /**
+ *
  * @author Nicolas de Pomereu
  *
  */
-public class SqlServerStoredProcedureTest {
+public class OracleStoredProcedureTest {
 
     /**
      * @param args
@@ -40,42 +39,27 @@ public class SqlServerStoredProcedureTest {
     public static void main(String[] args) throws Exception {
 
 	Connection connection = AceQLDriverLoader.getConnection("http://localhost:9090/aceql", "XE", "user1", "password1".toCharArray());
-
+	
 	if (connection == null) {
-	    Objects.requireNonNull(connection, "connection can not be null!");
+	    throw new IllegalArgumentException(
+		    "AceQL Oracle Connection is null after driver.connect(url, properties)!");
 	}
-
 	testStoredProcedures(connection);
+
     }
 
-    /**
-     * Tests a remote MS SQL Server procedure
-     *
-     * @param connection
-     * @throws SQLException
-     */
     public static void testStoredProcedures(Connection connection) throws SQLException {
-
-	CallableStatement callableStatement = connection.prepareCall("{call ProcedureName(?, ?, ?) }");
-	callableStatement.registerOutParameter(3, Types.INTEGER);
-	callableStatement.setInt(1, 0);
-	callableStatement.setInt(2, 2);
+	
+	AceQLStatement.DUMP_FILE_DEBUG = false;
+	
+	CallableStatement callableStatement = connection.prepareCall("{ call PROCEDURE2(?, ?) }");
+	callableStatement.setInt(1, 2);
 	ResultSet rs = callableStatement.executeQuery();
-
+	
 	while (rs.next()) {
-	    System.out.println();
-	    System.out.println("rs.getString(1): " + rs.getString(1));
-	    System.out.println("rs.getString(2): " + rs.getString(2));
+	    System.out.println(rs.getInt(1));
 	}
 
-	int out3 = callableStatement.getInt(3);
-
-	callableStatement.close();
-
-	System.out.println();
-	System.out.println("out3: " + out3);
-
     }
-
 
 }
