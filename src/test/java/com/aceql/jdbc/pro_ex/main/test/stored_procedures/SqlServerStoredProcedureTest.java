@@ -25,7 +25,6 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.Objects;
 
-import com.aceql.jdbc.commons.AceQLConnection;
 import com.aceql.jdbc.commons.test.connection.AceQLDriverLoader;
 
 /**
