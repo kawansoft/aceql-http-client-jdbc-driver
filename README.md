@@ -98,11 +98,14 @@ The Client JDBC Driver version is compatible with AceQL HTTP server side v6.2+. 
 | <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;[BLOB](https://docs.oracle.com/javase/tutorial/jdbc/basics/blob.html) Type - Size up to 4GB |
 | <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;IBM DB2 Database |
 | <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;[Array](https://docs.oracle.com/en/java/javase/11/docs/api/java.sql/java/sql/Array.html) Type |
-| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;[Stored Procedures](https://docs.oracle.com/javase/tutorial/jdbc/basics/storedprocedures.html) |
+| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;[Stored Procedures *](https://docs.oracle.com/javase/tutorial/jdbc/basics/storedprocedures.html) |
 | <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;JDBC API Metadata<br/>`Connection.getMetadata()`, `ResultSet.getMetaData()` |
 | <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;JDBC Clients Tools & GUI <br/>[DBeaver](https://dbeaver.io/), [DbVisualizer](https://www.dbvis.com/), [JetBrains DataGrip](https://www.jetbrains.com/datagrip/), [RazorSQL](https://razorsql.com/), [SQuirreL SQL](http://squirrel-sql.sourceforge.net/) |
 | <img src="https://download.aceql.com/images/check_20.png" alt="check!"/> [Allows outer authentication without a password](#using-outer-authentication-without-a-password-and-with-an-aceql-session-id) |
 | <img src="https://download.aceql.com/images/check_20.png" alt="check!"/> [Allows passing request headers for validation on server](#passing-request-headers-for-validation-on-server-side) |
+
+\* *Note that  in this version SELECT calls are not supported for Oracle Database stored procedures.*
+*They will be supported in a November 2022 subsequent version.*
 
 ## Installation
 
@@ -808,6 +811,7 @@ The following JDBC features are not supported nor implemented in this version. T
 
 
 - `ROWID` are not supported.
+- SELECT calls are not supported for Oracle Database stored procedures.  They will be supported in a November 2022 subsequent version.
 - Auto-generated keys are not supported.
 - Some Advanced data types:   `Struct`, `NClob`, `SQLXML` and `Typemaps`.
 - Some Statement methods: `getWarnings`, `isPoolable`/`setPoolable`, `getMoreResults`, `setCursorName`.
