@@ -37,6 +37,7 @@ public class AceQLHealthCheckInfoApi {
 			resultAnalyzer.getStackTrace(), httpManager.getHttpStatusCode());
 	    }
 
+	    debug("HealthCheckInfoDto url+action: " + url+action);
 	    debug("HealthCheckInfoDto: ");
 	    debug(result);
 	    
