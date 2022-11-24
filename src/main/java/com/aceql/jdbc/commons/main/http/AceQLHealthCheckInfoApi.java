@@ -3,6 +3,7 @@ package com.aceql.jdbc.commons.main.http;
 import com.aceql.jdbc.commons.AceQLException;
 import com.aceql.jdbc.commons.main.metadata.dto.HealthCheckInfoDto;
 import com.aceql.jdbc.commons.main.metadata.util.GsonWsUtil;
+import com.aceql.jdbc.commons.main.util.framework.FrameworkDebug;
 
 /**
  * Dedicated HTTP and API operations for meta data API.
@@ -11,6 +12,8 @@ import com.aceql.jdbc.commons.main.metadata.util.GsonWsUtil;
  */
 public class AceQLHealthCheckInfoApi {
 
+    public static boolean DEBUG = FrameworkDebug.isSet(AceQLHealthCheckInfoApi.class);
+    
     /* The HttpManager */
     private HttpManager httpManager;
     private String url;
@@ -34,6 +37,9 @@ public class AceQLHealthCheckInfoApi {
 			resultAnalyzer.getStackTrace(), httpManager.getHttpStatusCode());
 	    }
 
+	    debug("HealthCheckInfoDto: ");
+	    debug(result);
+	    
 	    // If result is OK, it's a DTO
 	    HealthCheckInfoDto healthCheckInfoDto = GsonWsUtil.fromJson(result,
 		    HealthCheckInfoDto.class);
@@ -44,6 +50,12 @@ public class AceQLHealthCheckInfoApi {
 	}
 	catch (Exception e) {
 	    throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
+	}
+    }
+    
+    private void debug(String s) {
+	if (DEBUG) {
+	    System.out.println(s);
 	}
     }
 
