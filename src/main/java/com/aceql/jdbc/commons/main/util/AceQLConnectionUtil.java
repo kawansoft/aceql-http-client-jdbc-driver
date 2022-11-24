@@ -45,7 +45,7 @@ public class AceQLConnectionUtil {
     // Minimum version for Connection.getDatabaseInfo()
     public static final String GET_DATABASE_INFO_MIN_SERVER_VERSION = "9.0";
     
-    // Minimum version for Connection.getDatabaseInfo()
+    // Minimum version for HealthCheck.getHealthCheckInfo()
     public static final String GET_HEALTH_CHECK_INFO_MIN_SERVER_VERSION = "12.0";
     
     private static String SERVER_VERSION_NUMBER = null;
@@ -184,7 +184,7 @@ public class AceQLConnectionUtil {
 	return isCurrentVersionOk(rawServerVersion, GET_DATABASE_INFO_MIN_SERVER_VERSION);
     }
 
-    public static boolean isCheckHealthInfoSupported(Connection connection) throws SQLException{
+    public static boolean isHealthCheckInfoSupported(Connection connection) throws SQLException{
 	String rawServerVersion = getServerRawVersion(connection);	
 	return isCurrentVersionOk(rawServerVersion, GET_HEALTH_CHECK_INFO_MIN_SERVER_VERSION);
     }

@@ -119,7 +119,7 @@ public class HealthCheck {
      */
     public HealthCheckInfo getHealthCheckInfo() throws SQLException {
 	
-	if (!AceQLConnectionUtil.isCheckHealthInfoSupported(connection)) {
+	if (!AceQLConnectionUtil.isHealthCheckInfoSupported(connection)) {
 	    throw new SQLException("AceQL Server version must be >= " + AceQLConnectionUtil.GET_HEALTH_CHECK_INFO_MIN_SERVER_VERSION
 		    + " in order to call getHealthCheckInfo().");
 	}
