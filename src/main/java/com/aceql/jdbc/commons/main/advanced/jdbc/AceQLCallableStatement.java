@@ -40,11 +40,14 @@ import java.util.Map;
 import java.util.Objects;
 
 import com.aceql.jdbc.commons.AceQLConnection;
+import com.aceql.jdbc.commons.DatabaseInfo;
 import com.aceql.jdbc.commons.main.AceQLPreparedStatement;
+import com.aceql.jdbc.commons.main.util.AceQLConnectionUtil;
 import com.aceql.jdbc.commons.main.util.AceQLResultSetUtil;
 import com.aceql.jdbc.commons.main.util.JavaSqlConversion;
 import com.aceql.jdbc.commons.main.util.framework.Tag;
 import com.aceql.jdbc.commons.main.util.json.SqlParameter;
+
 /**
  *
  * @author Nicolas de Pomereu
@@ -59,6 +62,8 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
     /** Says if the last accessed value was null */
     private boolean wasNull = false;
 
+    private DatabaseInfo databaseInfo;
+
     /**
      * @param aceQLConnection
      * @param sql
@@ -69,8 +74,11 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 	super.isStoredProcedure = true;
     }
 
-    /* (non-Javadoc)
-     * @see com.aceql.client.jdbc.driver.abstracts.AbstractPreparedStatement#execute()
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.aceql.client.jdbc.driver.abstracts.AbstractPreparedStatement#execute()
      */
     @Override
     public boolean execute() throws SQLException {
@@ -78,15 +86,27 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 	return false; // It's not a query
     }
 
-
-
     /*
      * (non-Javadoc)
+     * 
      * @see com.aceql.client.jdbc.driver.AceQLPreparedStatement#executeQuery()
      */
     @Override
     public ResultSet executeQuery() throws SQLException {
-	//HACK ProVersion 3.0.1: future usage
+
+	if (!AceQLConnectionUtil.isVersion12OrHigher(aceQLConnection)) {
+
+	    if (databaseInfo == null) {
+		databaseInfo = aceQLConnection.getDatabaseInfo();
+	    }
+
+	    if (databaseInfo.getDatabaseProductName().toLowerCase().contains("oracle")) {
+		throw new SQLException("AceQL Server version must be >= " + AceQLConnectionUtil.SERVER_VERSION_12
+			+ " in order to call Oracle stored procedure SELECT.");
+	    }
+
+	}
+
 	return super.executeQuery();
     }
 
@@ -99,7 +119,6 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
     public void registerOutParameter(int parameterIndex, int sqlType) throws SQLException {
 	builder.setOutParameter(parameterIndex, JavaSqlConversion.fromJavaToSql(sqlType));
     }
-
 
     /*
      * (non-Javadoc)
@@ -135,7 +154,7 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 	    throw new SQLException("This CallableStatement is closed.");
 	}
 
-	Map<Integer, SqlParameter> statementParameters =  super.builder.getCallableOutParameters();
+	Map<Integer, SqlParameter> statementParameters = super.builder.getCallableOutParameters();
 
 	if (statementParameters.containsKey(parameterIndex)) {
 	    SqlParameter sqlParameter = statementParameters.get(parameterIndex);
@@ -151,13 +170,11 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 		return null;
 	    }
 	    return value;
-	}
-	else {
-	    throw new SQLException("parameter does not exists for index: " + parameterIndex );
+	} else {
+	    throw new SQLException("parameter does not exists for index: " + parameterIndex);
 	}
 
     }
-
 
     /*
      * (non-Javadoc)
@@ -1517,7 +1534,5 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 	}.getClass().getEnclosingMethod().getName();
 	throw new SQLException(FEATURE_NOT_SUPPORTED_IN_THIS_VERSION + methodName);
     }
-
-
 
 }
