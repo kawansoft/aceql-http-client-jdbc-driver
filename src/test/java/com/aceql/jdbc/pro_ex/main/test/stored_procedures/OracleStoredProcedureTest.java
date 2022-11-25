@@ -52,7 +52,9 @@ public class OracleStoredProcedureTest {
 	
 	AceQLStatement.DUMP_FILE_DEBUG = false;
 	
-	CallableStatement callableStatement = connection.prepareCall("{ call PROCEDURE2(?, ?) }");
+	// AceQL Oracle JDBC syntax : call of a stored procedure
+	// that returns a SELECT result
+	CallableStatement callableStatement = connection.prepareCall("{ call ORACLE_PROCEDURE(?, ?) }");
 	callableStatement.setInt(1, 2);
 	ResultSet rs = callableStatement.executeQuery();
 	
