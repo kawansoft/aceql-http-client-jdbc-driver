@@ -54,7 +54,8 @@ public class OracleStoredProcedureTest {
 	
 	// AceQL Oracle JDBC syntax : call of a stored procedure
 	// that returns a SELECT result
-	CallableStatement callableStatement = connection.prepareCall("{ call ORACLE_PROCEDURE(?, ?) }");
+	CallableStatement callableStatement 
+		= connection.prepareCall("{ call ORACLE_SELECT_CUSTOMER(?, ?) }");
 	callableStatement.setInt(1, 2);
 	ResultSet rs = callableStatement.executeQuery();
 	
