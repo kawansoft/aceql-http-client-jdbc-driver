@@ -25,7 +25,7 @@ What's new:
 - Oracle stored procedures with SELECT output are now 
   supported. See User Guide.
 - The new HealthCheck.getServerMemoryInfo() API allows
-  now to gather health check info on the server. 
+  now to gather memory info of the AceQL server running instance. 
 
 
 AceQL Client JDBC Driver - Version 9.1 - 13-Jun-2022

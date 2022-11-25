@@ -105,6 +105,7 @@ public class ServerMemoryInfo {
     public long getCommittedMemory() {
         return committedMemory;
     }
+    
     @Override
     public String toString() {
 	return "ServerMemoryInfo [initMemory=" + initMemory + ", usedMemory=" + usedMemory + ", maxMemory=" + maxMemory

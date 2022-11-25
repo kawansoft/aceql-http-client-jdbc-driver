@@ -44,7 +44,7 @@ public class HealthCheckTest {
 	HealthCheck healthCheck = new HealthCheck(aceQLConnection);
 	System.out.println("healthCheck.ping()               : " + healthCheck.ping());
 	System.out.println("healthCheck.getResponseTime()    : " + healthCheck.getResponseTime());
-	System.out.println("healthCheck.getHealthCheckInfo() : " + healthCheck.getServerMemoryInfo());
+	System.out.println("healthCheck.getServerMemoryInfo(): " + healthCheck.getServerMemoryInfo());
     }
 
 }
