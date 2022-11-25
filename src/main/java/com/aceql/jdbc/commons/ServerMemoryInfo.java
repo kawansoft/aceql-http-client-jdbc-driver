@@ -19,7 +19,7 @@
 package com.aceql.jdbc.commons;
 
 /**
- * Contains health check Java memory info of the running AceQL HTTP remote server instance.
+ * Contains health check Java memory info of the AceQL server running instance. 
  * @author Nicolas de Pomereu
  *
  */
