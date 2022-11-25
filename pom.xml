@@ -3,36 +3,8 @@
   <groupId>com.aceql</groupId>
   <artifactId>aceql-http-client-jdbc-driver</artifactId>
   <version>9.2</version>
-  <dependencies>
-      <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.13.1</version>
-      <scope>test</scope>
-    </dependency>
-  	<dependency>
-  		<groupId>commons-io</groupId>
-  		<artifactId>commons-io</artifactId>
-  		<version>2.7</version>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.glassfish</groupId>
-  		<artifactId>javax.json</artifactId>
-  		<version>1.1.4</version>
-  	</dependency>
-  	<dependency>
-		<groupId>org.apache.commons</groupId>
-		<artifactId>commons-lang3</artifactId>
-		<version>3.8.1</version>
-  	</dependency>
-  	    <dependency>
-        <groupId>com.google.code.gson</groupId>
-        <artifactId>gson</artifactId>
-        <version>2.8.9</version>
-     </dependency>
-  </dependencies>
 
-  <build>
+ <build>
       <plugins>
         <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -70,6 +42,36 @@
      </plugins>
   </build>
 
+  <dependencies>
+      <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.13.1</version>
+      <scope>test</scope>
+    </dependency>
+  	<dependency>
+  		<groupId>commons-io</groupId>
+  		<artifactId>commons-io</artifactId>
+  		<version>2.7</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.glassfish</groupId>
+  		<artifactId>javax.json</artifactId>
+  		<version>1.1.4</version>
+  	</dependency>
+  	<dependency>
+		<groupId>org.apache.commons</groupId>
+		<artifactId>commons-lang3</artifactId>
+		<version>3.8.1</version>
+  	</dependency>
+  	    <dependency>
+        <groupId>com.google.code.gson</groupId>
+        <artifactId>gson</artifactId>
+        <version>2.8.9</version>
+     </dependency>
+  </dependencies>
+
+ 
   <organization>
   	<name>KawanSoft</name>
   	<url>http://www.kawansoft.com</url>
@@ -115,8 +117,5 @@
   <description>The AceQL Java Client JDBC Driver allows to wrap the AceQL HTTP APIs and eliminates the tedious works of handling communications errors and parsing JSON results.
 
 Android and Java Desktop application developers can access remote SQL databases and/or SQL databases in the cloud by simply including standard JDBC calls in their code, just like they would for a local database.</description>
-    <properties>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-    </properties>
+
 </project>
