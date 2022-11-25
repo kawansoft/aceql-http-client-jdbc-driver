@@ -7,9 +7,9 @@
 
 # AceQL HTTP 
 
-## AceQL Client JDBC Driver v9.1 - User Guide
+## AceQL Client JDBC Driver v9.2 - User Guide
 
-## June 13, 2022
+## November 25, 2022
 
 <img src="https://docs.aceql.com/img/AceQL-Schema-min.jpg" alt="AceQL Draw"/>
 
@@ -85,7 +85,7 @@ The Client JDBC Driver version is compatible with AceQL HTTP server side v6.2+. 
 
 ### Main features
 
-| AceQL Client JDBC Driver v9.1<br>Main Features               |
+| AceQL Client JDBC Driver v9.2<br>Main Features               |
 | :----------------------------------------------------------- |
 | <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Works as a real [JDBC Driver](https://docs.oracle.com/javase/tutorial/jdbc/basics/connecting.html) <br/>Plug & play without editing your app source code. |
 | <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Main SQL types<br/>`Boolean`, `Integer`, `Short`, `Double`, `Float`, `BigDecimal`, `Long`, `String`, `Date`, `Time`, `Timestamp` |
@@ -115,7 +115,7 @@ The Client JDBC Driver version is compatible with AceQL HTTP server side v6.2+. 
 <dependency>
     <groupId>com.aceql</groupId>
     <artifactId>aceql-http-client-jdbc-driver</artifactId>
-    <version>9.1</version>
+    <version>9.2</version>
 </dependency>
 ```
 ### Single Jar 
@@ -173,7 +173,7 @@ Note that AceQL is optimized as much as possible:
 
 We will use the same `sampledb` database for all our code samples. 
 
-The schema is available here: [sampledb.txt](https://docs.aceql.com/rest/soft_java_client/9.1/src/sampledb.txt). 
+The schema is available here: [sampledb.txt](https://docs.aceql.com/rest/soft_java_client/9.2/src/sampledb.txt). 
 
 ## Connection creation
 
@@ -235,7 +235,7 @@ Sample code:
 
 ## Handling Exceptions
 
-Except for `NullPointerException`, exceptions thrown are always an instance of [AceQLException.](https://docs.aceql.com/rest/soft_java_client/9.1/javadoc/com/aceql/jdbc/commons/AceQLConnection.html)
+Except for `NullPointerException`, exceptions thrown are always an instance of [AceQLException.](https://docs.aceql.com/rest/soft_java_client/9.2/javadoc/com/aceql/jdbc/commons/AceQLConnection.html)
 
 The `AceQLException` contains 5 pieces of information :
 
@@ -483,8 +483,8 @@ The atomic variables values will be shared by AceQL download/upload processes an
 
 The values are to be initialized and passed to `AceQLConnection` before the JDBC actions with the static setters:
 
-- [AceQLConnection.setProgress(AtomicInteger progress)](https://docs.aceql.com/rest/soft_java_client/9.1/javadoc/com/aceql/jdbc/commons/AceQLConnection.html#setProgress(java.util.concurrent.atomic.AtomicInteger))
-- [AceQLConnection.setCancelled(AtomicBoolean cancelled)](https://docs.aceql.com/rest/soft_java_client/9.1/javadoc/com/aceql/jdbc/commons/AceQLConnection.html#setCancelled(java.util.concurrent.atomic.AtomicBoolean))
+- [AceQLConnection.setProgress(AtomicInteger progress)](https://docs.aceql.com/rest/soft_java_client/9.2/javadoc/com/aceql/jdbc/commons/AceQLConnection.html#setProgress(java.util.concurrent.atomic.AtomicInteger))
+- [AceQLConnection.setCancelled(AtomicBoolean cancelled)](https://docs.aceql.com/rest/soft_java_client/9.2/javadoc/com/aceql/jdbc/commons/AceQLConnection.html#setCancelled(java.util.concurrent.atomic.AtomicBoolean))
 
 
 Values will then be updated and read:
@@ -607,7 +607,7 @@ Assuming hat you want to display a progress indicator using `SwingWorker`, you w
 	}
 ```
 
-A complete example is available in [SqlProgressMonitorDemo.java](https://docs.aceql.com/rest/soft_java_client/9.1/src/SqlProgressMonitorDemo.java) and [BlobExample.java](https://docs.aceql.com/rest/soft_java_client/9.1/src/BlobExample.java) 
+A complete example is available in [SqlProgressMonitorDemo.java](https://docs.aceql.com/rest/soft_java_client/9.2/src/SqlProgressMonitorDemo.java) and [BlobExample.java](https://docs.aceql.com/rest/soft_java_client/9.2/src/BlobExample.java) 
 
 ## HTTP session options 
 
@@ -639,18 +639,18 @@ First step is to get an instance of `RemoteDatabaseMetaData`:
 
 ### Downloading database schema into a file
 
-Downloading a schema into a Java `File` is done through the method. See the `RemoteDatabaseMetaData` [javadoc](https://docs.aceql.com/rest/soft_java_client/9.1/javadoc/com/aceql/jdbc/commons/metadata/RemoteDatabaseMetaData.html).
+Downloading a schema into a Java `File` is done through the method. See the `RemoteDatabaseMetaData` [javadoc](https://docs.aceql.com/rest/soft_java_client/9.2/javadoc/com/aceql/jdbc/commons/metadata/RemoteDatabaseMetaData.html).
 
 ```java
     File file = new File("db_schema.out.html");
     remoteDatabaseMetaData.dbSchemaDownload(file);
 ```
 
-See an example of the built HTML schema:  [db_schema.out.html](https://docs.aceql.com/rest/soft_java_client/9.1/src/db_schema.out.html)
+See an example of the built HTML schema:  [db_schema.out.html](https://docs.aceql.com/rest/soft_java_client/9.2/src/db_schema.out.html)
 
 ### Accessing remote database main properties
 
-The [JdbcDatabaseMetaData](https://docs.aceql.com/rest/soft_java_client/9.1/javadoc/com/aceql/jdbc/commons/metadata/JdbcDatabaseMetaData.html) class wraps instance the main value retrieved by a remote JDBC call to `Connection.getMetaData`(): 
+The [JdbcDatabaseMetaData](https://docs.aceql.com/rest/soft_java_client/9.2/javadoc/com/aceql/jdbc/commons/metadata/JdbcDatabaseMetaData.html) class wraps instance the main value retrieved by a remote JDBC call to `Connection.getMetaData`(): 
 
 ```java
     JdbcDatabaseMetaData jdbcDatabaseMetaData = remoteDatabaseMetaData.getJdbcDatabaseMetaData();
@@ -661,7 +661,7 @@ The [JdbcDatabaseMetaData](https://docs.aceql.com/rest/soft_java_client/9.1/java
 
 ### Getting Details of Tables and Columns
 
-See the [javadoc](https://docs.aceql.com/rest/soft_java_client/9.1/javadoc/com/aceql/jdbc/commons/metadata/package-summary.html) of the `com.aceql.jdbc.commons.metadata` package: 
+See the [javadoc](https://docs.aceql.com/rest/soft_java_client/9.2/javadoc/com/aceql/jdbc/commons/metadata/package-summary.html) of the `com.aceql.jdbc.commons.metadata` package: 
 
 ```java
     System.out.println("Get the table names:");
@@ -685,7 +685,7 @@ See the [javadoc](https://docs.aceql.com/rest/soft_java_client/9.1/javadoc/com/a
 
 ### Code Sample
 
-Standard JDBC [DatabaseMetadata](https://docs.aceql.com/rest/soft_java_client/9.1/javadoc/com/aceql/jdbc/commons/metadata/JdbcDatabaseMetaData.html)  and [ResultSetMetadata](https://docs.oracle.com/javase/8/docs/api/java/sql/ResultSetMetaData.html) calls are fully supported.
+Standard JDBC [DatabaseMetadata](https://docs.aceql.com/rest/soft_java_client/9.2/javadoc/com/aceql/jdbc/commons/metadata/JdbcDatabaseMetaData.html)  and [ResultSetMetadata](https://docs.oracle.com/javase/8/docs/api/java/sql/ResultSetMetaData.html) calls are fully supported.
 
 `DatabaseMetaData` example:
 
@@ -811,7 +811,6 @@ The following JDBC features are not supported nor implemented in this version. T
 
 
 - `ROWID` are not supported.
-- SELECT calls are not supported for Oracle Database stored procedures.  They will be supported in a November 2022 subsequent version.
 - Auto-generated keys are not supported.
 - Some Advanced data types:   `Struct`, `NClob`, `SQLXML` and `Typemaps`.
 - Some Statement methods: `getWarnings`, `isPoolable`/`setPoolable`, `getMoreResults`, `setCursorName`.
