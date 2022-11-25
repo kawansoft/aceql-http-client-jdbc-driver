@@ -19,11 +19,11 @@
 package com.aceql.jdbc.commons;
 
 /**
- * Contains health check info about running AceQL HTTP on remote server.
+ * Contains health check Java memory info of the running AceQL HTTP remote server instance.
  * @author Nicolas de Pomereu
  *
  */
-public class HealthCheckInfo {
+public class ServerMemoryInfo {
 
     private long initMemory = -1;
     private long usedMemory = -1;
@@ -53,33 +53,61 @@ public class HealthCheckInfo {
      void setCommittedMemory(long committedMemory) {
         this.committedMemory = committedMemory;
     }
-    /**
-     * @return the initMemory
+     
+     /**
+     * Returns the amount of memory in bytes that the Java virtual machine
+     * initially requests from the operating system for memory management.
+     * This method returns <tt>-1</tt> if the initial memory size is undefined.
+     *
+     * @return the initial size of memory in bytes;
      */
     public long getInitMemory() {
         return initMemory;
     }
+    
     /**
-     * @return the usedMemory
+     * Returns the amount of used memory in bytes.
+     *
+     * @return the amount of used memory in bytes.
+     *
      */
     public long getUsedMemory() {
         return usedMemory;
     }
+    
     /**
-     * @return the maxMemory
+     * Returns the maximum amount of memory in bytes that can be
+     * used for memory management.  This method returns <tt>-1</tt>
+     * if the maximum memory size is undefined.
+     *
+     * <p> This amount of memory is not guaranteed to be available
+     * for memory management if it is greater than the amount of
+     * committed memory.  The Java virtual machine may fail to allocate
+     * memory even if the amount of used memory does not exceed this
+     * maximum size.
+     *
+     * @return the maximum amount of memory in bytes;
+     * <tt>-1</tt> if undefined.
      */
     public long getMaxMemory() {
         return maxMemory;
     }
+    
     /**
-     * @return the committedMemory
+     * Returns the amount of memory in bytes that is committed for
+     * the Java virtual machine to use.  This amount of memory is
+     * guaranteed for the Java virtual machine to use.
+     *
+     * @return the amount of committed memory in bytes.
+     *
      */
+    
     public long getCommittedMemory() {
         return committedMemory;
     }
     @Override
     public String toString() {
-	return "HealthCheckInfo [initMemory=" + initMemory + ", usedMemory=" + usedMemory + ", maxMemory=" + maxMemory
+	return "ServerMemoryInfo [initMemory=" + initMemory + ", usedMemory=" + usedMemory + ", maxMemory=" + maxMemory
 		+ ", committedMemory=" + committedMemory + "]";
     }
     

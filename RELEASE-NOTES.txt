@@ -18,6 +18,16 @@ The AceQL Client JDBC Driver is licensed under the Apache 2.0
 License.
 
 
+AceQL Client JDBC Driver - Version 9.2 - 25-Nov-2022
+----------------------------------------------------
+
+What's new:
+- Oracle stored procedures with SELECT output are now 
+  supported. See User Guide.
+- The new HealthCheck.getServerMemoryInfo() API allows
+  now to gather health check info on the server. 
+
+
 AceQL Client JDBC Driver - Version 9.1 - 13-Jun-2022
 ----------------------------------------------------
 

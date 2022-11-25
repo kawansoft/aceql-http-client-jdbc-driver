@@ -112,12 +112,12 @@ public class HealthCheck {
     }
 
     /**
-     * Gets health check info from server
+     * Gets health check memory info from server
      * 
-     * @return health check info from server
+     * @return health check memory info from server
      * @throws SQLException if any SQL Exception occurs
      */
-    public HealthCheckInfo getHealthCheckInfo() throws SQLException {
+    public ServerMemoryInfo getServerMemoryInfo() throws SQLException {
 	
 	if (!AceQLConnectionUtil.isHealthCheckInfoSupported(connection)) {
 	    throw new SQLException("AceQL Server version must be >= " + AceQLConnectionUtil.GET_HEALTH_CHECK_INFO_MIN_SERVER_VERSION
@@ -127,21 +127,21 @@ public class HealthCheck {
 	AceQLHttpApi aceQLHttpApi = connection.aceQLHttpApi;
 	HttpManager httpManager = aceQLHttpApi.getHttpManager();
 
-	HealthCheckInfo healthCheckInfo = new HealthCheckInfo();
+	ServerMemoryInfo serverMemoryInfo = new ServerMemoryInfo();
 
 	try {
 	    HealthCheckInfoDto healthCheckInfoDto = aceQLHttpApi.getHealthCheckInfo();
 
-	    healthCheckInfo.setCommittedMemory(healthCheckInfoDto.getCommittedMemory());
-	    healthCheckInfo.setInitMemory(healthCheckInfoDto.getInitMemory());
-	    healthCheckInfo.setMaxMemory(healthCheckInfoDto.getMaxMemory());
-	    healthCheckInfo.setUsedMemory(healthCheckInfoDto.getUsedMemory());
+	    serverMemoryInfo.setCommittedMemory(healthCheckInfoDto.getCommittedMemory());
+	    serverMemoryInfo.setInitMemory(healthCheckInfoDto.getInitMemory());
+	    serverMemoryInfo.setMaxMemory(healthCheckInfoDto.getMaxMemory());
+	    serverMemoryInfo.setUsedMemory(healthCheckInfoDto.getUsedMemory());
 
 	} catch (AceQLException e) {
 	    this.aceQLException = new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
 	}
 
-	return healthCheckInfo;
+	return serverMemoryInfo;
 
     }
 
