@@ -24,7 +24,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.aceql.jdbc.commons.main.AceQLStatement;
-import com.aceql.jdbc.commons.test.connection.AceQLDriverLoader;
+import com.aceql.jdbc.commons.test.connection.FourDbConnections;
 
 /**
  *
@@ -38,7 +38,7 @@ public class OracleStoredProcedureTest {
      */
     public static void main(String[] args) throws Exception {
 
-	Connection connection = AceQLDriverLoader.getConnection("http://localhost:9090/aceql", "XE", "user1", "password1".toCharArray());
+	Connection connection = new FourDbConnections(FourDbConnections.DEFAULT_SERVER_URL).getOracleConnection();
 	
 	if (connection == null) {
 	    throw new IllegalArgumentException(
@@ -52,8 +52,8 @@ public class OracleStoredProcedureTest {
 	
 	AceQLStatement.DUMP_FILE_DEBUG = false;
 	
-	// AceQL Oracle JDBC syntax : call of a stored procedure
-	// that returns a SELECT result
+	// Calling the ORACLE_SELECT_CUSTOMER stored procedure.
+	// JDBC syntax using the AceQL JDBC Driver
 	CallableStatement callableStatement 
 		= connection.prepareCall("{ call ORACLE_SELECT_CUSTOMER(?, ?) }");
 	callableStatement.setInt(1, 2);

@@ -27,12 +27,11 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.Objects;
 
-import com.aceql.jdbc.commons.test.connection.ConnectionBuilder;
+import com.aceql.jdbc.commons.test.connection.FourDbConnections;
 
 public class SqlServerUtf8Test {
 
     public SqlServerUtf8Test() {
-	// TODO Auto-generated constructor stub Value = "à¤Ÿà¥‡à¤¸à¥�à¤Ÿ"
 
     }
 
@@ -42,7 +41,7 @@ public class SqlServerUtf8Test {
     public static void main(String[] args) throws Exception {
 	
 	System.out.println(new Date() + " Insert Begin...");
-	Connection connection = ConnectionBuilder.createOnConfig();
+	Connection connection = new FourDbConnections(FourDbConnections.DEFAULT_SERVER_URL).getSqlServerConnection();
 	
 	deleteTest1(connection);
 	
@@ -53,7 +52,7 @@ public class SqlServerUtf8Test {
     public static void testSqlServerSoredProcedure(Connection connection) throws SQLException {
 	
 	System.out.println(new Date() + " Stored Procedure Begin...");
-	String parm1 = "टेस�?ट";
+	String parm1 = "Andr�";
 	
 	CallableStatement callableStatement = connection.prepareCall("{call spAddNvarchar(?) }");
 	callableStatement.setString(1, parm1);
@@ -77,7 +76,7 @@ public class SqlServerUtf8Test {
 	String sql = "insert into test1 values (?)";
 	PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
-	String parm1 = "टेस�?ट";
+	String parm1 = "Andr�";
 	int j = 1;
 	preparedStatement.setString(j, parm1);
 	preparedStatement.executeUpdate();

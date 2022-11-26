@@ -27,40 +27,52 @@ import java.sql.Connection;
  */
 public class FourDbConnections {
 
-    private static String serverUrl = "http://localhost:9091/aceql";
-    private static String username = "user1";
-    private static String password= "password1";
+    public static final String DEFAULT_SERVER_URL = "http://localhost:9090/aceql";
+    
+    private String serverUrl = "http://localhost:9091/aceql";
+    private String username = "user1";
+    private String password= "password1";
 
-    private static String databasePostgreSQL= "sampledb";
-    private static String databaseMySQL= "sampledb_mysql";
-    private static String databaseSqlServer= "sampledb_sql_server";
-    private static String databaseOracle= "XE";
+    private String databasePostgreSQL= "sampledb";
+    private String databaseMySQL= "sampledb_mysql";
+    private String databaseSqlServer= "sampledb_sql_server";
+    private String databaseOracle= "XE";
 
 
     /**
-     * Static class
+     * Default constructor will points to http://localhost:9091/aceql serverUrl
      */
-    protected FourDbConnections() {
+    public FourDbConnections() {
 
     }
+    
+    /**
+     * Constructor that allows to pass the AceQL server URL
+     * @param serverUrl AceQL server URL
+     */
+    public FourDbConnections(String serverUrl) {
+	super();
+	this.serverUrl = serverUrl;
+    }
 
-    public static Connection getPostgreSQLConnection() throws Exception {
+
+
+    public Connection getPostgreSQLConnection() throws Exception {
 	Connection connection = AceQLDriverLoader.getConnection(serverUrl, databasePostgreSQL, username, password.toCharArray());
 	return connection;
     }
 
-    public static Connection getMySQLConnection() throws Exception {
+    public  Connection getMySQLConnection() throws Exception {
 	Connection connection = AceQLDriverLoader.getConnection(serverUrl, databaseMySQL, username, password.toCharArray());
 	return connection;
     }
 
-    public static Connection getSqlServerConnection() throws Exception {
+    public Connection getSqlServerConnection() throws Exception {
 	Connection connection = AceQLDriverLoader.getConnection(serverUrl, databaseSqlServer, username, password.toCharArray());
 	return connection;
     }
 
-    public static Connection getOracleConnection() throws Exception {
-	
+    public  Connection getOracleConnection() throws Exception {
 	Connection connection = AceQLDriverLoader.getConnection(serverUrl, databaseOracle, username, password.toCharArray());
 	return connection;
     }

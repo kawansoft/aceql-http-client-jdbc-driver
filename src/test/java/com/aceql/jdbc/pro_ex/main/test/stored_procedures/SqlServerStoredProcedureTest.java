@@ -25,7 +25,7 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.Objects;
 
-import com.aceql.jdbc.commons.test.connection.AceQLDriverLoader;
+import com.aceql.jdbc.commons.test.connection.FourDbConnections;
 
 /**
  * @author Nicolas de Pomereu
@@ -38,7 +38,7 @@ public class SqlServerStoredProcedureTest {
      */
     public static void main(String[] args) throws Exception {
 
-	Connection connection = AceQLDriverLoader.getConnection("http://localhost:9090/aceql", "XE", "user1", "password1".toCharArray());
+	Connection connection = new FourDbConnections(FourDbConnections.DEFAULT_SERVER_URL).getSqlServerConnection();
 
 	if (connection == null) {
 	    Objects.requireNonNull(connection, "connection can not be null!");

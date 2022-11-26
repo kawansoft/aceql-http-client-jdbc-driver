@@ -25,7 +25,7 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.Objects;
 
-import com.aceql.jdbc.commons.test.connection.ConnectionBuilder;
+import com.aceql.jdbc.commons.test.connection.FourDbConnections;
 
 /**
  *
@@ -39,9 +39,7 @@ public class MySqlStoredProcedureTest {
      */
     public static void main(String[] args) throws Exception {
 
-	//AceQLConnection.setTraceOn(true);
-
-	Connection connection = ConnectionBuilder.createOnConfig();
+	Connection connection = new FourDbConnections(FourDbConnections.DEFAULT_SERVER_URL).getMySQLConnection();
 
 	if (connection == null) {
 	    Objects.requireNonNull(connection, "connection can not be null!");

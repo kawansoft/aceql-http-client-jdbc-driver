@@ -13,49 +13,50 @@
 
 <img src="https://docs.aceql.com/img/AceQL-Schema-min.jpg" alt="AceQL Draw"/>
 
- * [Fundamentals](#fundamentals)
-      * [Technical operating environment](#technical-operating-environment)
-      * [AceQL Server side compatibility](#aceql-server-side-compatibility)
-         * [Main features](#main-features)
-      * [Installation](#installation)
-         * [Maven](#maven)
-         * [Single Jar](#single-jar)
-      * [Android Project settings](#android-project-settings)
-      * [Data transport](#data-transport)
-         * [Transport format](#transport-format)
-         * [Content streaming and memory management](#content-streaming-and-memory-management)
-      * [Best practices for fast response time](#best-practices-for-fast-response-time)
-   * [Using the AceQL Client JDBC Driver](#using-the-aceql-client-jdbc-driver)
-      * [Connection creation](#connection-creation)
-      * [Using a Proxy](#using-a-proxy)
-      * [Handling Exceptions](#handling-exceptions)
-         * [The error type](#the-error-type)
-         * [Most common AceQL Server messages](#most-common-aceql-server-messages)
-         * [HTTP Status Codes](#http-status-codes)
-      * [Data types](#data-types)
-      * [SQL Transactions and Connections modifiers](#sql-transactions-and-connections-modifiers)
-      * [Batch management](#batch-management)
-      * [BLOB management](#blob-management)
-         * [Standard syntax](#standard-syntax)
-            * [BLOB creation with standard syntax](#blob-creation-with-standard-syntax)
-            * [BLOB reading with standard syntax](#blob-reading-with-standard-syntax)
-         * [Advanced syntax with streaming techniques](#advanced-syntax-with-streaming-techniques)
-            * [BLOB creation with stream syntax](#blob-creation-with-stream-syntax)
-            * [BLOB reading with stream syntax](#blob-reading-with-stream-syntax)
-            * [Using Progress Bars with Blobs](#using-progress-bars-with-blobs)
-      * [HTTP session options](#http-session-options)
-      * [Using the AceQL Metadata Query API](#using-the-aceql-metadata-query-api)
-         * [Downloading database schema into a file](#downloading-database-schema-into-a-file)
-         * [Accessing remote database main properties](#accessing-remote-database-main-properties)
-         * [Getting Details of Tables and Columns](#getting-details-of-tables-and-columns)
-      * [Using the native JDBC Metadata Query API](#using-the-native-jdbc-metadata-query-api)
-         * [Code Sample](#code-sample)
-         * [Using Database viewers with the AceQL Client JDBC Driver](#using-database-viewers-with-the-aceql-client-jdbc-driver)
-         * [Disabling JDBC MetaData calls when not required](#disabling-jdbc-metadata-calls-when-not-required)
-      * [Using outer authentication without a password and with an AceQL Session ID](#using-outer-authentication-without-a-password-and-with-an-aceql-session-id)
-      * [Passing request headers for validation on server side](#passing-request-headers-for-validation-on-server-side)
-   * [Limitations](#limitations)
-
+* [Fundamentals](#fundamentals)
+   * [Technical operating environment](#technical-operating-environment)
+   * [AceQL Server side compatibility](#aceql-server-side-compatibility)
+      * [Main features](#main-features)
+   * [Installation](#installation)
+      * [Maven](#maven)
+      * [Single Jar](#single-jar)
+   * [Android Project settings](#android-project-settings)
+   * [Data transport](#data-transport)
+      * [Transport format](#transport-format)
+      * [Content streaming and memory management](#content-streaming-and-memory-management)
+   * [Best practices for fast response time](#best-practices-for-fast-response-time)
+* [Using the AceQL Client JDBC Driver](#using-the-aceql-client-jdbc-driver)
+   * [Connection creation](#connection-creation)
+   * [Using a Proxy](#using-a-proxy)
+   * [Handling Exceptions](#handling-exceptions)
+      * [The error type](#the-error-type)
+      * [Most common AceQL Server messages](#most-common-aceql-server-messages)
+      * [HTTP Status Codes](#http-status-codes)
+   * [Data types](#data-types)
+   * [SQL Transactions and Connections modifiers](#sql-transactions-and-connections-modifiers)
+   * [Using Stored Procedures](#using-stored-procedures)
+      * [Using Oracle Database stored procedures with SELECT calls](#using-oracle-database-stored-procedures-with-select-calls)
+   * [Batch management](#batch-management)
+   * [BLOB management](#blob-management)
+      * [Standard syntax](#standard-syntax)
+         * [BLOB creation with standard syntax](#blob-creation-with-standard-syntax)
+         * [BLOB reading with standard syntax](#blob-reading-with-standard-syntax)
+      * [Advanced syntax with streaming techniques](#advanced-syntax-with-streaming-techniques)
+         * [BLOB creation with stream syntax](#blob-creation-with-stream-syntax)
+         * [BLOB reading with stream syntax](#blob-reading-with-stream-syntax)
+         * [Using Progress Bars with Blobs](#using-progress-bars-with-blobs)
+   * [HTTP session options](#http-session-options)
+   * [Using the AceQL Metadata Query API](#using-the-aceql-metadata-query-api)
+      * [Downloading database schema into a file](#downloading-database-schema-into-a-file)
+      * [Accessing remote database main properties](#accessing-remote-database-main-properties)
+      * [Getting Details of Tables and Columns](#getting-details-of-tables-and-columns)
+   * [Using the native JDBC Metadata Query API](#using-the-native-jdbc-metadata-query-api)
+      * [Code Sample](#code-sample)
+      * [Using Database viewers with the AceQL Client JDBC Driver](#using-database-viewers-with-the-aceql-client-jdbc-driver)
+      * [Disabling JDBC MetaData calls when not required](#disabling-jdbc-metadata-calls-when-not-required)
+   * [Using outer authentication without a password and with an AceQL Session ID](#using-outer-authentication-without-a-password-and-with-an-aceql-session-id)
+   * [Passing request headers for validation on server side](#passing-request-headers-for-validation-on-server-side)
+* [Limitations](#limitations)
 
 
 # Fundamentals 
@@ -98,14 +99,11 @@ The Client JDBC Driver version is compatible with AceQL HTTP server side v6.2+. 
 | <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;[BLOB](https://docs.oracle.com/javase/tutorial/jdbc/basics/blob.html) Type - Size up to 4GB |
 | <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;IBM DB2 Database |
 | <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;[Array](https://docs.oracle.com/en/java/javase/11/docs/api/java.sql/java/sql/Array.html) Type |
-| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;[Stored Procedures *](https://docs.oracle.com/javase/tutorial/jdbc/basics/storedprocedures.html) |
+| <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;[Stored Procedures](https://docs.oracle.com/javase/tutorial/jdbc/basics/storedprocedures.html) |
 | <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;JDBC API Metadata<br/>`Connection.getMetadata()`, `ResultSet.getMetaData()` |
 | <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;JDBC Clients Tools & GUI <br/>[DBeaver](https://dbeaver.io/), [DbVisualizer](https://www.dbvis.com/), [JetBrains DataGrip](https://www.jetbrains.com/datagrip/), [RazorSQL](https://razorsql.com/), [SQuirreL SQL](http://squirrel-sql.sourceforge.net/) |
 | <img src="https://download.aceql.com/images/check_20.png" alt="check!"/> [Allows outer authentication without a password](#using-outer-authentication-without-a-password-and-with-an-aceql-session-id) |
 | <img src="https://download.aceql.com/images/check_20.png" alt="check!"/> [Allows passing request headers for validation on server](#passing-request-headers-for-validation-on-server-side) |
-
-\* *Note that  in this version SELECT calls are not supported for Oracle Database stored procedures.*
-*They will be supported in a November 2022 subsequent version.*
 
 ## Installation
 
@@ -318,6 +316,61 @@ The following Connections modifiers calls are supported in this version:
 - `Connection.setTransactionIsolation(int level)`
 
 - `Connection.setReadOnly(boolean readOnly)`
+
+## Using Stored Procedures
+
+Stored procedures are supported through the native unmodified JDBC syntax. Database product dialects are not supported, as the AceQL JDBC Driver uses only the common JDBC syntax for stored procedures.
+
+### Using Oracle Database stored procedures with SELECT calls
+
+Oracle Database stored procedures with SELECT calls are supported starting AceQL HTTP server version 12.0.
+
+Assuming this Oracle Database stored procedure that executes a SELECT call:
+
+```plsql
+-- ORACLE_SELECT_CUSTOMER stored procedure
+-- Executes a SELECT on customer table with 
+-- customer_id as IN parameter
+create or replace PROCEDURE ORACLE_SELECT_CUSTOMER 
+    (p_customer_id NUMBER, p_rc OUT sys_refcursor) AS 
+BEGIN
+    OPEN p_rc
+    For select customer_id from customer where customer_id > p_customer_id;
+END ORACLE_SELECT_CUSTOMER;
+```
+
+The JDBC syntax with a Connection using the Oracle JDBC Driver is:
+
+```java
+// Calling the ORACLE_SELECT_CUSTOMER store procedure
+// Native Oracle JDBC syntax using an Oracle JDBC Driver:
+CallableStatement callableStatement 
+    = connection.prepareCall("{ call ORACLE_SELECT_CUSTOMER(?, ?) }");
+callableStatement.setInt(1, 2);
+callableStatement.registerOutParameter(2, OracleTypes.CURSOR);
+callableStatement.executeQuery();
+
+ResultSet rs= (ResultSet) callableStatement.getObject(2);
+
+while (rs.next()) {
+    System.out.println(rs.getInt(1));
+}
+```
+
+But the JDBC syntax with a Connection using the AceQL JDBC Driver is simplified and does not use `OracleTypes.CURSOR` nor the `(ResultSet) callableStatement.getObject()` cast:
+
+```java
+// Calling the ORACLE_SELECT_CUSTOMER stored procedure.
+// JDBC syntax using the AceQL JDBC Driver
+CallableStatement callableStatement 
+    = connection.prepareCall("{ call ORACLE_SELECT_CUSTOMER(?, ?) }");
+callableStatement.setInt(1, 2);
+ResultSet rs = callableStatement.executeQuery();
+
+while (rs.next()) {
+    System.out.println(rs.getInt(1));
+}
+```
 
 ## Batch management
 

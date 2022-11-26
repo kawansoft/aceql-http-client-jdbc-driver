@@ -79,7 +79,7 @@ public class AceQLConnectionTestFourDbs {
      */
     public static void testPostgreSQL()
 	    throws Exception  {
-	Connection connection = FourDbConnections.getPostgreSQLConnection();
+	Connection connection = new FourDbConnections().getPostgreSQLConnection();
 	AceQLConnectionTest.doItPassConnection(connection);
     }
 
@@ -93,7 +93,7 @@ public class AceQLConnectionTestFourDbs {
      */
     public static void testMySQL()
 	    throws Exception {
-	Connection connection = FourDbConnections.getMySQLConnection();
+	Connection connection = new FourDbConnections().getMySQLConnection();
 	AceQLConnectionTest.doItPassConnection(connection);
     }
 
@@ -107,7 +107,7 @@ public class AceQLConnectionTestFourDbs {
      */
     public static void testSqlServer()
 	    throws Exception {
-	Connection connection = FourDbConnections.getSqlServerConnection();
+	Connection connection = new FourDbConnections().getSqlServerConnection();
 	AceQLConnectionTest.doItPassConnection(connection);
     }
 
@@ -122,7 +122,7 @@ public class AceQLConnectionTestFourDbs {
      */
     public static void testOracle()
 	    throws Exception{
-	Connection connection = FourDbConnections.getOracleConnection();
+	Connection connection = new FourDbConnections().getOracleConnection();
 	AceQLConnectionTest.doItPassConnection(connection);
 	connection.close();
     }
