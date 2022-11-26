@@ -26,6 +26,8 @@ What's new:
   supported. See User Guide.
 - The new HealthCheck.getServerMemoryInfo() API allows
   gathering memory info of the AceQL server running instance. 
+  See Javadoc at:
+  https://docs.aceql.com/rest/soft_java_client/9.1/javadoc/.
 
 
 AceQL Client JDBC Driver - Version 9.1 - 13-Jun-2022
