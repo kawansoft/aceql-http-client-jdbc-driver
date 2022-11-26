@@ -59,7 +59,7 @@ public class ServerMemoryInfo {
      * initially requests from the operating system for memory management.
      * This method returns <tt>-1</tt> if the initial memory size is undefined.
      *
-     * @return the initial size of memory in bytes;
+     * @return the initial size of memory in bytes.
      */
     public long getInitMemory() {
         return initMemory;
