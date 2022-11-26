@@ -22,7 +22,7 @@ AceQL Client JDBC Driver - Version 9.2 - 25-Nov-2022
 ----------------------------------------------------
 
 What's new:
-- Oracle stored procedures with SELECT output are now 
+- Oracle stored procedures with SELECT calls are now 
   supported. See User Guide.
 - The new HealthCheck.getServerMemoryInfo() API allows
   gathering memory info of the AceQL server running instance. 
