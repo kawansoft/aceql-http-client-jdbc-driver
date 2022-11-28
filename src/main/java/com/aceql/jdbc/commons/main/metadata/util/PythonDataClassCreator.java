@@ -63,8 +63,16 @@ public class PythonDataClassCreator {
 	System.out.println(PythonDataClassUtil.getTimestamp() + " Begin...");
 	boolean printHeader = true;
 
+	if (args.length != 1) {
+	    throw new IllegalArgumentException("Pass DTO class name as args.");
+	}
+	
+	String className = args[0];
+	Class<?> clazz= Class.forName(className);
+	
 	List<Class<?>> classes = new ArrayList<Class<?>>();
-	classes.add(JdbcDatabaseMetaData.class);
+	classes.add(clazz);
+	//classes.add(JdbcDatabaseMetaData.class);
 	
 	PythonDataClassCreator pythonDataClassCreator = new PythonDataClassCreator();
 	pythonDataClassCreator.generatePythonClasses(printHeader, classes);
