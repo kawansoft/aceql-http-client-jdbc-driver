@@ -118,4 +118,10 @@
 
 Android and Java Desktop application developers can access remote SQL databases and/or SQL databases in the cloud by simply including standard JDBC calls in their code, just like they would for a local database.</description>
 
+<!-- Force Eclipse and Maven to use a Java 8 JDK compiler-->
+<properties>
+  <maven.compiler.target>1.8</maven.compiler.target>
+  <maven.compiler.source>1.8</maven.compiler.source>
+</properties>
+
 </project>
