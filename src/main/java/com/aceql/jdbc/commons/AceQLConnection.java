@@ -148,7 +148,7 @@ import com.aceql.jdbc.driver.free.AceQLDriver;
  * </pre>
  *
  * </blockquote> See the source code of <a href=
- * "https://docs.aceql.com/rest/soft_java_client/9.2/src/SqlProgressMonitorDemo.java"
+ * "https://docs.aceql.com/rest/soft_java_client/9.3/src/SqlProgressMonitorDemo.java"
  * >SqlProgressMonitorDemo.java</a> that demonstrates the use of atomic
  * variables when inserting a Blob. <br>
  * <br>
@@ -649,12 +649,6 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      * @throws SQLException if any Exception occurs
      */
     public DatabaseInfo getDatabaseInfo() throws SQLException {
-	
-	if (!AceQLConnectionUtil.isGetDatabaseInfoSupported(this)) {
-	    throw new SQLException("AceQL Server version must be >= " + AceQLConnectionUtil.GET_DATABASE_INFO_MIN_SERVER_VERSION
-		    + " in order to call getDatabaseInfo().");
-	}
-	
 	DatabaseInfo databaseInfo = InternalWrapper.databaseInfoBuilder(aceQLHttpApi);
 	return databaseInfo;
     }
@@ -666,12 +660,6 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
      * @throws SQLException if any Exception occurs
      */
     public LimitsInfo getLimitsInfo() throws SQLException {
-	
-	if (!AceQLConnectionUtil.isGetDatabaseInfoSupported(this)) {
-	    throw new SQLException("AceQL Server version must be >= " + AceQLConnectionUtil.GET_LIMITS_INFO_MIN_SERVER_VERSION
-		    + " in order to call getLimitsInfo().");
-	}
-	
 	LimitsInfo limitsInfo = InternalWrapper.limitsInfoBuilder(aceQLHttpApi);
 	return limitsInfo;
     }

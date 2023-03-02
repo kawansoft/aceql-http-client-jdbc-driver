@@ -9,7 +9,7 @@
 
 ## AceQL Client JDBC Driver v9.3 - User Guide
 
-## February 24, 2023
+## March 2, 2023
 
 <img src="https://docs.aceql.com/img/AceQL-Schema-min.jpg" alt="AceQL Draw"/>
 
@@ -82,14 +82,7 @@ The only required third party installation is a recent JVM:
 
 ## AceQL Server side compatibility
 
-The Client JDBC Driver version is compatible with AceQL HTTP server side v6.2+.  
-
-But the following features require AceQL HTTP server side v12.2+:
-
-- Stored Procedures Calls.
-- Batch management.
-- Remote database metadata info fetch.
-- Server health info & limits info.
+The Client JDBC Driver version is compatible with AceQL HTTP server side v12.2+  
 
 ### Main features
 

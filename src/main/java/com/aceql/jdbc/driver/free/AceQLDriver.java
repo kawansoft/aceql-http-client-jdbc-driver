@@ -42,6 +42,7 @@ import com.aceql.jdbc.commons.ConnectionInfo;
 import com.aceql.jdbc.commons.InternalWrapper;
 import com.aceql.jdbc.commons.driver.util.DriverPropertyInfoBuilder;
 import com.aceql.jdbc.commons.driver.util.DriverUtil;
+import com.aceql.jdbc.commons.main.util.AceQLConnectionUtil;
 import com.aceql.jdbc.commons.main.util.framework.FrameworkDebug;
 import com.aceql.jdbc.commons.main.util.framework.JdbcUrlHeader;
 import com.aceql.jdbc.commons.main.util.framework.Tag;
@@ -266,6 +267,12 @@ final public class AceQLDriver implements java.sql.Driver {
 		resultSetMetaDataPolicy, requestProperties, clobReadCharset, clobWriteCharset);
 	
 	AceQLConnection connection = InternalWrapper.connectionBuilder(connectionInfo);
+	
+	if (!AceQLConnectionUtil.isVersion12_2OrHigher(connection)) {
+	    throw new SQLException("AceQL Server version must be >= " + AceQLConnectionUtil.SERVER_VERSION_12_2
+		    + " in order to use the AceQL Client JDBC Driver.");
+	}
+	
 	return connection;
     }
 

@@ -45,7 +45,6 @@ import com.aceql.jdbc.commons.AceQLException;
 import com.aceql.jdbc.commons.InternalWrapper;
 import com.aceql.jdbc.commons.main.abstracts.AbstractStatement;
 import com.aceql.jdbc.commons.main.http.AceQLHttpApi;
-import com.aceql.jdbc.commons.main.util.AceQLConnectionUtil;
 import com.aceql.jdbc.commons.main.util.AceQLStatementUtil;
 import com.aceql.jdbc.commons.main.util.SimpleTimer;
 import com.aceql.jdbc.commons.main.util.TimeUtil;
@@ -228,11 +227,6 @@ public class AceQLStatement extends AbstractStatement implements Statement {
     public int[] executeBatch() throws SQLException {
 	if (this.batchFileSqlOrders == null || ! this.batchFileSqlOrders.exists()) {
 	    throw new SQLException("Cannot call executeBatch: No SQL commands / addBatch(String sql) has never been called.");
-	}
-	
-	if (!AceQLConnectionUtil.isBatchSupported(this.aceQLConnection)) {
-	    throw new SQLException("AceQL Server version must be >= " + AceQLConnectionUtil.BATCH_MIN_SERVER_VERSION
-		    + " in order to call Statement.executeBatch().");
 	}
 
 	try {

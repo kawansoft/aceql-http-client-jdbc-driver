@@ -29,17 +29,19 @@ import com.aceql.jdbc.commons.main.metadata.dto.LimitsInfoDto;
  * client by the AceQL server.</li>
  * <li>maxBlobLength: the maximum length allowed for a Blob upload.</li>
  * </ul>
+ * 
  * @author Nicolas de Pomereu
- *
+ * @since 9.3
  */
 public class LimitsInfo {
 
     private long maxRows = 0;
     private long maxBlobLength = 0;
-    
+
     /**
      * Constructor.
-     * @param limitsInfoDto	the Limits DTO
+     * 
+     * @param limitsInfoDto the Limits DTO
      */
     public LimitsInfo(LimitsInfoDto limitsInfoDto) {
 	Objects.requireNonNull(limitsInfoDto, "limitsInfoDto cannot be null!");
@@ -60,16 +62,16 @@ public class LimitsInfo {
 
     /**
      * Gets the maximum length allowed for a Blob upload.
+     * 
      * @return the maximum length allowed for a Blob upload.
      */
     public long getMaxBlobLength() {
-        return maxBlobLength;
+	return maxBlobLength;
     }
 
     @Override
     public String toString() {
 	return "LimitsInfo [maxRows=" + maxRows + ", maxBlobLength=" + maxBlobLength + "]";
     }
-    
-   
+
 }

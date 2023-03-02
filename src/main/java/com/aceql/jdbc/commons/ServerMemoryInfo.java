@@ -21,7 +21,7 @@ package com.aceql.jdbc.commons;
 /**
  * Contains health check Java memory info of the AceQL server running instance. 
  * @author Nicolas de Pomereu
- *
+ * @since 9.2
  */
 public class ServerMemoryInfo {
 

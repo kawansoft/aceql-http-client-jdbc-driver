@@ -64,7 +64,6 @@ import com.aceql.jdbc.commons.main.batch.PrepStatementParamsHolder;
 import com.aceql.jdbc.commons.main.http.BlobUploader;
 import com.aceql.jdbc.commons.main.http.HttpManager;
 import com.aceql.jdbc.commons.main.metadata.util.GsonWsUtil;
-import com.aceql.jdbc.commons.main.util.AceQLConnectionUtil;
 import com.aceql.jdbc.commons.main.util.AceQLStatementUtil;
 import com.aceql.jdbc.commons.main.util.AceQLTypes;
 import com.aceql.jdbc.commons.main.util.framework.FrameworkDebug;
@@ -522,12 +521,7 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
 	if (this.batchFileParameters == null || !this.batchFileParameters.exists()) {
 	    throw new SQLException("Cannot call executeBatch: addBatch() has never been called.");
 	}
-
-	if (!AceQLConnectionUtil.isBatchSupported(super.aceQLConnection)) {
-	    throw new SQLException("AceQL Server version must be >= " + AceQLConnectionUtil.BATCH_MIN_SERVER_VERSION
-		    + " in order to call PreparedStatement.executeBatch().");
-	}
-
+	
 	int[] updateCountsArray = aceQLHttpApi.executePreparedStatementBatch(sql, batchFileParameters);
 	this.clearBatch();
 	return updateCountsArray;

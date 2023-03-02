@@ -242,6 +242,11 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
     @Override
     public boolean next() throws SQLException {
 
+	if (!AceQLConnectionUtil.isVersion12_2OrHigher(this.aceQLConnection)) {
+	    throw new SQLException("AceQL Server version must be >= " + AceQLConnectionUtil.SERVER_VERSION_12_2
+		    + " in order to use the AceQL Client JDBC Driver.");
+	}
+	
 	if (isClosed) {
 	    throw new SQLException("ResltSetWrapper is closed.");
 	}
@@ -388,14 +393,7 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
      */
 
     @Override
-    public ResultSetMetaData getMetaData() throws SQLException {
-
-	if (!AceQLConnectionUtil.isJdbcMetaDataSupported(this.aceQLConnection)) {
-	    throw new SQLException(
-		    "AceQL Server version must be >= " + AceQLConnectionUtil.META_DATA_CALLS_MIN_SERVER_VERSION
-			    + " in order to call ResultSetMetaData.getMetaData().");
-	}
-
+    public ResultSetMetaData getMetaData() throws SQLException {	
 	if (!this.aceQLHttpApi.isFillResultSetMetaData()) {
 	    throw new SQLException(Tag.PRODUCT + ". "
 		    + "Cannot get ResultSet.getMetaData(). Add to AceQL Driver the property resultSetMetaDataPolicy=on");
@@ -1078,11 +1076,6 @@ public class AceQLResultSet extends AbstractResultSet implements ResultSet, Clos
      */
     private Array getArrayFromValue(String value) throws SQLException {
 
-	if (!AceQLConnectionUtil.isJdbcMetaDataSupported(this.aceQLConnection)) {
-	    throw new SQLException("AceQL Server version must be >= "
-		    + AceQLConnectionUtil.META_DATA_CALLS_MIN_SERVER_VERSION + " in order to call getArray().");
-	}
-	
 	ArrayGetter arrayGetter = new ArrayGetter();
 	return arrayGetter.getArray(value);
 

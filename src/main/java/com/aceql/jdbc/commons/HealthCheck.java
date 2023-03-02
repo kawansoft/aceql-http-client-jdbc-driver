@@ -26,7 +26,6 @@ import com.aceql.jdbc.commons.main.http.AceQLHttpApi;
 import com.aceql.jdbc.commons.main.http.HttpManager;
 import com.aceql.jdbc.commons.main.http.ResultAnalyzer;
 import com.aceql.jdbc.commons.main.metadata.dto.HealthCheckInfoDto;
-import com.aceql.jdbc.commons.main.util.AceQLConnectionUtil;
 
 /**
  * Allows testing if the remote AceQL servlet is accessible with a ping, and to
@@ -117,13 +116,7 @@ public class HealthCheck {
      * @return health check memory info from server
      * @throws SQLException if any SQL Exception occurs
      */
-    public ServerMemoryInfo getServerMemoryInfo() throws SQLException {
-	
-	if (!AceQLConnectionUtil.isHealthCheckInfoSupported(connection)) {
-	    throw new SQLException("AceQL Server version must be >= " + AceQLConnectionUtil.GET_HEALTH_CHECK_INFO_MIN_SERVER_VERSION
-		    + " in order to call getHealthCheckInfo().");
-	}
-	
+    public ServerMemoryInfo getServerMemoryInfo() throws SQLException {	
 	AceQLHttpApi aceQLHttpApi = connection.aceQLHttpApi;
 	HttpManager httpManager = aceQLHttpApi.getHttpManager();
 

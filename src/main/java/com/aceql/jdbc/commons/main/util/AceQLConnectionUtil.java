@@ -36,20 +36,7 @@ public class AceQLConnectionUtil {
     private static final String TRANSACTION_READ_COMMITTED_TEXT = "read_committed";
     private static final String TRANSACTION_READ_UNCOMMITTED_TEXT = "read_uncommitted";
 
-    public static final String SERVER_VERSION_12 = "12.0";
-    
-    // Minimum version for Connection.getMetaData() and ResultSet.getMetaData()
-    public static final String META_DATA_CALLS_MIN_SERVER_VERSION = "6.0";
-    
-    // Minimum version for Statement.executeBatch() & PreparedStatement.executeBatch();
-    public static final String BATCH_MIN_SERVER_VERSION =  "8.0";
-
-    // Minimum version for Connection.getDatabaseInfo()
-    public static final String GET_DATABASE_INFO_MIN_SERVER_VERSION = "9.0";
-    
-    // Minimum version for HealthCheck.getHealthCheckInfo()
-    public static final String GET_HEALTH_CHECK_INFO_MIN_SERVER_VERSION = "12.0";
-    public static final String GET_LIMITS_INFO_MIN_SERVER_VERSION = "12.2";
+    public static final String SERVER_VERSION_12_2 = "12.2";
     
     private static String SERVER_VERSION_NUMBER = null;
 
@@ -124,7 +111,7 @@ public class AceQLConnectionUtil {
     }
 
     /**
-     * Gets the Rax server version as 
+     * Gets the Raw server version as 
      * @param connection
      * @return
      * @throws AceQLException
@@ -148,82 +135,23 @@ public class AceQLConnectionUtil {
      * @return true if rawServerVersion is OK for execution
      * @throws NumberFormatException
      */
-    public static boolean isCurrentVersionOk(String rawServerVersion, String minServerVersion)
+    private static boolean isCurrentVersionOk(String rawServerVersion, String minServerVersion)
 	    throws NumberFormatException {
 	Double rawServerVersionDouble = Double.valueOf(rawServerVersion);
 	Double minServerVersionDouble =  Double.valueOf(minServerVersion);
 	return rawServerVersionDouble >= minServerVersionDouble;
     }
-    
-    /**
-     * Says it the server version supports JDBC MetaData calls. True if >= 6.0
-     * @param connection
-     * @return true if server version greater or equal 6.0
-     * @throws AceQLException
-     */
-    public static boolean isJdbcMetaDataSupported(Connection connection) throws SQLException {
-	String rawServerVersion = getServerRawVersion(connection);
-	return isCurrentVersionOk(rawServerVersion, META_DATA_CALLS_MIN_SERVER_VERSION);
-    }
-
-    /**
-     * Says it the server version supports batch callls. True if greater or equal 8.0
-     * @param connection
-     * @return true if server version  greater or equal 8.0
-     * @throws AceQLException
-     */
-    public static boolean isBatchSupported(Connection connection) throws SQLException {
-	String rawServerVersion = getServerRawVersion(connection);
-	return isCurrentVersionOk(rawServerVersion, BATCH_MIN_SERVER_VERSION);
-    }
-
-    /**
-     * Says it the server version supports getDatabaseInfo calls.
-     * @return true if server version  greater or equal 9.0
-     * @throws AceQLException
-     */
-    public static boolean isGetDatabaseInfoSupported(Connection connection) throws SQLException {
-	String rawServerVersion = getServerRawVersion(connection);	
-	return isCurrentVersionOk(rawServerVersion, GET_DATABASE_INFO_MIN_SERVER_VERSION);
-    }
-    
-    /**
-     * Says it the server version supports getLimitsInfo calls.
-     * @return true if server version  greater or equal 9.0
-     * @throws AceQLException
-     */
-    public static boolean isGetLimitsInfoSupported(Connection connection) throws SQLException {
-	String rawServerVersion = getServerRawVersion(connection);	
-	return isCurrentVersionOk(rawServerVersion, GET_LIMITS_INFO_MIN_SERVER_VERSION);
-    }
-
-    /**
-     * Says it the server version supports HealthCheckInfo calls.
-     * @param connection
-     * @return true if server version greater or equal 12.0
-     * @throws SQLException
-     */
-    public static boolean isHealthCheckInfoSupported(Connection connection) throws SQLException{
-	String rawServerVersion = getServerRawVersion(connection);	
-	return isCurrentVersionOk(rawServerVersion, GET_HEALTH_CHECK_INFO_MIN_SERVER_VERSION);
-    }
-    
+        
     /**
      * Says it the server version supports greater or equal 12.0
      * @param connection
      * @return true if server version greater or equal 12.0
      * @throws SQLException
      */
-    public static boolean isVersion12OrHigher(Connection connection) throws SQLException{
+    public static boolean isVersion12_2OrHigher(Connection connection) throws SQLException{
 	String rawServerVersion = getServerRawVersion(connection);	
-	return isCurrentVersionOk(rawServerVersion, SERVER_VERSION_12);
+	return isCurrentVersionOk(rawServerVersion, SERVER_VERSION_12_2);
     }
     
-    
-    
-    
-    
-
-
-
+   
 }

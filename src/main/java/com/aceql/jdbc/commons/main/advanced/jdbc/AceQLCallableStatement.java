@@ -40,9 +40,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import com.aceql.jdbc.commons.AceQLConnection;
-import com.aceql.jdbc.commons.DatabaseInfo;
 import com.aceql.jdbc.commons.main.AceQLPreparedStatement;
-import com.aceql.jdbc.commons.main.util.AceQLConnectionUtil;
 import com.aceql.jdbc.commons.main.util.AceQLResultSetUtil;
 import com.aceql.jdbc.commons.main.util.JavaSqlConversion;
 import com.aceql.jdbc.commons.main.util.framework.Tag;
@@ -61,8 +59,6 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
 
     /** Says if the last accessed value was null */
     private boolean wasNull = false;
-
-    private DatabaseInfo databaseInfo;
 
     /**
      * @param aceQLConnection
@@ -93,20 +89,6 @@ public class AceQLCallableStatement extends AceQLPreparedStatement implements Ca
      */
     @Override
     public ResultSet executeQuery() throws SQLException {
-
-	if (!AceQLConnectionUtil.isVersion12OrHigher(aceQLConnection)) {
-
-	    if (databaseInfo == null) {
-		databaseInfo = aceQLConnection.getDatabaseInfo();
-	    }
-
-	    if (databaseInfo.getDatabaseProductName().toLowerCase().contains("oracle")) {
-		throw new SQLException("AceQL Server version must be >= " + AceQLConnectionUtil.SERVER_VERSION_12
-			+ " in order to call Oracle stored procedure SELECT.");
-	    }
-
-	}
-
 	return super.executeQuery();
     }
 
