@@ -1,7 +1,7 @@
 /*
  * This file is part of AceQL JDBC Driver.
  * AceQL JDBC Driver: Remote JDBC access over HTTP with AceQL HTTP.
- * Copyright (C) 2021,  KawanSoft SAS
+ * Copyright (c) 2023,  KawanSoft SAS
  * (http://www.kawansoft.com). All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -59,7 +59,7 @@ public class ServerMemoryInfo {
      * initially requests from the operating system for memory management.
      * This method returns <tt>-1</tt> if the initial memory size is undefined.
      *
-     * @return the initial size of memory in bytes;
+     * @return the initial size of memory in bytes.
      */
     public long getInitMemory() {
         return initMemory;

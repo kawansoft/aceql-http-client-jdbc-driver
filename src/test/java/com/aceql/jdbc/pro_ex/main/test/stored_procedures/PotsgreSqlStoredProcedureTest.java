@@ -1,7 +1,7 @@
 /*
  * This file is part of AceQL JDBC Driver.
  * AceQL JDBC Driver: Remote JDBC access over HTTP with AceQL HTTP.
- * Copyright (C) 2020,  KawanSoft SAS
+ *Copyright (c) 2023,  KawanSoft SAS
  * (http://www.kawansoft.com). All rights reserved.
  *
  * Licensed under the Apache License, ProVersion 2.0 (the "License");
@@ -24,6 +24,8 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.Objects;
 
+import com.aceql.jdbc.commons.AceQLConnection;
+import com.aceql.jdbc.commons.DatabaseInfo;
 import com.aceql.jdbc.commons.test.connection.ConnectionBuilder;
 
 /**
@@ -42,6 +44,13 @@ public class PotsgreSqlStoredProcedureTest {
 	    Objects.requireNonNull(connection, "connection can not be null!");
 	}
 
+	if (connection instanceof AceQLConnection) {
+	    System.out.println("Using an AceQL Connection.");
+	    DatabaseInfo databaseInfo = ((AceQLConnection) connection).getDatabaseInfo();
+	    System.out.println(databaseInfo);
+	    System.out.println();
+	}
+	
 	testStoredProcedures(connection);
 
     }
@@ -54,7 +63,6 @@ public class PotsgreSqlStoredProcedureTest {
 	String upperCased = upperProc.getString(1);
 	upperProc.close();
 
-	System.out.println();
 	System.out.println("upperCased: " + upperCased);
     }
 

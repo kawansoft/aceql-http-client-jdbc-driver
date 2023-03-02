@@ -9,6 +9,7 @@ import java.util.Objects;
 import com.aceql.jdbc.commons.AceQLException;
 import com.aceql.jdbc.commons.main.metadata.dto.DatabaseInfoDto;
 import com.aceql.jdbc.commons.main.metadata.dto.JdbcDatabaseMetaDataDto;
+import com.aceql.jdbc.commons.main.metadata.dto.LimitsInfoDto;
 import com.aceql.jdbc.commons.main.metadata.dto.TableDto;
 import com.aceql.jdbc.commons.main.metadata.dto.TableNamesDto;
 import com.aceql.jdbc.commons.main.metadata.util.GsonWsUtil;
@@ -179,6 +180,31 @@ public class AceQLMetadataApi {
 	    DatabaseInfoDto databaseInfoDto = GsonWsUtil.fromJson(result,
 		    DatabaseInfoDto.class);
 	    return databaseInfoDto;
+	} 
+	catch (AceQLException e) {
+	    throw e;
+	}
+	catch (Exception e) {
+	    throw new AceQLException(e.getMessage(), 0, e, null, httpManager.getHttpStatusCode());
+	}
+    }
+    
+    public LimitsInfoDto getLimitsInfoDto() throws AceQLException {
+	try {
+	    String action = "get_limits_info";
+	    String result = httpManager.callWithGet(url + action);
+
+	    ResultAnalyzer resultAnalyzer = new ResultAnalyzer(result, httpManager.getHttpStatusCode(),
+		    httpManager.getHttpStatusMessage());
+	    if (!resultAnalyzer.isStatusOk()) {
+		throw new AceQLException(resultAnalyzer.getErrorMessage(), resultAnalyzer.getErrorType(), null,
+			resultAnalyzer.getStackTrace(), httpManager.getHttpStatusCode());
+	    }
+
+	    // If result is OK, it's a DTO
+	    LimitsInfoDto limitsInfoDto = GsonWsUtil.fromJson(result,
+		    LimitsInfoDto.class);
+	    return limitsInfoDto;
 	} 
 	catch (AceQLException e) {
 	    throw e;

@@ -1,4 +1,5 @@
 /*
+/*
  * This file is part of AceQL JDBC Driver.
  * AceQL JDBC Driver: Remote JDBC access over HTTP with AceQL HTTP.
  * Copyright (c) 2023,  KawanSoft SAS
@@ -16,39 +17,55 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.aceql.jdbc.commons.main.http;
+package com.aceql.jdbc.commons.main.metadata.dto;
 
 /**
- * Contains the ID and name of a savepont.
+ * Container to transport limits info defined in DatabaseConfigurator.
+ * 
  * @author Nicolas de Pomereu
  *
  */
-public class SavepointDto {
+public class LimitsInfoDto {
 
     private String status = "OK";
-    private int id;
-    private String name;
+    private long maxRows = 0;
+    private long maxBlobLength = 0;
 
-    public SavepointDto(int id, String name) {
-	this.id = id;
-	this.name = name;
+    /**
+     * Constructor.
+     * 
+     * @param maxRows       value of {@code DatabaseConfigurator.getMaxRows}
+     * @param maxBlobLength value of {@code DatabaseConfigurator.getMaxBlobLength}
+     */
+    public LimitsInfoDto(long maxRows, long maxBlobLength) {
+	this.maxRows = maxRows;
+	this.maxBlobLength = maxBlobLength;
     }
-
+    
+    /**
+     * @return the status
+     */
     public String getStatus() {
         return status;
     }
 
-    public int getId() {
-        return id;
+    /**
+     * @return the maxRows
+     */
+    public long getMaxRows() {
+        return maxRows;
     }
 
-    public String getName() {
-        return name;
+    /**
+     * @return the maxBlobLength
+     */
+    public long getMaxBlobLength() {
+        return maxBlobLength;
     }
 
     @Override
     public String toString() {
-	return "SavepointDto [status=" + status + ", id=" + id + ", name=" + name + "]";
+	return "LimitsInfoDto [status=" + status + ", maxRows=" + maxRows + ", maxBlobLength=" + maxBlobLength + "]";
     }
 
 }

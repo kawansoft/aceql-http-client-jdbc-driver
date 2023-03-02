@@ -1,7 +1,7 @@
 /*
  * This file is part of AceQL JDBC Driver.
  * AceQL JDBC Driver: Remote JDBC access over HTTP with AceQL HTTP.
- * Copyright (C) 2021,  KawanSoft SAS
+ * Copyright (c) 2023,  KawanSoft SAS
  * (http://www.kawansoft.com). All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,6 +29,7 @@ import java.util.Map;
 
 import com.aceql.jdbc.commons.main.http.AceQLHttpApi;
 import com.aceql.jdbc.commons.main.metadata.dto.DatabaseInfoDto;
+import com.aceql.jdbc.commons.main.metadata.dto.LimitsInfoDto;
 import com.aceql.jdbc.commons.metadata.ResultSetMetaDataPolicy;
 
 /**
@@ -95,6 +96,12 @@ public class InternalWrapper {
 	DatabaseInfoDto databaseInfoDto = aceQLHttpApi.getDatabaseInfoDto();
 	DatabaseInfo databaseInfo = new DatabaseInfo(databaseInfoDto);
 	return databaseInfo;
+    }
+    
+    public static LimitsInfo limitsInfoBuilder(AceQLHttpApi aceQLHttpApi) throws AceQLException {
+	LimitsInfoDto limitsInfoDto = aceQLHttpApi.getLimitsInfoDto();
+	LimitsInfo limitsInfo = new LimitsInfo(limitsInfoDto);
+	return limitsInfo;
     }
 
 }

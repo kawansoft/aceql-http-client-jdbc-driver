@@ -9,14 +9,15 @@ import java.util.Date;
 import com.aceql.jdbc.commons.AceQLConnection;
 import com.aceql.jdbc.commons.test.base.dml.SqlDeleteTest;
 import com.aceql.jdbc.commons.test.base.dml.SqlSelectTest;
-import com.aceql.jdbc.commons.test.connection.DirectConnectionBuilder;
+import com.aceql.jdbc.commons.test.connection.ConnectionBuilder;
 
 public class SqlPreparedStatementBatchTest {
     /**
      * @param args
      */
     public static void main(String[] args) throws Exception {
-	Connection connection = new DirectConnectionBuilder().createPostgreSql();
+	//Connection connection = new DirectConnectionBuilder().createPostgreSql();
+	Connection connection = ConnectionBuilder.createOnConfig();
 	callInsertFlow(connection);
     }
 

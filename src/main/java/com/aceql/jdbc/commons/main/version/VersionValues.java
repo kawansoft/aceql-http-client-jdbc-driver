@@ -1,7 +1,7 @@
 /*
  * This file is part of AceQL JDBC Driver.
  * AceQL JDBC Driver: Remote JDBC access over HTTP with AceQL HTTP.
- * Copyright (C) 2021,  KawanSoft SAS
+ * Copyright (c) 2023,  KawanSoft SAS
  * (http://www.kawansoft.com). All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,6 +23,6 @@ package com.aceql.jdbc.commons.main.version;
  */
 
 public class VersionValues {
-    public static final String VERSION = "v9.2";
-    public static final String DATE = "25-Nov-2022";
+    public static final String VERSION = "v9.3";
+    public static final String DATE = "23-Feb-2023";
 }

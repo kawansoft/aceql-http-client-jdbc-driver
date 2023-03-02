@@ -1,7 +1,7 @@
 /*
  * This file is part of AceQL JDBC Driver.
  * AceQL JDBC Driver: Remote JDBC access over HTTP with AceQL HTTP.
- * Copyright (C) 2021,  KawanSoft SAS
+ * Copyright (c) 2023,  KawanSoft SAS
  * (http://www.kawansoft.com). All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -49,6 +49,7 @@ public class AceQLConnectionUtil {
     
     // Minimum version for HealthCheck.getHealthCheckInfo()
     public static final String GET_HEALTH_CHECK_INFO_MIN_SERVER_VERSION = "12.0";
+    public static final String GET_LIMITS_INFO_MIN_SERVER_VERSION = "12.2";
     
     private static String SERVER_VERSION_NUMBER = null;
 
@@ -184,6 +185,16 @@ public class AceQLConnectionUtil {
     public static boolean isGetDatabaseInfoSupported(Connection connection) throws SQLException {
 	String rawServerVersion = getServerRawVersion(connection);	
 	return isCurrentVersionOk(rawServerVersion, GET_DATABASE_INFO_MIN_SERVER_VERSION);
+    }
+    
+    /**
+     * Says it the server version supports getLimitsInfo calls.
+     * @return true if server version  greater or equal 9.0
+     * @throws AceQLException
+     */
+    public static boolean isGetLimitsInfoSupported(Connection connection) throws SQLException {
+	String rawServerVersion = getServerRawVersion(connection);	
+	return isCurrentVersionOk(rawServerVersion, GET_LIMITS_INFO_MIN_SERVER_VERSION);
     }
 
     /**

@@ -1,7 +1,7 @@
 /*
  * This file is part of AceQL JDBC Driver.
  * AceQL JDBC Driver: Remote JDBC access over HTTP with AceQL HTTP.
- * Copyright (C) 2021,  KawanSoft SAS
+ * Copyright (c) 2023,  KawanSoft SAS
  * (http://www.kawansoft.com). All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -99,10 +99,12 @@ public class AceQLConnectionTest {
 	System.out.println("aceQLConnection.getServerVersion() : " + ((AceQLConnection) connection).getServerVersion());
 	System.out.println("aceQLConnection.getClientVersion() : " + ((AceQLConnection) connection).getClientVersion());
 	System.out.println();
-	System.out.println("aceQLConnection.getDatabaseInfo()  : " + ((AceQLConnection) connection).getDatabaseInfo());
 	System.out
 		.println("aceQLConnection.getConnectionInfo(): " + ((AceQLConnection) connection).getConnectionInfo());
-
+	
+	System.out.println("aceQLConnection.getDatabaseInfo()  : " + ((AceQLConnection) connection).getDatabaseInfo());
+	System.out.println("aceQLConnection.getLimitsInfo()    : " + ((AceQLConnection) connection).getLimitsInfo());
+	
 	System.out.println();
 	System.out.println("aceQLConnection.getAutoCommit() : " + connection.getAutoCommit());
 	System.out.println("aceQLConnection.isReadOnly()    : " + connection.isReadOnly());
@@ -176,6 +178,9 @@ public class AceQLConnectionTest {
 	// Batch with Prepared Statement
 	SqlPreparedStatementBatchTest.callInsertFlow(connection);
 
+	//HACK
+	//if (true) throw new SQLException("SqlPreparedStatementBatchTest interrupt!");
+	
 	AceQLSchemaTest.doIt(connection);
 
 	connection.close();

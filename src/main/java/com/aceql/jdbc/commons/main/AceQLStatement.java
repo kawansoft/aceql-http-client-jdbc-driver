@@ -1,7 +1,7 @@
 /*
  * This file is part of AceQL JDBC Driver.
  * AceQL JDBC Driver: Remote JDBC access over HTTP with AceQL HTTP.
- * Copyright (C) 2021,  KawanSoft SAS
+ * Copyright (c) 2023,  KawanSoft SAS
  * (http://www.kawansoft.com). All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -50,6 +50,7 @@ import com.aceql.jdbc.commons.main.util.AceQLStatementUtil;
 import com.aceql.jdbc.commons.main.util.SimpleTimer;
 import com.aceql.jdbc.commons.main.util.TimeUtil;
 import com.aceql.jdbc.commons.main.util.framework.FrameworkDebug;
+import com.aceql.jdbc.commons.main.util.framework.HtmlConverter;
 import com.aceql.jdbc.commons.main.util.json.StreamResultAnalyzer;
 
 /**
@@ -441,6 +442,8 @@ public class AceQLStatement extends AbstractStatement implements Statement {
 	if (this.batchFileSqlOrders == null) {
 	    this.batchFileSqlOrders = AceQLPreparedStatement.buildBlobIdFile();
 	}
+	
+	sql = HtmlConverter.toHtml(sql);
 	
 	try {
 	    try (BufferedWriter output = new BufferedWriter(new FileWriter(this.batchFileSqlOrders, true));){

@@ -1,7 +1,7 @@
 /*
  * This file is part of AceQL JDBC Driver.
  * AceQL JDBC Driver: Remote JDBC access over HTTP with AceQL HTTP.
- * Copyright (C) 2021,  KawanSoft SAS
+ * Copyright (c) 2023,  KawanSoft SAS
  * (http://www.kawansoft.com). All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -69,6 +69,7 @@ import com.aceql.jdbc.commons.main.util.AceQLStatementUtil;
 import com.aceql.jdbc.commons.main.util.AceQLTypes;
 import com.aceql.jdbc.commons.main.util.framework.FrameworkDebug;
 import com.aceql.jdbc.commons.main.util.framework.FrameworkFileUtil;
+import com.aceql.jdbc.commons.main.util.framework.HtmlConverter;
 import com.aceql.jdbc.commons.main.util.framework.Tag;
 import com.aceql.jdbc.commons.main.util.framework.UniqueIDBuilder;
 import com.aceql.jdbc.commons.main.util.json.PrepStatementParametersBuilder;
@@ -487,6 +488,12 @@ public class AceQLPreparedStatement extends AceQLStatement implements PreparedSt
 
 	Map<String, String> statementParameters = builder.getHttpFormattedStatementParameters();
 
+	// Convert param to HTML
+	for (String key : statementParameters.keySet()) {
+	    String strValue = statementParameters.get(key);
+	    strValue = HtmlConverter.toHtml(strValue);
+	}
+	
 	if (statementParameters.isEmpty()) {
 	    throw new SQLException(Tag.PRODUCT + " " + "Cannot call addBatch() if no parameters have been set.");
 	}

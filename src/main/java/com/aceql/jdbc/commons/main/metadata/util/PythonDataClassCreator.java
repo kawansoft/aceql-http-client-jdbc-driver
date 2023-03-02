@@ -1,7 +1,7 @@
 /*
  * This file is part of AceQL JDBC Driver.
  * AceQL JDBC Driver: Remote JDBC access over HTTP with AceQL HTTP.
- * Copyright (C) 2021,  KawanSoft SAS
+ * Copyright (c) 2023,  KawanSoft SAS
  * (http://www.kawansoft.com). All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -63,8 +63,16 @@ public class PythonDataClassCreator {
 	System.out.println(PythonDataClassUtil.getTimestamp() + " Begin...");
 	boolean printHeader = true;
 
+	if (args.length < 1) {
+	    throw new IllegalArgumentException("Pass class full names as args parameter.");
+	}
+		
 	List<Class<?>> classes = new ArrayList<Class<?>>();
-	classes.add(JdbcDatabaseMetaData.class);
+	
+	for (String className : args) {
+	    Class<?> clazz = Class.forName(className);
+	    classes.add(clazz);
+	}
 	
 	PythonDataClassCreator pythonDataClassCreator = new PythonDataClassCreator();
 	pythonDataClassCreator.generatePythonClasses(printHeader, classes);

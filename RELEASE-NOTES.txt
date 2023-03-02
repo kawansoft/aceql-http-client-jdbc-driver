@@ -18,6 +18,16 @@ The AceQL Client JDBC Driver is licensed under the Apache 2.0
 License.
 
 
+AceQL Client JDBC Driver - Version 9.3 - 24-Feb-2023
+----------------------------------------------------
+
+What's new:
+- It is now possible to get info about limits set on the server side:
+  maximum rows available for a SELECT and maximum allowed length 
+  for a BLOB upload. 
+  See com.aceql.jdbc.commons.LimitsInfo Javadoc.
+
+
 AceQL Client JDBC Driver - Version 9.2 - 25-Nov-2022
 ----------------------------------------------------
 

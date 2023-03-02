@@ -1,7 +1,7 @@
 /*
  * This file is part of AceQL JDBC Driver.
  * AceQL JDBC Driver: Remote JDBC access over HTTP with AceQL HTTP.
- * Copyright (C) 2021,  KawanSoft SAS
+ * Copyright (c) 2023,  KawanSoft SAS
  * (http://www.kawansoft.com). All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -659,6 +659,23 @@ public class AceQLConnection extends AbstractConnection implements Connection, C
 	return databaseInfo;
     }
 
+    /**
+     * Gives info of limits defined on server side.
+     * 
+     * @return Gives info of limits defined on server side.o.
+     * @throws SQLException if any Exception occurs
+     */
+    public LimitsInfo getLimitsInfo() throws SQLException {
+	
+	if (!AceQLConnectionUtil.isGetDatabaseInfoSupported(this)) {
+	    throw new SQLException("AceQL Server version must be >= " + AceQLConnectionUtil.GET_LIMITS_INFO_MIN_SERVER_VERSION
+		    + " in order to call getLimitsInfo().");
+	}
+	
+	LimitsInfo limitsInfo = InternalWrapper.limitsInfoBuilder(aceQLHttpApi);
+	return limitsInfo;
+    }
+    
     /**
      * Returns the cancelled value set by the progress indicator
      *

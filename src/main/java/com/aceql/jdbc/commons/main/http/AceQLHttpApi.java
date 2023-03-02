@@ -1,7 +1,7 @@
 /*
  * This file is part of AceQL JDBC Driver.
  * AceQL JDBC Driver: Remote JDBC access over HTTP with AceQL HTTP.
- * Copyright (C) 2021,  KawanSoft SAS
+ * Copyright (c) 2023,  KawanSoft SAS
  * (http://www.kawansoft.com). All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,6 +34,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -45,6 +47,7 @@ import com.aceql.jdbc.commons.main.batch.UpdateCountsArrayDto;
 import com.aceql.jdbc.commons.main.metadata.dto.DatabaseInfoDto;
 import com.aceql.jdbc.commons.main.metadata.dto.HealthCheckInfoDto;
 import com.aceql.jdbc.commons.main.metadata.dto.JdbcDatabaseMetaDataDto;
+import com.aceql.jdbc.commons.main.metadata.dto.LimitsInfoDto;
 import com.aceql.jdbc.commons.main.metadata.dto.ServerQueryExecutorDto;
 import com.aceql.jdbc.commons.main.metadata.dto.ServerQueryExecutorDtoBuilder;
 import com.aceql.jdbc.commons.main.metadata.dto.TableDto;
@@ -248,7 +251,7 @@ public class AceQLHttpApi {
 
     public void trace(String s) {
 	if (TRACE_ON) {
-	    System.out.println();
+	    System.out.println(s);
 	}
     }
 
@@ -791,13 +794,27 @@ public class AceQLHttpApi {
 	    parametersMap.put("prepared_statement", "" + isPreparedStatement);
 	    parametersMap.put("stored_procedure", "" + isStoredProcedure);
 
-	    trace("sql: " + sql);
-	    trace("statement_parameters: " + statementParameters);
-
 	    // Add the statement parameters map
 	    if (statementParameters != null) {
 		parametersMap.putAll(statementParameters);
 	    }
+	    
+	    trace("sql: " + sql);
+	    trace("parametersMap: " + parametersMap);
+	    trace();
+	    
+	    if (AceQLHttpApi.TRACE_ON) {
+		Set<String> set = parametersMap.keySet();
+		Set<String> mySortedSet  = new TreeSet<>();
+		for (String string : set) {
+		    mySortedSet.add(string);
+		}
+		
+		for (String string : mySortedSet) {
+		    System.out.println(string + "=" + parametersMap.get(string));
+		}
+	    }
+	    trace();
 
 	    URL theUrl = new URL(url + action);
 
@@ -991,8 +1008,8 @@ public class AceQLHttpApi {
 		parametersMap.putAll(statementParameters);
 	    }
 
-	    trace("sql: " + sql);
-	    trace("statement_parameters: " + statementParameters);
+	    trace("sql          : " + sql);
+	    trace("parametersMap: " + parametersMap);
 
 	    URL theUrl = new URL(url + action);
 	    debug("executeQuery url: " + url);
@@ -1193,6 +1210,11 @@ public class AceQLHttpApi {
     public DatabaseInfoDto getDatabaseInfoDto() throws AceQLException {
 	AceQLMetadataApi aceQLMetadataApi = new AceQLMetadataApi(httpManager, url);
 	return aceQLMetadataApi.getDatabaseInfoDto();
+    }
+    
+    public LimitsInfoDto getLimitsInfoDto() throws AceQLException {
+	AceQLMetadataApi aceQLMetadataApi = new AceQLMetadataApi(httpManager, url);
+	return aceQLMetadataApi.getLimitsInfoDto();
     }
 
     public TableNamesDto getTableNames(String tableType) throws AceQLException {

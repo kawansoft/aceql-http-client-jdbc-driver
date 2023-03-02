@@ -1,7 +1,7 @@
 /*
  * This file is part of AceQL JDBC Driver.
  * AceQL JDBC Driver: Remote JDBC access over HTTP with AceQL HTTP.
- * Copyright (C) 2020,  KawanSoft SAS
+ *Copyright (c) 2023,  KawanSoft SAS
  * (http://www.kawansoft.com). All rights reserved.
  *
  * Licensed under the Apache License, ProVersion 2.0 (the "License");
@@ -22,9 +22,10 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Types;
 import java.util.Objects;
 
+import com.aceql.jdbc.commons.AceQLConnection;
+import com.aceql.jdbc.commons.DatabaseInfo;
 import com.aceql.jdbc.commons.test.connection.FourDbConnections;
 
 /**
@@ -45,30 +46,54 @@ public class MySqlStoredProcedureTest {
 	    Objects.requireNonNull(connection, "connection can not be null!");
 	}
 
-	testStoredProcedures(connection);
+	if (connection instanceof AceQLConnection) {
+	    System.out.println("Using an AceQL Connection.");
+	    DatabaseInfo databaseInfo = ((AceQLConnection) connection).getDatabaseInfo();
+	    System.out.println(databaseInfo);
+	    System.out.println();
+	}
+	
+	testStoredProcedureSelectCustomer(connection);
 
     }
 
-    public static void testStoredProcedures(Connection connection) throws SQLException {
-	CallableStatement callableStatement = connection.prepareCall("{ call demoSp(?, ?, ?) }");
-	callableStatement.registerOutParameter(2, Types.INTEGER);
-	callableStatement.registerOutParameter(3, Types.INTEGER);
-	callableStatement.setString(1, "test");
-	callableStatement.setInt(2, 12);
+    public static void testStoredProcedureSelectCustomer(Connection connection) throws SQLException {
+	
+	/**
+	 <code>
+            CREATE DEFINER=`user1`@`%` PROCEDURE `SelectCustomer`(
+            	INOUT p_customer_id INT,
+                IN p_customer_name  INT
+            )
+            BEGIN
+            	select customer_id, lname from customer where customer_id > @p_customer_id 
+            	and  lname <> @p_customer_name;
+            END
+	 </code>
+	 */
+    	
+	CallableStatement callableStatement 
+		= connection.prepareCall("{ call SelectCustomer(?, ?) }");
+	callableStatement.setInt(1, 2);
+	callableStatement.setString(2, "Doe5");
+	
+	callableStatement.registerOutParameter(1, java.sql.Types.INTEGER);
+	
+	
 	ResultSet rs = callableStatement.executeQuery();
-
+	
 	while (rs.next()) {
-	    System.out.println(rs.getString(1));
+	    System.out.println(rs.getInt(1) + " "+ rs.getString(2));
 	}
-
-	int out2 = callableStatement.getInt(2);
-	int out3 = callableStatement.getInt(3);
-
+	
+	int out = callableStatement.getInt(1);
+	System.out.println("out: " + out);
+	
 	callableStatement.close();
 
+	System.out.println("Done dbo.spSelectCustomer!");
 	System.out.println();
-	System.out.println("out2: " + out2);
-	System.out.println("out3: " + out3);
+
     }
 
 }
