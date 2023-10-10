@@ -165,7 +165,29 @@ Note that AceQL is optimized as much as possible:
   - The rows are all dumped at once on the servlet output stream by the server.
   - The client side gets the `ResultSet` content as a file.
   - All `ResultSet` navigation commands are executed locally on the client side by navigating through the file:  `next()`, `prev(`), `first()`, `last()`, etc. 
+  
 - **It is highly recommended to always use  batch commands  when you have many rows to INSERT or UPDATE.**
+
+  
+
+## *[Advertisement] 📢* 
+
+## *Explore Sqlephant for Streamlined SQL Development! 🐘*
+
+Sqlephant brings a heap of benefits to your SQL workflow:
+
+- 🚄 **Swift Schema Generation**: Auto-infer types and generate schemas.
+- 🛠 **SQL Fixers**: Easily manage SQL requests and injection issues.
+- 📦 **SQL Wrapper Generation**: Full support for C#, Java, PHP, and Python.
+- 🔄 **SQL CRUD Generation**: Automate CRUD operations seamlessly.
+
+**✨ Optimize Your Development: Save Time, Reduce Bugs, Eliminate Tedious Work!**
+
+👉 Explore [**Sqlephant**](https://www.sqlephant.com) and elevate your SQL development experience!
+
+
+
+---
 
 # Using the AceQL Client JDBC Driver
 
