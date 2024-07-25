@@ -159,7 +159,6 @@ Try to avoid coding JDBC calls inside loops, as this can reduce execution speed.
 Note that AceQL is optimized as much as possible:
 
 - A SELECT call returning a huge Result Set will not consume memory on the server or client side:  AceQL uses input stream and output stream I/O for `ResultSet` transfer.
-
 - Result Set retrieval is as fast as possible:  
   - The `ResultSet` creation is done once on the server by the `executeQuery()`.
   - The rows are all dumped at once on the servlet output stream by the server.
@@ -167,22 +166,25 @@ Note that AceQL is optimized as much as possible:
   - All `ResultSet` navigation commands are executed locally on the client side by navigating through the file:  `next()`, `prev(`), `first()`, `last()`, etc. 
 - **It is highly recommended to always use  batch commands  when you have many rows to INSERT or UPDATE.**
 
+_________
 
 
-## *[Advertisement] 📢* 
 
-## *Explore Sqlephant for Streamlined SQL Development! 🐘*
+## *[Advertisement] 📢*
 
-Sqlephant brings a heap of benefits to your SQL workflow:
+## *Transform Your Development with ChatMotor API! 🚀*
 
-- 🚄 **Swift Schema Generation**: Auto-infer types and generate schemas.
-- 🛠 **SQL Fixers**: Easily manage SQL requests and injection issues.
-- 📦 **SQL Wrapper Generation**: Full support for C#, Java, PHP, and Python.
-- 🔄 **SQL CRUD Generation**: Automate CRUD operations seamlessly.
+[ChatMotor](https://www.chatmotor.ai/) API is designed to make your development life easier by handling the complexities of OpenAI and ChatGPT:
 
-**✨ Optimize Your Development: Save Time, Reduce Bugs, Eliminate Tedious Work!**
+- 🌟 **Seamless Integration**: No need to learn the intricacies of OpenAI APIs and their limitations. ChatMotor handles chunking, HTTP errors, and retry management.
+- 📄 **Excel Handling**: Allow your end user to easily process and manipulate large Excel files using simple prompts. Much easier for them than endless VBA or painful Python coding.
+- 📝 **Unlimited Input Sizes**: Seamlessly handle prompts that exceed 4096 tokens with automatic sequencing and parallel task threading for speed, allowing you to treat large inputs without dwelling on the details.
+- 🎙️ **Hassle-Free Transcriptions**: Simply provide the audio files for transcription, regardless of format and size. ChatMotor handles everything, including gigantic files, and delivers a clean, formatted text file.
+- 🌐 **Advanced Translation**: Handle documents of any size with ease. Just pass them to the API, and it will manage everything, delivering accurate and fast results.
 
-👉 Explore [**Sqlephant**](https://www.sqlephant.com) and elevate your SQL development experience!
+**✨ Faster and Easier Delivery for Your End User: Save Time, Reduce Complexity, and Focus on What Matters!**
+
+👉 Explore [**ChatMotor**](https://www.chatmotor.ai) and revolutionize your development workflow!
 
 
 
