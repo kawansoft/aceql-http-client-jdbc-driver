@@ -25,7 +25,7 @@ public class DriverPropertyInfoBuilder {
     private static final String CLOB_WRITE_CHARSET = "Name of the charset to use when writing a CLOB content with the PreparedStatement streaming methods. Defaults to \"UTF-8\".";
 
     public static final String MAX_RETRIES = "Maximum number of retries for connecting to the remote server. Defaults to 3.";
-    public static final String RETRY_DELAY = "Delay in milliseconds between retries. Defaults to 3000.";
+    public static final String RETRY_DELAY = "Delay in milliseconds between retries. Defaults to 1000.";
     
     
     /**
@@ -134,7 +134,7 @@ public class DriverPropertyInfoBuilder {
 	driverPropertyInfo = getNewDriverPropertyInfo("retryIntervalMs", info);
 	driverPropertyInfo.description = RETRY_DELAY;
 	driverPropertyInfo.required = false;
-	driverPropertyInfo.value = "3000";
+	driverPropertyInfo.value = "1000";
 	driverPropertyInfoList.add(driverPropertyInfo);
 	
 	List<String> list = new ArrayList<>();
