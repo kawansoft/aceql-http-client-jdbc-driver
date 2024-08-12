@@ -95,41 +95,6 @@ public class ConnectionInfo {
 	this.retryIntervalMs = connectionInfoHolder.getRetryIntervalMs();
     }
     
-//    /**
-//     * Package protected constructor, Driver users can not instantiate the class.
-//     * 
-//     * @param url
-//     * @param database
-//     * @param authentication
-//     * @param passwordIsSessionId
-//     * @param proxy
-//     * @param proxyAuthentication
-//     * @param connectTimeout
-//     * @param readTimeout
-//     * @param gzipResult
-//     * @param resultSetMetaDataPolicy
-//     * @param requestProperties
-//     * @param clobReadCharset
-//     * @param clobWriteCharset
-//     */
-//    ConnectionInfo(String url, String database, PasswordAuthentication authentication, boolean passwordIsSessionId,
-//	    Proxy proxy, PasswordAuthentication proxyAuthentication, int connectTimeout, int readTimeout,
-//	    boolean gzipResult, ResultSetMetaDataPolicy resultSetMetaDataPolicy, Map<String, String> requestProperties,
-//	    String clobReadCharset, String clobWriteCharset) {
-//	this.url = url;
-//	this.database = database;
-//	this.authentication = authentication;
-//	this.passwordIsSessionId = passwordIsSessionId;
-//	this.proxy = proxy;
-//	this.proxyAuthentication = proxyAuthentication;
-//	this.connectTimeout = connectTimeout;
-//	this.readTimeout = readTimeout;
-//	this.gzipResult = gzipResult;
-//	this.resultSetMetaDataPolicy = resultSetMetaDataPolicy;
-//	this.requestProperties = requestProperties;
-//	this.clobReadCharset = clobReadCharset;
-//	this.clobWriteCharset = clobWriteCharset;
-//    }
 
     /**
      * Gets the URL of the remote database
