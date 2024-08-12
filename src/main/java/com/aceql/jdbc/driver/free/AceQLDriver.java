@@ -39,6 +39,7 @@ import java.util.logging.Logger;
 
 import com.aceql.jdbc.commons.AceQLConnection;
 import com.aceql.jdbc.commons.ConnectionInfo;
+import com.aceql.jdbc.commons.ConnectionInfoHolder;
 import com.aceql.jdbc.commons.InternalWrapper;
 import com.aceql.jdbc.commons.driver.util.DriverPropertyInfoBuilder;
 import com.aceql.jdbc.commons.driver.util.DriverUtil;
@@ -49,48 +50,47 @@ import com.aceql.jdbc.commons.main.util.framework.Tag;
 import com.aceql.jdbc.commons.metadata.ResultSetMetaDataPolicy;
 
 /**
- *
- * The <a href=http://www.aceql.com>AceQL</a> JDBC Driver class in order to
- * access remote SQL databases through HTTP from Android or Java desktop
- * programs.<br>
- * <br>
- * <b>user</b>, <b>password</b> and <b>database</b> are the only required
- * properties. <br>
- * <br>
- * Properties:
- * <ul>
- * <li><b>user</b>: username to connect to the remote database as.</li>
- * <li><b>password</b>: password to use when authenticating.</li>
- * <li><b>database</b>: name of remote database as defined in the server
- * {@code aceql-server.properties} file.</li>
- * <li><b>proxyType</b>: java.net.Proxy Type to use: DIRECT, HTTP or SOCKS.
- * Defaults to DIRECT.</li>
- * <li><b>proxyHostname</b>: java.net.Proxy hostname to use.</li>
- * <li><b>proxyPort</b>: java.net.Proxy Port to use.</li>
- * <li><b>proxyUsername</b>: Proxy credential username.</li>
- * <li><b>proxyPassword</b>: Proxy credential password.</li>
- * <li><b>connectTimeout</b>: Timeout value, in milliseconds, to be used when
- * opening a communications link to the remote server. If the timeout expires
- * before the connection can be established, a java.net.SocketTimeoutException is
- * raised. A timeout of zero is interpreted as an infinite timeout. Defaults to 0.</li>
- * <li><b>readTimeout</b>: Read timeout to a specified timeout, in milliseconds.
- * A non-zero value specifies the timeout when reading from Input stream when a
- * connection is established to a resource. If the timeout expires before there
- * is data available for read, a java.net.SocketTimeoutException is raised. A
- * timeout of zero is interpreted as an infinite timeout. Defaults to 0.
- * <li><b>gzipResult</b>: Boolean to say if the ResultSet is Gzipped before
- * download. Defaults to <code>true</code>.</li>
- * <li><b>resultSetMetaDataPolicy</b>: Defines the {@code ResultSet} metadata
- * policy. Says if the {@code ResultSet} metadata is to be downloaded along with
- * the ResultSet. Possible values are "on" and "off". Defaults to "on".</li>
- * <li><b>clobReadCharset</b>: Name of the charset to use when
- * reading a CLOB content with the {@code ResultSet} methods. Defaults
- * to {@code null}.</li>
- * <li><b>clobWriteCharset</b>: Name of the charset to use when
- * writing a CLOB content with the {@code PreparedStatement} streaming methods. Defaults
- * to "{@code UTF-8}".</li>
- * </ul>
- * <p>
+*
+* The <a href=http://www.aceql.com>AceQL</a> JDBC Driver class for accessing remote SQL databases through HTTP from Android or Java desktop
+* programs.<br>
+* <br>
+* <b>user</b>, <b>password</b>, and <b>database</b> are the only required properties. <br>
+* <br>
+* Properties:
+* <ul>
+* <li><b>user</b>: Username to connect to the remote database.</li>
+* <li><b>password</b>: Password to use for authentication.</li>
+* <li><b>database</b>: Name of the remote database as defined in the server
+* {@code aceql-server.properties} file.</li>
+* <li><b>proxyType</b>: java.net.Proxy type to use: DIRECT, HTTP, or SOCKS.
+* Defaults to DIRECT.</li>
+* <li><b>proxyHostname</b>: java.net.Proxy hostname to use.</li>
+* <li><b>proxyPort</b>: java.net.Proxy port to use.</li>
+* <li><b>proxyUsername</b>: Proxy credential username.</li>
+* <li><b>proxyPassword</b>: Proxy credential password.</li>
+* <li><b>connectTimeout</b>: Timeout value, in milliseconds, to be used when
+* opening a communications link to the remote server. If the timeout expires
+* before the connection can be established, a java.net.SocketTimeoutException is
+* raised. A timeout of zero is interpreted as an infinite timeout. Defaults to 0.</li>
+* <li><b>readTimeout</b>: Read timeout in milliseconds. A non-zero value specifies the timeout when reading from an InputStream after a
+* connection is established. If the timeout expires before there
+* is data available for reading, a java.net.SocketTimeoutException is raised. A
+* timeout of zero is interpreted as an infinite timeout. Defaults to 0.</li>
+* <li><b>gzipResult</b>: Boolean indicating whether the ResultSet is gzipped before
+* download. Defaults to <code>true</code>.</li>
+* <li><b>resultSetMetaDataPolicy</b>: Defines the {@code ResultSet} metadata
+* policy. Indicates if the {@code ResultSet} metadata is downloaded along with
+* the ResultSet. Possible values are "on" and "off". Defaults to "on".</li>
+* <li><b>clobReadCharset</b>: Name of the charset to use when
+* reading CLOB content with the {@code ResultSet} methods. Defaults
+* to {@code null}.</li>
+* <li><b>clobWriteCharset</b>: Name of the charset to use when
+* writing CLOB content with the {@code PreparedStatement} streaming methods. Defaults
+* to "{@code UTF-8}".</li>
+* <li><b>maxRetries</b>: Maximum number of retries for failed HTTP calls. Defaults to 3.</li>
+* <li><b>retryIntervalMs</b>: Delay between retries, in milliseconds. Defaults to 1000 ms.</li>
+* </ul>
+* <p>
  * Usage of the AceQL JDBC Driver is straightforward:
  *
  * <pre>
@@ -262,10 +262,28 @@ final public class AceQLDriver implements java.sql.Driver {
 	    passwordIsSessionId = true;
 	}
 		
-	ConnectionInfo connectionInfo = InternalWrapper.connectionInfoBuilder(url, database, authentication, passwordIsSessionId,
-		proxy, proxyAuthentication, connectTimeout, readTimeout, gzipResult,
-		resultSetMetaDataPolicy, requestProperties, clobReadCharset, clobWriteCharset);
+	int maxRetries= DriverUtil.getMaxRetries(info);
+	int retryIntervalMs = DriverUtil.getIntervalRetryMs(info);
 	
+	ConnectionInfoHolder connectionInfoHolder = new ConnectionInfoHolder();
+	connectionInfoHolder.setAuthentication(authentication);
+	connectionInfoHolder.setClobReadCharset(clobReadCharset);
+	connectionInfoHolder.setClobWriteCharset(clobWriteCharset);
+	connectionInfoHolder.setConnectTimeout(connectTimeout);
+	connectionInfoHolder.setDatabase(database);
+	connectionInfoHolder.setGzipResult(gzipResult);
+	connectionInfoHolder.setPasswordIsSessionId(passwordIsSessionId);
+	connectionInfoHolder.setProxy(proxy);
+	connectionInfoHolder.setProxyAuthentication(proxyAuthentication);
+	connectionInfoHolder.setReadTimeout(readTimeout);
+	connectionInfoHolder.setRequestProperties(requestProperties);
+	connectionInfoHolder.setResultSetMetaDataPolicy(resultSetMetaDataPolicy);
+	connectionInfoHolder.setUrl(url);
+	
+	connectionInfoHolder.setMaxRetries(maxRetries);
+	connectionInfoHolder.setRetryIntervalMs(retryIntervalMs);
+	
+	ConnectionInfo connectionInfo = InternalWrapper.connectionInfoBuilder(connectionInfoHolder);
 	AceQLConnection connection = InternalWrapper.connectionBuilder(connectionInfo);
 	
 	if (!AceQLConnectionUtil.isVersion12_2OrHigher(connection)) {
@@ -352,7 +370,7 @@ final public class AceQLDriver implements java.sql.Driver {
      */
     @Override
     public int getMinorVersion() {
-	return 3;
+	return 4;
     }
 
     /**

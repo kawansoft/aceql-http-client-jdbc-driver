@@ -141,16 +141,40 @@ public class HttpManager {
     public InputStream callWithGetReturnStream(String url)
 	    throws MalformedURLException, IOException, UnsupportedEncodingException {
 
+	int maxRetries = this.connectionInfo.getMaxRetries();
+	int retryIntervalMs = this.connectionInfo.getRetryIntervalMs();
+
 	/*
 	 * if (httpVersion == 1) { return callWithGetInputStreamHttp11(url); } else {
 	 * return callWithGetInputStreamHttp2(url); }
 	 */
 
-	return callWithGetInputStreamHttp11(url);
+	IOException exceptionThrown = null;
+
+	int nbTry = 0;
+	
+	while (true) {
+	    try {
+		InputStream in = callWithGetInputStreamHttp11(url);
+		return in;
+	    } catch (Exception exception) {
+		exceptionThrown = new IOException(exception);
+	    }
+	    
+	    try {
+		Thread.sleep(retryIntervalMs);
+	    } catch (InterruptedException ignore) {
+		// e1.printStackTrace();
+	    }
+
+	    if (nbTry > maxRetries) {
+		throw exceptionThrown;
+	    }
+	}
 
     }
 
-    public InputStream callWithGetInputStreamHttp11(String url)
+    private InputStream callWithGetInputStreamHttp11(String url)
 	    throws MalformedURLException, IOException, ProtocolException {
 	URL theUrl = new URL(url);
 	HttpURLConnection conn = null;
@@ -216,6 +240,51 @@ public class HttpManager {
 
     public InputStream callWithPost(URL theUrl, Map<String, String> parameters)
 	    throws IOException, ProtocolException, SocketTimeoutException, UnsupportedEncodingException {
+	
+	int maxRetries = this.connectionInfo.getMaxRetries();
+	int retryIntervalMs = this.connectionInfo.getRetryIntervalMs();
+
+	/*
+	 * if (httpVersion == 1) { return callWithGetInputStreamHttp11(url); } else {
+	 * return callWithGetInputStreamHttp2(url); }
+	 */
+
+	IOException exceptionThrown = null;
+
+	int nbTry = 0;
+	
+	while (true) {
+	    try {
+		InputStream in =  callWithPostWrapped(theUrl, parameters);
+		return in;
+	    } catch (Exception exception) {
+		exceptionThrown = new IOException(exception);
+	    }
+	    
+	    try {
+		Thread.sleep(retryIntervalMs);
+	    } catch (InterruptedException ignore) {
+		// e1.printStackTrace();
+	    }
+
+	    if (nbTry > maxRetries) {
+		throw exceptionThrown;
+	    }
+	}
+	
+    }
+
+    /**
+     * @param theUrl
+     * @param parameters
+     * @return
+     * @throws IOException
+     * @throws ProtocolException
+     * @throws UnsupportedEncodingException
+     * @throws SocketTimeoutException
+     */
+    private InputStream callWithPostWrapped(URL theUrl, Map<String, String> parameters)
+	    throws IOException, ProtocolException, UnsupportedEncodingException, SocketTimeoutException {
 	HttpURLConnection conn = null;
 
 	if (this.proxy == null) {

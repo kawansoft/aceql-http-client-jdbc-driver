@@ -2,8 +2,9 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.aceql</groupId>
   <artifactId>aceql-http-client-jdbc-driver</artifactId>
-  <version>9.3</version>
+  <version>9.4</version>
 
+<!--
  <build>
       <plugins>
         <plugin>
@@ -41,6 +42,89 @@
 
      </plugins>
   </build>
+-->
+
+    <build>
+        <finalName>${project.artifactId}</finalName>
+        <sourceDirectory>src/main/java</sourceDirectory>
+        <plugins>
+
+        <plugin>
+          <groupId>org.sonatype.central</groupId>
+          <artifactId>central-publishing-maven-plugin</artifactId>
+          <version>0.5.0</version>
+          <extensions>true</extensions>
+          <configuration>
+            <publishingServerId>central</publishingServerId>
+          </configuration>
+        </plugin>
+
+            <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <version>3.2.1</version>
+            <executions>
+                <execution>
+                    <id>attach-sources</id>
+                    <goals>
+                        <goal>jar</goal>
+                    </goals>
+                </execution>
+            </executions>
+           </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <additionalparam>-Xdoclint:none</additionalparam>
+
+        <sourcepath>${project.basedir}/src/main/java</sourcepath>
+
+        <excludes>
+            <exclude>com/aceql/jdbc/commons/main/**</exclude> 
+            <exclude>com/aceql/jdbc/commons/driver/**</exclude> 
+        </excludes>
+
+        <includes>
+            <include>com/aceql/jdbc/commons/*.java</include> <!-- Includes only Java files directly in the commons package -->
+            <include>com/aceql/jdbc/commons/*.html</include>  <!-- Includes only HTML files directly in the commons package -->
+            <include>com/aceql/jdbc/commons/metadata/*.java</include> <!-- Includes only Java files directly in the metadata package -->
+            <include>com/aceql/jdbc/commons/metadata/*.html</include> <!-- Includes only Java files directly in the metadata package -->
+            <include>com/aceql/jdbc/driver/free/*.java</include> <!-- Includes only Java files directly in the free package -->
+            <include>com/aceql/jdbc/driver/free/*.html</include> <!-- Includes only HTML files directly in the free package -->
+        </includes>
+
+        </configuration>
+
+          <version>2.9.1</version>
+          <executions>
+            <execution>
+              <id>attach-javadocs</id>
+              <goals>
+                <goal>jar</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-gpg-plugin</artifactId>
+          <version>1.5</version>
+          <executions>
+            <execution>
+              <id>sign-artifacts</id>
+              <phase>verify</phase>
+              <goals>
+                <goal>sign</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+
+        </plugins>
+    </build>
 
   <dependencies>
       <dependency>

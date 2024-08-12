@@ -21,10 +21,13 @@ public class DriverPropertyInfoBuilder {
     public static final String GZIP_RESULT = "Boolean to say if the ResultSet is Gzipped before download. Defaults to true.";
     public static final String CLOB_CHARSET = "Name of the charset  to use when reading a CLOB content with the ResultSet methods. Defaults to null.";
 
-    
     public static final String DEFINES_THE_RESULT_SET_META_DATA_POLICY = "Defines the ResultSet MetaData policy. Says if the ResultSet MetaData is to be downloaded along with the ResultSet. Possible values are \"on\" and \"off\". Defaults to \"on\".";
     private static final String CLOB_WRITE_CHARSET = "Name of the charset to use when writing a CLOB content with the PreparedStatement streaming methods. Defaults to \"UTF-8\".";
 
+    public static final String MAX_RETRIES = "Maximum number of retries for connecting to the remote server. Defaults to 3.";
+    public static final String RETRY_DELAY = "Delay in milliseconds between retries. Defaults to 1000.";
+    
+    
     /**
      * Build a new DriverPropertyInfo with the passed property
      *
@@ -120,6 +123,18 @@ public class DriverPropertyInfoBuilder {
 	driverPropertyInfo = getNewDriverPropertyInfo("clobWriteCharset", info);
 	driverPropertyInfo.description = CLOB_WRITE_CHARSET;
 	driverPropertyInfo.required = false;
+	driverPropertyInfoList.add(driverPropertyInfo);
+	
+	driverPropertyInfo = getNewDriverPropertyInfo("maxRetries", info);
+	driverPropertyInfo.description = MAX_RETRIES;
+	driverPropertyInfo.required = false;
+	driverPropertyInfo.value = "3";
+	driverPropertyInfoList.add(driverPropertyInfo);
+	
+	driverPropertyInfo = getNewDriverPropertyInfo("retryIntervalMs", info);
+	driverPropertyInfo.description = RETRY_DELAY;
+	driverPropertyInfo.required = false;
+	driverPropertyInfo.value = "1000";
 	driverPropertyInfoList.add(driverPropertyInfo);
 	
 	List<String> list = new ArrayList<>();

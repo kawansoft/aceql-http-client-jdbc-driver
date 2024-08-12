@@ -212,6 +212,45 @@ public class DriverUtil {
     }
 
     /**
+     * Return the value of a property, taking into account the request properties
+     * @param info the properties
+     * @return the value of the property or null if not found
+     * @throws SQLException 
+     */
+    public static int getMaxRetries(Properties info) throws SQLException {
+	String maxRetriesStr = info.getProperty("maxRetries");
+	if (maxRetriesStr == null) {
+            return 0;
+        }
+	
+	int maxRetries = 0;
+	try {
+            maxRetries = Integer.parseInt(maxRetriesStr);
+        } catch (NumberFormatException e) {
+	    throw new SQLException(Tag.PRODUCT + " Invalid maxRetries, is not numeric: " + maxRetries);
+        }
+	
+	return maxRetries;
+    }
+    
+    public static int getIntervalRetryMs(Properties info) throws SQLException {
+	String intervalRetryMsStr = info.getProperty("intervalRetryMs");
+	if (intervalRetryMsStr == null) {
+            return 0;
+        }
+	
+        int intervalRetryMs = 0;
+        try {
+            intervalRetryMs = Integer.parseInt(intervalRetryMsStr);
+        } catch (NumberFormatException e) {
+	    throw new SQLException(Tag.PRODUCT + " Invalid intervalRetryMs, is not numeric: " + intervalRetryMsStr);
+        }
+        
+        return intervalRetryMs;
+        
+    }
+    
+    /**
      * Copy a set of properties from one Property to another.
      * <p>
      *
