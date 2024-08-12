@@ -82,13 +82,14 @@
         <sourcepath>${project.basedir}/src/main/java</sourcepath>
 
         <excludes>
-            <exclude>org/kawanfw/sql/**</exclude> 
+            <exclude>com/aceql/jdbc/commons/main/**</exclude> 
+            <exclude>com/aceql/jdbc/commons/diver/**</exclude> 
         </excludes>
 
         <includes>
-            <include>org/kawanfw/sql/api/server/**</include> <!-- Includes this package and all subpackages -->
-            <include>org/kawanfw/sql/*.java</include>        <!-- Includes only Java files directly in this package -->
-            <include>org/kawanfw/sql/*.html</include>  
+            <include>com/aceql/jdbc/commons/**</include> <!-- Includes this package and all subpackages -->
+            <include>com/aceql/jdbc/commons/metadata/**</include>        <!-- Includes only Java files directly in this package -->
+            <include>com/aceql/jdbc/commons/*.html</include>  
         </includes>
 
         </configuration>
