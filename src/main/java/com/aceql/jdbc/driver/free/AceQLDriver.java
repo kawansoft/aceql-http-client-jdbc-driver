@@ -263,6 +263,8 @@ final public class AceQLDriver implements java.sql.Driver {
 	    passwordIsSessionId = true;
 	}
 		
+	int maxRetries= DriverUtil.getMaxRetries(info);
+	int retryIntervalMs = DriverUtil.getIntervalRetryMs(info);
 	
 	ConnectionInfoHolder connectionInfoHolder = new ConnectionInfoHolder();
 	connectionInfoHolder.setAuthentication(authentication);
@@ -271,14 +273,16 @@ final public class AceQLDriver implements java.sql.Driver {
 	connectionInfoHolder.setConnectTimeout(connectTimeout);
 	connectionInfoHolder.setDatabase(database);
 	connectionInfoHolder.setGzipResult(gzipResult);
-	connectionInfoHolder.setMaxRetries(3);
 	connectionInfoHolder.setPasswordIsSessionId(passwordIsSessionId);
 	connectionInfoHolder.setProxy(proxy);
+	connectionInfoHolder.setProxyAuthentication(proxyAuthentication);
 	connectionInfoHolder.setReadTimeout(readTimeout);
 	connectionInfoHolder.setRequestProperties(requestProperties);
 	connectionInfoHolder.setResultSetMetaDataPolicy(resultSetMetaDataPolicy);
-	connectionInfoHolder.setRetryIntervalMs(1000);
 	connectionInfoHolder.setUrl(url);
+	
+	connectionInfoHolder.setMaxRetries(maxRetries);
+	connectionInfoHolder.setRetryIntervalMs(retryIntervalMs);
 	
 	ConnectionInfo connectionInfo = InternalWrapper.connectionInfoBuilder(connectionInfoHolder);
 	AceQLConnection connection = InternalWrapper.connectionBuilder(connectionInfo);

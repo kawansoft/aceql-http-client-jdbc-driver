@@ -21,15 +21,12 @@ package com.aceql.jdbc.commons;
 import java.io.File;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.net.PasswordAuthentication;
-import java.net.Proxy;
 import java.sql.SQLException;
-import java.util.Map;
+import java.time.Instant;
 
 import com.aceql.jdbc.commons.main.http.AceQLHttpApi;
 import com.aceql.jdbc.commons.main.metadata.dto.DatabaseInfoDto;
 import com.aceql.jdbc.commons.main.metadata.dto.LimitsInfoDto;
-import com.aceql.jdbc.commons.metadata.ResultSetMetaDataPolicy;
 
 /**
  * A internal wrapper for Java package protected calls. <br>
@@ -81,6 +78,9 @@ public class InternalWrapper {
 	return new ConnectionInfo(ConnectionInfoHolder);
     }
     
+    public static void setCreationDateTime(ConnectionInfo connectionInfo, Instant instant) {
+	connectionInfo.setCreationDateTime(instant);
+    }
 
     public static DatabaseInfo databaseInfoBuilder(AceQLHttpApi aceQLHttpApi) throws AceQLException {
 	DatabaseInfoDto databaseInfoDto = aceQLHttpApi.getDatabaseInfoDto();

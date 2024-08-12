@@ -28,6 +28,7 @@ public class ConnectionInfoHolder {
     // New 9.4
     private int maxRetries = 0;
     private int retryIntervalMs = 0;
+    
     public String getUrl() {
         return url;
     }

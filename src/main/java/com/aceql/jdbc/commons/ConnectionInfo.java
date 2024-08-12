@@ -67,6 +67,9 @@ public class ConnectionInfo {
     private Map<String, String> requestProperties = new HashMap<>();
     private String clobReadCharset;
     private String clobWriteCharset;
+    
+    private int maxRetries;
+    private int retryIntervalMs;
 
     /**
      * Package protected constructor, Driver users can not instantiate the class.
@@ -87,6 +90,9 @@ public class ConnectionInfo {
 	this.requestProperties = connectionInfoHolder.getRequestProperties();
 	this.clobReadCharset = connectionInfoHolder.getClobReadCharset();
 	this.clobWriteCharset = connectionInfoHolder.getClobWriteCharset();
+	
+	this.maxRetries = connectionInfoHolder.getMaxRetries();
+	this.retryIntervalMs = connectionInfoHolder.getRetryIntervalMs();
     }
     
 //    /**
@@ -275,8 +281,29 @@ public class ConnectionInfo {
 	return creationDateTime;
     }
 
-    @Override
-    public String toString() {
+    
+    /**
+     * Gets the maximum number of retries for failed requests.
+     * @return the maximum number of retries for failed requests.
+     */
+    public int getMaxRetries() {
+        return maxRetries;
+    }
+
+    void setMaxRetries(int maxRetries) {
+        this.maxRetries = maxRetries;
+    }
+
+    /**
+     * Gets the interval between retries in milliseconds.
+     * @return the interval between retries in milliseconds.
+     */
+    public int getRetryIntervalMs() {
+	return retryIntervalMs;
+    }
+    
+    //@Override
+    public String _toString() {
 
 	String username = authentication.getUserName();
 	String proxyUsername = proxyAuthentication != null ? proxyAuthentication.getUserName() : null;
@@ -285,8 +312,11 @@ public class ConnectionInfo {
 		+ ", creationDateTime=" + creationDateTime + ", passwordIsSessionId=" + passwordIsSessionId + ", proxy="
 		+ proxy + ", proxyAuthentication=" + proxyUsername + ", connectTimeout=" + connectTimeout
 		+ ", readTimeout=" + readTimeout + ", gzipResult=" + gzipResult 
+		+ ", maxRetries=" + maxRetries + ", retryIntervalMs=" + retryIntervalMs
 		+ ", resultSetMetaDataPolicy=" + resultSetMetaDataPolicy + ", requestProperties=" + requestProperties
 		+ ", clobReadCharset=" + clobReadCharset + ", clobWriteCharset=" + clobWriteCharset + "]";
     }
+    
+    
 
 }

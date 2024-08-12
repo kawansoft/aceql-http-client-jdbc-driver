@@ -141,8 +141,8 @@ public class HttpManager {
     public InputStream callWithGetReturnStream(String url)
 	    throws MalformedURLException, IOException, UnsupportedEncodingException {
 
-	int maxRetries = 3;
-	int retryIntervalMs = 1000;
+	int maxRetries = this.connectionInfo.getMaxRetries();
+	int retryIntervalMs = this.connectionInfo.getRetryIntervalMs();
 
 	/*
 	 * if (httpVersion == 1) { return callWithGetInputStreamHttp11(url); } else {
@@ -241,8 +241,8 @@ public class HttpManager {
     public InputStream callWithPost(URL theUrl, Map<String, String> parameters)
 	    throws IOException, ProtocolException, SocketTimeoutException, UnsupportedEncodingException {
 	
-	int maxRetries = 3;
-	int retryIntervalMs = 1000;
+	int maxRetries = this.connectionInfo.getMaxRetries();
+	int retryIntervalMs = this.connectionInfo.getRetryIntervalMs();
 
 	/*
 	 * if (httpVersion == 1) { return callWithGetInputStreamHttp11(url); } else {
