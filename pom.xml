@@ -83,13 +83,16 @@
 
         <excludes>
             <exclude>com/aceql/jdbc/commons/main/**</exclude> 
-            <exclude>com/aceql/jdbc/commons/diver/**</exclude> 
+            <exclude>com/aceql/jdbc/commons/driver/**</exclude> 
         </excludes>
 
         <includes>
-            <include>com/aceql/jdbc/commons/**</include> <!-- Includes this package and all subpackages -->
-            <include>com/aceql/jdbc/commons/metadata/**</include>        <!-- Includes only Java files directly in this package -->
-            <include>com/aceql/jdbc/commons/*.html</include>  
+            <include>com/aceql/jdbc/commons/*.java</include> <!-- Includes only Java files directly in the commons package -->
+            <include>com/aceql/jdbc/commons/*.html</include>  <!-- Includes only HTML files directly in the commons package -->
+            <include>com/aceql/jdbc/commons/metadata/*.java</include> <!-- Includes only Java files directly in the metadata package -->
+            <include>com/aceql/jdbc/commons/metadata/*.html</include> <!-- Includes only Java files directly in the metadata package -->
+            <include>com/aceql/jdbc/driver/free/*.java</include> <!-- Includes only Java files directly in the free package -->
+            <include>com/aceql/jdbc/driver/free/*.html</include> <!-- Includes only HTML files directly in the free package -->
         </includes>
 
         </configuration>
