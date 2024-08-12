@@ -303,7 +303,7 @@ public class ConnectionInfo {
     }
     
     //@Override
-    public String _toString() {
+    public String toString() {
 
 	String username = authentication.getUserName();
 	String proxyUsername = proxyAuthentication != null ? proxyAuthentication.getUserName() : null;
