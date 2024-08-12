@@ -7,9 +7,9 @@
 
 # AceQL HTTP 
 
-## AceQL Client JDBC Driver v9.3 - User Guide
+## AceQL Client JDBC Driver v9.4 - User Guide
 
-## March 2, 2023
+## August 12, 2024
 
 <img src="https://docs.aceql.com/img/AceQL-Schema-min.jpg" alt="AceQL Draw"/>
 
@@ -86,7 +86,7 @@ The Client JDBC Driver version is compatible with AceQL HTTP server side v12.2+
 
 ### Main features
 
-| AceQL Client JDBC Driver v9.3<br>Main Features               |
+| AceQL Client JDBC Driver v9.4<br>Main Features               |
 | :----------------------------------------------------------- |
 | <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Works as a real [JDBC Driver](https://docs.oracle.com/javase/tutorial/jdbc/basics/connecting.html) <br/>Plug & play without editing your app source code. |
 | <img src="https://download.aceql.com/images/check_20.png" alt="check!"/>&nbsp;Main SQL types<br/>`Boolean`, `Integer`, `Short`, `Double`, `Float`, `BigDecimal`, `Long`, `String`, `Date`, `Time`, `Timestamp` |
@@ -113,7 +113,7 @@ The Client JDBC Driver version is compatible with AceQL HTTP server side v12.2+
 <dependency>
     <groupId>com.aceql</groupId>
     <artifactId>aceql-http-client-jdbc-driver</artifactId>
-    <version>9.3</version>
+    <version>9.4</version>
 </dependency>
 ```
 ### Single Jar 
@@ -167,26 +167,6 @@ Note that AceQL is optimized as much as possible:
   
 - **It is highly recommended to always use  batch commands  when you have many rows to INSERT or UPDATE.**
 
-<<<<<<< HEAD
-  
-
-## *[Advertisement] 📢* 
-
-## *Explore Sqlephant for Streamlined SQL Development! 🐘*
-
-Sqlephant brings a heap of benefits to your SQL workflow:
-
-- 🚄 **Swift Schema Generation**: Auto-infer types and generate schemas.
-- 🛠 **SQL Fixers**: Easily manage SQL requests and injection issues.
-- 📦 **SQL Wrapper Generation**: Full support for C#, Java, PHP, and Python.
-- 🔄 **SQL CRUD Generation**: Automate CRUD operations seamlessly.
-
-**✨ Optimize Your Development: Save Time, Reduce Bugs, Eliminate Tedious Work!**
-
-👉 Explore [**Sqlephant**](https://www.sqlephant.com) and elevate your SQL development experience!
-=======
-_________
-
 
 
 ## *[Advertisement] 📢*
@@ -204,9 +184,6 @@ _________
 **✨ Faster and Easier Delivery for Your End User: Save Time, Reduce Complexity, and Focus on What Matters!**
 
 👉 Explore [**ChatMotor**](https://www.chatmotor.ai) and revolutionize your development workflow!
->>>>>>> refs/heads/master
-
-
 
 ---
 
@@ -214,7 +191,7 @@ _________
 
 We will use the same `sampledb` database for all our code samples. 
 
-The schema is available here: [sampledb.txt](https://docs.aceql.com/rest/soft_java_client/9.3/src/sampledb.txt). 
+The schema is available here: [sampledb.txt](https://docs.aceql.com/rest/soft_java_client/9.4/src/sampledb.txt). 
 
 ## Connection creation
 
@@ -276,7 +253,7 @@ Sample code:
 
 ## Handling Exceptions
 
-Except for `NullPointerException`, exceptions thrown are always an instance of [AceQLException.](https://docs.aceql.com/rest/soft_java_client/9.3/javadoc/com/aceql/jdbc/commons/AceQLConnection.html)
+Except for `NullPointerException`, exceptions thrown are always an instance of [AceQLException.](https://docs.aceql.com/rest/soft_java_client/9.4/javadoc/com/aceql/jdbc/commons/AceQLConnection.html)
 
 The `AceQLException` contains 5 pieces of information :
 
@@ -579,8 +556,8 @@ The atomic variables values will be shared by AceQL download/upload processes an
 
 The values are to be initialized and passed to `AceQLConnection` before the JDBC actions with the static setters:
 
-- [AceQLConnection.setProgress(AtomicInteger progress)](https://docs.aceql.com/rest/soft_java_client/9.3/javadoc/com/aceql/jdbc/commons/AceQLConnection.html#setProgress(java.util.concurrent.atomic.AtomicInteger))
-- [AceQLConnection.setCancelled(AtomicBoolean cancelled)](https://docs.aceql.com/rest/soft_java_client/9.3/javadoc/com/aceql/jdbc/commons/AceQLConnection.html#setCancelled(java.util.concurrent.atomic.AtomicBoolean))
+- [AceQLConnection.setProgress(AtomicInteger progress)](https://docs.aceql.com/rest/soft_java_client/9.4/javadoc/com/aceql/jdbc/commons/AceQLConnection.html#setProgress(java.util.concurrent.atomic.AtomicInteger))
+- [AceQLConnection.setCancelled(AtomicBoolean cancelled)](https://docs.aceql.com/rest/soft_java_client/9.4/javadoc/com/aceql/jdbc/commons/AceQLConnection.html#setCancelled(java.util.concurrent.atomic.AtomicBoolean))
 
 
 Values will then be updated and read:
@@ -703,7 +680,7 @@ Assuming hat you want to display a progress indicator using `SwingWorker`, you w
 	}
 ```
 
-A complete example is available in [SqlProgressMonitorDemo.java](https://docs.aceql.com/rest/soft_java_client/9.3/src/SqlProgressMonitorDemo.java) and [BlobExample.java](https://docs.aceql.com/rest/soft_java_client/9.3/src/BlobExample.java) 
+A complete example is available in [SqlProgressMonitorDemo.java](https://docs.aceql.com/rest/soft_java_client/9.4/src/SqlProgressMonitorDemo.java) and [BlobExample.java](https://docs.aceql.com/rest/soft_java_client/9.4/src/BlobExample.java) 
 
 ## HTTP session options 
 
@@ -735,18 +712,18 @@ First step is to get an instance of `RemoteDatabaseMetaData`:
 
 ### Downloading database schema into a file
 
-Downloading a schema into a Java `File` is done through the method. See the `RemoteDatabaseMetaData` [javadoc](https://docs.aceql.com/rest/soft_java_client/9.3/javadoc/com/aceql/jdbc/commons/metadata/RemoteDatabaseMetaData.html).
+Downloading a schema into a Java `File` is done through the method. See the `RemoteDatabaseMetaData` [javadoc](https://docs.aceql.com/rest/soft_java_client/9.4/javadoc/com/aceql/jdbc/commons/metadata/RemoteDatabaseMetaData.html).
 
 ```java
     File file = new File("db_schema.out.html");
     remoteDatabaseMetaData.dbSchemaDownload(file);
 ```
 
-See an example of the built HTML schema:  [db_schema.out.html](https://docs.aceql.com/rest/soft_java_client/9.3/src/db_schema.out.html)
+See an example of the built HTML schema:  [db_schema.out.html](https://docs.aceql.com/rest/soft_java_client/9.4/src/db_schema.out.html)
 
 ### Accessing remote database main properties
 
-The [JdbcDatabaseMetaData](https://docs.aceql.com/rest/soft_java_client/9.3/javadoc/com/aceql/jdbc/commons/metadata/JdbcDatabaseMetaData.html) class wraps instance the main value retrieved by a remote JDBC call to `Connection.getMetaData`(): 
+The [JdbcDatabaseMetaData](https://docs.aceql.com/rest/soft_java_client/9.4/javadoc/com/aceql/jdbc/commons/metadata/JdbcDatabaseMetaData.html) class wraps instance the main value retrieved by a remote JDBC call to `Connection.getMetaData`(): 
 
 ```java
     JdbcDatabaseMetaData jdbcDatabaseMetaData = remoteDatabaseMetaData.getJdbcDatabaseMetaData();
@@ -757,7 +734,7 @@ The [JdbcDatabaseMetaData](https://docs.aceql.com/rest/soft_java_client/9.3/java
 
 ### Getting Details of Tables and Columns
 
-See the [javadoc](https://docs.aceql.com/rest/soft_java_client/9.3/javadoc/com/aceql/jdbc/commons/metadata/package-summary.html) of the `com.aceql.jdbc.commons.metadata` package: 
+See the [javadoc](https://docs.aceql.com/rest/soft_java_client/9.4/javadoc/com/aceql/jdbc/commons/metadata/package-summary.html) of the `com.aceql.jdbc.commons.metadata` package: 
 
 ```java
     System.out.println("Get the table names:");
@@ -781,7 +758,7 @@ See the [javadoc](https://docs.aceql.com/rest/soft_java_client/9.3/javadoc/com/a
 
 ### Code Sample
 
-Standard JDBC [DatabaseMetadata](https://docs.aceql.com/rest/soft_java_client/9.3/javadoc/com/aceql/jdbc/commons/metadata/JdbcDatabaseMetaData.html)  and [ResultSetMetadata](https://docs.oracle.com/javase/8/docs/api/java/sql/ResultSetMetaData.html) calls are fully supported.
+Standard JDBC [DatabaseMetadata](https://docs.aceql.com/rest/soft_java_client/9.4/javadoc/com/aceql/jdbc/commons/metadata/JdbcDatabaseMetaData.html)  and [ResultSetMetadata](https://docs.oracle.com/javase/8/docs/api/java/sql/ResultSetMetaData.html) calls are fully supported.
 
 `DatabaseMetaData` example:
 
