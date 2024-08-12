@@ -71,38 +71,59 @@ public class ConnectionInfo {
     /**
      * Package protected constructor, Driver users can not instantiate the class.
      * 
-     * @param url
-     * @param database
-     * @param authentication
-     * @param passwordIsSessionId
-     * @param proxy
-     * @param proxyAuthentication
-     * @param connectTimeout
-     * @param readTimeout
-     * @param gzipResult
-     * @param resultSetMetaDataPolicy
-     * @param requestProperties
-     * @param clobReadCharset
-     * @param clobWriteCharset
+     * @param ConnectionInfoHolder all the info set and passed.
      */
-    ConnectionInfo(String url, String database, PasswordAuthentication authentication, boolean passwordIsSessionId,
-	    Proxy proxy, PasswordAuthentication proxyAuthentication, int connectTimeout, int readTimeout,
-	    boolean gzipResult, ResultSetMetaDataPolicy resultSetMetaDataPolicy, Map<String, String> requestProperties,
-	    String clobReadCharset, String clobWriteCharset) {
-	this.url = url;
-	this.database = database;
-	this.authentication = authentication;
-	this.passwordIsSessionId = passwordIsSessionId;
-	this.proxy = proxy;
-	this.proxyAuthentication = proxyAuthentication;
-	this.connectTimeout = connectTimeout;
-	this.readTimeout = readTimeout;
-	this.gzipResult = gzipResult;
-	this.resultSetMetaDataPolicy = resultSetMetaDataPolicy;
-	this.requestProperties = requestProperties;
-	this.clobReadCharset = clobReadCharset;
-	this.clobWriteCharset = clobWriteCharset;
+    ConnectionInfo(ConnectionInfoHolder connectionInfoHolder) {
+	this.url = connectionInfoHolder.getUrl();
+	this.database = connectionInfoHolder.getDatabase();
+	this.authentication = connectionInfoHolder.getAuthentication();
+	this.passwordIsSessionId = connectionInfoHolder.isPasswordIsSessionId();
+	this.proxy = connectionInfoHolder.getProxy();
+	this.proxyAuthentication = connectionInfoHolder.getProxyAuthentication();
+	this.connectTimeout = connectionInfoHolder.getConnectTimeout();
+	this.readTimeout = connectionInfoHolder.getReadTimeout();
+	this.gzipResult = connectionInfoHolder.isGzipResult();
+	this.resultSetMetaDataPolicy = connectionInfoHolder.getResultSetMetaDataPolicy();
+	this.requestProperties = connectionInfoHolder.getRequestProperties();
+	this.clobReadCharset = connectionInfoHolder.getClobReadCharset();
+	this.clobWriteCharset = connectionInfoHolder.getClobWriteCharset();
     }
+    
+//    /**
+//     * Package protected constructor, Driver users can not instantiate the class.
+//     * 
+//     * @param url
+//     * @param database
+//     * @param authentication
+//     * @param passwordIsSessionId
+//     * @param proxy
+//     * @param proxyAuthentication
+//     * @param connectTimeout
+//     * @param readTimeout
+//     * @param gzipResult
+//     * @param resultSetMetaDataPolicy
+//     * @param requestProperties
+//     * @param clobReadCharset
+//     * @param clobWriteCharset
+//     */
+//    ConnectionInfo(String url, String database, PasswordAuthentication authentication, boolean passwordIsSessionId,
+//	    Proxy proxy, PasswordAuthentication proxyAuthentication, int connectTimeout, int readTimeout,
+//	    boolean gzipResult, ResultSetMetaDataPolicy resultSetMetaDataPolicy, Map<String, String> requestProperties,
+//	    String clobReadCharset, String clobWriteCharset) {
+//	this.url = url;
+//	this.database = database;
+//	this.authentication = authentication;
+//	this.passwordIsSessionId = passwordIsSessionId;
+//	this.proxy = proxy;
+//	this.proxyAuthentication = proxyAuthentication;
+//	this.connectTimeout = connectTimeout;
+//	this.readTimeout = readTimeout;
+//	this.gzipResult = gzipResult;
+//	this.resultSetMetaDataPolicy = resultSetMetaDataPolicy;
+//	this.requestProperties = requestProperties;
+//	this.clobReadCharset = clobReadCharset;
+//	this.clobWriteCharset = clobWriteCharset;
+//    }
 
     /**
      * Gets the URL of the remote database

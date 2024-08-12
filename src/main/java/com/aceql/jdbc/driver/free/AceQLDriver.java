@@ -39,6 +39,7 @@ import java.util.logging.Logger;
 
 import com.aceql.jdbc.commons.AceQLConnection;
 import com.aceql.jdbc.commons.ConnectionInfo;
+import com.aceql.jdbc.commons.ConnectionInfoHolder;
 import com.aceql.jdbc.commons.InternalWrapper;
 import com.aceql.jdbc.commons.driver.util.DriverPropertyInfoBuilder;
 import com.aceql.jdbc.commons.driver.util.DriverUtil;
@@ -262,10 +263,24 @@ final public class AceQLDriver implements java.sql.Driver {
 	    passwordIsSessionId = true;
 	}
 		
-	ConnectionInfo connectionInfo = InternalWrapper.connectionInfoBuilder(url, database, authentication, passwordIsSessionId,
-		proxy, proxyAuthentication, connectTimeout, readTimeout, gzipResult,
-		resultSetMetaDataPolicy, requestProperties, clobReadCharset, clobWriteCharset);
 	
+	ConnectionInfoHolder connectionInfoHolder = new ConnectionInfoHolder();
+	connectionInfoHolder.setAuthentication(authentication);
+	connectionInfoHolder.setClobReadCharset(clobReadCharset);
+	connectionInfoHolder.setClobWriteCharset(clobWriteCharset);
+	connectionInfoHolder.setConnectTimeout(connectTimeout);
+	connectionInfoHolder.setDatabase(database);
+	connectionInfoHolder.setGzipResult(gzipResult);
+	connectionInfoHolder.setMaxRetries(3);
+	connectionInfoHolder.setPasswordIsSessionId(passwordIsSessionId);
+	connectionInfoHolder.setProxy(proxy);
+	connectionInfoHolder.setReadTimeout(readTimeout);
+	connectionInfoHolder.setRequestProperties(requestProperties);
+	connectionInfoHolder.setResultSetMetaDataPolicy(resultSetMetaDataPolicy);
+	connectionInfoHolder.setRetryIntervalMs(1000);
+	connectionInfoHolder.setUrl(url);
+	
+	ConnectionInfo connectionInfo = InternalWrapper.connectionInfoBuilder(connectionInfoHolder);
 	AceQLConnection connection = InternalWrapper.connectionBuilder(connectionInfo);
 	
 	if (!AceQLConnectionUtil.isVersion12_2OrHigher(connection)) {

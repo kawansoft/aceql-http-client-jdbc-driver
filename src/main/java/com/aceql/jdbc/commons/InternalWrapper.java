@@ -24,7 +24,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.PasswordAuthentication;
 import java.net.Proxy;
 import java.sql.SQLException;
-import java.time.Instant;
 import java.util.Map;
 
 import com.aceql.jdbc.commons.main.http.AceQLHttpApi;
@@ -77,20 +76,11 @@ public class InternalWrapper {
 	return aceQLHttpApi;
     }
 
-    public static ConnectionInfo connectionInfoBuilder(String url, String database,
-	    PasswordAuthentication authentication, boolean passwordIsSessionId, Proxy proxy,
-	    PasswordAuthentication proxyAuthentication, int connectTimeout, int readTimeout, boolean gzipResult,
-	    ResultSetMetaDataPolicy resultSetMetaDataPolicy, Map<String, String> requestProperties,
-	    String clobReadCharset, String clobWriteCharset) {
-	ConnectionInfo connectionInfo = new ConnectionInfo(url, database, authentication, passwordIsSessionId, proxy,
-		proxyAuthentication, connectTimeout, readTimeout, gzipResult, resultSetMetaDataPolicy, requestProperties,
-		clobReadCharset, clobWriteCharset);
-	return connectionInfo;
-    }
 
-    public static void setCreationDateTime(ConnectionInfo connectionInfo, Instant instant) {
-	connectionInfo.setCreationDateTime(instant);
+    public static ConnectionInfo connectionInfoBuilder(ConnectionInfoHolder ConnectionInfoHolder) {
+	return new ConnectionInfo(ConnectionInfoHolder);
     }
+    
 
     public static DatabaseInfo databaseInfoBuilder(AceQLHttpApi aceQLHttpApi) throws AceQLException {
 	DatabaseInfoDto databaseInfoDto = aceQLHttpApi.getDatabaseInfoDto();

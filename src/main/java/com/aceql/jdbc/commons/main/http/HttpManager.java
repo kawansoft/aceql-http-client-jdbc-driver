@@ -142,7 +142,7 @@ public class HttpManager {
 	    throws MalformedURLException, IOException, UnsupportedEncodingException {
 
 	int maxRetries = 3;
-	int retryIntervalInMilliseconds = 1000;
+	int retryIntervalMs = 1000;
 
 	/*
 	 * if (httpVersion == 1) { return callWithGetInputStreamHttp11(url); } else {
@@ -162,7 +162,7 @@ public class HttpManager {
 	    }
 	    
 	    try {
-		Thread.sleep(retryIntervalInMilliseconds);
+		Thread.sleep(retryIntervalMs);
 	    } catch (InterruptedException ignore) {
 		// e1.printStackTrace();
 	    }
@@ -242,7 +242,7 @@ public class HttpManager {
 	    throws IOException, ProtocolException, SocketTimeoutException, UnsupportedEncodingException {
 	
 	int maxRetries = 3;
-	int retryIntervalInMilliseconds = 1000;
+	int retryIntervalMs = 1000;
 
 	/*
 	 * if (httpVersion == 1) { return callWithGetInputStreamHttp11(url); } else {
@@ -262,7 +262,7 @@ public class HttpManager {
 	    }
 	    
 	    try {
-		Thread.sleep(retryIntervalInMilliseconds);
+		Thread.sleep(retryIntervalMs);
 	    } catch (InterruptedException ignore) {
 		// e1.printStackTrace();
 	    }
