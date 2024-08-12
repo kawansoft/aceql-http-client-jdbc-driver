@@ -19,6 +19,14 @@ The AceQL Client JDBC Driver is licensed under the Apache 2.0
 License.
 
 
+AceQL Client JDBC Driver - Version 9.4 - 12-Aug-2023
+----------------------------------------------------
+
+What's new:
+- You can now define a maximum number of retries for failed HTTP calls, 
+  with a configurable delay between each retry.
+
+
 AceQL Client JDBC Driver - Version 9.3 - 02-Mar-2023
 ----------------------------------------------------
 
