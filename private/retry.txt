@@ -1,7 +1,0 @@
-Retry Mechanism
----------------
-
-HttpManager:
-- public InputStream callWithGetReturnStream(String url)
-- public InputStream callWithPost(URL theUrl, Map<String, String> parameters)
-
